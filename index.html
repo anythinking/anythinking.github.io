@@ -1,0 +1,159 @@
+<title>Youngcheol Shin — Optical & Quantum Computing</title>
+<style>
+  :root {
+    --ground: #ffffff;
+    --panel: #faf8f3;
+    --panel-2: #f3efe6;
+    --ink: #1a1613;
+    --ink-soft: #514b42;
+    --ink-faint: #948d7f;
+    --line: #ece7dc;
+    --line-soft: #f4efe6;
+    --amber: #b5822e;
+    --teal: #0d6b63;
+    --accent: #0d6b63;
+    --grid: rgba(13,107,99,0.04);
+    --shadow: 0 1px 3px rgba(40,32,18,.045), 0 12px 34px rgba(40,32,18,.06);
+    --maxw: 720px;
+    --mono: ui-monospace, "SF Mono", "JetBrains Mono", Menlo, Consolas, monospace;
+    --sans: "Helvetica Neue", "Pretendard", "Apple SD Gothic Neo", -apple-system, system-ui, "Segoe UI", sans-serif;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --ground: #0d1416; --panel: #121b1d; --panel-2: #16211f; --ink: #e6efec;
+      --ink-soft: #a9b8b4; --ink-faint: #6f807c; --line: #22302f; --line-soft: #1a2624;
+      --amber: #e7a944; --teal: #38b4bf; --accent: #38b4bf; --grid: rgba(56,180,191,0.14);
+      --shadow: 0 1px 2px rgba(0,0,0,.3), 0 10px 34px rgba(0,0,0,.4);
+    }
+  }
+  :root[data-theme="light"] {
+    --ground: #ffffff; --panel: #faf8f3; --panel-2: #f3efe6; --ink: #1a1613;
+    --ink-soft: #514b42; --ink-faint: #948d7f; --line: #ece7dc; --line-soft: #f4efe6;
+    --amber: #b5822e; --teal: #0d6b63; --accent: #0d6b63; --grid: rgba(13,107,99,0.04);
+    --shadow: 0 1px 3px rgba(40,32,18,.045), 0 12px 34px rgba(40,32,18,.06);
+  }
+  :root[data-theme="dark"] {
+    --ground: #0d1416; --panel: #121b1d; --panel-2: #16211f; --ink: #e6efec;
+    --ink-soft: #a9b8b4; --ink-faint: #6f807c; --line: #22302f; --line-soft: #1a2624;
+    --amber: #e7a944; --teal: #38b4bf; --accent: #38b4bf; --grid: rgba(56,180,191,0.14);
+    --shadow: 0 1px 2px rgba(0,0,0,.3), 0 10px 34px rgba(0,0,0,.4);
+  }
+
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; background: var(--ground); color: var(--ink);
+    font-family: var(--sans); line-height: 1.65; font-size: 17px;
+    -webkit-font-smoothing: antialiased;
+  }
+  .wrap { max-width: var(--maxw); margin: 0 auto; padding: 0 24px; }
+
+  /* hero */
+  header.hero { padding: 100px 24px 32px; max-width: var(--maxw); margin: 0 auto; }
+  .eyebrow {
+    font-family: var(--mono); font-size: 12px; letter-spacing: .22em;
+    text-transform: uppercase; color: var(--teal); margin: 0 0 18px;
+    display: flex; align-items: center; gap: 10px;
+  }
+  .eyebrow::before { content: ""; width: 26px; height: 1px; background: var(--teal); opacity: .6; }
+  h1 {
+    font-size: clamp(2.4rem, 7vw, 3.4rem); line-height: 1.04; margin: 0 0 18px;
+    font-weight: 800; letter-spacing: -0.035em; text-wrap: balance;
+  }
+  .tagline { font-size: 1.2rem; color: var(--ink-soft); margin: 0; max-width: 46ch; text-wrap: pretty; }
+
+  /* sections */
+  section { padding: 26px 0; }
+  section.wrap { padding-top: 26px; padding-bottom: 26px; }
+  h2 {
+    font-family: var(--mono); font-size: 12.5px; letter-spacing: .16em; text-transform: uppercase;
+    color: var(--ink-faint); font-weight: 650; margin: 0 0 18px; padding-bottom: 10px;
+    border-bottom: 1px solid var(--line);
+  }
+  .about p { margin: 0 0 14px; color: var(--ink-soft); }
+  .about p strong { color: var(--ink); font-weight: 680; }
+  .about .goal { color: var(--teal); font-weight: 600; }
+
+  /* writing list */
+  .entry { display: block; text-decoration: none; color: inherit; padding: 18px 0; border-bottom: 1px solid var(--line-soft); }
+  .entry:hover .etitle { color: var(--teal); }
+  .entry:last-child { border-bottom: none; }
+  .etop { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; }
+  .etitle { font-size: 1.12rem; font-weight: 700; letter-spacing: -0.01em; transition: color .12s; }
+  .edate { font-family: var(--mono); font-size: 12px; color: var(--ink-faint); flex: none; }
+  .edesc { margin: 6px 0 0; font-size: .95rem; color: var(--ink-soft); }
+  .etag { display: inline-block; font-family: var(--mono); font-size: 10.5px; letter-spacing: .06em; text-transform: uppercase; color: var(--teal); background: color-mix(in srgb, var(--teal) 9%, transparent); padding: 2px 8px; border-radius: 20px; margin-top: 8px; }
+
+  /* projects */
+  .projects { display: flex; flex-direction: column; gap: 12px; }
+  .proj { background: var(--panel); border: 1px solid var(--line); border-radius: 11px; padding: 16px 18px; box-shadow: var(--shadow); }
+  .proj .ptitle { font-size: 1.02rem; font-weight: 700; letter-spacing: -0.01em; margin: 0 0 4px; }
+  .proj .pdesc { margin: 0; font-size: .93rem; color: var(--ink-soft); }
+  .proj .psoon { font-family: var(--mono); font-size: 10.5px; letter-spacing: .05em; text-transform: uppercase; color: var(--ink-faint); }
+
+  footer.pg {
+    max-width: var(--maxw); margin: 24px auto 0; padding: 26px 24px 70px;
+    border-top: 1px solid var(--line); font-family: var(--mono); font-size: 12px;
+    color: var(--ink-faint); display: flex; justify-content: space-between; flex-wrap: wrap; gap: 10px;
+  }
+  footer.pg a { color: var(--ink-soft); text-decoration: none; }
+  footer.pg a:hover { color: var(--teal); }
+
+  @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+</style>
+
+<header class="hero">
+  <p class="eyebrow">Optical · Quantum Computing</p>
+  <h1>Youngcheol Shin</h1>
+  <p class="tagline">Electrical engineer exploring how we might compute with light and with quantum systems — and writing to understand it.</p>
+</header>
+
+<main>
+  <section class="wrap about">
+    <h2>About</h2>
+    <p>I studied <strong>electrical &amp; electronic engineering</strong> at the University of Sydney, and I work as an engineer building <strong>superconducting magnets</strong> (NMR, up to ~20&nbsp;T) — hands-on high-field hardware: REBCO tapes, joints, cryogenics, quench and current-injection measurement.</p>
+    <p>That hardware work feeds a broader interest — <strong>next-generation computing</strong>: optical accelerators for AI, and photonic / quantum approaches that reach past the limits of today's chips. I write to think, turning what I study (and where I get stuck) into the explanations I wish I'd had. Hands-on over hand-wavy: simulators I built, competition circuits I actually ran.</p>
+    <p class="goal">Looking toward graduate research in optical / photonic-quantum computing.</p>
+  </section>
+
+  <section class="wrap">
+    <h2>Writing</h2>
+    <a class="entry" href="writing/what-is-a-qubit.html">
+      <div class="etop">
+        <span class="etitle">What Is a Qubit? — Drawing It on the Bloch Sphere</span>
+        <span class="edate">2026</span>
+      </div>
+      <p class="edesc">A hands-on primer for engineers: waves → superposition → the Bloch sphere → measurement — with an interactive sphere you can spin and measure yourself.</p>
+      <span class="etag">Interactive · Quantum</span>
+    </a>
+    <div class="entry" style="opacity:.6;cursor:default">
+      <div class="etop">
+        <span class="etitle">Optical computing series</span>
+        <span class="edate">soon</span>
+      </div>
+      <p class="edesc">Building blocks of a light-based computer — waveguides, modulators, and where optics actually beats electronics.</p>
+    </div>
+  </section>
+
+  <section class="wrap">
+    <h2>Projects</h2>
+    <div class="projects">
+      <div class="proj">
+        <p class="ptitle">Optical computing, from scratch <span class="psoon">· write-up soon</span></p>
+        <p class="pdesc">An 8×8 optical-inference simulator built and validated end to end (≈93.7% on digits, on par with a digital baseline). Architecture and BOM for a physical build in progress.</p>
+      </div>
+      <div class="proj">
+        <p class="ptitle">Quantum ML competition <span class="psoon">· write-up soon</span></p>
+        <p class="pdesc">A variational quantum classifier (VQC) for an 8-feature task, designed and run under real NISQ constraints — circuit depth, shot noise, the honest ceiling of the data.</p>
+      </div>
+      <div class="proj">
+        <p class="ptitle">Superconducting magnets</p>
+        <p class="pdesc">Building and testing superconducting solenoids (NMR, ~20&nbsp;T) — REBCO tapes, joints, quench and current-injection measurement. High-field hardware, hands-on.</p>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="pg">
+  <span>Youngcheol Shin · 2026</span>
+  <span>Optical &amp; quantum computing</span>
+</footer>

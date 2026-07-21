@@ -1,0 +1,833 @@
+<meta charset="utf-8">
+<title>What Is a Qubit? — Drawing It on the Bloch Sphere</title>
+<style>
+  :root {
+    --ground: #ffffff;
+    --panel: #faf8f3;
+    --panel-2: #f3efe6;
+    --ink: #1a1613;
+    --ink-soft: #514b42;
+    --ink-faint: #948d7f;
+    --line: #ece7dc;
+    --line-soft: #f4efe6;
+    --wire: #c7bca8;       /* 블로흐 구 와이어프레임 (배경 대비용) */
+    --amber: #b5822e;      /* |0> 따뜻 */
+    --amber-soft: #cfa055;
+    --teal: #0d6b63;       /* |1> 쿨 */
+    --teal-soft: #35948b;
+    --accent: #0d6b63;
+    --grid: rgba(13,107,99,0.04);
+    --scope-bg: #f7f4ee;
+    --shadow: 0 1px 3px rgba(40,32,18,.045), 0 12px 34px rgba(40,32,18,.06);
+    --maxw: 680px;
+    --mono: ui-monospace, "SF Mono", "JetBrains Mono", Menlo, Consolas, monospace;
+    --sans: "Helvetica Neue", "Pretendard", "Apple SD Gothic Neo", -apple-system, system-ui, "Segoe UI", "Malgun Gothic", sans-serif;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --ground: #0d1416;
+      --panel: #121b1d;
+      --panel-2: #16211f;
+      --ink: #e6efec;
+      --ink-soft: #a9b8b4;
+      --ink-faint: #6f807c;
+      --line: #22302f;
+      --line-soft: #1a2624;
+      --amber: #e7a944;
+      --amber-soft: #f0bd63;
+      --teal: #38b4bf;
+      --teal-soft: #5fcdd6;
+      --accent: #38b4bf;
+      --grid: rgba(56,180,191,0.15);
+      --scope-bg: #0a1113;
+      --shadow: 0 1px 2px rgba(0,0,0,.3), 0 10px 34px rgba(0,0,0,.4);
+    }
+  }
+  :root[data-theme="light"] {
+    --ground: #ffffff; --panel: #faf8f3; --panel-2: #f3efe6; --ink: #1a1613;
+    --ink-soft: #514b42; --ink-faint: #948d7f; --line: #ece7dc; --line-soft: #f4efe6; --wire: #c7bca8;
+    --amber: #b5822e; --amber-soft: #cfa055; --teal: #0d6b63; --teal-soft: #35948b;
+    --accent: #0d6b63; --grid: rgba(13,107,99,0.04); --scope-bg: #f7f4ee;
+    --shadow: 0 1px 3px rgba(40,32,18,.045), 0 12px 34px rgba(40,32,18,.06);
+  }
+  :root[data-theme="dark"] {
+    --ground: #0d1416; --panel: #121b1d; --panel-2: #16211f; --ink: #e6efec;
+    --ink-soft: #a9b8b4; --ink-faint: #6f807c; --line: #22302f; --line-soft: #1a2624;
+    --amber: #e7a944; --amber-soft: #f0bd63; --teal: #38b4bf; --teal-soft: #5fcdd6;
+    --accent: #38b4bf; --grid: rgba(56,180,191,0.15); --scope-bg: #0a1113;
+    --shadow: 0 1px 2px rgba(0,0,0,.3), 0 10px 34px rgba(0,0,0,.4);
+  }
+
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--ground);
+    color: var(--ink);
+    font-family: var(--sans);
+    line-height: 1.7;
+    -webkit-font-smoothing: antialiased;
+    font-size: 17px;
+  }
+  .wrap { max-width: var(--maxw); margin: 0 auto; padding: 0 22px; }
+
+  /* ---- header ---- */
+  header.hero {
+    max-width: var(--maxw); margin: 0 auto; padding: 96px 22px 38px;
+  }
+  .eyebrow {
+    font-family: var(--mono); font-size: 12px; letter-spacing: .22em;
+    text-transform: uppercase; color: var(--teal); margin: 0 0 18px;
+    display: flex; align-items: center; gap: 10px;
+  }
+  .eyebrow::before {
+    content: ""; width: 26px; height: 1px; background: var(--teal); opacity: .6;
+  }
+  h1 {
+    font-size: clamp(2.15rem, 6vw, 3.15rem); line-height: 1.06; margin: 0 0 22px;
+    font-weight: 800; letter-spacing: -0.032em; text-wrap: balance;
+  }
+  h1 .q0 { color: var(--amber); }
+  h1 .q1 { color: var(--teal); }
+  .standfirst {
+    font-size: 1.16rem; color: var(--ink-soft); margin: 0; max-width: 40ch;
+    text-wrap: pretty;
+  }
+  .meta-row {
+    margin-top: 30px; padding-top: 18px; border-top: 1px solid var(--line);
+    display: flex; flex-wrap: wrap; gap: 8px 20px;
+    font-family: var(--mono); font-size: 12.5px; color: var(--ink-faint);
+    letter-spacing: .02em;
+  }
+  .meta-row b { color: var(--ink-soft); font-weight: 600; }
+
+  /* ---- article ---- */
+  article { padding-bottom: 60px; }
+  section.act { padding: 26px 0; }
+  .act-head {
+    display: flex; align-items: baseline; gap: 14px; margin: 0 0 4px;
+  }
+  .act-num {
+    font-family: var(--mono); font-size: 13px; color: var(--teal);
+    font-weight: 600; letter-spacing: .05em; flex: none;
+    padding-top: 2px;
+  }
+  h2 {
+    font-size: 1.5rem; font-weight: 750; letter-spacing: -0.015em;
+    margin: 0; line-height: 1.2; text-wrap: balance;
+  }
+  h2 + .sub { color: var(--ink-faint); font-size: .96rem; margin: 6px 0 0 0; padding-left: 40px; }
+  section.act > p, section.act > .callout, section.act > figure { }
+  p { margin: 18px 0; }
+  p.body { }
+  strong { font-weight: 680; color: var(--ink); }
+  em { font-style: normal; color: var(--teal); font-weight: 600; }
+  .ket { font-family: var(--mono); font-weight: 600; white-space: nowrap; }
+  .ket.z0 { color: var(--amber); }
+  .ket.z1 { color: var(--teal); }
+  code, .m {
+    font-family: var(--mono); font-size: .9em;
+    background: var(--panel-2); padding: 1px 6px; border-radius: 4px;
+    color: var(--ink);
+  }
+
+  /* ---- EE bridge callout ---- */
+  .bridge {
+    margin: 24px 0; padding: 18px 20px 18px 20px;
+    background: var(--panel);
+    border: 1px solid var(--line);
+    border-left: 3px solid var(--amber);
+    border-radius: 8px;
+    box-shadow: var(--shadow);
+  }
+  .bridge .tag {
+    font-family: var(--mono); font-size: 11.5px; letter-spacing: .12em;
+    text-transform: uppercase; color: var(--amber);
+    display: flex; align-items: center; gap: 8px; margin-bottom: 8px; font-weight: 600;
+  }
+  .bridge .tag svg { width: 15px; height: 15px; }
+  .bridge p { margin: 0; font-size: .97rem; color: var(--ink-soft); }
+  .bridge p + p { margin-top: 10px; }
+
+  /* ---- inline formula ---- */
+  .formula {
+    margin: 22px 0; padding: 18px; text-align: center;
+    font-family: var(--mono); font-size: 1.02rem;
+    background: var(--scope-bg); border: 1px solid var(--line-soft);
+    border-radius: 8px; overflow-x: auto; color: var(--ink);
+    background-image: linear-gradient(var(--grid) 1px, transparent 1px),
+                      linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+    background-size: 22px 22px;
+  }
+  .formula .note { display:block; margin-top: 8px; font-family: var(--sans); font-size: .8rem; color: var(--ink-faint); letter-spacing: 0; }
+
+  /* ---- probability mini bars (static, in text) ---- */
+
+  /* ---- widget ---- */
+  .widget-shell {
+    margin: 40px 0; background: var(--panel);
+    border: 1px solid var(--line); border-radius: 14px;
+    box-shadow: var(--shadow); overflow: hidden;
+  }
+  .widget-top {
+    padding: 16px 20px; border-bottom: 1px solid var(--line);
+    display: flex; align-items: center; justify-content: space-between; gap: 12px;
+    background: var(--panel-2);
+  }
+  .widget-top .wt-title { font-weight: 700; font-size: .98rem; letter-spacing: -0.01em; }
+  .widget-top .wt-sub { font-family: var(--mono); font-size: 11.5px; color: var(--ink-faint); letter-spacing: .04em; }
+  .widget-body { display: grid; grid-template-columns: 1fr; gap: 0; }
+  @media (min-width: 720px) {
+    .widget-body { grid-template-columns: 1.05fr 0.95fr; }
+  }
+  .canvas-cell {
+    position: relative; background: var(--scope-bg);
+    min-height: 340px; display: flex; align-items: center; justify-content: center;
+    border-bottom: 1px solid var(--line);
+    touch-action: none; cursor: grab;
+    background-image: radial-gradient(circle at 50% 46%, transparent 60%, rgba(0,0,0,0.04) 100%);
+  }
+  @media (min-width: 720px) { .canvas-cell { border-bottom: none; border-right: 1px solid var(--line); } }
+  .canvas-cell:active { cursor: grabbing; }
+  #bloch { width: 100%; height: 100%; display: block; }
+  .drag-hint {
+    position: absolute; bottom: 10px; left: 0; right: 0; text-align: center;
+    font-family: var(--mono); font-size: 11px; color: var(--ink-faint);
+    pointer-events: none; letter-spacing: .04em; opacity: .8;
+  }
+  .controls { padding: 20px; display: flex; flex-direction: column; gap: 18px; }
+
+  .readout { display: flex; gap: 12px; }
+  .prob {
+    flex: 1; background: var(--scope-bg); border: 1px solid var(--line-soft);
+    border-radius: 9px; padding: 12px 13px;
+  }
+  .prob .plabel { font-family: var(--mono); font-size: 12px; font-weight: 600; display:flex; justify-content: space-between; align-items: baseline; }
+  .prob.p0 .plabel { color: var(--amber); }
+  .prob.p1 .plabel { color: var(--teal); }
+  .prob .pval { font-variant-numeric: tabular-nums; font-size: 1.05rem; color: var(--ink); }
+  .bar-track { margin-top: 9px; height: 7px; background: var(--line); border-radius: 4px; overflow: hidden; }
+  .bar-fill { height: 100%; width: 50%; border-radius: 4px; transition: width .12s linear; }
+  .prob.p0 .bar-fill { background: linear-gradient(90deg, var(--amber-soft), var(--amber)); }
+  .prob.p1 .bar-fill { background: linear-gradient(90deg, var(--teal-soft), var(--teal)); }
+
+  .sliders { display: flex; flex-direction: column; gap: 15px; }
+  .sld { }
+  .sld .sld-top { display: flex; justify-content: space-between; align-items: baseline; font-family: var(--mono); font-size: 12.5px; margin-bottom: 6px; }
+  .sld .sld-top .k { color: var(--ink-soft); font-weight: 600; }
+  .sld .sld-top .v { color: var(--accent); font-variant-numeric: tabular-nums; }
+  input[type=range] {
+    -webkit-appearance: none; appearance: none; width: 100%; height: 4px;
+    background: var(--line); border-radius: 3px; outline: none; margin: 6px 0;
+  }
+  input[type=range]::-webkit-slider-thumb {
+    -webkit-appearance: none; appearance: none; width: 17px; height: 17px;
+    border-radius: 50%; background: var(--accent); cursor: pointer;
+    border: 2px solid var(--panel); box-shadow: 0 1px 3px rgba(0,0,0,.25);
+  }
+  input[type=range]::-moz-range-thumb {
+    width: 17px; height: 17px; border-radius: 50%; background: var(--accent);
+    cursor: pointer; border: 2px solid var(--panel); box-shadow: 0 1px 3px rgba(0,0,0,.25);
+  }
+  input[type=range]:focus-visible { box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 30%, transparent); }
+
+  .state-line {
+    font-family: var(--mono); font-size: 12.5px; color: var(--ink-soft);
+    background: var(--scope-bg); border: 1px solid var(--line-soft);
+    border-radius: 8px; padding: 10px 12px; text-align: center; overflow-x: auto;
+    white-space: nowrap; line-height: 1.5;
+  }
+  .presets { display: flex; flex-wrap: wrap; gap: 7px; }
+  .presets button {
+    font-family: var(--mono); font-size: 12.5px; font-weight: 600;
+    padding: 6px 11px; border-radius: 7px; cursor: pointer;
+    background: var(--panel-2); color: var(--ink-soft);
+    border: 1px solid var(--line); transition: all .12s;
+  }
+  .presets button:hover { border-color: var(--accent); color: var(--accent); }
+  .presets button:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; }
+
+  .measure-row { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+  .btn-measure {
+    font-family: var(--sans); font-size: .92rem; font-weight: 650;
+    padding: 9px 16px; border-radius: 8px; cursor: pointer; border: none;
+    background: var(--ink); color: var(--ground); transition: transform .1s, opacity .12s;
+  }
+  .btn-measure:hover { opacity: .88; }
+  .btn-measure:active { transform: translateY(1px); }
+  .btn-measure:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  .measure-out { font-family: var(--mono); font-size: 13px; color: var(--ink-faint); }
+  .measure-out b { font-weight: 700; }
+  .measure-out b.r0 { color: var(--amber); }
+  .measure-out b.r1 { color: var(--teal); }
+
+  /* ---- pull / aside ---- */
+  .pull {
+    margin: 34px 0; padding-left: 20px; border-left: 3px solid var(--teal);
+    font-size: 1.24rem; line-height: 1.45; font-weight: 600; color: var(--ink);
+    letter-spacing: -0.01em; text-wrap: balance;
+  }
+
+  /* ---- footer / next ---- */
+  .next {
+    margin: 30px 0 0; padding: 22px 24px; border-radius: 12px;
+    background: var(--panel); border: 1px solid var(--line);
+    display: flex; gap: 16px; align-items: flex-start;
+  }
+  .next .nx-mark { font-family: var(--mono); color: var(--teal); font-size: 22px; line-height: 1; flex: none; padding-top: 2px;}
+  .next h3 { margin: 0 0 6px; font-size: 1.05rem; }
+  .next p { margin: 0; color: var(--ink-soft); font-size: .96rem; }
+  footer.pg {
+    max-width: var(--maxw); margin: 0 auto; padding: 30px 22px 70px;
+    border-top: 1px solid var(--line); margin-top: 20px;
+    font-family: var(--mono); font-size: 12px; color: var(--ink-faint);
+    letter-spacing: .03em; display: flex; justify-content: space-between; flex-wrap: wrap; gap: 8px;
+  }
+  hr.rule { border: none; border-top: 1px solid var(--line-soft); margin: 8px 0; }
+
+  .disclaimer {
+    color: var(--ink-faint); font-size: .97rem; font-style: italic;
+    border-left: 2px solid var(--line); padding-left: 15px; margin: 20px 0;
+  }
+  .roadmap { display: flex; flex-direction: column; gap: 10px; margin: 18px 0; }
+  .roadmap .rm-item {
+    display: flex; gap: 14px; align-items: flex-start; padding: 14px 16px;
+    border: 1px solid var(--line); border-radius: 11px; background: var(--panel);
+  }
+  .roadmap .rm-item.done { border-color: var(--teal); background: color-mix(in srgb, var(--teal) 7%, var(--panel)); }
+  .roadmap .rm-n { font-family: var(--mono); font-size: 12px; font-weight: 700; color: var(--ink-faint); flex: none; padding-top: 3px; }
+  .roadmap .rm-item.done .rm-n { color: var(--teal); }
+  .roadmap .rm-item b { display: block; font-size: 1.02rem; letter-spacing: -0.01em; }
+  .roadmap .rm-item span { display: block; font-size: .87rem; color: var(--ink-faint); margin-top: 3px; }
+
+  .diagram {
+    margin: 24px 0; background: var(--scope-bg);
+    border: 1px solid var(--line-soft); border-radius: 10px; padding: 18px 18px 14px;
+  }
+  .diagram svg { width: 100%; height: auto; display: block; }
+  .diagram figcaption {
+    margin-top: 12px; font-size: .87rem; color: var(--ink-faint);
+    text-align: center; line-height: 1.55;
+  }
+
+  ul.constraints { margin: 14px 0; padding-left: 22px; }
+  ul.constraints li { margin: 9px 0; }
+  ul.constraints li::marker { color: var(--teal); }
+
+  @media (prefers-reduced-motion: reduce) {
+    * { transition: none !important; }
+  }
+</style>
+
+<header class="hero">
+  <p class="eyebrow">Quantum Computing · Primer</p>
+  <h1>What Is a Qubit?<br>— Drawing It on the <span class="q1">Bloch Sphere</span></h1>
+  <div class="meta-row">
+    <span><b>Reader</b> EE / programming background</span>
+    <span><b>Scope</b> Waves → Qubit → Bloch sphere → Measurement</span>
+    <span><b>Prerequisite</b> None</span>
+  </div>
+</header>
+
+<article>
+  <div class="wrap">
+
+  <section class="act" id="intro">
+    <p>My background is optical computing. Then a chance to enter a quantum-algorithm competition came up, so lately I've been learning quantum computing. I'd worked with machine learning (LLMs) before and figured quantum would be similar — but the moment I started writing competition circuits, it was quite different. Coding while ignoring what a qubit actually is, nothing would work. So this piece is my own attempt to pin down <strong>"the minimum intuition needed to write quantum algorithms."</strong> The goal is to reach one single picture — <strong>drawing a qubit on the Bloch sphere</strong>.</p>
+    <p class="disclaimer">Math is kept to a minimum; this runs on analogies and pictures. It's not a rigorous textbook but a notebook to get my imagination going — so in places I've chosen intuition over precision, and there may be leaps.</p>
+  </section>
+
+  <hr class="rule">
+
+  <section class="act" id="act1">
+    <div class="act-head"><span class="act-num">01</span><h2>Waves and Wave-Particle Duality</h2></div>
+    <p>The "quantum" in a quantum computer — the qubit — is, in one line, <strong>something in which 0 and 1 are superposed until you observe it</strong>. This doesn't mean it "stores" both at once; it means that before you measure, the value isn't pinned to a single outcome. And having several values overlap isn't such a foreign property — just as a <em>wave</em> carries many crests and troughs superposed together, very small particles like electrons also behave like waves (wave-particle duality). So to understand the qubit, the quickest path is to <strong>start from waves</strong>.</p>
+    <p>The most famous evidence is the <strong>double-slit experiment</strong>. Fire electrons at two narrow slits and an <strong>interference pattern</strong> appears on the screen — the kind of banding only a wave produces. The astonishing part is that the pattern builds up even when you fire the electrons <em>one at a time</em>. It means a single electron behaves <strong>as if it passed through both slits</strong> and interferes with itself — you can't say "it went through one particular slit."</p>
+    <figure class="diagram">
+      <svg viewBox="0 0 720 268" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Double-slit experiment — wave vs. particle depending on whether the path is observed">
+        <!-- ===== left: not observed → wave ===== -->
+        <text x="176" y="20" text-anchor="middle" font-size="12" font-weight="700" fill="var(--teal)" font-family="monospace">No observation → wave</text>
+        <circle cx="32" cy="158" r="7" fill="var(--ink)"/>
+        <g stroke="var(--teal)" stroke-width="1.4" fill="none" opacity="0.45">
+          <path d="M58 136 Q74 158 58 180"/>
+          <path d="M82 134 Q100 158 82 182"/>
+        </g>
+        <g fill="var(--ink-soft)">
+          <rect x="150" y="50" width="10" height="66"/>
+          <rect x="150" y="128" width="10" height="24"/>
+          <rect x="150" y="164" width="10" height="66"/>
+        </g>
+        <g stroke="var(--teal)" stroke-width="1.2" fill="none" opacity="0.4">
+          <path d="M160 94 A28 28 0 0 1 160 150"/>
+          <path d="M160 68 A54 54 0 0 1 160 176"/>
+          <path d="M160 130 A28 28 0 0 1 160 186"/>
+          <path d="M160 104 A54 54 0 0 1 160 212"/>
+        </g>
+        <line x1="316" y1="52" x2="316" y2="226" stroke="var(--line)" stroke-width="2"/>
+        <g fill="var(--amber)">
+          <rect x="298" y="124" width="14" height="30" rx="2" opacity="0.9"/>
+          <rect x="298" y="92" width="14" height="20" rx="2" opacity="0.5"/>
+          <rect x="298" y="166" width="14" height="20" rx="2" opacity="0.5"/>
+          <rect x="298" y="68" width="14" height="12" rx="2" opacity="0.28"/>
+          <rect x="298" y="198" width="14" height="12" rx="2" opacity="0.28"/>
+        </g>
+        <text x="176" y="252" text-anchor="middle" font-size="10.5" fill="var(--ink-faint)" font-family="monospace">Interference pattern (fringes)</text>
+
+        <!-- divider -->
+        <line x1="368" y1="34" x2="368" y2="240" stroke="var(--line-soft)" stroke-width="1"/>
+
+        <!-- ===== right: observed → particle ===== -->
+        <text x="544" y="20" text-anchor="middle" font-size="12" font-weight="700" fill="var(--amber)" font-family="monospace">Path observed → particle</text>
+        <circle cx="400" cy="158" r="7" fill="var(--ink)"/>
+        <g stroke="var(--ink-faint)" stroke-width="1.3" fill="none" opacity="0.55" stroke-dasharray="3 3">
+          <path d="M400 158 L524 118 L676 122"/>
+          <path d="M400 158 L524 158 L676 194"/>
+        </g>
+        <g fill="var(--ink-soft)">
+          <rect x="518" y="50" width="10" height="66"/>
+          <rect x="518" y="128" width="10" height="24"/>
+          <rect x="518" y="164" width="10" height="66"/>
+        </g>
+        <circle cx="500" cy="200" r="10" fill="none" stroke="var(--amber)" stroke-width="1.5"/>
+        <circle cx="500" cy="200" r="3.4" fill="var(--amber)"/>
+        <text x="500" y="228" text-anchor="middle" font-size="10" fill="var(--amber)" font-family="monospace">detector</text>
+        <line x1="684" y1="52" x2="684" y2="226" stroke="var(--line)" stroke-width="2"/>
+        <g fill="var(--amber)">
+          <rect x="666" y="106" width="14" height="30" rx="2" opacity="0.85"/>
+          <rect x="666" y="178" width="14" height="30" rx="2" opacity="0.85"/>
+        </g>
+        <text x="544" y="252" text-anchor="middle" font-size="10.5" fill="var(--ink-faint)" font-family="monospace">Two bands only (clumped)</text>
+      </svg>
+      <figcaption>Without observation you get an <strong>interference pattern</strong> (wave); observe the path and only <strong>two bands</strong> (particle) remain — <strong>observation destroys the wave nature.</strong></figcaption>
+    </figure>
+    <p>But the moment you <strong>observe</strong> "which slit it went through," the interference pattern vanishes. Observation here doesn't mean a person "looking" — for instance, if you <strong>fire a photon at the electron to pin down its position</strong>, that interaction destroys the electron's wave nature, and it's fixed as having passed through a single slit, like a particle. <strong>The instant the path is revealed, the wave nature disappears</strong> — this one fact runs through all of quantum mechanics.</p>
+  </section>
+
+  <section class="act" id="act2">
+    <div class="act-head"><span class="act-num">02</span><h2>Bit vs. Qubit</h2></div>
+    <p>A classical (electrical) bit is a switch. On or off, <code>1</code> or <code>0</code>, nothing in between.</p>
+    <p>A qubit, though, has <strong><span class="ket z0">|0⟩</span> and <span class="ket z1">|1⟩</span> overlapping until you observe it</strong> — the very property the double-slit electron showed when it acted as if it went through both slits (<em>superposition</em>). (The bar-and-bracket around <span class="ket z0">|0⟩</span> is quantum notation for a "state," called a <strong>ket</strong>.) The coefficient in front of a state is its <strong>amplitude</strong>, and <strong>the square of that amplitude's magnitude is the probability of getting that state</strong>. So the superposition of 0 and 1, written out, is:</p>
+    <div class="formula">
+      |ψ⟩ = α|0⟩ + β|1⟩
+      <span class="note">α, β: the complex amplitude of each component</span>
+    </div>
+    <p>With this notation, when you measure you get <span class="ket z0">|0⟩</span> with probability <span class="m">|α|²</span> and <span class="ket z1">|1⟩</span> with probability <span class="m">|β|²</span>. One of the two must come out, so <span class="m">|α|² + |β|² = 1</span>.</p>
+    <p>A qubit is not an abstract idea — it is a <strong>real physical thing</strong>. It can be built from many physical systems: superconducting circuits, trapped ions, neutral atoms, photons, and more. Whatever it is made of, the common thread is that it is a <strong>system with two states (a two-level system) to serve as 0 and 1 — or one you deliberately pick two levels out of</strong>.</p>
+    <div class="bridge">
+      <div class="tag"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12h4l3-8 4 16 3-8h4"/></svg>From the EE side</div>
+      <p>A digital node is <strong>a single scalar</strong>, High or Low. What makes a qubit different is that its value is a combination of two amplitudes <span class="m">α, β</span>, and because those amplitudes are <strong>complex numbers</strong> they carry not just a "magnitude" but also a <strong>phase</strong>. That phase turns out to be decisive later on.</p>
+    </div>
+  </section>
+
+  <section class="act" id="act3">
+    <div class="act-head"><span class="act-num">03</span><h2>The Bloch Sphere — Making a Qubit Visible</h2></div>
+    <p>Now a problem shows up. We wrote the state out in full as <span class="m">α|0⟩ + β|1⟩</span> — but <strong>you can't see it.</strong> Since <span class="m">α, β</span> are complex numbers, that is four real numbers' worth of information, and four dimensions can't be drawn.</p>
+    <p>Fortunately, two constraints cut down the degrees of freedom:</p>
+    <ul class="constraints">
+      <li><strong>The probabilities sum to 1</strong> (<span class="m">|α|²+|β|²=1</span>) — once one is fixed, the other follows.</li>
+      <li><strong>A phase applied to the whole state is invisible</strong> — multiplying both <span class="m">α, β</span> by the same overall phase changes nothing, neither in measurement nor under a gate (just as rotating two photos together leaves their relationship unchanged). So that "global phase" isn't counted; the only thing that matters is the <em>relative phase</em> between <span class="m">α</span> and <span class="m">β</span>.</li>
+    </ul>
+    <p>Putting it together — <strong>four real numbers minus two constraints</strong> — leaves exactly <strong>two</strong> degrees of freedom. Those two are <span class="m">θ</span> (the polar angle), which acts like latitude, and <span class="m">φ</span>, which acts like longitude. Using them, just as you pin a spot on a globe by latitude and longitude, we can draw the once-invisible qubit as a picture — and that picture is the <strong>Bloch sphere</strong>. (Earlier we said "the global phase is ignored, only the <em>relative phase</em> matters" — that relative phase is precisely this <span class="m">φ</span>.) Rewriting the state in these two angles:</p>
+    <div class="formula">
+      |ψ⟩ = cos(θ/2)|0⟩ + e<sup>iφ</sup> sin(θ/2)|1⟩
+      <span class="note">θ: how far it tilts from the North pole (probability) · φ: longitude (phase)</span>
+    </div>
+    <p>The North pole is <span class="ket z0">|0⟩</span>, the South pole is <span class="ket z1">|1⟩</span>, and the qubit is an arrow on that surface.</p>
+    <p><span class="m">θ</span> is <strong>how far the arrow tilts away from the North pole</strong>. By the rule above, <span class="m">cos(θ/2)</span> is the amplitude of 0, so on measurement you get 0 with probability <span class="m">cos²(θ/2)</span> — in other words, <strong>θ sets the measurement probability</strong>. At the North pole (θ=0°) it's 100% <span class="ket z0">0</span>, at the equator (θ=90°) it's 50:50, and at the South pole (θ=180°) it's 100% <span class="ket z1">1</span>. <span class="m">φ</span> is <strong>which direction (longitude) the arrow faces around the equator</strong> — this is the <em>phase</em>.</p>
+    <p><strong>But why does this phase matter?</strong> Spin the arrow all the way around the equator — change only the phase — and <strong>the 0/1 probabilities don't move</strong> (they're set by <span class="m">θ</span> alone). So it's natural to ask, "why does it matter?" The answer: <em>it's invisible right now, but when a gate rotates the arrow, this phase completely changes the outcome.</em> It's the hidden second knob. (Two states with the same probabilities but different phases respond differently to a gate — the concrete example comes in <strong>Part 2</strong>, on gates.)</p>
+    <p>It's faster to just play with it than to read about it. Drag the sphere below to rotate it, and move the arrow with the θ and φ sliders — in particular, watch how <strong>changing <span class="m">θ</span> moves the probability bars while spinning <span class="m">φ</span> (longitude) alone doesn't budge them one bit</strong>.</p>
+  </section>
+
+  </div>
+
+  <!-- ================= WIDGET ================= -->
+  <div class="wrap">
+  <div class="widget-shell">
+    <div class="widget-top">
+      <div>
+        <div class="wt-title">The Bloch Sphere — Try It Yourself</div>
+      </div>
+      <div class="wt-sub" id="coordReadout">θ 90° · φ 0°</div>
+    </div>
+    <div class="widget-body">
+      <div class="canvas-cell" id="canvasCell">
+        <canvas id="bloch"></canvas>
+        <div class="drag-hint">Drag to rotate</div>
+      </div>
+      <div class="controls">
+        <div class="readout">
+          <div class="prob p0">
+            <div class="plabel"><span>P(0) · |0⟩</span><span class="pval" id="p0val">50%</span></div>
+            <div class="bar-track"><div class="bar-fill" id="p0bar"></div></div>
+          </div>
+          <div class="prob p1">
+            <div class="plabel"><span>P(1) · |1⟩</span><span class="pval" id="p1val">50%</span></div>
+            <div class="bar-track"><div class="bar-fill" id="p1bar"></div></div>
+          </div>
+        </div>
+
+        <div class="sliders">
+          <div class="sld">
+            <div class="sld-top"><span class="k">θ · polar angle (tilt)</span><span class="v" id="thetaLabel">90°</span></div>
+            <input type="range" id="theta" min="0" max="180" value="90" step="1" aria-label="polar angle theta">
+          </div>
+          <div class="sld">
+            <div class="sld-top"><span class="k">φ · phase (longitude)</span><span class="v" id="phiLabel">0°</span></div>
+            <input type="range" id="phi" min="0" max="360" value="0" step="1" aria-label="phase phi">
+          </div>
+        </div>
+
+        <div class="state-line" id="stateLine">|ψ⟩ = 0.71|0⟩ + 0.71|1⟩</div>
+
+        <div class="presets" id="presets">
+          <button data-t="0" data-p="0">|0⟩</button>
+          <button data-t="180" data-p="0">|1⟩</button>
+          <button data-t="90" data-p="0">|+⟩</button>
+          <button data-t="90" data-p="180">|−⟩</button>
+          <button data-t="90" data-p="90">|i⟩</button>
+        </div>
+
+        <div class="measure-row">
+          <button class="btn-measure" id="measureBtn">Measure</button>
+          <div class="measure-out" id="measureOut">Measure 100 times… press the button</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  </div>
+
+  <div class="wrap">
+  <section class="act" id="act4">
+    <div class="act-head"><span class="act-num">04</span><h2>Measurement — The Moment the Wave Collapses</h2></div>
+    <p>Recall the double slit from ①. The instant you observe it, the electron's wave nature collapses and settles onto a single path. A qubit is the same. However tilted the arrow is — at the equator or anywhere else — <strong>the moment you measure, the result is always either 0 or 1</strong>. There is no answer like "45 degrees."</p>
+    <p>Which way it lands is a matter of probability — as we saw, <span class="ket z0">|0⟩</span> with probability <span class="m">|α|²</span> and <span class="ket z1">|1⟩</span> with probability <span class="m">|β|²</span>. The more the arrow tilts toward the North pole, the more often 0 comes up, but <strong>tilting doesn't guarantee that value</strong> — even a state pointing toward 0 can come out as 1 (it is, after all, only a probability). When you measure, the arrow jumps to <strong>the pole of whatever result just came out</strong> (collapse), and the superposition and phase information from before the measurement is gone — irreversibly.</p>
+    <p>There's a trap here. <strong>A single measurement can't tell you the probability.</strong> Even for a state with a 70% chance of 0, one measurement won't tell you whether it will be 0 or 1. So in practice you <strong>run the same circuit hundreds to thousands of times (shots)</strong> and recover the probabilities from the <strong>ratio</strong> of 0s to 1s. (The competition circuits I ran also measured 1024 shots each time.) A single result can't be trusted, so <strong>you measure many times, pull the answer out statistically, and filter out errors</strong> — that is what running quantum algorithms is really about.</p>
+    <div class="bridge">
+      <div class="tag"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 17l6-6 4 4 8-8"/><path d="M17 3h4v4"/></svg>From the EE side</div>
+      <p>It's similar to how an ADC <strong>quantizes</strong> a continuous voltage into a discrete code. But two things differ — which code it lands on is <strong>probabilistic</strong>, and the sampling <strong>destroys the original</strong>. An ADC reads the same waveform if you measure again, but for a qubit the first measurement changes the state itself.</p>
+    </div>
+    <p>That's why half of designing a quantum algorithm isn't "how do I compute" but <strong>"how do I stack the probabilities beforehand so that, when measured, the value corresponding to the correct answer comes up more often"</strong> — and figuring out which direction the correct answer lies in is the other half. The dice are cast the moment you measure, so <strong>rotating the arrow ahead of time with gates</strong> to make those dice fall toward the answer — that's the next story.</p>
+  </section>
+
+  <section class="act" id="roadmap">
+    <div class="act-head"><span class="act-num">↦</span><h2>Map of This Series</h2></div>
+    <div class="roadmap">
+      <div class="rm-item done">
+        <span class="rm-n">Part 1</span>
+        <div><b>What Is a Qubit? — The Bloch Sphere <em style="color:var(--teal);font-style:normal">· this post</em></b><span>Waves &amp; duality → superposition (α|0⟩+β|1⟩) → Bloch sphere → measurement</span></div>
+      </div>
+      <div class="rm-item">
+        <span class="rm-n">Part 2</span>
+        <div><b>How to Turn the Arrow — Gates</b><span>X and rotation gates change phase and probability — spinning the very sphere we built here.</span></div>
+      </div>
+      <div class="rm-item">
+        <span class="rm-n">Part 3</span>
+        <div><b>Two Qubits — Entanglement</b><span>A state one arrow can't draw. Where quantum starts to outrun classical.</span></div>
+      </div>
+    </div>
+  </section>
+  </div>
+</article>
+
+<footer class="pg">
+  <span>Waves · Qubits · Bloch sphere · Measurement</span>
+  <span>Quantum series · Part 1</span>
+</footer>
+
+<script>
+(function () {
+  "use strict";
+  var canvas = document.getElementById("bloch");
+  var cell = document.getElementById("canvasCell");
+  var ctx = canvas.getContext("2d");
+  var DPR = Math.max(1, Math.min(2.5, window.devicePixelRatio || 1));
+
+  // state
+  var theta = Math.PI / 2;  // polar 0..pi
+  var phi = 0;              // azimuth 0..2pi
+  // camera
+  var camYaw = -0.6, camPitch = 0.45;
+
+  var W = 0, H = 0, cx = 0, cy = 0, R = 0;
+
+  function css(name){ return getComputedStyle(document.documentElement).getPropertyValue(name).trim(); }
+  var COL = {};
+  function refreshColors(){
+    COL.amber = css('--amber') || '#c8811a';
+    COL.teal = css('--teal') || '#14808c';
+    COL.ink = css('--ink') || '#16211f';
+    COL.faint = css('--ink-faint') || '#7f8c89';
+    COL.line = css('--wire') || css('--line') || '#d2dad7';
+    COL.grid = css('--grid') || 'rgba(20,128,140,0.13)';
+  }
+
+  function resize() {
+    var rect = cell.getBoundingClientRect();
+    W = rect.width; H = rect.height;
+    canvas.width = Math.round(W * DPR);
+    canvas.height = Math.round(H * DPR);
+    ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
+    cx = W / 2; cy = H / 2;
+    R = Math.min(W, H) * 0.34;
+    draw();
+  }
+
+  // rotate a 3d point (x right, y depth, z up) by camera, return {sx,sy,depth}
+  function project(x, y, z) {
+    // yaw around vertical z axis
+    var cyaw = Math.cos(camYaw), syaw = Math.sin(camYaw);
+    var x1 = x * cyaw - y * syaw;
+    var y1 = x * syaw + y * cyaw;
+    var z1 = z;
+    // pitch around screen-horizontal x axis
+    var cp = Math.cos(camPitch), sp = Math.sin(camPitch);
+    var y2 = y1 * cp - z1 * sp;
+    var z2 = y1 * sp + z1 * cp;
+    var x2 = x1;
+    return { sx: cx + x2 * R, sy: cy - z2 * R, depth: y2 };
+  }
+
+  // bloch coords: z up = |0>, -z = |1>
+  function blochVec(th, ph) {
+    return {
+      x: Math.sin(th) * Math.cos(ph),
+      y: Math.sin(th) * Math.sin(ph),
+      z: Math.cos(th)
+    };
+  }
+
+  function strokePolyline(pts, front, colorFront, colorBack, wF, wB) {
+    // split by depth sign for depth cueing
+    for (var i = 0; i < pts.length - 1; i++) {
+      var a = pts[i], b = pts[i + 1];
+      var backSeg = (a.depth + b.depth) / 2 < 0;
+      ctx.beginPath();
+      ctx.moveTo(a.sx, a.sy);
+      ctx.lineTo(b.sx, b.sy);
+      ctx.strokeStyle = backSeg ? colorBack : colorFront;
+      ctx.lineWidth = backSeg ? wB : wF;
+      ctx.stroke();
+    }
+  }
+
+  function circlePts(kind, val, n) {
+    var pts = [], i, t;
+    for (i = 0; i <= n; i++) {
+      t = (i / n) * Math.PI * 2;
+      if (kind === 'lat') { // constant theta=val, vary phi
+        pts.push(project(Math.sin(val)*Math.cos(t), Math.sin(val)*Math.sin(t), Math.cos(val)));
+      } else { // meridian: constant phi=val, vary theta 0..2pi (full circle)
+        pts.push(project(Math.sin(t)*Math.cos(val), Math.sin(t)*Math.sin(val), Math.cos(t)));
+      }
+    }
+    return pts;
+  }
+
+  function draw() {
+    if (!W) return;
+    refreshColors();
+    ctx.clearRect(0, 0, W, H);
+
+    var faint = COL.faint, line = COL.line;
+
+    // ---- sphere outline (silhouette) ----
+    ctx.beginPath();
+    ctx.arc(cx, cy, R, 0, Math.PI * 2);
+    ctx.strokeStyle = line;
+    ctx.lineWidth = 1.4;
+    ctx.stroke();
+
+    // subtle fill
+    ctx.beginPath();
+    ctx.arc(cx, cy, R, 0, Math.PI * 2);
+    var g = ctx.createRadialGradient(cx - R*0.3, cy - R*0.35, R*0.1, cx, cy, R);
+    g.addColorStop(0, COL.grid);
+    g.addColorStop(1, 'rgba(0,0,0,0)');
+    ctx.fillStyle = g;
+    ctx.fill();
+
+    // ---- grid: latitudes + meridians ----
+    ctx.globalAlpha = 1;
+    var lats = [Math.PI/4, Math.PI/2, 3*Math.PI/4];
+    for (var li = 0; li < lats.length; li++) {
+      var isEq = Math.abs(lats[li] - Math.PI/2) < 1e-6;
+      strokePolyline(circlePts('lat', lats[li], 96), true,
+        isEq ? faint : line, isEq ? faint : line,
+        isEq ? 1.3 : 0.9, isEq ? 0.7 : 0.5);
+    }
+    var mers = [0, Math.PI/4, Math.PI/2, 3*Math.PI/4];
+    for (var mi = 0; mi < mers.length; mi++) {
+      strokePolyline(circlePts('mer', mers[mi], 96), true, line, line, 0.9, 0.5);
+    }
+
+    // ---- axis poles ----
+    var top = project(0,0,1), bot = project(0,0,-1);
+    ctx.beginPath();
+    ctx.moveTo(top.sx, top.sy); ctx.lineTo(bot.sx, bot.sy);
+    ctx.strokeStyle = line; ctx.lineWidth = 1; ctx.setLineDash([3,4]); ctx.stroke();
+    ctx.setLineDash([]);
+
+    // ---- state vector ----
+    var v = blochVec(theta, phi);
+    var o = project(0,0,0);
+    var tip = project(v.x, v.y, v.z);
+    var behind = tip.depth < 0;
+
+    // vector color blends amber(top)->teal(bottom) by z
+    var vcol = COL.teal;
+    // draw shadow on equator plane
+    var sh = project(v.x, v.y, 0);
+    ctx.beginPath();
+    ctx.moveTo(o.sx, o.sy); ctx.lineTo(sh.sx, sh.sy);
+    ctx.strokeStyle = faint; ctx.globalAlpha = 0.25; ctx.lineWidth = 1; ctx.setLineDash([2,3]);
+    ctx.stroke(); ctx.setLineDash([]); ctx.globalAlpha = 1;
+
+    // arrow line
+    ctx.globalAlpha = behind ? 0.45 : 1;
+    ctx.beginPath();
+    ctx.moveTo(o.sx, o.sy); ctx.lineTo(tip.sx, tip.sy);
+    var grad = ctx.createLinearGradient(o.sx, o.sy, tip.sx, tip.sy);
+    grad.addColorStop(0, COL.teal);
+    grad.addColorStop(1, v.z >= 0 ? COL.amber : COL.teal);
+    ctx.strokeStyle = grad;
+    ctx.lineWidth = 3;
+    ctx.lineCap = 'round';
+    ctx.stroke();
+
+    // arrow head
+    var ang = Math.atan2(tip.sy - o.sy, tip.sx - o.sx);
+    var hl = 11, ha = 0.5;
+    ctx.beginPath();
+    ctx.moveTo(tip.sx, tip.sy);
+    ctx.lineTo(tip.sx - hl*Math.cos(ang - ha), tip.sy - hl*Math.sin(ang - ha));
+    ctx.lineTo(tip.sx - hl*Math.cos(ang + ha), tip.sy - hl*Math.sin(ang + ha));
+    ctx.closePath();
+    ctx.fillStyle = v.z >= 0 ? COL.amber : COL.teal;
+    ctx.fill();
+
+    // tip dot
+    ctx.beginPath();
+    ctx.arc(tip.sx, tip.sy, 3.2, 0, Math.PI*2);
+    ctx.fillStyle = v.z >= 0 ? COL.amber : COL.teal;
+    ctx.fill();
+    ctx.globalAlpha = 1;
+
+    // ---- pole labels ----
+    ctx.font = '600 13px ' + (css('--mono') || 'monospace');
+    ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+    // |0> top
+    var l0 = project(0,0,1.18);
+    ctx.fillStyle = COL.amber;
+    ctx.fillText('|0⟩', l0.sx, l0.sy);
+    var l1 = project(0,0,-1.18);
+    ctx.fillStyle = COL.teal;
+    ctx.fillText('|1⟩', l1.sx, l1.sy);
+  }
+
+  // ---------- UI wiring ----------
+  var thetaS = document.getElementById('theta');
+  var phiS = document.getElementById('phi');
+  var thetaLabel = document.getElementById('thetaLabel');
+  var phiLabel = document.getElementById('phiLabel');
+  var p0val = document.getElementById('p0val');
+  var p1val = document.getElementById('p1val');
+  var p0bar = document.getElementById('p0bar');
+  var p1bar = document.getElementById('p1bar');
+  var stateLine = document.getElementById('stateLine');
+  var coordReadout = document.getElementById('coordReadout');
+  var measureOut = document.getElementById('measureOut');
+
+  function fmt(x) { return (Math.round(x * 100) / 100).toFixed(2); }
+
+  function updateFromState() {
+    var thDeg = Math.round(theta * 180 / Math.PI);
+    var phDeg = Math.round(phi * 180 / Math.PI);
+    thetaLabel.textContent = thDeg + '°';
+    phiLabel.textContent = phDeg + '°';
+    coordReadout.textContent = 'θ ' + thDeg + '° · φ ' + phDeg + '°';
+
+    var p0 = Math.cos(theta/2) * Math.cos(theta/2);
+    var p1 = 1 - p0;
+    p0val.textContent = Math.round(p0 * 100) + '%';
+    p1val.textContent = Math.round(p1 * 100) + '%';
+    p0bar.style.width = (p0 * 100) + '%';
+    p1bar.style.width = (p1 * 100) + '%';
+
+    var a = Math.cos(theta/2);
+    var b = Math.sin(theta/2);
+    var betaStr;
+    if (b < 1e-6) { betaStr = ''; }
+    else if (phDeg === 0) { betaStr = ' + ' + fmt(b) + '|1⟩'; }
+    else { betaStr = ' + ' + fmt(b) + '·e^(i' + phDeg + '°)|1⟩'; }
+    if (a < 1e-6) {
+      stateLine.textContent = '|ψ⟩ = ' + (phDeg === 0 ? '' : 'e^(i' + phDeg + '°)·') + '1.00|1⟩';
+    } else {
+      stateLine.textContent = '|ψ⟩ = ' + fmt(a) + '|0⟩' + betaStr;
+    }
+    measureOut.textContent = 'Measure 100 times… press the button';
+  }
+
+  thetaS.addEventListener('input', function () {
+    theta = (+thetaS.value) * Math.PI / 180;
+    updateFromState(); draw();
+  });
+  phiS.addEventListener('input', function () {
+    phi = (+phiS.value) * Math.PI / 180;
+    updateFromState(); draw();
+  });
+
+  // presets
+  document.getElementById('presets').addEventListener('click', function (e) {
+    var btn = e.target.closest('button');
+    if (!btn) return;
+    thetaS.value = btn.getAttribute('data-t');
+    phiS.value = btn.getAttribute('data-p');
+    theta = (+thetaS.value) * Math.PI / 180;
+    phi = (+phiS.value) * Math.PI / 180;
+    updateFromState(); draw();
+  });
+
+  // measure
+  var measureBtn = document.getElementById('measureBtn');
+  measureBtn.addEventListener('click', function () {
+    var p0 = Math.cos(theta/2) * Math.cos(theta/2);
+    var n = 100, c0 = 0;
+    for (var i = 0; i < n; i++) { if (Math.random() < p0) c0++; }
+    var oneShot = Math.random() < p0 ? 0 : 1;
+    measureOut.innerHTML = 'This run: <b class="r' + oneShot + '">' + oneShot +
+      '</b> · out of 100, 0 came up <b class="r0">' + c0 + '</b> times, 1 came up <b class="r1">' + (n - c0) + '</b> times';
+  });
+
+  // drag to rotate
+  var dragging = false, lastX = 0, lastY = 0;
+  cell.addEventListener('pointerdown', function (e) {
+    dragging = true; lastX = e.clientX; lastY = e.clientY;
+    cell.setPointerCapture(e.pointerId);
+  });
+  cell.addEventListener('pointermove', function (e) {
+    if (!dragging) return;
+    var dx = e.clientX - lastX, dy = e.clientY - lastY;
+    lastX = e.clientX; lastY = e.clientY;
+    camYaw += dx * 0.008;
+    camPitch += dy * 0.008;
+    camPitch = Math.max(-1.35, Math.min(1.35, camPitch));
+    draw();
+  });
+  function endDrag() { dragging = false; }
+  cell.addEventListener('pointerup', endDrag);
+  cell.addEventListener('pointercancel', endDrag);
+
+  // react to theme toggle (data-theme) & color-scheme changes
+  var mo = new MutationObserver(function(){ refreshColors(); draw(); });
+  mo.observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
+  if (window.matchMedia) {
+    var mq = window.matchMedia('(prefers-color-scheme: dark)');
+    if (mq.addEventListener) mq.addEventListener('change', function(){ refreshColors(); draw(); });
+  }
+
+  window.addEventListener('resize', resize);
+  refreshColors();
+  updateFromState();
+  // initial sizing (wait a frame for layout)
+  requestAnimationFrame(resize);
+})();
+</script>
