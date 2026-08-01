@@ -83,12 +83,18 @@
   .edesc { margin: 6px 0 0; font-size: .95rem; color: var(--ink-soft); }
   .etag { display: inline-block; font-family: var(--mono); font-size: 10.5px; letter-spacing: .06em; text-transform: uppercase; color: var(--teal); background: color-mix(in srgb, var(--teal) 9%, transparent); padding: 2px 8px; border-radius: 20px; margin-top: 8px; }
 
-  /* projects */
-  .projects { display: flex; flex-direction: column; gap: 12px; }
-  .proj { background: var(--panel); border: 1px solid var(--line); border-radius: 11px; padding: 16px 18px; box-shadow: var(--shadow); }
-  .proj .ptitle { font-size: 1.02rem; font-weight: 700; letter-spacing: -0.01em; margin: 0 0 4px; }
-  .proj .pdesc { margin: 0; font-size: .93rem; color: var(--ink-soft); }
-  .proj .psoon { font-family: var(--mono); font-size: 10.5px; letter-spacing: .05em; text-transform: uppercase; color: var(--ink-faint); }
+  /* tracks (hub cards) */
+  .tracks { display: flex; flex-direction: column; gap: 12px; }
+  .track { display: block; text-decoration: none; color: inherit; background: var(--panel); border: 1px solid var(--line); border-radius: 11px; padding: 18px 20px; box-shadow: var(--shadow); transition: border-color .14s, transform .14s; }
+  a.track:hover { border-color: var(--teal); transform: translateY(-1px); }
+  a.track:hover .ttitle { color: var(--teal); }
+  a.track:hover .tarrow { transform: translateX(3px); color: var(--teal); }
+  .ttop { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; }
+  .ttitle { font-size: 1.08rem; font-weight: 750; letter-spacing: -0.015em; transition: color .12s; }
+  .tarrow { font-family: var(--mono); color: var(--ink-faint); transition: transform .14s, color .14s; flex: none; }
+  .tdesc { margin: 6px 0 0; font-size: .93rem; color: var(--ink-soft); }
+  .track.soon { opacity: .58; }
+  .track.soon .tsoon { font-family: var(--mono); font-size: 10.5px; letter-spacing: .05em; text-transform: uppercase; color: var(--ink-faint); }
 
   footer.pg {
     max-width: var(--maxw); margin: 24px auto 0; padding: 26px 24px 70px;
@@ -135,19 +141,28 @@
   </section>
 
   <section class="wrap">
-    <h2>Projects</h2>
-    <div class="projects">
-      <div class="proj">
-        <p class="ptitle">Optical computing, from scratch <span class="psoon">· write-up soon</span></p>
-        <p class="pdesc">An 8×8 optical-inference simulator built and validated end to end (≈93.7% on digits, on par with a digital baseline). Architecture and BOM for a physical build in progress.</p>
+    <h2>Explore</h2>
+    <div class="tracks">
+      <a class="track" href="https://github.com/anythinking/photonic-computing-roadmap">
+        <div class="ttop">
+          <span class="ttitle">Optical &amp; Quantum Computing</span>
+          <span class="tarrow">→</span>
+        </div>
+        <p class="tdesc">A leveled roadmap of my self-directed study — from the physics of light to optical AI accelerators, with honest depth markers. My main research track.</p>
+      </a>
+      <div class="track soon">
+        <div class="ttop">
+          <span class="ttitle">AI Architecture</span>
+          <span class="tsoon">soon</span>
+        </div>
+        <p class="tdesc">A personal AI operating system — persistent memory, self-evolving rules, and multi-agent orchestration across CLIs.</p>
       </div>
-      <div class="proj">
-        <p class="ptitle">Quantum ML competition <span class="psoon">· write-up soon</span></p>
-        <p class="pdesc">A variational quantum classifier (VQC) for an 8-feature task, designed and run under real NISQ constraints — circuit depth, shot noise, the honest ceiling of the data.</p>
-      </div>
-      <div class="proj">
-        <p class="ptitle">Superconducting magnets</p>
-        <p class="pdesc">Building and testing superconducting solenoids (NMR, ~20&nbsp;T) — REBCO tapes, joints, quench and current-injection measurement. High-field hardware, hands-on.</p>
+      <div class="track soon">
+        <div class="ttop">
+          <span class="ttitle">DIY Builds</span>
+          <span class="tsoon">soon</span>
+        </div>
+        <p class="tdesc">Hardware I make — Arduino / ESP32, sensors and motors, things that move. Learning by building.</p>
       </div>
     </div>
   </section>
