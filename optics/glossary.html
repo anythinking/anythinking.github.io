@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@500;700&family=Noto+Sans+KR:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<script src="data/glossary.js"></script>
+<style>
+html,body{margin:0;overflow:hidden;background:#F2F0EB;color:#1C1B18;font-family:'Noto Sans KR',sans-serif;-webkit-font-smoothing:antialiased}
+a{color:#2C7A86;text-underline-offset:2px}a:hover{color:#C9472F}
+</style>
+</helmet>
+<div style="position:fixed;inset:0;display:flex;flex-direction:column;overflow:hidden">
+  <header style="display:flex;justify-content:space-between;align-items:center;gap:24px;padding:16px 32px;border-bottom:1px solid #D9D4C9">
+    <div style="display:flex;align-items:baseline;gap:14px;min-width:0;overflow:hidden">
+      <b style="font-family:'Noto Serif KR',serif;font-size:20px;letter-spacing:-.015em;white-space:nowrap">광 연산 지도와 실험실</b>
+      <span style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:#6B675E;letter-spacing:.06em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0">지도 7장 · 구조 28개 · 용어 340개</span>
+    </div>
+    <nav style="flex:none;display:flex;gap:2px;font-family:'IBM Plex Mono',monospace;font-size:11.5px;color:#6B675E;background:#FBFAF7;border:1px solid #D9D4C9;border-radius:8px;padding:3px">
+      <a href="optics.html" style="padding:5px 9px;white-space:nowrap;color:inherit;text-decoration:none">광학</a>
+      <a href="layers.html" style="padding:5px 9px;white-space:nowrap;color:inherit;text-decoration:none">층 148</a>
+      <a href="compute.html" style="padding:5px 9px;white-space:nowrap;color:inherit;text-decoration:none">구조 28</a>
+      <a href="devices.html" style="padding:5px 9px;white-space:nowrap;color:inherit;text-decoration:none">소자 42</a>
+      
+      <a href="glossary.html" style="padding:5px 9px;white-space:nowrap;background:#F7E6DF;color:#A8361F;border-radius:5px;text-decoration:none">용어 340</a>
+      
+    </nav>
+  </header>
+
+  <div style="display:flex;align-items:center;gap:10px 14px;padding:10px 32px;border-bottom:1px solid #D9D4C9;flex-wrap:wrap">
+    <input type="search" value="{{ q }}" onInput="{{ onQ }}" placeholder="용어나 설명으로 찾기 — 포켈스, 비휘발, 파운드리…" style="flex:1 1 260px;max-width:420px;font:inherit;font-size:13.5px;padding:7px 12px;border:1px solid #D9D4C9;border-radius:8px;background:#FBFAF7;color:#1C1B18;outline:none">
+    <span style="font-family:'IBM Plex Mono',monospace;font-size:11.5px;color:#6B675E;white-space:nowrap">{{ cnt }}</span>
+  </div>
+  <div style="display:flex;align-items:center;gap:6px;padding:8px 32px;border-bottom:1px solid #D9D4C9;flex-wrap:wrap">
+    <sc-for list="{{ filters }}" as="f" hint-placeholder-count="12">
+      <button onClick="{{ f.go }}" style="font:inherit;font-size:12px;cursor:pointer;padding:3px 9px;border-radius:999px;border:1px solid {{ f.bd }};background:{{ f.bg }};color:{{ f.fg }};white-space:nowrap"><span style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;opacity:.7;margin-right:4px">{{ f.k }}</span>{{ f.l }}</button>
+    </sc-for>
+  </div>
+
+  <main style="flex:1;min-height:0;display:grid;grid-template-columns:minmax(0,1fr) clamp(300px,34vw,440px)">
+    <div style="min-width:0;min-height:0;overflow:auto;padding:12px 32px 40px">
+      <sc-if value="{{ none }}" hint-placeholder-val="{{ false }}">
+        <p style="margin:24px 0;font-size:14px;color:#6B675E">찾는 말이 없다. 다른 낱말로 해보거나 층 필터를 풀어보자.</p>
+      </sc-if>
+      <sc-for list="{{ groups }}" as="g" hint-placeholder-count="8">
+        <div style="display:grid;grid-template-columns:minmax(130px,190px) minmax(0,1fr);gap:16px;padding:16px 0;border-bottom:1px solid #D9D4C9">
+          <div style="display:flex;flex-direction:column;gap:3px;min-width:0">
+            <div style="display:flex;align-items:baseline;gap:7px;flex-wrap:wrap">
+              <span style="font-family:'IBM Plex Mono',monospace;font-size:11.5px;font-weight:600;color:{{ g.kc }}">{{ g.k }}</span>
+              <span style="font-family:'Noto Serif KR',serif;font-size:15px;font-weight:700;line-height:1.35">{{ g.t }}</span>
+              <span style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:#8C877C">{{ g.n }}</span>
+            </div>
+            <span style="font-size:12px;line-height:1.55;color:#6B675E;text-wrap:pretty">{{ g.q }}</span>
+          </div>
+          <div style="display:flex;flex-wrap:wrap;gap:5px;align-content:flex-start">
+            <sc-for list="{{ g.items }}" as="o" hint-placeholder-count="10">
+              <button onClick="{{ o.go }}" style="font:inherit;font-size:13px;cursor:pointer;padding:3px 9px;border-radius:6px;border:1px solid {{ o.bd }};background:{{ o.bg }};color:{{ o.fg }};white-space:nowrap;display:inline-flex;gap:5px;align-items:baseline" style-hover="border-color:#C9472F">{{ o.t }}<span style="font-family:'IBM Plex Mono',monospace;font-size:9.5px;color:#8C877C">{{ o.gb }}</span></button>
+            </sc-for>
+          </div>
+        </div>
+      </sc-for>
+    </div>
+
+    <aside style="min-width:0;min-height:0;overflow:auto;border-left:1px solid #D9D4C9;padding:22px 26px 28px;display:flex;flex-direction:column;gap:16px">
+      <sc-if value="{{ hasSel }}" hint-placeholder-val="{{ false }}">
+        <div style="display:flex;flex-direction:column;gap:12px">
+          <div style="display:flex;justify-content:space-between;align-items:baseline;gap:10px">
+            <span style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:#6B675E;letter-spacing:.04em">{{ s.where }}</span>
+            <button onClick="{{ clear }}" style="font:inherit;font-size:12px;cursor:pointer;border:1px solid #D9D4C9;background:transparent;border-radius:6px;padding:2px 9px;white-space:nowrap">닫기 ✕</button>
+          </div>
+          <h2 style="margin:0;font-family:'Noto Serif KR',serif;font-size:24px;letter-spacing:-.015em;line-height:1.3">{{ s.t }}</h2>
+          <p ref="{{ defRef }}" style="margin:0;font-size:15px;line-height:1.85"></p>
+          <sc-if value="{{ s.hasX }}" hint-placeholder-val="{{ false }}">
+            <div style="display:flex;flex-direction:column;gap:6px;padding:12px 14px;background:#FBFAF7;border:1px solid #D9D4C9;border-radius:8px">
+              <span style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:#6B675E">{{ s.xl }}</span>
+              <p ref="{{ xRef }}" style="margin:0;font-size:14px;line-height:1.8"></p>
+            </div>
+          </sc-if>
+          <div style="display:flex;flex-direction:column;gap:6px">
+            <sc-if value="{{ s.hasRel }}" hint-placeholder-val="{{ false }}">
+              <a href="{{ s.relHref }}" style="display:flex;justify-content:space-between;gap:10px;padding:10px 12px;border:1px solid #D9D4C9;border-radius:8px;background:#FBFAF7;text-decoration:none;color:#1C1B18;font-size:13.5px" style-hover="border-color:#C9472F"><span>층 관계도에서 사슬 보기</span><span style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:#6B675E">아래 {{ s.dn }} · 위 {{ s.up }} →</span></a>
+            </sc-if>
+            <sc-if value="{{ s.hasS }}" hint-placeholder-val="{{ false }}">
+              <a href="{{ s.sHref }}" style="display:flex;justify-content:space-between;gap:10px;padding:10px 12px;border:1px solid #D9D4C9;border-radius:8px;background:#FBFAF7;text-decoration:none;color:#1C1B18;font-size:13.5px" style-hover="border-color:#C9472F"><span>{{ s.s }} 열기</span><span style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:#6B675E">{{ s.sid }} →</span></a>
+            </sc-if>
+          </div>
+        </div>
+      </sc-if>
+      <sc-if value="{{ noSel }}" hint-placeholder-val="{{ true }}">
+        <div style="display:flex;flex-direction:column;gap:8px">
+          <span style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:#6B675E;letter-spacing:.04em">용어 정리 · {{ total }}개</span>
+          <h2 style="margin:0;font-family:'Noto Serif KR',serif;font-size:22px;letter-spacing:-.015em;line-height:1.3">이 페이지가 쓰는 말</h2>
+          <p style="margin:0;font-size:13.5px;line-height:1.75;color:#6B675E">층이 붙은 용어는 층 관계도로 건너뛰어 그 말이 어디서 와서 어디로 가는지 사슬로 볼 수 있다. 군이 붙은 용어는 그 구조를 설명할 때 쓰는 말이다.</p>
+          <p style="margin:0;font-size:13px;line-height:1.7;color:#6B675E">왼쪽에서 말을 누르면 풀이가 여기 열린다.</p>
+        </div>
+      </sc-if>
+    </aside>
+  </main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  state = { q: '', only: 'all', sel: decodeURIComponent((location.hash || '').slice(1)) || null, ready: !!window.GLX };
+  defRef = React.createRef(); xRef = React.createRef();
+  LN = { L0: '빛 자체', L1: '물리 효과', L2: '재료·플랫폼', L3: '소자', L4: '회로', L5: '아키텍처', L6: '시스템·산업', '비교': '층 밖 — 전자와 비교', '기타': '그 밖',
+    'G:A': '행렬곱', 'G:B': '신경망 모델', 'G:C': '최적화', 'G:D': '디지털 전광 논리', 'G:E': '센서·이미징', 'G:F': '양자·신호처리', 'G:M': '메시 심화' };
+  LQ = { L0: '무엇을 조절하고 무엇을 잴 수 있나', L1: '무엇을 걸면 빛이 어떻게 변하나', L2: '어떤 재료가 어떤 손잡이를 갖나', L3: '효과와 형상으로 무엇을 만드나', L4: '소자를 엮어 무슨 함수를 만드나', L5: '그 회로로 어떤 계산기를 짓나', L6: '누가 사고 어디서 돈이 나나', '비교': '광이 전자보다 나은 점 — L0 사실의 결과', '기타': '기관·분야 쪽 용어 — 층에 안 걸린다' };
+  ORDER = ['L0', 'L1', 'L2', 'L3', 'L4', 'L5', 'L6', '비교', '기타', 'G:A', 'G:B', 'G:C', 'G:D', 'G:E', 'G:F', 'G:M'];
+  componentDidMount() { if (!this.state.ready) this._p = setInterval(() => { if (window.GLX) { clearInterval(this._p); this.setState({ ready: true }); } }, 50); this.paint(); }
+  componentDidUpdate() { this.paint(); }
+  componentWillUnmount() { clearInterval(this._p); }
+  ink(h) { return String(h || '').replace(/<b>/g, '<b style="color:#C9472F;font-weight:700">'); }
+  paint() {
+    const o = (window.GLX || []).find(x => x.t === this.state.sel); if (!o) return;
+    if (this.defRef.current) this.defRef.current.innerHTML = this.ink(o.d);
+    if (this.xRef.current) this.xRef.current.innerHTML = this.ink(o.x);
+  }
+  key(l) { return l.startsWith('G:') ? l.slice(2) + '군' : l === '기타' ? '—' : l; }
+  pill(on) { return on ? ['#C9472F', '#F7E6DF', '#A8361F'] : ['#D9D4C9', 'transparent', '#1C1B18']; }
+  pick(t) { history.replaceState(null, '', '#' + encodeURIComponent(t)); this.setState({ sel: t }); }
+  renderVals() {
+    const st = this.state, X = window.GLX || [];
+    const n = st.q.trim().toLowerCase();
+    const hit = X.filter(o => (st.only === 'all' || o.l === st.only) && (!n || o.t.toLowerCase().includes(n) || o.d.replace(/<[^>]+>/g, '').toLowerCase().includes(n)));
+    const have = this.ORDER.filter(L => X.some(o => o.l === L));
+    const filters = [{ k: '', l: '전체', id: 'all' }].concat(have.map(L => ({ k: this.key(L), l: this.LN[L], id: L }))).map(f => { const p = this.pill(st.only === f.id); return { ...f, go: () => this.setState({ only: f.id }), bd: p[0], bg: p[1], fg: p[2] }; });
+    const groups = this.ORDER.map(L => {
+      const g = hit.filter(o => o.l === L).sort((a, b) => a.t.localeCompare(b.t, 'ko')); if (!g.length) return null;
+      const isG = L.startsWith('G:');
+      return { k: this.key(L), kc: isG ? '#B7791F' : /^L[345]$/.test(L) ? '#2C7A86' : '#6B675E', t: this.LN[L], q: this.LQ[L] || '그 구조를 설명할 때 쓰는 말', n: g.length,
+        items: g.map(o => { const on = st.sel === o.t; return { t: o.t, gb: !isG && o.gs.length ? o.gs.join('·') : '', go: () => this.pick(o.t), bd: on ? '#C9472F' : '#D9D4C9', bg: on ? '#F7E6DF' : '#FBFAF7', fg: on ? '#A8361F' : '#1C1B18' }; }) };
+    }).filter(Boolean);
+    const o = X.find(x => x.t === st.sel);
+    const s = o ? { t: o.t, where: (o.l.startsWith('G:') ? o.l.slice(2) + '군 · ' + this.LN[o.l] : o.l === '기타' ? '그 밖' : o.l + ' · ' + this.LN[o.l]) + (o.gs.length && !o.l.startsWith('G:') ? ' · ' + o.gs.join('·') + '군에서도 쓴다' : ''),
+      hasX: !!o.x, xl: o.gs.length ? o.gs.join('·') + '군에서는' : '덧붙임', hasRel: o.w && /^L|비교/.test(o.l), relHref: `layers.html#${encodeURIComponent(o.t)}`, dn: o.dn, up: o.up,
+      hasS: !!o.sid, s: o.s, sid: o.sid.toUpperCase(), sHref: `compute.html#${o.sid}` } : {};
+    return { q: st.q, onQ: e => this.setState({ q: e.target.value }), cnt: (n || st.only !== 'all') ? `${hit.length} / ${X.length}개` : `${X.length}개`, total: X.length,
+      filters, groups, none: st.ready && !hit.length, hasSel: !!o, noSel: !o, s, clear: () => { history.replaceState(null, '', '#'); this.setState({ sel: null }); }, defRef: this.defRef, xRef: this.xRef };
+  }
+}
+</script>
+</body>
+</html>

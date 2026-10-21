@@ -1,0 +1,662 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@500;700&family=Noto+Sans+KR:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<style>
+body{margin:0;overflow:hidden;background:#F2F0EB;color:#1C1B18;-webkit-font-smoothing:antialiased}
+a{color:#2C7A86;text-decoration:underline;text-underline-offset:2px}
+a:hover{color:#C9472F}
+</style>
+<script src="data/devices.js"></script>
+<script src="data/dev-extra.js"></script>
+<script src="data/structures-a.js"></script>
+<script src="data/legacy-b.js"></script>
+<script src="data/legacy-c.js"></script>
+<script src="data/legacy-d.js"></script>
+<script src="data/legacy-e.js"></script>
+<script src="data/legacy-f.js"></script>
+<script src="data/legacy.js"></script>
+<script src="data/overview.js"></script>
+</helmet>
+<div style="--beam:#C9472F;--probe:#2C7A86;--warm:#B7791F;--wall:#8A5A2B;--panel:#FBFAF7;--ink:#1C1B18;--muted:#6B675E;--rule:#D9D4C9;--grid:#ECE8DF;--bg:#F2F0EB;position:fixed;inset:0;overflow:hidden;background:#F2F0EB;color:#1C1B18;font-family:'Noto Sans KR',sans-serif;display:flex;flex-direction:column">
+
+  <header style="display:flex;justify-content:space-between;align-items:center;gap:24px;padding:16px 32px;border-bottom:1px solid #D9D4C9">
+    <div style="display:flex;align-items:baseline;gap:14px;min-width:0;overflow:hidden">
+      <span style="font-family:'Noto Serif KR',serif;font-size:20px;font-weight:700;letter-spacing:-.015em;white-space:nowrap">광 연산 지도와 실험실</span>
+      <span style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:#6B675E;letter-spacing:.06em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0">지도 7장 · 구조 28개 · 용어 340개</span>
+    </div>
+    <nav style="flex:none;display:flex;gap:2px;font-family:'IBM Plex Mono',monospace;font-size:11.5px;color:#6B675E;background:#FBFAF7;border:1px solid #D9D4C9;border-radius:8px;padding:3px">
+      <a href="optics.html" style="padding:5px 9px;white-space:nowrap;color:inherit;text-decoration:none">광학</a><a href="layers.html" style="padding:5px 9px;white-space:nowrap;color:inherit;text-decoration:none">층 148</a>
+      <span style="padding:5px 9px;background:#F7E6DF;color:#A8361F;border-radius:5px;white-space:nowrap">구조 28</span>
+      <a href="devices.html" style="padding:5px 9px;white-space:nowrap;color:inherit;text-decoration:none">소자 42</a><a href="glossary.html" style="padding:5px 9px;white-space:nowrap;color:inherit;text-decoration:none">용어 340</a>
+    </nav>
+  </header>
+
+  <div style="display:flex;gap:6px 14px;align-items:center;padding:10px 32px;border-bottom:1px solid #D9D4C9;font-size:13px;flex-wrap:wrap">
+    <div style="display:flex;gap:2px;font-family:'IBM Plex Mono',monospace;font-size:11.5px;border:1px solid #D9D4C9;border-radius:7px;padding:2px">
+      <button onClick="{{ goOv }}" title="구조 28개를 축으로 묶어 보기" style="white-space:nowrap;font:inherit;font-family:'Noto Sans KR',sans-serif;font-size:12px;cursor:pointer;padding:4px 10px;border:0;border-radius:5px;background:{{ ovBg }};color:{{ ovFg }}">목차</button>
+      <sc-for list="{{ groups }}" as="g" hint-placeholder-count="6">
+        <button onClick="{{ g.go }}" title="{{ g.name }}" style="white-space:nowrap;font:inherit;cursor:{{ g.cur }};padding:4px 9px;border:0;border-radius:5px;background:{{ g.bg }};color:{{ g.fg }}">{{ g.label }}</button>
+      </sc-for>
+    </div>
+    <sc-if value="{{ isOv }}" hint-placeholder-val="{{ false }}">
+      <div style="display:flex;gap:4px;align-items:center">
+        <span style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:#6B675E;letter-spacing:.06em;margin-right:4px;white-space:nowrap">묶는 축</span>
+        <sc-for list="{{ ovAxes }}" as="a" hint-placeholder-count="2">
+          <button onClick="{{ a.go }}" style="white-space:nowrap;font:inherit;cursor:pointer;padding:5px 12px;border-radius:999px;border:1px solid {{ a.bd }};background:{{ a.bg }};color:{{ a.fg }}">{{ a.l }}</button>
+        </sc-for>
+      </div>
+    </sc-if>
+    <div style="display:flex;gap:4px;flex-wrap:wrap;align-items:center">
+      <sc-for list="{{ tabs }}" as="t" hint-placeholder-count="9">
+        <button onClick="{{ t.go }}" style="white-space:nowrap;font:inherit;cursor:pointer;padding:5px 11px;border-radius:999px;border:1px solid {{ t.bd }};background:{{ t.bg }};color:{{ t.fg }}"><span style="font-family:'IBM Plex Mono',monospace;opacity:.6;margin-right:5px">{{ t.num }}</span>{{ t.tab }}</button>
+      </sc-for>
+    </div>
+  </div>
+
+  <div style="position:relative;flex:1;min-height:0;display:grid;grid-template-columns:minmax(0,1fr) 360px">
+    <div style="display:flex;flex-direction:column;min-width:0;min-height:0">
+      <sc-if value="{{ isOv }}" hint-placeholder-val="{{ false }}">
+        <div style="flex:1;min-height:0;overflow:auto;padding:8px 32px 40px;background:#FBFAF7">
+          <sc-for list="{{ ovGroups }}" as="g" hint-placeholder-count="6">
+            <div style="display:grid;grid-template-columns:minmax(150px,220px) minmax(0,1fr);gap:22px;padding:18px 0;border-bottom:1px solid #D9D4C9">
+              <div style="display:flex;flex-direction:column;gap:6px;min-width:0">
+                <div style="display:flex;align-items:baseline;gap:8px;flex-wrap:wrap">
+                  <span style="font-family:'Noto Serif KR',serif;font-size:16px;font-weight:700;line-height:1.4;text-wrap:pretty">{{ g.t }}</span>
+                  <span style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:{{ g.cc }};white-space:nowrap">{{ g.n }}개</span>
+                </div>
+                <span style="font-size:12.5px;line-height:1.65;color:#6B675E;text-wrap:pretty">{{ g.d }}</span>
+                <sc-if value="{{ g.hasTag }}" hint-placeholder-val="{{ false }}">
+                  <div style="display:flex;gap:5px;flex-wrap:wrap;margin-top:2px">
+                    <span style="font-size:11px;padding:1px 8px;border-radius:999px;background:{{ g.sbg }};color:{{ g.sfg }};white-space:nowrap">{{ g.sv }}</span>
+                    <span style="font-size:11px;padding:1px 8px;border-radius:999px;border:1px solid {{ g.cbd }};white-space:nowrap;display:inline-flex;align-items:center;gap:5px"><i style="width:7px;height:7px;border-radius:2px;background:{{ g.cbg }};border:1.5px solid {{ g.cbd }}"></i>내 커버리지 {{ g.cv }}</span>
+                  </div>
+                </sc-if>
+              </div>
+              <div style="display:flex;flex-wrap:wrap;gap:8px;align-content:flex-start">
+                <sc-for list="{{ g.items }}" as="s" hint-placeholder-count="4">
+                  <button onClick="{{ s.go }}" onMouseEnter="{{ s.hov }}" onFocus="{{ s.hov }}" style="font:inherit;text-align:left;cursor:pointer;display:flex;flex-direction:column;gap:3px;min-width:140px;max-width:230px;padding:10px 13px 11px;border-radius:8px;border:1px solid {{ s.bd }};background:#F2F0EB;color:#1C1B18" style-hover="border-color:#C9472F">
+                    <span style="font-size:14px;font-weight:500;line-height:1.4">{{ s.n }}</span>
+                    <span style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:#6B675E;display:flex;gap:6px;align-items:center"><span style="width:7px;height:7px;border-radius:50%;background:{{ s.vc }};flex:none"></span>{{ s.sub }}</span>
+                  </button>
+                </sc-for>
+              </div>
+            </div>
+          </sc-for>
+        </div>
+      </sc-if>
+      <sc-if value="{{ isFig }}" hint-placeholder-val="{{ true }}">
+        <div ref="{{ figBoxRef }}" style="position:relative;flex:1;min-height:0;overflow:auto;display:flex;flex-direction:column;justify-content:safe center;padding:64px 48px 28px;background-color:#FBFAF7;background-image:linear-gradient(#EFECE5 1px,transparent 1px),linear-gradient(90deg,#EFECE5 1px,transparent 1px);background-size:32px 32px">
+          <span style="position:absolute;top:20px;left:24px;font-family:'IBM Plex Mono',monospace;font-size:11px;color:#6B675E;letter-spacing:.08em;white-space:nowrap">{{ figLabel }}</span>
+          <sc-if value="{{ hasMarks }}" hint-placeholder-val="{{ true }}">
+            <div style="position:absolute;top:14px;right:20px;display:flex;gap:6px;font-size:12px">
+              <button onClick="{{ toggleMarks }}" style="white-space:nowrap;font:inherit;cursor:pointer;padding:5px 10px;border-radius:6px;border:1px solid {{ marksBd }};background:{{ marksBg }};color:{{ marksFg }}">자리 표시</button>
+            </div>
+          </sc-if>
+          <div style="position:relative;width:100%;max-width:{{ figMax }};margin:0 auto;container-type:inline-size">
+            <sc-if value="{{ isSvg }}" hint-placeholder-val="{{ true }}">
+              <svg ref="{{ svgRef }}" viewBox="{{ viewBox }}" style="width:100%;height:auto;display:block;font-family:'IBM Plex Mono',monospace;overflow:visible"></svg>
+            </sc-if>
+            <sc-if value="{{ isCanvas }}" hint-placeholder-val="{{ false }}">
+              <canvas ref="{{ canvasRef }}" width="{{ figW }}" height="{{ figH }}" style="width:100%;height:auto;display:block"></canvas>
+            </sc-if>
+            <sc-if value="{{ isLegacyFig }}" hint-placeholder-val="{{ false }}">
+              <div ref="{{ legacyRef }}" style="font-family:'IBM Plex Mono',monospace"></div>
+            </sc-if>
+            <sc-if value="{{ showMarks }}" hint-placeholder-val="{{ false }}">
+              <svg ref="{{ leadRef }}" style="display:none"></svg>
+              <sc-for list="{{ markers }}" as="m" hint-placeholder-count="0">
+                <sc-for list="{{ m.anchors }}" as="a" hint-placeholder-count="0">
+                  <button onClick="{{ a.open }}" title="{{ a.name }}" aria-label="{{ a.name }}" style="position:absolute;left:{{ a.x }}%;top:{{ a.y }}%;transform:translate(-50%,-50%);width:17px;height:17px;border-radius:50%;padding:0;border:0;display:grid;place-items:center;font-family:'IBM Plex Mono',monospace;font-size:10px;font-weight:600;color:#FBFAF7;background:{{ a.bg }};box-shadow:0 0 0 2px rgba(251,250,247,.9);cursor:pointer;opacity:.92">{{ a.num }}</button>
+                </sc-for>
+              </sc-for>
+            </sc-if>
+          </div>
+          <sc-if value="{{ hasLegend }}" hint-placeholder-val="{{ false }}">
+            <div style="width:100%;max-width:{{ figMax }};margin:18px auto 0;display:flex;flex-wrap:wrap;gap:6px 8px;justify-content:center">
+              <sc-for list="{{ legend }}" as="m" hint-placeholder-count="0">
+                <button onClick="{{ m.open }}" title="{{ m.hint }}" style="display:flex;align-items:center;gap:6px;padding:2px 9px 2px 2px;border-radius:999px;border:1px solid {{ m.bd }};background:#FBFAF7;cursor:pointer;white-space:nowrap;font-family:'Noto Sans KR',sans-serif;font-size:12px;font-weight:500;color:{{ m.fg }};line-height:1.4">
+                  <span style="width:18px;height:18px;border-radius:50%;display:grid;place-items:center;font-family:'IBM Plex Mono',monospace;font-size:10.5px;font-weight:600;background:{{ m.bg }};color:#FBFAF7">{{ m.num }}</span>
+                  <span>{{ m.lab }}</span>
+                  <span style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:#8C877C">{{ m.where }}</span>
+                </button>
+              </sc-for>
+            </div>
+          </sc-if>
+        </div>
+      </sc-if>
+      <sc-if value="{{ isText }}" hint-placeholder-val="{{ false }}">
+        <div style="flex:1;min-height:0;overflow:auto;background:#FBFAF7;padding:56px 64px">
+          <div style="max-width:68ch;display:flex;flex-direction:column;gap:18px">
+            <h2 style="margin:0;font-family:'Noto Serif KR',serif;font-size:30px;font-weight:700;letter-spacing:-.015em">{{ title }}</h2>
+            <p ref="{{ ledeRef }}" style="margin:0;font-size:14px;line-height:1.75;color:#6B675E"></p>
+            <div ref="{{ textFigRef }}" style="font-family:'IBM Plex Mono',monospace"></div>
+            <div ref="{{ textRef }}" style="display:flex;flex-direction:column;gap:16px;font-size:16px;line-height:1.85"></div>
+          </div>
+        </div>
+      </sc-if>
+    </div>
+
+    <aside style="min-width:0;min-height:0;overflow:auto;box-sizing:border-box;border-left:1px solid #D9D4C9;padding:22px 28px 28px;display:flex;flex-direction:column;gap:20px">
+      <sc-if value="{{ isOv }}" hint-placeholder-val="{{ false }}">
+        <div style="display:flex;flex-direction:column;gap:10px;padding:16px 16px 18px;background:#FBFAF7;border:1px solid #D9D4C9;border-radius:8px;min-height:180px">
+          <sc-if value="{{ ovHas }}" hint-placeholder-val="{{ false }}">
+            <span style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:#6B675E;letter-spacing:.04em">{{ ovH.meta }}</span>
+            <h3 style="margin:0;font-family:'Noto Serif KR',serif;font-size:19px;line-height:1.35">{{ ovH.n }}</h3>
+            <p style="margin:0;font-size:14px;line-height:1.75;text-wrap:pretty">{{ ovH.d }}</p>
+            <p style="margin:0;font-size:12.5px;line-height:1.6;color:#6B675E">{{ ovH.who }}</p>
+            <p style="margin:0;font-size:13px;line-height:1.65;padding:8px 11px;background:#F2EBE3;color:#8A5A2B;border-radius:6px">벽 — {{ ovH.wl }}</p>
+          </sc-if>
+          <sc-if value="{{ ovNone }}" hint-placeholder-val="{{ true }}">
+            <span style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:#6B675E;letter-spacing:.04em">목차 · 구조 28</span>
+            <h3 style="margin:0;font-family:'Noto Serif KR',serif;font-size:19px;line-height:1.35">같은 28개를 가로로 자른다</h3>
+            <p style="margin:0;font-size:13.5px;line-height:1.75;color:#6B675E">A~F가 무엇을 푸는지로 묶은 것이라면, 여기서는 가중치가 어디 있는지와 끄면 남는지로 다시 묶는다. 블록에 올리면 요약, 누르면 그 구조가 열린다.</p>
+          </sc-if>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:14px;font-size:14px;line-height:1.8">
+          <p style="margin:0"><b>가중치를 어디에 두느냐가 설계를 가른다.</b> 위상에 두면 임의 행렬이 되지만 소자가 N²로 늘고 히터를 계속 켜둬야 한다. 파장에 두면 합산이 공짜가 되지만 온도에 묶인다. 공간에 두면 전파가 연산을 대신 해주지만 바꾸려면 다시 찍어야 한다. 재료의 상태에 두면 꺼도 남지만 쓰기가 느리다.</p>
+          <p style="margin:0"><b>그래서 「끄면 사라지나」가 따로 있는 축이다.</b> 28개 중 전원을 끊어도 값이 남는 건 여섯 개뿐이고, 그중 넷은 바꾸려면 다시 찍어야 하는 쪽이다. 쓰기가 되는 비휘발은 사실상 PCM 계열 둘이다. 리뷰들이 다음 승부처로 가중치 저장·업데이트를 꼽는 이유가 이 숫자에 있다.</p>
+          <p style="margin:0"><b>그리고 절반은 연산이 아니라 읽기에서 갈린다.</b> 검출기는 세기만 읽으니 부호가 사라지고, 되찾으려면 기준 빛을 같이 때려야 한다. 아무리 좋은 행렬곱도 읽는 방식이 음수를 버리면 쓸 수 없다.</p>
+        </div>
+      </sc-if>
+      <sc-if value="{{ isFig }}" hint-placeholder-val="{{ true }}">
+        <div style="display:flex;flex-direction:column;gap:20px">
+          <div style="display:flex;flex-direction:column;border-bottom:1px solid #D9D4C9">
+            <button onClick="{{ toggleInfo }}" style="font:inherit;text-align:left;cursor:pointer;border:0;background:transparent;color:#1C1B18;padding:6px 0 14px;display:flex;align-items:baseline;gap:12px">
+              <span style="font-family:'Noto Serif KR',serif;font-size:28px;line-height:1;color:#C9472F">{{ num }}</span>
+              <span style="flex:1;font-family:'Noto Serif KR',serif;font-size:22px;font-weight:700;letter-spacing:-.015em;line-height:1.3">{{ title }}</span>
+              <span style="font-family:'IBM Plex Mono',monospace;font-size:11.5px;color:#6B675E;white-space:nowrap">{{ infoLabel }}</span>
+            </button>
+            <sc-if value="{{ infoOpen }}" hint-placeholder-val="{{ false }}">
+              <div style="display:flex;flex-direction:column;gap:12px;padding:0 0 18px">
+                <sc-if value="{{ isIdeaHtml }}" hint-placeholder-val="{{ false }}">
+                  <p ref="{{ ideaRef }}" style="margin:0;font-size:15px;line-height:1.7"></p>
+                </sc-if>
+                <sc-if value="{{ isIdeaSeg }}" hint-placeholder-val="{{ true }}">
+                  <p style="margin:0;font-size:15px;line-height:1.7"><sc-for list="{{ idea }}" as="s" hint-placeholder-count="3"><span style="color:{{ s.c }};font-weight:{{ s.w }}">{{ s.t }}</span></sc-for></p>
+                </sc-if>
+              </div>
+            </sc-if>
+          </div>
+
+          <sc-if value="{{ hasPanes }}" hint-placeholder-val="{{ false }}">
+            <div style="display:flex;flex-direction:column;gap:8px">
+              <span style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:#6B675E">{{ walkTitle }}</span>
+              <div style="display:flex;gap:4px;flex-wrap:wrap">
+                <sc-for list="{{ paneTabs }}" as="p" hint-placeholder-count="3">
+                  <button onClick="{{ p.go }}" style="font:inherit;font-size:12.5px;cursor:pointer;padding:4px 11px;border-radius:999px;border:1px solid {{ p.bd }};background:{{ p.bg }};color:{{ p.fg }};white-space:nowrap">{{ p.l }}</button>
+                </sc-for>
+              </div>
+            </div>
+          </sc-if>
+          <sc-if value="{{ hasIntro }}" hint-placeholder-val="{{ false }}">
+            <p ref="{{ introRef }}" style="margin:0;font-size:14px;line-height:1.75"></p>
+          </sc-if>
+
+          <div style="display:flex;flex-wrap:wrap;gap:10px 8px;font-family:'IBM Plex Mono',monospace;font-size:12px">
+            <sc-for list="{{ controls }}" as="c" hint-placeholder-count="2">
+              <sc-if value="{{ c.isRange }}" hint-placeholder-val="{{ true }}">
+                <label style="width:100%;display:grid;grid-template-columns:96px minmax(0,1fr) 64px;gap:10px;align-items:center;padding-top:{{ c.pt }};border-top:{{ c.bt }}">
+                  <span style="color:{{ c.lc }}">{{ c.label }}</span>
+                  <input type="range" min="{{ c.min }}" max="{{ c.max }}" step="{{ c.step }}" value="{{ c.value }}" onInput="{{ c.onInput }}" style="width:100%;accent-color:{{ c.ac }}">
+                  <span style="text-align:right;color:#1C1B18">{{ c.text }}</span>
+                </label>
+              </sc-if>
+              <sc-if value="{{ c.isSeg }}" hint-placeholder-val="{{ false }}">
+                <div style="width:100%;display:flex;gap:6px;align-items:center;flex-wrap:wrap">
+                  <span style="width:96px;color:#6B675E">{{ c.label }}</span>
+                  <sc-for list="{{ c.opts }}" as="o" hint-placeholder-count="2">
+                    <button onClick="{{ o.go }}" style="font:inherit;font-family:'Noto Sans KR',sans-serif;font-size:12.5px;cursor:pointer;padding:4px 10px;border-radius:6px;border:1px solid {{ o.bd }};background:{{ o.bg }};color:{{ o.fg }};white-space:nowrap">{{ o.l }}</button>
+                  </sc-for>
+                </div>
+              </sc-if>
+              <sc-if value="{{ c.isRow }}" hint-placeholder-val="{{ false }}">
+                <div style="width:100%;display:flex;gap:6px;align-items:center;flex-wrap:wrap">
+                  <sc-for list="{{ c.opts }}" as="o" hint-placeholder-count="2">
+                    <button onClick="{{ o.go }}" style="font:inherit;font-family:'Noto Sans KR',sans-serif;font-size:12.5px;cursor:pointer;padding:5px 12px;border-radius:6px;border:1px solid {{ o.bd }};background:{{ o.bg }};color:{{ o.fg }};white-space:nowrap">{{ o.l }}</button>
+                  </sc-for>
+                </div>
+              </sc-if>
+              <sc-if value="{{ c.isBtn }}" hint-placeholder-val="{{ false }}">
+                <button onClick="{{ c.go }}" style="font:inherit;font-family:'Noto Sans KR',sans-serif;font-size:12.5px;cursor:pointer;padding:5px 12px;border-radius:6px;border:1px solid {{ c.bd }};background:{{ c.bg }};color:{{ c.fg }};white-space:nowrap">{{ c.text }}</button>
+              </sc-if>
+            </sc-for>
+          </div>
+
+          <sc-if value="{{ hasStats }}" hint-placeholder-val="{{ true }}">
+          <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:1px;background:#D9D4C9;border:1px solid #D9D4C9;font-family:'IBM Plex Mono',monospace">
+            <sc-for list="{{ stats }}" as="st" hint-placeholder-count="2">
+              <div style="background:#FBFAF7;padding:14px 16px;display:flex;flex-direction:column;gap:6px;min-width:0"><span style="font-size:11px;color:#6B675E;font-family:'Noto Sans KR',sans-serif">{{ st.l }}</span><span style="display:flex;flex-wrap:wrap;align-items:baseline;gap:2px 5px;line-height:1"><span style="font-size:clamp(20px,2.2vw,28px);color:{{ st.c }}">{{ st.v }}</span><span style="font-size:13px;color:#6B675E">{{ st.u }}</span></span></div>
+            </sc-for>
+          </div>
+          </sc-if>
+          <div ref="{{ readRef }}" style="font-family:'IBM Plex Mono',monospace;font-size:12.5px;line-height:1.8;color:#6B675E;display:flex;flex-direction:column;gap:2px"></div>
+
+          <sc-if value="{{ hasDev }}" hint-placeholder-val="{{ false }}">
+            <div style="display:flex;flex-direction:column;background:#FBFAF7;border:1px solid #D9D4C9;border-left:3px solid #C9472F">
+              <div style="display:flex;align-items:center;gap:10px;padding:12px 12px 0 14px">
+                <span style="width:22px;height:22px;flex:none;border-radius:50%;display:grid;place-items:center;font-family:'IBM Plex Mono',monospace;font-size:11px;font-weight:600;background:#C9472F;color:#FBFAF7">{{ dev.num }}</span>
+                <span style="flex:1;font-size:15px;font-weight:700">{{ dev.n }}</span>
+                <button onClick="{{ closeDev }}" aria-label="닫기" style="font:inherit;font-size:16px;line-height:1;cursor:pointer;border:0;background:transparent;color:#6B675E;width:26px;height:26px;border-radius:5px">×</button>
+              </div>
+              <div style="min-height:56px;max-height:420px;overflow:auto;resize:vertical;padding:8px 14px 12px 46px;font-size:14px;line-height:1.75">{{ dev.d }}</div>
+            </div>
+          </sc-if>
+          <sc-if value="{{ noDevHint }}" hint-placeholder-val="{{ true }}">
+            <p style="margin:0;font-size:13px;color:#6B675E">그림의 번호를 누르면 그 소자 설명이 여기에 뜬다.</p>
+          </sc-if>
+
+          <sc-if value="{{ hasBom }}" hint-placeholder-val="{{ true }}">
+            <div style="display:flex;flex-direction:column;border-top:1px solid #D9D4C9">
+              <button onClick="{{ toggleBom }}" style="font:inherit;font-family:'IBM Plex Mono',monospace;font-size:11.5px;text-align:left;cursor:pointer;border:0;background:transparent;color:#6B675E;padding:12px 0 10px">{{ bomLabel }}</button>
+              <sc-if value="{{ bomOpen }}" hint-placeholder-val="{{ true }}">
+                <div style="display:flex;flex-direction:column;gap:10px;padding:0 0 16px">
+                  <sc-if value="{{ hasMiss }}" hint-placeholder-val="{{ true }}">
+                    <div style="display:flex;flex-direction:column;gap:5px;padding:10px 12px;background:#F2EBE3;border-left:3px solid #8A5A2B;border-radius:0 6px 6px 0">
+                      <span style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.05em;color:#8A5A2B">무엇이 없나 — 이 구조의 벽</span>
+                      <sc-for list="{{ missLines }}" as="m" hint-placeholder-count="1">
+                        <p style="margin:0;font-size:12.5px;line-height:1.65;color:#1C1B18">{{ m }}</p>
+                      </sc-for>
+                    </div>
+                  </sc-if>
+                  <sc-for list="{{ bomItems }}" as="b" hint-placeholder-count="3">
+                    <div style="display:grid;grid-template-columns:22px minmax(0,1fr);gap:9px;padding:9px 0;border-bottom:1px solid #EDE9E1">
+                      <span style="width:22px;height:22px;border-radius:50%;display:grid;place-items:center;font-family:'IBM Plex Mono',monospace;font-size:10.5px;font-weight:600;background:{{ b.numBg }};color:{{ b.numFg }}">{{ b.num }}</span>
+                      <div style="min-width:0;display:flex;flex-direction:column;gap:4px">
+                        <div style="display:flex;align-items:baseline;gap:7px;flex-wrap:wrap">
+                          <button onClick="{{ b.open }}" style="font:inherit;font-size:14px;font-weight:700;text-align:left;cursor:pointer;border:0;background:transparent;color:#1C1B18;padding:0">{{ b.nm }}</button>
+                          <span style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:{{ b.kc }}">{{ b.k }}</span>
+                          <sc-if value="{{ b.hasQty }}" hint-placeholder-val="{{ true }}"><span style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:#6B675E">{{ b.qty }}</span></sc-if>
+                        </div>
+                        <p style="margin:0;font-size:13px;line-height:1.6">{{ b.role }}</p>
+                        <p style="margin:0;font-size:12.5px;line-height:1.65;color:#6B675E">{{ b.def }}</p>
+                        <sc-if value="{{ b.hasHow }}" hint-placeholder-val="{{ true }}">
+                          <p style="margin:0;font-size:11.5px;line-height:1.5;color:#6B675E;padding-top:4px;border-top:1px dashed #D9D4C9">만드는 법 · {{ b.how }}</p>
+                        </sc-if>
+                        <sc-if value="{{ b.hasW }}" hint-placeholder-val="{{ false }}">
+                          <p style="margin:0;font-size:12px;line-height:1.55;color:#8A5A2B">↳ {{ b.w }}</p>
+                        </sc-if>
+                      </div>
+                    </div>
+                  </sc-for>
+                </div>
+              </sc-if>
+            </div>
+          </sc-if>
+        </div>
+      </sc-if>
+      <sc-if value="{{ isFig }}" hint-placeholder-val="{{ true }}">
+        <div style="margin-top:auto;display:flex;flex-direction:column;gap:9px;padding-top:16px;border-top:1px solid #D9D4C9;font-size:13px;line-height:1.55">
+          <div style="display:grid;grid-template-columns:48px 1fr;gap:8px"><span style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:#6B675E;padding-top:2px">어디서</span><span>{{ who }}</span></div>
+          <div style="display:grid;grid-template-columns:48px 1fr;gap:8px"><span style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:#6B675E;padding-top:2px">벽</span><span style="color:#8A5A2B">{{ wall }}</span></div>
+          <p ref="{{ noteRef }}" style="margin:2px 0 0;color:#6B675E"></p>
+        </div>
+      </sc-if>
+      <sc-if value="{{ isText }}" hint-placeholder-val="{{ false }}">
+        <p style="margin:0;font-size:13px;line-height:1.7;color:#6B675E">{{ groupName }}의 구조를 한자리에 겹쳐 본 요약이다. 위 탭에서 구조를 고르면 그림과 손잡이로 돌아간다.</p>
+      </sc-if>
+    </aside>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  state = { grp: 'o', ovAxis: 'para', ovHov: -1, sel: { a: 'a1' }, vals: {}, pane: {}, marks: true, names: true, dev: null, info: false, ready: false };
+  svgRef = React.createRef(); canvasRef = React.createRef(); readRef = React.createRef(); noteRef = React.createRef(); textRef = React.createRef();
+  figBoxRef = React.createRef(); leadRef = React.createRef();
+  legacyRef = React.createRef(); ideaRef = React.createRef(); introRef = React.createRef(); textFigRef = React.createRef(); ledeRef = React.createRef();
+  GROUPS = [['a', 'A', 'A · 행렬곱'], ['b', 'B', 'B · 신경망'], ['c', 'C', 'C · 최적화'], ['d', 'D', 'D · 논리'], ['e', 'E', 'E · 변환 앞'], ['f', 'F', 'F · 양자·신호']];
+
+  componentDidMount() {
+    this._key = e => { if (e.key === 'Escape') this.setState({ dev: null }); };
+    document.addEventListener('keydown', this._key);
+    this._rs = () => this.forceUpdate();
+    window.addEventListener('resize', this._rs);
+    const check = () => { if (window.OPT && window.OPT.groups && window.OPT_DATA) {
+      const m = /^#([a-f])(\d+)$/.exec(location.hash || '');
+      this.setState(m ? o => ({ ready: true, grp: m[1], sel: { ...o.sel, [m[1]]: m[1] + m[2] } }) : { ready: true }); return true; } return false; };
+    if (!check()) { this._poll = setInterval(() => { if (check()) clearInterval(this._poll); }, 80); }
+    this.paint();
+    this._mo = new MutationObserver(() => {
+      const keep = this.saveScroll();
+      const E = this.entry(), p = E && E.legacy && !E.text ? this.paneOf(E) : null, f = p && p.fig, S = window.OPT.stack, sp = f && S && S.spec(f);
+      if (sp && sp.parts && f.isConnected) { window.OPT.legacy.fixTree(f); S.svg(f, sp); }
+      keep();
+      this.bump();
+    });
+    const tick = () => { const b = this._blit; if (b && b.dst.isConnected) window.OPT.stack.blit(b.src, b.dst, b.spec); this._loop = requestAnimationFrame(tick); };
+    this._loop = requestAnimationFrame(tick);
+  }
+  bump() {
+    if (this._raf) return;
+    this._raf = requestAnimationFrame(() => { this._raf = null; const E = this.entry(); if (E && E.legacy) { const p = this.paneOf(E); if (p && p.fig) window.OPT.legacy.fixTree(p.fig); } this.forceUpdate(); });
+  }
+  watch(E) {
+    if (!this._mo || !E || !E.legacy) return;
+    const L = window.OPT_LEGACY[E.group], p = this.paneOf(E), key = E.id + ':' + (this.state.pane[E.id] || 0);
+    if (this._watching === key) return;
+    this._watching = key; this._mo.disconnect();
+    if (L && L.root) this._mo.observe(L.root, { subtree: true, childList: true, characterData: true, attributes: true, attributeFilter: ['aria-pressed', 'disabled', 'hidden', 'value'] });
+    const f = p ? p.fig : E.figEl; if (f) this._mo.observe(f, { subtree: true, childList: true, attributes: true, attributeFilter: ['class'] });
+  }
+  paneOf(E) { return E.panes ? E.panes[Math.min(this.state.pane[E.id] || 0, E.panes.length - 1)] : null; }
+  getGroup(g) { const O = window.OPT; if (!O) return null; return O.groups[g] || (O.legacyGroup ? O.legacyGroup(g) : null); }
+  put(ref, html) { if (ref.current) ref.current.innerHTML = html; }
+  host(ref, el) {
+    const h = ref.current; if (!h || !el) return;
+    const S = window.OPT.stack, spec = S && S.spec(el), isCv = el.tagName.toLowerCase() === 'canvas';
+    if (isCv && spec && spec.rects) {
+      if (!el._proxy) { el._proxy = document.createElement('canvas'); el._proxy.style.cssText = 'width:100%;height:auto;display:block'; }
+      if (h.firstChild !== el._proxy) { this.unhost(null); h.replaceChildren(el._proxy); }
+      this._blit = { src: el, dst: el._proxy, spec }; S.blit(el, el._proxy, spec);
+      return;
+    }
+    this._blit = null;
+    if (h.firstChild !== el) {
+      this.unhost(el);
+      if (!el._home) el._home = { p: el.parentNode, n: el.nextSibling };
+      h.replaceChildren(el); this._hosted = this._hosted || new Set(); this._hosted.add(el);
+      el.style.cssText = 'width:100%;height:auto;display:block;font-family:IBM Plex Mono,monospace;overflow:visible';
+    }
+    window.OPT.legacy.fixTree(el);
+    if (spec && spec.parts && !isCv) { const before = el.getAttribute('viewBox'); S.svg(el, spec); if (el.getAttribute('viewBox') !== before && !this._vbBump) { this._vbBump = true; requestAnimationFrame(() => { this._vbBump = false; this.forceUpdate(); }); } }
+  }
+  figSize(el) {
+    const S = window.OPT.stack, spec = S && S.spec(el);
+    if (spec && spec.rects) { const L = S.canvasLayout(spec); return { w: L.W, h: L.H, L, ow: el.width, oh: el.height }; }
+    const vb = el.viewBox && el.viewBox.baseVal, w = vb && vb.width ? vb.width : (+el.getAttribute('width') || 880), h = vb && vb.height ? vb.height : (+el.getAttribute('height') || 300);
+    if (spec && el._stk) return { w, h, L: el._stk, ow: el._vb0[2], oh: el._vb0[3] };
+    return { w, h, L: null };
+  }
+  unhost(keep) {
+    (this._hosted || new Set()).forEach(el => {
+      if (el === keep || !el._home) return;
+      const { p, n } = el._home;
+      if (n && n.parentNode === p) p.insertBefore(el, n); else p.appendChild(el);
+      this._hosted.delete(el);
+    });
+  }
+  componentWillUnmount() { document.removeEventListener('keydown', this._key); window.removeEventListener('resize', this._rs); clearInterval(this._poll); if (this._mo) this._mo.disconnect(); this.unhost(null); cancelAnimationFrame(this._loop); }
+  componentDidUpdate() { this.paint(); }
+
+  entry() {
+    if (!this.state.ready) return null;
+    const g = this.getGroup(this.state.grp); if (!g) return null;
+    const list = g.list;
+    return list.find(e => e.id === this.state.sel[this.state.grp]) || list[0];
+  }
+  valsOf(E) {
+    const cur = this.state.vals[E.id]; if (cur) return cur;
+    const d = E.init ? E.init() : {};
+    (E.controls || []).forEach(c => { if (c.k) d[c.k] = c.def; });
+    return d;
+  }
+  setter(E) {
+    return patch => this.setState(o => ({ vals: { ...o.vals, [E.id]: { ...(o.vals[E.id] || this.valsOf(E)), ...patch } } }));
+  }
+  saveScroll() {
+    const els = [this.figBoxRef.current, document.querySelector('aside'), document.scrollingElement].filter(Boolean), pos = els.map(e => e.scrollTop);
+    return () => els.forEach((e, i) => { if (e.scrollTop !== pos[i]) e.scrollTop = pos[i]; });
+  }
+  paint() {
+    const keep = this.saveScroll();
+    if (this.figBoxRef.current && this._boxW !== this.figBoxRef.current.clientWidth) { this._boxW = this.figBoxRef.current.clientWidth; requestAnimationFrame(() => this.forceUpdate()); }
+    { const wr = this.leadRef.current && this.leadRef.current.parentElement, w = wr ? Math.round(wr.clientWidth) : 0, h = wr ? Math.round(wr.clientHeight) : 0;
+      if (w && (this._figPx !== w || this._figPh !== h)) { this._figPx = w; this._figPh = h; requestAnimationFrame(() => this.forceUpdate()); }
+      if (wr && w && h) {
+        const R = wr.getBoundingClientRect(), svg = wr.querySelector('svg:not([style*="display:none"])');
+        const rects = svg ? [...svg.querySelectorAll('text')].map(t => { const b = t.getBoundingClientRect(); return b.width ? [(b.left - R.left) / R.width * 100, (b.top - R.top) / R.height * 100, (b.right - R.left) / R.width * 100, (b.bottom - R.top) / R.height * 100] : null; }).filter(Boolean) : [];
+        const sig = rects.map(r => r.map(v => v.toFixed(1)).join(',')).join(';');
+        if (sig !== this._textSig) { this._textSig = sig; this._textRects = rects; requestAnimationFrame(() => this.forceUpdate()); }
+      } }
+    try { this.paint0(); this.paintLeads(); } finally { keep(); requestAnimationFrame(keep); }
+  }
+  paintLeads() {
+    const el = this.leadRef.current; if (!el) return;
+    el.innerHTML = (this._leads || []).map(m => m.pts.map(([x, y]) => {
+      const ey = m.band === 't' ? 0 : 100;
+      return `<path d="M${m.lx.toFixed(2)} ${m.band === 't' ? -4 : 104} L${m.lx.toFixed(2)} ${ey} L${x.toFixed(2)} ${y.toFixed(2)}" fill="none" stroke="${m.bg}" stroke-width="1" vector-effect="non-scaling-stroke" opacity=".55"/>`;
+    }).join('')).join('');
+  }
+  paint0() {
+    const E0 = this.entry();
+    { const want = E0 && E0.legacy ? (E0.text ? E0.figEl : (this.paneOf(E0) || {}).fig) : null; this.unhost(want); }
+    if (E0 && E0.legacy) {
+      const LG = window.OPT.legacy;
+      this.watch(E0);
+      if (E0.text) {
+        this.put(this.textRef, E0.bodyHtml); this.put(this.ledeRef, E0.ledeHtml || '');
+        if (E0.figEl) this.host(this.textFigRef, E0.figEl); else if (this.textFigRef.current) this.textFigRef.current.replaceChildren();
+        return;
+      }
+      const p = this.paneOf(E0);
+      this.host(this.legacyRef, p.fig);
+      this.put(this.readRef, LG.inkHtml(p.read ? p.read.innerHTML : ''));
+      this.put(this.noteRef, LG.inkHtml(p.note ? p.note.innerHTML : ''));
+      this.put(this.ideaRef, E0.ideaHtml); this.put(this.introRef, p.introHtml || '');
+      return;
+    }
+    if (this.textFigRef.current) this.textFigRef.current.replaceChildren();
+    if (this.ledeRef.current) this.put(this.ledeRef, '');
+    const E = this.entry(); if (!E) return;
+    const ink = window.OPT.ink;
+    if (E.text) { if (this.textRef.current) this.textRef.current.innerHTML = E.body.map(p => '<p style="margin:0">' + p + '</p>').join(''); return; }
+    const S = this.valsOf(E), out = this._out || E.render(S);
+    if (this.svgRef.current && out.svg != null) { this.svgRef.current.innerHTML = ink(out.svg); if (E.bind) E.bind(this.svgRef.current, S, this.setter(E)); }
+    if (this.canvasRef.current && out.draw) {
+      const cv = this.canvasRef.current;
+      if (E.stack) { const off = this._off || (this._off = document.createElement('canvas')), k = Math.min(3, Math.max(2, window.devicePixelRatio || 2)); off.width = E.fig.w * k; off.height = E.fig.h * k; const cx = off.getContext('2d'); cx.setTransform(k, 0, 0, k, 0, 0); out.draw(cx, E.fig.w, E.fig.h); window.OPT.stack.blit(off, cv, E.stack, k); }
+      else out.draw(cv.getContext('2d'), cv.width, cv.height);
+    }
+    if (this.readRef.current) this.readRef.current.innerHTML = ink(out.read || '');
+    if (this.noteRef.current) this.noteRef.current.innerHTML = ink(E.note || '');
+  }
+  fitW(fw, fh) {
+    const b = this.figBoxRef.current, top = b ? b.getBoundingClientRect().top : 190, ih = window.innerHeight || 800;
+    const avail = Math.max(200, ih - top - 140), boxW = b ? b.clientWidth - 96 : 480;
+    const fit = avail * fw / fh;
+    return Math.round(fh > fw ? Math.min(boxW, fit) : Math.max(Math.min(380, boxW), Math.min(1000, boxW, fit)));
+  }
+  bomBlock(E) {
+    const st = this.state, D = window.OPT_DATA, X = window.DVX || {}, key = E && E.key;
+    const items = (D.BOM[key] || []), miss = ((X.MISS || {})[key]) || [];
+    const lines = Array.isArray(miss) ? miss : [miss];
+    if (!items.length && !lines.length) return { hasBom: false, bomOpen: false, bomItems: [], missLines: [], hasMiss: false, bomLabel: '', toggleBom: () => {} };
+    let n = 0;
+    const rows = items.map(it => {
+      const dv = D.DEV[it.id] || { n: it.id, d: '' };
+      const how = ((X.HOW || {})[it.id]) || dv.how || [];
+      const num = it.p ? String(++n) : '·';
+      return { num, numBg: it.p ? '#C9472F' : '#D9D4C9', numFg: it.p ? '#FBFAF7' : '#6B675E',
+        nm: dv.n, k: it.k ? '필수' : '선택', kc: it.k ? '#C9472F' : '#6B675E',
+        qty: it.n || '', hasQty: !!it.n, role: it.r, def: dv.d || '',
+        how: how.join(' · '), hasHow: how.length > 0, w: it.w || '', hasW: !!it.w,
+        open: () => this.setState({ dev: it.id, devNum: it.p ? +num : 0 }) };
+    });
+    const must = items.filter(i => i.k).length;
+    return { hasBom: true, bomOpen: !!st.bomOpen, bomItems: rows,
+      missLines: lines.map(t => String(t).replace(/<b>(.*?)<\/b>\s*/g, '$1 — ').replace(/<[^>]+>/g, '')),
+      hasMiss: lines.length > 0,
+      bomLabel: '부품표 — 소자 ' + items.length + '종 · 필수 ' + must + '종 ' + (st.bomOpen ? '▴' : '▾'),
+      toggleBom: () => this.setState(o => ({ bomOpen: !o.bomOpen })) };
+  }
+
+  pill(on) { return on ? ['#C9472F', '#F7E6DF', '#A8361F'] : ['#D9D4C9', 'transparent', '#1C1B18']; }
+  markersFor(E, FS, figId, showN, figPx) {
+    const st = this.state, items = (window.OPT_DATA.BOM[E.key] || []), S = window.OPT.stack;
+    const remap = p => { if (!FS || !FS.L) return p; const q = S.mapPoint(FS.L, p[0] * FS.ow / 100, p[1] * FS.oh / 100); return [q[0] / FS.w * 100, q[1] / FS.h * 100]; };
+    let n = 0; const markers = [];
+    items.forEach(it => {
+      const fix = (E.mk || {})[it.id] || {}, p0 = fix.p || it.p;
+      if (!p0) return; const num = ++n, on = st.dev === it.id;
+      if (figId !== undefined && (it.pf ? it.pf.slice(1) !== figId : figId !== '__main__')) return;
+      const pts = [p0, fix.p2 || (fix.p ? null : it.p2)].filter(Boolean).map(remap);
+      const D = window.OPT_DATA.DEV[it.id] || { n: it.id };
+      markers.push({ pts, x: pts.reduce((s, p) => s + p[0], 0) / pts.length, y: Math.min(...pts.map(p => p[1])), num, lab: it.lab || D.n, name: D.n, showName: showN == null ? st.names : showN,
+        bg: on ? '#C9472F' : '#1C1B18', bd: on ? '#C9472F' : '#D9D4C9', open: () => this.setState({ dev: it.id, devNum: num }) });
+    });
+    const px = this._figPx || figPx || 800, ph = this._figPh || px * 0.5;
+    const rx = 13 / px * 100, ry = 13 / ph * 100, obs = (this._textRects || []).slice(), placed = [];
+    const hit = (x, y) => obs.some(r => x + rx > r[0] && x - rx < r[2] && y + ry > r[1] && y - ry < r[3]) || placed.some(([a, b]) => Math.abs(a - x) < rx * 1.9 && Math.abs(b - y) < ry * 1.9);
+    const D8 = [[0, 0], [0, -1], [0, 1], [1, 0], [-1, 0], [1, -1], [-1, -1], [1, 1], [-1, 1]];
+    markers.forEach(m => {
+      m.anchors = m.pts.map(([x0, y0]) => {
+        let best = [x0, y0];
+        outer: for (const k of [0, 1.6, 2.6, 3.8, 5.2]) for (const [dx, dy] of D8) { if (!k && (dx || dy)) continue; const x = x0 + dx * k * rx, y = y0 + dy * k * ry; if (!hit(x, y)) { best = [x, y]; break outer; } }
+        placed.push(best);
+        return { x: best[0], y: best[1], bg: m.bg, name: m.name + ' — ' + m.lab, num: m.num, open: m.open };
+      });
+    });
+    this._leads = [];
+    return markers;
+  }
+  legendFor(E, onIds, paneLabel) {
+    const st = this.state, items = (window.OPT_DATA.BOM[E.key] || []); let n = 0;
+    return items.filter(it => it.p || ((E.mk || {})[it.id] || {}).p).map(it => {
+      const num = ++n, on = st.dev === it.id, here = onIds.has(it.id), D = window.OPT_DATA.DEV[it.id] || { n: it.id };
+      const pane = it.pf && E.panes ? E.panes.find(p => p.fig && '#' + p.fig.id === it.pf) : null;
+      return { num, lab: it.lab || D.n, hint: D.n, where: here ? '' : (pane ? paneLabel(pane) : ''),
+        bg: on ? '#C9472F' : here ? '#1C1B18' : '#B5AFA3', bd: on ? '#C9472F' : '#D9D4C9', fg: here || on ? '#1C1B18' : '#8C877C',
+        open: () => this.setState({ dev: it.id, devNum: num }) };
+    });
+  }
+  markersOld(E, FS) {
+    const st = this.state, items = (window.OPT_DATA.BOM[E.key] || []), S = window.OPT.stack;
+    const remap = p => { if (!FS || !FS.L) return p; const q = S.mapPoint(FS.L, p[0] * FS.ow / 100, p[1] * FS.oh / 100); return [q[0] / FS.w * 100, q[1] / FS.h * 100]; };
+    let n = 0; const markers = [];
+    items.forEach(it => {
+      const fix = (E.mk || {})[it.id] || {}, p0 = fix.p || it.p;
+      if (!p0) return; const num = ++n, on = st.dev === it.id;
+      const L = { r: ['calc(100% + 5px)', '50%', 'translateY(-50%)'], l: ['0', '50%', 'translate(calc(-100% - 5px),-50%)'], u: ['50%', '0', 'translate(-50%,calc(-100% - 4px))'] }[fix.d || 'r'];
+      [p0, fix.p2 || (fix.p ? null : it.p2)].forEach(p => {
+        if (!p) return; p = remap(p);
+        const D = window.OPT_DATA.DEV[it.id] || { n: it.id };
+        markers.push({ x: p[0], y: p[1], num, lab: it.lab || D.n, name: D.n, lx: L[0], ly: L[1], lt: L[2], showName: st.names,
+          bg: on ? '#C9472F' : '#1C1B18', bd: on ? '#C9472F' : '#D9D4C9', open: () => this.setState({ dev: it.id, devNum: num }) });
+      });
+    });
+    return markers;
+  }
+
+  overview() {
+    const O = window.OV, st = this.state; if (!O) return { isOv: true, ovAxes: [], ovGroups: [], ovHas: false, ovNone: true, ovH: {} };
+    const PARA = [
+      ['광 AI 가속기', '아날로그 MVM·ONN. 주류 — Lightmatter·Lightelligence 둘 다 Nature 640 (2025)', 'g', 'y', ['a1', 'a2', 'a5', 'a6', 'a7', 'b3']],
+      ['뉴로모픽 · 리저버', '데모는 풍부하고 킬러앱은 논쟁 중. Brunner 150인 로드맵(2025)이 합의 문서', 'm', 'p', ['b1', 'b2', 'b4']],
+      ['특수목적 아날로그', '이징·메타표면. 센서 전방단에서 경쟁력 — 후순위로 둔 칸', 'm', 'n', ['c1', 'c2', 'c3', 'e3', 'e1', 'e2']],
+      ['전광 디지털', 'SUBLEQ·Akhetonics. 내 장기 베팅 축 — 「아날로그를 품으려면 결국 디지털」', 't', 'p', ['d1', 'd2', 'd3', 'd4', 'd6']],
+      ['광양자 컴퓨팅', '별도 커뮤니티·별도 수학. 이 지도의 경계 밖', 'g', 'n', ['f1']],
+      ['광 인터커넥트 · CPO', '계산이 아니라 통신 — 그런데 돈·파운드리·취업처가 여기 있다', 'g', 'n', ['f3', 'f2']],
+      ['갈래 밖', '2026-07-22 지형도 이후에 더해져 아직 갈래에 안 꽂힌 구조', '', '', ['a3', 'a4', 'a8', 'd5', 'e4']]];
+    const SV = { g: ['살아남았다', '#DCEBEC', '#1F5F69'], m: ['논쟁 중', '#F4E9D2', '#7A5212'], t: ['태동', '#F4E9D2', '#7A5212'] };
+    const CV = { y: ['있음', '#2C7A86', '#2C7A86'], p: ['조각', '#B7791F', '#B7791F'], n: ['없음', 'transparent', '#B5AFA3'] };
+    const idOf = s => s[1] + s[2];
+    const ax = st.ovAxis === 'para' ? { ord: PARA.map((_, i) => i), t: PARA.map(p => p[0]), d: PARA.map(p => p[1]) } : O.H[st.ovAxis];
+    const key = s => st.ovAxis === 'weight' ? s[3] : st.ovAxis === 'vol' ? s[4] : PARA.findIndex(p => p[4].includes(idOf(s)));
+    const ovAxes = [['para', '패러다임 — 어느 갈래에 시간을 쓸까'], ['weight', '가중치가 어디에 있나'], ['vol', '끄면 사라지나']].map(([k, l]) => { const p = this.pill(st.ovAxis === k); return { l, go: () => this.setState({ ovAxis: k }), bd: p[0], bg: p[1], fg: p[2] }; });
+    const open = s => this.setState(o => ({ grp: s[1], sel: { ...o.sel, [s[1]]: s[1] + s[2] }, dev: null }));
+    const ovGroups = ax.ord.map(k => {
+      const items = O.S.map((s, i) => ({ s, i })).filter(o => key(o.s) === k).map(({ s, i }) => ({ n: s[0], go: () => open(s), hov: () => this.state.ovHov !== i && this.setState({ ovHov: i }),
+        sub: `${s[1].toUpperCase()}-${String(s[2]).padStart(2, '0')} · ${st.ovAxis === 'weight' ? s[4] : s[3]}`, vc: O.VC[s[4]], bd: st.ovHov === i ? '#C9472F' : '#D9D4C9' }));
+      const P = st.ovAxis === 'para' ? PARA[k] : null, sv = P && SV[P[2]], cv = P && CV[P[3]];
+      return { t: ax.t[k], d: ax.d[k], n: items.length, cc: st.ovAxis === 'vol' && k === '비휘발' ? '#2C7A86' : '#6B675E', items,
+        hasTag: !!sv, sv: sv ? sv[0] : '', sbg: sv ? sv[1] : '', sfg: sv ? sv[2] : '', cv: cv ? cv[0] : '', cbg: cv ? cv[1] : '', cbd: cv ? cv[2] : '' };
+    }).filter(g => g.n);
+    const s = O.S[st.ovHov];
+    return { isOv: true, ovAxes, ovGroups, ovHas: !!s, ovNone: !s, ovH: s ? { n: s[0], d: s[5], who: s[6], wl: s[7], meta: `${s[1].toUpperCase()}-${String(s[2]).padStart(2, '0')} · 가중치는 ${s[3]} · ${s[4]}` } : {} };
+  }
+  renderVals() {
+    const st = this.state, E = this.entry();
+    const groups = this.GROUPS.map(([id, l, name]) => {
+      const has = st.ready && this.getGroup(id), on = st.grp === id;
+      return { label: l, name: has ? name : name + ' (준비 중)', go: has ? () => this.setState({ grp: id, dev: null }) : () => {}, cur: has ? 'pointer' : 'default',
+        bg: on ? '#F7E6DF' : 'transparent', fg: on ? '#A8361F' : has ? '#1C1B18' : '#B5AFA3' };
+    });
+    const ovOn = st.grp === 'o', ob = this.pill(ovOn);
+    const ovBase = { goOv: () => this.setState({ grp: 'o', dev: null }), ovBg: ovOn ? '#F7E6DF' : 'transparent', ovFg: ovOn ? '#A8361F' : '#1C1B18', isOv: false };
+    if (ovOn) return { ...ovBase, ...this.overview(), groups, tabs: [], isFig: false, isText: false, controls: [], stats: [], markers: [], idea: [], dev: {}, legend: [] };
+    if (!E) return { ...ovBase, groups, tabs: [], isFig: false, isText: false, controls: [], stats: [], markers: [], idea: [], dev: {} };
+    const G = this.getGroup(st.grp);
+    const tabs = G.list.map(e => { const p = this.pill(e.id === E.id); return { num: e.num, tab: e.tab, go: () => this.setState(o => ({ sel: { ...o.sel, [st.grp]: e.id }, dev: null })), bd: p[0], bg: p[1], fg: p[2] }; });
+    if (E.text) { this._out = null; return { ...ovBase, groups, tabs, isFig: false, isText: true, title: E.title, groupName: G.name, controls: [], stats: [], markers: [], idea: [], dev: {}, textRef: this.textRef, textFigRef: this.textFigRef, ledeRef: this.ledeRef }; }
+    const mk = this.pill(st.marks), nm = this.pill(st.names);
+    let dev = {};
+    if (st.dev) { const D = window.OPT_DATA.DEV[st.dev] || { n: st.dev, d: '' }; dev = { n: D.n, d: D.d, num: st.devNum }; }
+    const common = {
+      ...ovBase,
+      groups, tabs, groupName: G.name, figBoxRef: this.figBoxRef, leadRef: this.leadRef, svgRef: this.svgRef, canvasRef: this.canvasRef, readRef: this.readRef, noteRef: this.noteRef, textRef: this.textRef,
+      legacyRef: this.legacyRef, ideaRef: this.ideaRef, introRef: this.introRef, textFigRef: this.textFigRef, ledeRef: this.ledeRef,
+      infoOpen: st.info, infoLabel: st.info ? '접기 ▴' : '설명 ▾', toggleInfo: () => this.setState(o => ({ info: !o.info })),
+      toggleMarks: () => this.setState(o => ({ marks: !o.marks })), toggleNames: () => this.setState(o => ({ names: !o.names, marks: o.names ? o.marks : true })),
+      marksBd: mk[0], marksBg: mk[1], marksFg: mk[2], namesBd: nm[0], namesBg: nm[1], namesFg: nm[2],
+      ...this.bomBlock(E), hasDev: !!st.dev, dev, closeDev: () => this.setState({ dev: null })
+    };
+    if (E.legacy) {
+      const LG = window.OPT.legacy, pi = Math.min(st.pane[E.id] || 0, E.panes.length - 1), p = E.panes[pi];
+      const re = () => this.forceUpdate();
+      const controls = LG.controls(p).map(c => {
+        if (c.kind === 'range') return { isRange: true, label: c.label, min: c.min, max: c.max, step: c.step, value: c.value, text: c.text,
+          onInput: e => { LG.fire('range', c.el, e.target.value); re(); }, lc: '#6B675E', ac: '#C9472F', pt: '0', bt: '0' };
+        const opts = c.btns.map(b => { const q = this.pill(b.on); return { l: b.text, go: () => { if (!b.el.disabled) { LG.fire('btn', b.el); re(); } }, bd: q[0], bg: q[1], fg: b.dis ? '#B5AFA3' : q[2] }; });
+        return c.label ? { isSeg: true, label: c.label, opts } : { isRow: true, opts };
+      });
+      const fig = p.fig, FS = fig ? this.figSize(fig) : { w: 880, h: 300, L: null };
+      const fw = FS.w, fh = FS.h;
+      const vh = Math.max(640, window.innerHeight || 900);
+      const mainId = ({})[E.id];
+      const fid = fig ? (mainId ? (fig.id === mainId ? '__main__' : fig.id) : (pi === 0 && !E.panes[0].step && !(window.OPT_DATA.BOM[E.key] || []).some(i => i.pf && i.pf.slice(1) === fig.id) ? '__main__' : fig.id)) : '__main__';
+      const markers = this.markersFor(E, FS, fid, true, this.fitW(fw, fh));
+      const legend = this.legendFor(E, new Set(markers.map(m => (window.OPT_DATA.BOM[E.key] || []).filter(i => i.p)[m.num - 1]).filter(Boolean).map(i => i.id)), q => q.step ? q.label + '단계' : q.label);
+      const showN = true, nm2 = this.pill(true);
+      const paneTabs = E.panes.length > 1 ? E.panes.map((q, i) => { const r = this.pill(i === pi); return { l: /^[①-⑳]/.test(q.label) ? q.label.slice(0, 1) : (q.label.length > 8 ? String(i + 1) : q.label), go: () => { if (q.wbtn) q.wbtn.click(); else { const w0 = E.panes.find(z => z.wbtn); } this.setState(o => ({ pane: { ...o.pane, [E.id]: i } })); }, bd: r[0], bg: r[1], fg: r[2] }; }) : [];
+      return { ...common, isFig: true, isText: false, isSvg: false, isCanvas: false, isLegacyFig: true,
+        figMax: this.fitW(fw, fh) + 'px',
+        figLabel: `FIG ${st.grp.toUpperCase()}·${E.num}` + (p.step ? ` — ${p.label}단계` : '') + ` — ${fig ? (fig.getAttribute('aria-label') || E.title) : E.title}`,
+        num: E.num, title: E.title, who: E.who, wall: E.wall, isIdeaHtml: true, isIdeaSeg: false, idea: [],
+        hasPanes: paneTabs.length > 0, paneTabs, walkTitle: (E.walkTitle && p.step) || (!/^[①-⑳]/.test(p.label) && E.walkTitle) ? E.walkTitle : (/^[①-⑳]/.test(p.label) ? p.label : (E.walkTitle || '단계')), hasIntro: !!p.introHtml,
+        controls, hasStats: false, stats: [], hasMarks: markers.length > 0, showMarks: st.marks && markers.length > 0, markers, legend, hasLegend: legend.length > 0,
+        noDevHint: !st.dev && legend.length > 0, namesBd: nm2[0], namesBg: nm2[1], namesFg: nm2[2],
+        toggleNames: () => this.setState(o => ({ names: !showN, namesSet: true, marks: showN ? o.marks : true })) };
+    }
+
+    const S = this.valsOf(E), set = this.setter(E), out = E.render(S); this._out = out;
+    const controls = (E.controls || []).map(c => {
+      if (c.type === 'range') return { isRange: true, label: c.label, min: c.min, max: c.max, step: c.step, value: S[c.k], text: c.fmt ? c.fmt(S[c.k]) : String(S[c.k]),
+        onInput: e => set({ [c.k]: +e.target.value }), lc: c.warm ? '#8A5A2B' : '#6B675E', ac: c.warm ? '#B7791F' : '#C9472F', pt: c.sep ? '10px' : '0', bt: c.sep ? '1px dashed #D9D4C9' : '0' };
+      if (c.type === 'seg') return { isSeg: true, label: c.label, opts: c.opts.map(([v, l]) => { const p = this.pill(S[c.k] === v); return { l, go: () => set({ [c.k]: v }), bd: p[0], bg: p[1], fg: p[2] }; }) };
+      const p = this.pill(c.on ? c.on(S) : false);
+      return { isBtn: true, text: c.label(S), go: () => c.act(this.valsOf(E), set), bd: p[0], bg: p[1], fg: p[2] };
+    });
+
+    const SL0 = E.stack && window.OPT.stack ? window.OPT.stack.canvasLayout(E.stack) : null;
+    const markers = this.markersFor(E, SL0 ? { w: Math.round(SL0.W), h: Math.round(SL0.H), L: SL0, ow: E.fig.w, oh: E.fig.h } : null, undefined, null, this.fitW(SL0 ? SL0.W : E.fig.w, SL0 ? SL0.H : E.fig.h));
+
+    const vh = Math.max(640, window.innerHeight || 900), SL = E.stack && window.OPT.stack ? window.OPT.stack.canvasLayout(E.stack) : null;
+    const fw = SL ? Math.round(SL.W) : E.fig.w, fh = SL ? Math.round(SL.H) : E.fig.h;
+    return {
+      ...common, isFig: true, isText: false, isIdeaSeg: true, isIdeaHtml: false, hasPanes: false, hasIntro: false, isLegacyFig: false, hasStats: (out.stats || []).length > 0,
+      isSvg: E.fig.type === 'svg', isCanvas: E.fig.type === 'canvas', viewBox: `0 0 ${fw} ${fh}`, figW: fw, figH: fh,
+      figMax: this.fitW(fw, fh) + 'px', figLabel: `FIG ${st.grp.toUpperCase()}·${E.num} — ${E.label}`,
+      svgRef: this.svgRef, canvasRef: this.canvasRef, readRef: this.readRef, noteRef: this.noteRef, textRef: this.textRef,
+      num: E.num, title: E.title, who: E.who, wall: E.wall,
+      idea: E.idea.map(([t, k]) => ({ t, c: k ? '#C9472F' : '#1C1B18', w: k ? 700 : 400 })),
+      infoOpen: st.info, infoLabel: st.info ? '접기 ▴' : '설명 ▾', toggleInfo: () => this.setState(o => ({ info: !o.info })),
+      controls, stats: (out.stats || []).map(s => { const [v, ...u] = String(s.v).split(' '); return { l: s.l, v, u: u.join(' '), c: s.c || '#1C1B18' }; }),
+      hasMarks: markers.length > 0, showMarks: st.marks && markers.length > 0, markers,
+      legend: this.legendFor(E, new Set((window.OPT_DATA.BOM[E.key] || []).map(i => i.id)), () => ''), hasLegend: markers.length > 0,
+      toggleMarks: () => this.setState(o => ({ marks: !o.marks })), toggleNames: () => this.setState(o => ({ names: !o.names, marks: o.names ? o.marks : true })),
+      marksBd: mk[0], marksBg: mk[1], marksFg: mk[2], namesBd: nm[0], namesBg: nm[1], namesFg: nm[2],
+      ...this.bomBlock(E), hasDev: !!st.dev, noDevHint: !st.dev && markers.length > 0, dev, closeDev: () => this.setState({ dev: null })
+    };
+  }
+}
+</script>
+</body>
+</html>
