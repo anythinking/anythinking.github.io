@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>기관 지도 — 광 연산 지도와 실험실</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@500;700&family=Noto+Sans+KR:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha384-sHL9NAb7lN7rfvG5lfHpm643Xkcjzp4jFvuavGOndn6pjVqS6ny56CAt3nsEVT4H" crossorigin="anonymous">
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha384-cxOPjt7s7Iz04uaHJceBmS+qpjv2JkIHNVcuOrM+YHwZOmJGBXI00mdUXEq65HTH" crossorigin="anonymous"></script>
+<script src="data/inst.js"></script>
+<script data-removed="notes"></script>
+<style>
+:root{--beam:#C9472F;--probe:#2C7A86;--warm:#B7791F;--wall:#8A5A2B;--panel:#FBFAF7;--ink:#1C1B18;--muted:#6B675E;--rule:#D9D4C9;--bg:#F2F0EB;--tint:#F7E6DF;--tintfg:#A8361F;
+  --sans:'Noto Sans KR',sans-serif;--serif:'Noto Serif KR',serif;--mono:'IBM Plex Mono',monospace}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%;overflow:hidden;background:var(--bg);color:var(--ink);font-family:var(--sans);-webkit-font-smoothing:antialiased}
+a{color:var(--probe);text-underline-offset:2px}a:hover{color:var(--beam)}
+button{font:inherit;color:inherit}
+.app{position:fixed;inset:0;display:flex;flex-direction:column;overflow:hidden}
+header{display:flex;justify-content:space-between;align-items:center;gap:24px;padding:16px 32px;border-bottom:1px solid var(--rule)}
+.ttl{display:flex;align-items:baseline;gap:14px;min-width:0;overflow:hidden}
+.ttl b{font-family:var(--serif);font-size:20px;letter-spacing:-.015em;white-space:nowrap}
+.ttl span{font-family:var(--mono);font-size:11px;color:var(--muted);letter-spacing:.06em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+nav.g{flex:none;display:flex;gap:2px;font-family:var(--mono);font-size:11.5px;color:var(--muted);background:var(--panel);border:1px solid var(--rule);border-radius:8px;padding:3px}
+nav.g a,nav.g span{padding:5px 9px;white-space:nowrap;border-radius:5px;color:inherit;text-decoration:none}
+nav.g a:hover{color:var(--ink)}
+nav.g .on{background:var(--tint);color:var(--tintfg)}
+.bar{display:flex;gap:8px 14px;align-items:center;padding:10px 32px;border-bottom:1px solid var(--rule);flex-wrap:wrap;font-size:13px}
+.seg{display:flex;gap:2px;flex-wrap:wrap}
+.pill{cursor:pointer;padding:5px 11px;border-radius:999px;border:1px solid var(--rule);background:transparent;white-space:nowrap}
+.pill.on{border-color:var(--beam);background:var(--tint);color:var(--tintfg)}
+.pill .c{font-family:var(--mono);font-size:10.5px;opacity:.6;margin-left:5px}
+.chip{cursor:pointer;padding:3px 9px;border-radius:6px;border:1px solid var(--rule);background:transparent;font-size:12px;white-space:nowrap;display:inline-flex;align-items:center;gap:6px}
+.chip.on{border-color:var(--beam);background:var(--tint);color:var(--tintfg)}
+.dot{width:8px;height:8px;border-radius:50%;display:inline-block}
+.lb{font-family:var(--mono);font-size:11px;color:var(--muted);letter-spacing:.06em}
+main{flex:1;min-height:0;display:grid;grid-template-columns:minmax(0,1fr) 380px}
+#map{position:relative;min-width:0;min-height:0;overflow:hidden;background:#e9e6df}
+.mapnote{position:absolute;left:14px;bottom:26px;z-index:500;background:rgba(251,250,247,.94);border:1px solid var(--rule);border-radius:8px;padding:8px 11px;font-size:11.5px;line-height:1.6;color:var(--muted);max-width:420px;pointer-events:none}
+.legend{position:absolute;right:12px;top:12px;z-index:500;background:rgba(251,250,247,.95);border:1px solid var(--rule);border-radius:8px;padding:8px 11px;font-size:11.5px;display:none;flex-direction:column;gap:4px}
+.legend i{display:inline-block;width:22px;height:0;border-top:2px solid;margin-right:6px;vertical-align:middle}
+aside{min-width:0;min-height:0;overflow:auto;border-left:1px solid var(--rule);padding:22px 26px 28px;display:flex;flex-direction:column;gap:18px}
+aside h2{margin:0;font-family:var(--serif);font-size:22px;letter-spacing:-.015em;line-height:1.3}
+.sub{margin:0;font-size:13.5px;line-height:1.7;color:var(--muted)}
+.warn{margin:0;font-size:13px;line-height:1.75;padding:12px 14px;background:var(--panel);border:1px solid var(--rule);border-left:3px solid var(--wall)}
+.list{display:flex;flex-direction:column;border-top:1px solid var(--rule)}
+.row{display:grid;grid-template-columns:44px minmax(0,1fr) auto;gap:10px;align-items:baseline;padding:9px 2px;border:0;border-bottom:1px solid var(--rule);background:transparent;text-align:left;cursor:pointer}
+.row:hover{background:var(--panel)}
+.row .f{font-size:11px;color:var(--warm);letter-spacing:-1px}
+.row .n{font-size:14px;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.row .ct{font-family:var(--mono);font-size:10.5px;color:var(--muted);white-space:nowrap}
+.dim{opacity:.45}
+.back{align-self:flex-start;cursor:pointer;border:1px solid var(--rule);background:transparent;border-radius:6px;padding:4px 10px;font-size:12.5px;white-space:nowrap}
+.tags{display:flex;flex-wrap:wrap;gap:5px}
+.tag{font-size:11.5px;padding:2px 8px;border-radius:999px;border:1px solid var(--rule);background:var(--panel);white-space:nowrap}
+.no{color:var(--wall)}.ok{color:var(--probe)}
+.legend span{white-space:nowrap}
+dl{margin:0;display:grid;grid-template-columns:44px 1fr;gap:10px 10px;font-size:13.5px;line-height:1.65}
+dt{font-family:var(--mono);font-size:11px;color:var(--muted);padding-top:3px}
+dd{margin:0}
+.pis{display:flex;flex-direction:column;gap:10px;margin:0;padding:0;list-style:none}
+.pis li{font-size:13.5px;line-height:1.65}
+.pis b{display:block;font-size:14px}
+.pis span{color:var(--muted)}
+.rels{display:flex;flex-direction:column;gap:8px}
+.rel{font-size:13px;line-height:1.6;border:0;background:transparent;text-align:left;padding:8px 10px;border-radius:6px;cursor:pointer;border-left:3px solid}
+.rel:hover{background:var(--panel)}
+.rel .k{font-family:var(--mono);font-size:10.5px;color:var(--muted)}
+.leaflet-container{font-family:var(--sans)}
+.leaflet-tooltip.nm{font-family:var(--sans);font-size:12px;padding:3px 8px;border-radius:6px;border:1px solid var(--rule);box-shadow:none}
+.cl{background:var(--ink);color:var(--panel);border:2px solid var(--panel);border-radius:50%;display:grid;place-items:center;font-family:var(--mono);font-size:11px;font-weight:600}
+</style>
+</head>
+<body>
+<div class="app">
+  <header>
+    <div class="ttl"><b>광 연산 지도와 실험실</b><span>지도 7장 · 구조 28개 · 용어 340개</span></div>
+    <nav class="g">
+      <a href="optics.html">광학</a><a href="layers.html">층 148</a>
+      <a href="compute.html">구조 28</a><a href="devices.html">소자 42</a><a class="on" href="institutions.html">기관 124</a><a href="glossary.html">용어 340</a>
+    </nav>
+  </header>
+  <div class="bar">
+    <div class="seg" id="ctabs"></div>
+  </div>
+  <div class="bar" style="padding-top:8px;padding-bottom:8px">
+    <span class="lb">축</span>
+    <div class="seg" id="ftabs" style="gap:4px"></div>
+  </div>
+  <main>
+    <div id="map">
+      <div class="legend" id="legend">
+        <span class="lb">연결 — 근거가 확인된 것만</span>
+        <span><i style="border-color:#C9472F"></i>논문 공저</span>
+        <span><i style="border-color:#2C7A86;border-top-style:dashed"></i>이동·계보</span>
+        <span><i style="border-color:#B7791F"></i>협약·공동운영</span>
+        <span><i style="border-color:#6B675E;border-top-style:dotted"></i>스핀오프·인수</span>
+      </div>
+      <div class="mapnote">2026-10-01 · 124기관 · 원 크기 = 광연산과의 거리 · 금색 테두리 = 핵심 기관</div>
+    </div>
+    <aside id="rail"></aside>
+  </main>
+</div>
+<script>
+(function () {
+  const I = window.INST, D = I.D, LBL = I.LBL;
+  const C = [['all', '전체', [[-46, -128], [66, 158]]], ['uk', '영국', [[49.4, -7.8], [59.2, 2.6]]], ['de', '독일', [[46.8, 4.8], [55.6, 15.8]]], ['us', '미국·캐나다', [[23.5, -127], [52.5, -62]]],
+    ['fr', '프랑스', [[41, -5.8], [51.8, 10.2]]], ['it', '이탈리아', [[35.8, 5.6], [47.8, 19.4]]], ['ch', '스위스', [[45.6, 5.5], [48.1, 10.9]]], ['eu2', '유럽 기타', [[35, -11.5], [70, 32]]],
+    ['as', '아시아', [[-1, 96], [47, 148]]], ['au', '호주', [[-45, 110], [-9, 156]]]];
+  const PN = { uk: '광학 UKRI 진행 £25.10M = 사우샘프턴', de: '모놀리식 전자-광은 IHP 하나', us: 'zero-change 계보 · 국적 게이트는 CUI에', fr: '브장송 = 공간광 신경망', it: '집적 PIC · 광양자 · 폴라리톤',
+    au: 'COMBS A$34.9M · CSIRO 패키징 센터 2026 개소 · MPW 셔틀은 없다', eu2: '학회 채굴로 드러난 구멍 — Ghent·Eindhoven·Tyndall·Valencia', as: '칩은 여기서 가장 많이 찍힌다 · 홍콩 HKPFS 마감 12/1', ch: 'EO 재료의 남은 구멍' };
+  const KC = { eo: '#C9472F', fab: '#B7791F', pcm: '#2C7A86', comp: '#1C1B18', mat: '#8A5A2B', src: '#7A4F8F', x: '#9A948A', ind: '#5E6B3A', quant: '#3B5A8A' };
+  const EK = { p: ['논문 공저', '#C9472F', ''], m: ['이동·계보', '#2C7A86', '6 5'], i: ['협약·공동운영', '#B7791F', ''], s: ['스핀오프·인수', '#6B675E', '2 4'] };
+  const stars = d => (d.star ? 3 : 0);
+  let cur = 'all', flt = 'all', sel = null;
+
+  /* 사람(관계도 노드) → 기관 */
+  const instOfNode = {};
+  I.NODES.forEach(n => {
+    const ln = n.l.toLowerCase();
+    let d = D.find(x => (x.pi || []).some(([nm]) => nm.toLowerCase().includes(ln)));
+    if (!d) { const tok = n.o.split(/[\s·→(]/)[0]; d = D.find(x => x.n.includes(tok) || (x.city || '').includes(tok)); }
+    if (d) instOfNode[n.id] = d;
+  });
+  const nodeById = Object.fromEntries(I.NODES.map(n => [n.id, n]));
+  const relsOf = d => I.EDGES.filter(e => instOfNode[e.a] === d || instOfNode[e.b] === d).map(e => {
+    const mine = instOfNode[e.a] === d ? e.a : e.b, other = mine === e.a ? e.b : e.a;
+    return { e, me: nodeById[mine], ot: nodeById[other], od: instOfNode[other] };
+  });
+
+  /* 지도 */
+  const mapEl = document.getElementById('map');
+  const map = L.map('map', { zoomControl: true, worldCopyJump: true, minZoom: 2, zoomSnap: 0.5, zoomAnimation: false, fadeAnimation: false, markerZoomAnimation: false }).setView([30, 20], 2);
+  const sized = () => mapEl.clientWidth > 0 && mapEl.clientHeight > 0;
+  const fitTo = (b, o) => { if (!sized()) { pendingFit = [b, o]; return; } map.invalidateSize(); map.fitBounds(b, o); };
+  let pendingFit = [C[0][2], {}];
+  new ResizeObserver(() => { if (!sized()) return; map.invalidateSize(); if (pendingFit) { const [b, o] = pendingFit; pendingFit = null; map.fitBounds(b, o); } }).observe(mapEl);
+  L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 18, attribution: '© OpenStreetMap contributors' }).addTo(map);
+  L.control.scale({ imperial: false, maxWidth: 140 }).addTo(map);
+  const linkLayer = L.layerGroup().addTo(map);
+  const mk = {};
+  D.forEach(d => {
+    const s3 = stars(d) >= 3;
+    const m = L.circleMarker([d.lat, d.lon], { radius: 4 + (d.r || 6) * 0.75, color: s3 ? '#D4A017' : '#FBFAF7', weight: s3 ? 3 : 1.5, fillColor: KC[d.k] || '#1C1B18', fillOpacity: .85 })
+      .bindTooltip(`${d.n} `, { className: 'nm', direction: 'top', offset: [0, -6] })
+      .on('click', () => select(d.id)).addTo(map);
+    mk[d.id] = m;
+  });
+  function restyle() {
+    D.forEach(d => {
+      const on = (cur === 'all' || d.p === cur) && (flt === 'all' || (d.t || []).includes(flt) || d.k === flt);
+      const m = mk[d.id];
+      if (!KIND_OK(d, okind)) { if (map.hasLayer(m)) map.removeLayer(m); return; }
+      if (!map.hasLayer(m)) m.addTo(map);
+      const isSel = sel === d.id;
+      mk[d.id].setStyle({ fillOpacity: on ? (isSel ? 1 : .85) : .15, opacity: on ? 1 : .25, weight: isSel ? 4 : (stars(d) >= 3 ? 3 : 1.5), color: isSel ? '#1C1B18' : (stars(d) >= 3 ? '#D4A017' : '#FBFAF7') });
+      if (isSel) mk[d.id].bringToFront();
+    });
+  }
+  function drawLinks(d) {
+    linkLayer.clearLayers();
+    document.getElementById('legend').style.display = d ? 'flex' : 'none';
+    if (!d) return;
+    relsOf(d).forEach(({ e, od }) => {
+      if (!od || od === d) return;
+      const k = EK[e.k] || EK.p;
+      L.polyline([[d.lat, d.lon], [od.lat, od.lon]], { color: k[1], weight: 2.4, opacity: .85, dashArray: k[2] || null }).addTo(linkLayer);
+    });
+  }
+
+  /* 탭 */
+  const ctabs = document.getElementById('ctabs'), ftabs = document.getElementById('ftabs');
+  function drawTabs() {
+    ctabs.innerHTML = C.map(([id, nm]) => `<button class="pill${cur === id ? ' on' : ''}" data-c="${id}">${nm}<span class="c">${id === 'all' ? D.length : D.filter(d => d.p === id).length}</span></button>`).join('');
+    const keys = ['all'].concat(Object.keys(LBL).filter(k => D.some(d => d.k === k || (d.t || []).includes(k))));
+    ftabs.innerHTML = keys.map(k => `<button class="chip${flt === k ? ' on' : ''}" data-f="${k}">${k === 'all' ? '' : `<span class="dot" style="background:${KC[k] || '#1C1B18'}"></span>`}${k === 'all' ? '전체' : LBL[k]}</button>`).join('');
+  }
+  ctabs.addEventListener('click', e => { const b = e.target.closest('[data-c]'); if (!b) return; cur = b.dataset.c; const c = C.find(x => x[0] === cur); fitTo(c[2], { padding: [20, 20] }); sel = null; drawLinks(null); render(); });
+  ftabs.addEventListener('click', e => { const b = e.target.closest('[data-f]'); if (!b) return; flt = b.dataset.f; render(); });
+
+
+  /* 대학 / 연구소 / 회사 — 한 칸에 둘이 섞인 이름(「KAIST · ETRI」)은 양쪽 다 해당된다 */
+  const CO_W = ['Inc','Ltd','LLC','GmbH','Corp','Technologies','Lightmatter','HyperLight','Lumentum','Infinera',
+    'Intel','IBM','Nokia','Samsung','TSMC','GlobalFoundries','AMF','Tower','Cisco','Ayar','Celestial','Salience',
+    'Luxtelligence','Lightium','Q.ANT','Xanadu','PsiQuantum','OpenLight','SiFotonics','Nexus','Lightelligence',
+    'Lumai','Oriole','NVIDIA','Nvidia','Broadcom','Marvell','Coherent','Rockley','Scintil','iPronics','Akhetonics',
+    'AMO','HPE','Jabil','住友','Furukawa','파운드리','Foundry','Semiconductor'];
+  const LAB_W = ['Fraunhofer','프라운호퍼','Max Planck','막스플랑크','CNRS','CEA','AIST','NIST','NICT','ETRI','KIST',
+    'A*STAR','IHP','VTT','TNO','imec','IMEC','SINTEF','CSIRO','Tyndall','ICFO','Paul Scherrer','PETRA','NTT',
+    'Sandia','Lincoln Lab','NRC','RIKEN','Riken','연구소','연구원','LETI','FBH','HHI','IPMS','IOF','MPI','Q-APP','IME'];
+  const UNI_W = ['University','Universit','Univ','대학','College','Institute of Technology','ETH','EPFL','EPF',
+    'KAIST','MIT','TU ','TU-','Politec','Polytech','UQ','SUTD','NUS','NTU','KTH','DTU','Carleton','Boulder',
+    'Ghent','Imperial','Caltech','Stanford','Harvard','Tsinghua','POSTECH','Waterloo','Toronto','Sydney'];
+  function orgKind(d) {
+    const t = (d.n || '') + ' ' + (d.w || '') + ' ' + (d.city || '');
+    const has = ws => ws.some(k => t.indexOf(k) >= 0);
+    const co = has(CO_W), lab = has(LAB_W), uni = has(UNI_W);
+    // 아무 단서도 없으면 대학 — 도시 이름만 적힌 칸이 대부분 대학이다
+    return { uni: uni || (!co && !lab), lab: lab, co: co };
+  }
+  const KIND_OK = (d, k) => k === 'all' || !!orgKind(d)[k];
+  let okind = 'all';   // all | uni | lab
+
+  /* 오른쪽 */
+  const rail = document.getElementById('rail');
+  const esc = s => String(s == null ? '' : s).replace(/&/g, '&amp;').replace(/</g, '&lt;');
+  function railList() {
+    const list = D.filter(d => (cur === 'all' || d.p === cur))
+      .filter(d => KIND_OK(d, okind)).sort((a, b) => stars(b) - stars(a) || a.n.localeCompare(b.n, 'ko'));
+    const pn = cur !== 'all' ? `<p class="sub"><b style="color:var(--ink)">${C.find(x => x[0] === cur)[1]}</b> — ${esc(PN[cur] || '')}</p>` : '';
+    return `<div style="display:flex;flex-direction:column;gap:8px"><h2>어디로 갈 것인가</h2>
+      <p class="sub">EO(전자-광 하이브리드)로 방향을 정한 뒤 다시 그린 진학 후보 지도. 마커를 누르면 그 기관의 PI·팹·문턱이 여기에 열린다.</p></div>
+      ${pn}
+      <p class="warn"><b>이 숫자는 「조사량」이지 「실제 규모」가 아니다.</b> 2026-10-01 전수 조사로 75 → 124기관이 됐는데, 늘어난 36곳 중 대부분이 원래 있었지만 내 조사 방법이 못 잡던 것이었다 — 기존 조사가 「영국·서유럽·미국」으로 범위를 한정해 캐나다·호주가 0이었고, 미국은 NSF만 실측해 국방 자금축이 통째로 빠졌으며, 학회는 ECIO 하나만 전수라 유럽이 과대였다. 지금도 OFC는 753편 중 75편(10%)만 열었다. 남은 빈칸은 「거기 없다」가 아니라 「아직 안 봤다」로 읽어야 한다.</p>
+      <div style="display:flex;flex-direction:column;gap:6px"><div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap"><span class="lb">기관 ${list.length}곳${list.length !== D.length ? ` / ${D.length}` : ''} </span><span style="display:flex;gap:4px;margin-left:auto">${[['all','전체'],['uni','대학'],['lab','연구소'],['co','회사']].map(([v,l]) => `<button type="button" data-ok="${v}" style="font:inherit;font-size:11.5px;cursor:pointer;padding:2px 9px;border-radius:999px;border:1px solid ${okind===v?'var(--beam)':'var(--rule)'};background:${okind===v?'#F7E6DF':'transparent'};color:${okind===v?'var(--beam)':'var(--muted)'}">${l}</button>`).join('')}</span></div><div class="list">` +
+      list.map(d => { const on = flt === 'all' || (d.t || []).includes(flt) || d.k === flt;
+        return `<button class="row${on ? '' : ' dim'}" data-id="${d.id}"><span class="f"></span><span class="n"><span class="dot" style="background:${KC[d.k] || '#1C1B18'};margin-right:7px"></span>${esc(d.n)}</span><span class="ct">${esc(d.city || '')}</span></button>`; }).join('') + `</div></div>`;
+  }
+  function railDetail(d) {
+    const rels = relsOf(d);
+    return `<button class="back" data-back>← 목록</button>
+      <div style="display:flex;flex-direction:column;gap:6px">
+        <span class="lb">${esc(d.city || '')} · ${esc(C.find(x => x[0] === d.p)?.[1] || '')}</span>
+        <h2>${esc(d.n)}</h2>
+        <span style="font-size:13px;color:var(--muted)">${esc(d.w || '')} </span>
+      </div>
+      
+      <div class="tags">${(d.t || []).map(t => `<span class="tag">${esc(LBL[t] || t)}</span>`).join('')}</div>
+      
+      <dl>${d.fab ? `<dt>팹</dt><dd>${d.fab}</dd>` : ''}</dl>
+      ${(d.pi || []).length ? `<div style="display:flex;flex-direction:column;gap:8px"><span class="lb">PI ${d.pi.length}명</span><ul class="pis">${d.pi.map(([n, t]) => `<li><b>${esc(n)}</b><span>${t}</span></li>`).join('')}</ul></div>` : ''}
+      ${rels.length ? `<div style="display:flex;flex-direction:column;gap:8px"><span class="lb">연결 ${rels.length}건 — 지도에 선으로 표시</span><div class="rels">${rels.map(({ e, me, ot, od }) => {
+        const k = EK[e.k] || EK.p;
+        return `<button class="rel" style="border-left-color:${k[1]}" ${od ? `data-id="${od.id}"` : ''}><span class="k">${k[0]}</span><br><b>${esc(me.l)}</b> ↔ <b>${esc(ot.l)}</b> <span style="color:var(--muted)">(${esc(ot.o)})</span><br>${esc(e.t)}</button>`; }).join('')}</div></div>` : ''}`;
+  }
+  const NOTE_OF = {};
+  (function walk(n, par) { n._par = par; const iid = (window.NOTE_INST || {})[n.id]; if (iid) (NOTE_OF[iid] = NOTE_OF[iid] || []).push(n); (n.kids || []).forEach(k => walk(k, n)); })(window.NOTES || { kids: [] }, null);
+  rail.addEventListener('click', e => {
+    const ok = e.target.closest('[data-ok]');
+    if (ok) { okind = ok.dataset.ok; render(); return; }
+    if (e.target.closest('[data-back]')) { sel = null; drawLinks(null); render(); return; }
+    const b = e.target.closest('[data-id]'); if (b) select(b.dataset.id);
+  });
+  function select(id) {
+    const d = D.find(x => x.id === id); if (!d) return;
+    sel = id; drawLinks(d); render();
+    // 고른 기관으로 이동만 한다 — 줌아웃 제거
+    map.invalidateSize(); map.panTo([d.lat, d.lon]);
+    rail.scrollTop = 0;
+  }
+  function render() { drawTabs(); restyle(); rail.innerHTML = sel ? railDetail(D.find(x => x.id === sel)) : railList(); }
+  document.addEventListener('keydown', e => { if (e.key === 'Escape' && sel) { sel = null; drawLinks(null); render(); } });
+  render();
+  const h0 = decodeURIComponent(location.hash.slice(1));
+  if (D.some(x => x.id === h0)) setTimeout(() => select(h0), 200);
+})();
+</script>
+</body>
+</html>
