@@ -480,7 +480,7 @@ D:[
       ["Bart Kuyken","<b>마이크로 전사인쇄 이종집적</b> — 레이저·SOA를 실리콘/SiN에 얹는 공정"],
       ["Dries Van Thourhout","<b>PZT·BTO 변조기</b> — 실리콘에 강유전체를 올려 포켈스 효과를 얻는 축"],
       ["Christian Haffner","<b>플라즈모닉·STO</b>. ETH → NIST → Ghent-imec 이동 — 초소형 EO 변조기 계보"],
-      ["Peter Bienstman","실리콘 포토닉 <b>리저버 컴퓨팅</b>(기존 조사의 ★★★)"]],
+      ["Peter Bienstman","실리콘 포토닉 <b>리저버 컴퓨팅</b>"]],
   fab:"<b>imec</b> — iSiPP50G MPW(Europractice quarter block €11,000)가 같은 캠퍼스",
   gate:"",
   why:""},
