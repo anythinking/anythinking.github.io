@@ -19,7 +19,7 @@ a{color:#2C7A86;text-underline-offset:2px}a:hover{color:#C9472F}
   <header style="display:flex;justify-content:space-between;align-items:center;gap:24px;padding:16px 32px;border-bottom:1px solid #D9D4C9">
     <div style="display:flex;align-items:baseline;gap:14px;min-width:0;overflow:hidden">
       <b style="font-family:'Noto Serif KR',serif;font-size:20px;letter-spacing:-.015em;white-space:nowrap">광 연산 지도와 실험실</b>
-      <span style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:#6B675E;letter-spacing:.06em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0">지도 7장 · 구조 28개 · 용어 340개</span>
+      <span style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:#6B675E;letter-spacing:.06em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0">지도 7장 · 구조 28개 · 용어 344개</span>
     </div>
     <nav style="flex:none;display:flex;gap:2px;font-family:'IBM Plex Mono',monospace;font-size:11.5px;color:#6B675E;background:#FBFAF7;border:1px solid #D9D4C9;border-radius:8px;padding:3px">
       <a href="optics.html" style="padding:5px 9px;white-space:nowrap;color:inherit;text-decoration:none">광학</a>
@@ -27,7 +27,7 @@ a{color:#2C7A86;text-underline-offset:2px}a:hover{color:#C9472F}
       <a href="compute.html" style="padding:5px 9px;white-space:nowrap;color:inherit;text-decoration:none">구조 28</a>
       <a href="devices.html" style="padding:5px 9px;white-space:nowrap;color:inherit;text-decoration:none">소자 42</a>
       <a href="institutions.html" style="padding:5px 9px;white-space:nowrap;color:inherit;text-decoration:none">기관 124</a>
-      <a href="glossary.html" style="padding:5px 9px;white-space:nowrap;background:#F7E6DF;color:#A8361F;border-radius:5px;text-decoration:none">용어 340</a>
+      <a href="glossary.html" style="padding:5px 9px;white-space:nowrap;background:#F7E6DF;color:#A8361F;border-radius:5px;text-decoration:none">용어 344</a>
       
     </nav>
   </header>
@@ -42,6 +42,12 @@ a{color:#2C7A86;text-underline-offset:2px}a:hover{color:#C9472F}
     </sc-for>
   </div>
 
+  <div style="display:flex;align-items:center;gap:6px;padding:8px 32px;border-bottom:1px solid #D9D4C9;flex-wrap:wrap">
+    <span style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:#6B675E;margin-right:4px">KIND</span>
+    <sc-for list="{{ kinds }}" as="k" hint-placeholder-count="4">
+      <button onClick="{{ k.go }}" style="font:inherit;font-size:12px;cursor:pointer;padding:3px 10px;border-radius:999px;border:1px solid {{ k.bd }};background:{{ k.bg }};color:{{ k.fg }};white-space:nowrap">{{ k.l }} <span style="opacity:.6">{{ k.n }}</span></button>
+    </sc-for>
+  </div>
   <main style="flex:1;min-height:0;display:grid;grid-template-columns:minmax(0,1fr) clamp(300px,34vw,440px)">
     <div style="min-width:0;min-height:0;overflow:auto;padding:12px 32px 40px">
       <sc-if value="{{ none }}" hint-placeholder-val="{{ false }}">
@@ -105,7 +111,7 @@ a{color:#2C7A86;text-underline-offset:2px}a:hover{color:#C9472F}
 </x-dc>
 <script type="text/x-dc" data-dc-script>
 class Component extends DCLogic {
-  state = { q: '', only: 'all', sel: decodeURIComponent((location.hash || '').slice(1)) || null, ready: !!window.GLX };
+  state = { q: '', only: 'all', kind: 'all', sel: decodeURIComponent((location.hash || '').slice(1)) || null, ready: !!window.GLX };
   defRef = React.createRef(); xRef = React.createRef();
   LN = { L0: '빛 자체', L1: '물리 효과', L2: '재료·플랫폼', L3: '소자', L4: '회로', L5: '아키텍처', L6: '시스템·산업', '비교': '층 밖 — 전자와 비교', '기타': '그 밖',
     'G:A': '행렬곱', 'G:B': '신경망 모델', 'G:C': '최적화', 'G:D': '디지털 전광 논리', 'G:E': '센서·이미징', 'G:F': '양자·신호처리', 'G:M': '메시 심화' };
@@ -126,7 +132,7 @@ class Component extends DCLogic {
   renderVals() {
     const st = this.state, X = window.GLX || [];
     const n = st.q.trim().toLowerCase();
-    const hit = X.filter(o => (st.only === 'all' || o.l === st.only) && (!n || o.t.toLowerCase().includes(n) || o.d.replace(/<[^>]+>/g, '').toLowerCase().includes(n)));
+    const hit = X.filter(o => (st.only === 'all' || o.l === st.only) && (st.kind === 'all' || (o.c || '미분류') === st.kind) && (!n || o.t.toLowerCase().includes(n) || o.d.replace(/<[^>]+>/g, '').toLowerCase().includes(n)));
     const have = this.ORDER.filter(L => X.some(o => o.l === L));
     const filters = [{ k: '', l: '전체', id: 'all' }].concat(have.map(L => ({ k: this.key(L), l: this.LN[L], id: L }))).map(f => { const p = this.pill(st.only === f.id); return { ...f, go: () => this.setState({ only: f.id }), bd: p[0], bg: p[1], fg: p[2] }; });
     const groups = this.ORDER.map(L => {
@@ -136,11 +142,13 @@ class Component extends DCLogic {
         items: g.map(o => { const on = st.sel === o.t; return { t: o.t, gb: !isG && o.gs.length ? o.gs.join('·') : '', go: () => this.pick(o.t), bd: on ? '#C9472F' : '#D9D4C9', bg: on ? '#F7E6DF' : '#FBFAF7', fg: on ? '#A8361F' : '#1C1B18' }; }) };
     }).filter(Boolean);
     const o = X.find(x => x.t === st.sel);
-    const s = o ? { t: o.t, where: (o.l.startsWith('G:') ? o.l.slice(2) + '군 · ' + this.LN[o.l] : o.l === '기타' ? '그 밖' : o.l + ' · ' + this.LN[o.l]) + (o.gs.length && !o.l.startsWith('G:') ? ' · ' + o.gs.join('·') + '군에서도 쓴다' : ''),
+    const s = o ? { t: o.t, where: (o.c || '미분류') + ' · ' + (o.l.startsWith('G:') ? o.l.slice(2) + '군 · ' + this.LN[o.l] : o.l === '기타' ? '그 밖' : o.l + ' · ' + this.LN[o.l]) + (o.gs.length && !o.l.startsWith('G:') ? ' · ' + o.gs.join('·') + '군에서도 쓴다' : ''),
       hasX: !!o.x, xl: o.gs.length ? o.gs.join('·') + '군에서는' : '덧붙임', hasRel: o.w && /^L|비교/.test(o.l), relHref: `layers.html#${encodeURIComponent(o.t)}`, dn: o.dn, up: o.up,
-      hasS: !!o.sid, s: o.s, sid: o.sid.toUpperCase(), sHref: `compute.html#${o.sid}` } : {};
-    return { q: st.q, onQ: e => this.setState({ q: e.target.value }), cnt: (n || st.only !== 'all') ? `${hit.length} / ${X.length}개` : `${X.length}개`, total: X.length,
-      filters, groups, none: st.ready && !hit.length, hasSel: !!o, noSel: !o, s, clear: () => { history.replaceState(null, '', '#'); this.setState({ sel: null }); }, defRef: this.defRef, xRef: this.xRef };
+      kind: o.c || '미분류', hasS: !!o.sid, s: o.s, sid: o.sid.toUpperCase(), sHref: `compute.html#${o.sid}` } : {};
+    const KS = [['all', '전체'], ['입자', '입자'], ['관계', '관계'], ['미분류', '미분류']];
+    const kinds = KS.map(([id, l]) => { const p = this.pill(st.kind === id); return { id, l, n: id === 'all' ? X.length : X.filter(o => (o.c || '미분류') === id).length, go: () => this.setState({ kind: id }), bd: p[0], bg: p[1], fg: p[2] }; });
+    return { q: st.q, onQ: e => this.setState({ q: e.target.value }), cnt: (n || st.only !== 'all' || st.kind !== 'all') ? `${hit.length} / ${X.length}개` : `${X.length}개`, total: X.length,
+      filters, kinds, groups, none: st.ready && !hit.length, hasSel: !!o, noSel: !o, s, clear: () => { history.replaceState(null, '', '#'); this.setState({ sel: null }); }, defRef: this.defRef, xRef: this.xRef };
   }
 }
 </script>
