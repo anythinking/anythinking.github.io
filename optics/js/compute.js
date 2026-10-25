@@ -14,6 +14,7 @@
 
   const GROUPS = [['a', 'A', 'A · 행렬곱'], ['b', 'B', 'B · 신경망'], ['c', 'C', 'C · 최적화'], ['d', 'D', 'D · 논리'], ['e', 'E', 'E · 변환 앞'], ['f', 'F', 'F · 양자·신호']];
   const HASH = /^([a-f])(\d+)$/;
+  const LAB = { a5: 'feldmann2021' };   // 실험실이 있는 구조 → 그 실험실의 기본 프리셋
   const BOM = k => (D.BOM && D.BOM[k]) || [];
   const DEV = id => (D.DEV && D.DEV[id]) || { n: id, d: '' };
   const PRIV = A.hasPrivate('compute');
@@ -505,6 +506,7 @@
     const foot = h('div.cmp-foot',
       h('div', h('span.lb', '어디서'), h('span', (CP && CP.WHO && CP.WHO[E.id]) || E.who)),
       h('div', h('span.lb', '벽'), h('span.cmp-wall', E.wall)),
+      LAB[E.id] ? h('div', h('span.lb', '실험실'), h('a', { href: 'lab.html#' + LAB[E.id] }, '논문 프리셋으로 깊게 돌려 보기 →')) : null,
       h('div.cmp-note'));
     mount(side, h('div.cmp-main-side', head, panes, intro, ctl, stats, read, h('div#cmp-dev'), h('div#cmp-bom')), foot);
     stats.hidden = true;
