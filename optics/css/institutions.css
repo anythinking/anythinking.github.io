@@ -1,0 +1,101 @@
+/* 기관 지도 페이지 */
+:root{
+  --in-eo:#C9472F; --in-fab:#B7791F; --in-pcm:#2C7A86; --in-comp:#1C1B18; --in-mat:#8A5A2B;
+  --in-src:#7A4F8F; --in-x:#9A948A; --in-ind:#5E6B3A; --in-quant:#3B5A8A;
+  --in-gold:#D4A017; --in-ring:#FBFAF7; --in-mapbg:#E9E6DF;
+}
+@media (prefers-color-scheme:dark){
+  :root{
+    --in-eo:#E0664C; --in-fab:#D4A017; --in-pcm:#4FA6B2; --in-comp:#ECE8DF; --in-mat:#B9875A;
+    --in-src:#B58CC8; --in-x:#8C877C; --in-ind:#9AAB6A; --in-quant:#7F9FD0;
+    --in-gold:#E6B83A; --in-ring:#1F1E19; --in-mapbg:#26251F;
+  }
+}
+.k-eo{--kc:var(--in-eo)} .k-fab{--kc:var(--in-fab)} .k-pcm{--kc:var(--in-pcm)} .k-comp{--kc:var(--in-comp)} .k-mat{--kc:var(--in-mat)}
+.k-src{--kc:var(--in-src)} .k-x{--kc:var(--in-x)} .k-ind{--kc:var(--in-ind)} .k-quant{--kc:var(--in-quant)}
+.e-p{--ec:var(--beam)} .e-m{--ec:var(--probe)} .e-i{--ec:var(--warm)} .e-s{--ec:var(--muted)}
+
+/* 탭 */
+.in-seg{display:flex;gap:2px;flex-wrap:wrap}
+.in-ftabs{gap:4px}
+#in-ctabs .pill{padding:5px 11px;font-size:13px}
+#in-ctabs .pill .n{font-family:var(--mono);font-size:10.5px;margin-left:5px}
+.in-ftabs .chip{font-size:12px;align-items:center;gap:6px;background:transparent}
+.in-ftabs .chip.on{background:var(--tint)}
+.in-dot{width:8px;height:8px;border-radius:50%;display:inline-block;flex:none;background:var(--kc)}
+
+/* 지도 */
+body[data-page="institutions"] main.split{grid-template-columns:minmax(0,1fr) 380px}
+#in-map{position:relative;min-width:0;min-height:0;background:var(--in-mapbg)}
+#in-map.leaflet-container{font-family:var(--sans);background:var(--in-mapbg)}
+.in-mapnote{position:absolute;left:14px;bottom:26px;z-index:500;background:color-mix(in srgb,var(--panel) 94%,transparent);border:1px solid var(--rule);border-radius:8px;padding:8px 11px;font-size:11.5px;line-height:1.6;color:var(--muted);max-width:420px;pointer-events:none}
+.in-legend{position:absolute;right:12px;top:12px;z-index:500;background:color-mix(in srgb,var(--panel) 95%,transparent);border:1px solid var(--rule);border-radius:8px;padding:8px 11px;font-size:11.5px;display:flex;flex-direction:column;gap:4px;color:var(--ink)}
+.in-legend span{white-space:nowrap}
+.in-legend i{display:inline-block;width:22px;height:0;border-top:2px solid var(--ec);margin-right:6px;vertical-align:middle}
+.in-legend i.e-m{border-top-style:dashed} .in-legend i.e-s{border-top-style:dotted}
+/* 마커·선 색은 클래스로 — CSS 가 Leaflet 의 SVG 속성보다 우선한다 */
+path.in-m{fill:var(--kc);fill-opacity:.85;stroke:var(--in-ring);stroke-width:1.5;stroke-opacity:1}
+path.in-m.s3{stroke:var(--in-gold);stroke-width:3}
+path.in-m.sel{fill-opacity:1;stroke:var(--ink);stroke-width:4}
+path.in-m.off{fill-opacity:.15;stroke-opacity:.25}
+path.in-e{fill:none;stroke:var(--ec);stroke-width:2.4;stroke-opacity:.85}
+path.in-e.e-m{stroke-dasharray:6 5} path.in-e.e-s{stroke-dasharray:2 4}
+.leaflet-tooltip.in-tip{font-family:var(--sans);font-size:12px;padding:3px 8px;border-radius:6px;border:1px solid var(--rule);box-shadow:none;background:var(--panel);color:var(--ink)}
+.leaflet-tooltip-top.in-tip::before{border-top-color:var(--rule)}
+.in-fit{color:var(--warm);margin-left:6px}
+
+/* 오른쪽 */
+body[data-page="institutions"] aside.side{background:var(--bg)}
+.in-col{display:flex;flex-direction:column;gap:8px}
+.in-g6{gap:6px}
+.in-warn{margin:0;font-size:13px;line-height:1.75;padding:12px 14px;background:var(--panel);border:1px solid var(--rule);border-left:3px solid var(--wall)}
+.in-warn.why{border-left-color:var(--beam)}
+.in-lhead{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.in-ok{display:flex;gap:4px;margin-left:auto}
+.in-ok .pill{font-size:11.5px;padding:2px 9px;color:var(--muted)}
+.in-ok .pill.on{color:var(--beam)}
+.in-list{display:flex;flex-direction:column;border-top:1px solid var(--rule)}
+.in-row{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:10px;align-items:baseline;padding:9px 2px;border-bottom:1px solid var(--rule);text-decoration:none;color:var(--ink);cursor:pointer}
+.in-list.fit .in-row{grid-template-columns:44px minmax(0,1fr) auto}
+.in-row:hover{background:var(--panel);color:var(--ink)}
+.in-row .f{font-size:11px;color:var(--warm);letter-spacing:-1px}
+.in-row .n{font-size:14px;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.in-row .n .in-dot{margin-right:7px}
+.in-row .ct{font-family:var(--mono);font-size:10.5px;color:var(--muted);white-space:nowrap}
+.in-row.dim{opacity:.45}
+.in-back{align-self:flex-start;cursor:pointer;border:1px solid var(--rule);background:transparent;border-radius:6px;padding:4px 10px;font-size:12.5px;white-space:nowrap}
+.in-back:hover{border-color:var(--beam)}
+.in-w{font-size:13px;color:var(--muted)}
+.in-tags{display:flex;flex-wrap:wrap;gap:5px}
+.in-tag{font-size:11.5px;padding:2px 8px;border-radius:999px;border:1px solid var(--rule);background:var(--panel);white-space:nowrap}
+.in-dl{margin:0;display:grid;grid-template-columns:44px 1fr;gap:10px;font-size:13.5px;line-height:1.65}
+.in-dl:empty{display:none}
+.in-dl dt{font-family:var(--mono);font-size:11px;color:var(--muted);padding-top:3px}
+.in-dl dd{margin:0}
+body[data-page="institutions"] .no{color:var(--wall)}
+body[data-page="institutions"] .ok{color:var(--probe)}
+.in-pis{display:flex;flex-direction:column;gap:10px;margin:0;padding:0;list-style:none}
+.in-pis li{font-size:13.5px;line-height:1.65}
+.in-pis b{display:block;font-size:14px}
+.in-pis li > span{color:var(--muted)}
+.in-rels{display:flex;flex-direction:column;gap:8px}
+.in-rel{font-size:13px;line-height:1.6;border:0;border-left:3px solid var(--ec);background:transparent;text-align:left;padding:8px 10px;border-radius:6px;cursor:pointer}
+.in-rel:hover{background:var(--panel)}
+.in-rel .k{font-family:var(--mono);font-size:10.5px;color:var(--muted)}
+.in-nonote{font-size:12.5px;color:var(--muted);display:flex;gap:8px;align-items:baseline}
+.in-notes{display:flex;flex-direction:column;gap:6px;padding:10px 12px;border:1px solid var(--rule);border-radius:8px;background:var(--panel)}
+.in-note{text-decoration:none;color:var(--ink);font-size:13px;line-height:1.6;display:flex;flex-direction:column;gap:2px}
+.in-note:hover{color:var(--ink)}
+.in-home{font-family:var(--mono);font-size:11px;font-weight:600;margin-left:4px}
+.in-home.h-know{color:var(--probe)} .in-home.h-plan{color:var(--warm)} .in-home.h-none{color:var(--faint)} .in-home.h-off{color:var(--beam)}
+.in-move{color:var(--beam)}
+.in-path{font-family:var(--mono);font-size:11px;color:var(--muted)}
+.in-judge{color:var(--tintfg);font-size:12.5px}
+
+/* 좁은 화면: 지도는 위에 고정 높이, 목록·상세는 그 아래 */
+@media (max-width:899.98px){
+  #in-map{height:62vh;min-height:320px}
+  .in-mapnote{left:8px;right:8px;bottom:22px;max-width:none;font-size:11px;padding:6px 9px}
+  .in-legend{right:8px;top:8px;font-size:11px}
+  .in-row .n{white-space:normal}
+}

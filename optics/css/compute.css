@@ -1,0 +1,200 @@
+/* 구조 페이지 */
+body[data-page="compute"]{--side:360px}
+
+/* 윗줄: 목차·군 · 축 · 구조 탭 */
+.cmp-bar{gap:6px 14px;font-size:13px}
+.cmp-grp{display:flex;gap:2px;font-family:var(--mono);font-size:11.5px;border:1px solid var(--rule);border-radius:7px;padding:2px}
+.cmp-g{white-space:nowrap;font:inherit;cursor:pointer;padding:4px 9px;border:0;border-radius:5px;background:transparent;color:var(--ink)}
+.cmp-g.cmp-gov{font-family:var(--sans);font-size:12px;padding:4px 10px}
+.cmp-g.on{background:var(--tint);color:var(--tintfg)}
+.cmp-g:disabled{cursor:default;color:var(--faint)}
+.cmp-axes,.cmp-tabs{display:flex;gap:4px;flex-wrap:wrap;align-items:center}
+.cmp-axes .lb{font-size:11px;margin-right:4px;white-space:nowrap}
+.pill.cmp-tab,.pill.cmp-axis{font-size:13px;padding:5px 11px}
+.pill.cmp-axis{padding:5px 12px}
+.pill.cmp-tab .k{font-size:inherit;opacity:.6;margin-right:5px}
+
+/* 칸: 그림판은 칸 전체, 오른쪽 패널은 옛 폭 */
+.cmp-stage{padding:0;display:flex;flex-direction:column}
+.cmp-pad{margin:24px var(--gutter)}
+aside.cmp-side{padding:22px 28px 28px;gap:20px}
+.cmp-main-side{display:flex;flex-direction:column;gap:20px}
+
+/* 목차 */
+.cmp-ov{flex:1;padding:8px 32px 40px;background:var(--panel)}
+.cmp-ovrow{display:grid;grid-template-columns:minmax(150px,220px) minmax(0,1fr);gap:22px;padding:18px 0;border-bottom:1px solid var(--rule)}
+.cmp-ovhead{display:flex;flex-direction:column;gap:6px;min-width:0}
+.cmp-ovhead > div:first-child{display:flex;align-items:baseline;gap:8px;flex-wrap:wrap}
+.cmp-ovt{font-family:var(--serif);font-size:16px;font-weight:700;line-height:1.4;text-wrap:pretty}
+.cmp-ovn{font-family:var(--mono);font-size:11px;color:var(--muted);white-space:nowrap}
+.cmp-ovn.hl{color:var(--probe)}
+.cmp-ovd{font-size:12.5px;line-height:1.65;color:var(--muted);text-wrap:pretty}
+.cmp-ovtags{display:flex;gap:5px;flex-wrap:wrap;margin-top:2px}
+.cmp-sv,.cmp-cv{font-size:11px;padding:1px 8px;border-radius:999px;white-space:nowrap}
+.cmp-sv.probe{background:var(--probetint);color:var(--probefg)}
+.cmp-sv.warm{background:var(--warmtint);color:var(--warmfg)}
+.cmp-cv{display:inline-flex;align-items:center;gap:5px;border:1px solid var(--cv)}
+.cmp-cv i{width:7px;height:7px;border-radius:2px;background:var(--cvbg);border:1.5px solid var(--cv)}
+.cmp-cv.y{--cv:var(--probe);--cvbg:var(--probe)}
+.cmp-cv.p{--cv:var(--warm);--cvbg:var(--warm)}
+.cmp-cv.n{--cv:var(--link);--cvbg:transparent}
+.cmp-ovitems{display:flex;flex-wrap:wrap;gap:8px;align-content:flex-start}
+.cmp-ovit{font:inherit;text-align:left;cursor:pointer;display:flex;flex-direction:column;gap:3px;min-width:140px;max-width:230px;padding:10px 13px 11px;border-radius:8px;border:1px solid var(--rule);background:var(--bg);color:var(--ink)}
+.cmp-ovit:hover,.cmp-ovit.hov{border-color:var(--beam)}
+.cmp-ovname{font-size:14px;font-weight:500;line-height:1.4}
+.cmp-ovsub{font-family:var(--mono);font-size:10.5px;color:var(--muted);display:flex;gap:6px;align-items:center}
+.cmp-ovsub i{width:7px;height:7px;border-radius:50%;flex:none}
+.cmp-ovbox{min-height:180px}
+.cmp-meta{font-family:var(--mono);font-size:11px;color:var(--muted);letter-spacing:.04em}
+.cmp-ovbox .sub{font-size:13.5px}
+.cmp-who{font-size:12.5px!important;line-height:1.6!important;color:var(--muted)}
+.cmp-wallbox,.cmp-miss{background:color-mix(in srgb,var(--wall) 11%,var(--panel));color:var(--wall)}
+.cmp-wallbox{font-size:13px!important;line-height:1.65!important;padding:8px 11px;border-radius:6px}
+.cmp-ovprose{display:flex;flex-direction:column;gap:14px;font-size:14px;line-height:1.8}
+.cmp-ovprose p{margin:0}
+
+/* 그림판: 모눈 종이. 그림 자체는 밝은 팔레트로 그려져 있어 다크 모드에선 밝은 판 위에 둔다 */
+.cmp-figbox{position:relative;flex:1;min-height:0;display:flex;flex-direction:column;justify-content:safe center;padding:64px 48px 28px;background-color:var(--panel);background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);background-size:32px 32px}
+.cmp-figlabel{position:absolute;top:20px;left:24px;right:120px;font-family:var(--mono);font-size:11px;color:var(--muted);letter-spacing:.08em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.cmp-markbtn{position:absolute;top:14px;right:20px}
+.cmp-figwrap{
+  --beam:#C9472F;--probe:#2C7A86;--warm:#B7791F;--wall:#8A5A2B;--panel:#FBFAF7;--ink:#1C1B18;--muted:#6B675E;--faint:#8C877C;--rule:#D9D4C9;--grid:#ECE8DF;--bg:#F2F0EB;
+  position:relative;width:100%;margin:0 auto;container-type:inline-size;font-family:var(--mono);color:var(--ink);color-scheme:light;background:var(--figbg,transparent);border-radius:8px}
+.cmp-figwrap > svg,.cmp-figwrap > canvas{width:100%;height:auto;display:block;overflow:visible;font-family:var(--mono)}
+@media (prefers-color-scheme:dark){.cmp-figwrap{--figbg:#FBFAF7;padding:10px}}
+/* 옛 그림의 클래스 → 색 (옛 장의 스타일시트를 대신한다) */
+.cmp-figwrap svg .wg{fill:none;stroke:var(--faint)}
+.cmp-figwrap svg .bm{fill:none;stroke:var(--beam);stroke-linecap:round}
+.cmp-figwrap svg .pd{fill:none;stroke:var(--probe)}
+.cmp-figwrap svg .pdf{fill:var(--probe);stroke:none}
+.cmp-figwrap svg .ht{fill:var(--warm);stroke:none}
+.cmp-figwrap svg .gridl{fill:none;stroke:var(--rule)}
+.cmp-figwrap svg .box{fill:var(--panel);stroke:var(--rule)}
+.cmp-figwrap svg .fillg{fill:var(--grid);stroke:var(--rule)}
+.cmp-figwrap svg .m{fill:var(--muted)}
+.cmp-figwrap svg .i{fill:var(--ink)}
+.cmp-figwrap svg .a{fill:var(--beam)}
+.cmp-figwrap svg .p{fill:var(--probe)}
+.cmp-figwrap svg .w{fill:var(--wall)}
+.cmp-marks{position:absolute;inset:0;pointer-events:none}
+.cmp-mk{pointer-events:auto;position:absolute;transform:translate(-50%,-50%);width:17px;height:17px;border-radius:50%;padding:0;border:0;display:grid;place-items:center;font-family:var(--mono);font-size:10px;font-weight:600;color:var(--panel);background:var(--ink);box-shadow:0 0 0 2px rgba(251,250,247,.9);cursor:pointer;opacity:.92}
+.cmp-mk.on{background:var(--beam)}
+.cmp-legend{width:100%;margin:18px auto 0;display:flex;flex-wrap:wrap;gap:6px 8px;justify-content:center}
+.cmp-lg{display:flex;align-items:center;gap:6px;padding:2px 9px 2px 2px;border-radius:999px;border:1px solid var(--rule);background:var(--panel);cursor:pointer;white-space:nowrap;font-family:var(--sans);font-size:12px;font-weight:500;color:var(--faint);line-height:1.4}
+.cmp-lg.here,.cmp-lg.on{color:var(--ink)}
+.cmp-lg.on{border-color:var(--beam)}
+.cmp-lgn{width:18px;height:18px;border-radius:50%;display:grid;place-items:center;font-family:var(--mono);font-size:10.5px;font-weight:600;background:var(--faint);color:var(--panel)}
+.cmp-lg.here .cmp-lgn{background:var(--ink)}
+.cmp-lg.on .cmp-lgn{background:var(--beam);color:#FBFAF7}
+.cmp-lgw{font-family:var(--mono);font-size:10px;color:var(--faint)}
+
+/* 겹쳐 보면(글) */
+.cmp-text{flex:1;background:var(--panel);padding:56px 64px;display:flex;flex-direction:column;gap:18px;max-width:calc(68ch + 128px)}
+.cmp-text h2{margin:0;font-family:var(--serif);font-size:30px;font-weight:700;letter-spacing:-.015em}
+.cmp-body{display:flex;flex-direction:column;gap:16px;font-size:16px;line-height:1.85}
+.cmp-body p{margin:0}
+.cmp-body .k,.cmp-idea .k,.cmp-intro .k,.cmp-read .k{color:var(--beam);font-weight:700}
+.cmp-body .w,.cmp-idea .w,.cmp-intro .w,.cmp-read .w{color:var(--wall);font-weight:700}
+
+/* 오른쪽 패널 */
+.cmp-head{display:flex;flex-direction:column;border-bottom:1px solid var(--rule)}
+.cmp-ttl{font:inherit;text-align:left;cursor:pointer;border:0;background:transparent;color:var(--ink);padding:6px 0 14px;display:flex;align-items:baseline;gap:12px}
+.cmp-num{font-family:var(--serif);font-size:28px;line-height:1;color:var(--beam)}
+.cmp-title{flex:1;font-family:var(--serif);font-size:22px;font-weight:700;letter-spacing:-.015em;line-height:1.3}
+.cmp-tl{font-family:var(--mono);font-size:11.5px;color:var(--muted);white-space:nowrap}
+.cmp-ideabox{display:flex;flex-direction:column;gap:12px;padding:0 0 18px}
+.cmp-idea{margin:0;font-size:15px;line-height:1.7}
+.cmp-idea b.k{color:var(--beam);font-weight:700}
+.cmp-panes{display:flex;flex-direction:column;gap:8px}
+.cmp-panes .lb{font-size:11px;letter-spacing:0}
+.cmp-panes .wrap{gap:4px}
+.cmp-panes .cmp-opt{border-radius:999px;padding:4px 11px}
+.cmp-intro{margin:0;font-size:14px;line-height:1.75}
+
+.cmp-opt{font:inherit;font-family:var(--sans);font-size:12.5px;cursor:pointer;padding:5px 12px;border-radius:6px;border:1px solid var(--rule);background:transparent;color:var(--ink);white-space:nowrap}
+.cmp-opt:hover{border-color:var(--beam)}
+.cmp-opt.on,.cmp-ctl button[aria-pressed="true"]{border-color:var(--beam);background:var(--tint);color:var(--tintfg)}
+.cmp-markbtn{font-size:12px;padding:5px 10px}
+
+/* 손잡이: A군은 직접 만들고, 옛 장은 실물 손잡이를 같은 꼴로 보이게 한다 */
+.cmp-ctl{display:flex;flex-wrap:wrap;gap:10px 8px;font-family:var(--mono);font-size:12px}
+.cmp-ctl > div:not(.cmp-segrow),.cmp-ctl .ctl{width:100%;display:flex;flex-direction:column;gap:10px}
+.cmp-range,.cmp-ctl .row{width:100%;display:grid;grid-template-columns:96px minmax(0,1fr) 64px;gap:10px;align-items:center;padding:0;border:0}
+.cmp-range > span:first-child,.cmp-ctl .row label{color:var(--muted)}
+.cmp-range.warm > span:first-child{color:var(--wall)}
+.cmp-range.sep{padding-top:10px;border-top:1px dashed var(--rule)}
+.cmp-range input,.cmp-ctl .row input{width:100%;accent-color:var(--beam)}
+.cmp-val,.cmp-ctl .row output{text-align:right;color:var(--ink)}
+.cmp-segrow,.cmp-ctl .btns{width:100%;display:flex;gap:6px;align-items:center;flex-wrap:wrap;margin:0!important}
+.cmp-seglb,.cmp-ctl .btns .chip{width:96px;color:var(--muted);font-family:var(--mono);font-size:12px;padding:0;border:0;background:none;border-radius:0;cursor:default}
+.cmp-segrow .cmp-opt{padding:4px 10px}
+.cmp-ctl .btns button{font:inherit;font-family:var(--sans);font-size:12.5px;cursor:pointer;padding:5px 12px;border-radius:6px;border:1px solid var(--rule);background:transparent;color:var(--ink);white-space:nowrap}
+.cmp-ctl .btns .chip ~ button{padding:4px 10px}
+.cmp-ctl .btns button:hover{border-color:var(--beam)}
+.cmp-ctl .btns button[aria-pressed="true"]{border-color:var(--beam);background:var(--tint);color:var(--tintfg)}
+.cmp-ctl .btns button:disabled{color:var(--faint);cursor:default}
+.cmp-ctl p.note{width:100%;font-size:12.5px}
+
+.cmp-stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:1px;background:var(--rule);border:1px solid var(--rule);font-family:var(--mono)}
+.cmp-stats > div{background:var(--panel);padding:14px 16px;display:flex;flex-direction:column;gap:6px;min-width:0}
+.cmp-sl{font-size:11px;color:var(--muted);font-family:var(--sans)}
+.cmp-sv2{display:flex;flex-wrap:wrap;align-items:baseline;gap:2px 5px;line-height:1}
+.cmp-sv2 b{font-weight:400;font-size:clamp(20px,2.2vw,28px);color:var(--ink)}
+.cmp-sv2 span{font-size:13px;color:var(--muted)}
+.cmp-read,.cmp-read .read{font-family:var(--mono);font-size:12.5px;line-height:1.8;color:var(--muted);display:flex;flex-direction:column;gap:2px}
+.cmp-read:empty{display:none}
+.cmp-read b{color:var(--ink)}
+
+.cmp-devbox{display:flex;flex-direction:column;background:var(--panel);border:1px solid var(--rule);border-left:3px solid var(--beam)}
+.cmp-devhead{display:flex;align-items:center;gap:10px;padding:12px 12px 0 14px}
+.cmp-devn{width:22px;height:22px;flex:none;border-radius:50%;display:grid;place-items:center;font-family:var(--mono);font-size:11px;font-weight:600;background:var(--beam);color:#FBFAF7}
+.cmp-devt{flex:1;font-size:15px;font-weight:700}
+.cmp-x{font:inherit;font-size:16px;line-height:1;cursor:pointer;border:0;background:transparent;color:var(--muted);width:26px;height:26px;border-radius:5px}
+.cmp-x:hover{color:var(--beam)}
+.cmp-devd{min-height:56px;max-height:420px;overflow:auto;resize:vertical;padding:8px 14px 12px 46px;font-size:14px;line-height:1.75}
+#cmp-dev .note{font-size:13px}
+
+.cmp-bom{display:flex;flex-direction:column;border-top:1px solid var(--rule)}
+.cmp-bomtg{font:inherit;font-family:var(--mono);font-size:11.5px;text-align:left;cursor:pointer;border:0;background:transparent;color:var(--muted);padding:12px 0 10px}
+.cmp-bomtg:hover{color:var(--ink)}
+.cmp-bombody{display:flex;flex-direction:column;gap:10px;padding:0 0 16px}
+.cmp-miss{display:flex;flex-direction:column;gap:5px;padding:10px 12px;border-left:3px solid var(--wall);border-radius:0 6px 6px 0}
+.cmp-miss span{font-family:var(--mono);font-size:10.5px;letter-spacing:.05em}
+.cmp-miss p{margin:0;font-size:12.5px;line-height:1.65;color:var(--ink)}
+.cmp-bomrow{display:grid;grid-template-columns:22px minmax(0,1fr);gap:9px;padding:9px 0;border-bottom:1px solid var(--grid)}
+.cmp-bomrow > div{min-width:0;display:flex;flex-direction:column;gap:4px}
+.cmp-bomn{width:22px;height:22px;border-radius:50%;display:grid;place-items:center;font-family:var(--mono);font-size:10.5px;font-weight:600;background:var(--rule);color:var(--muted)}
+.cmp-bomn.p{background:var(--beam);color:#FBFAF7}
+.cmp-bomtop{display:flex;align-items:baseline;gap:7px;flex-wrap:wrap}
+.cmp-bomnm{font:inherit;font-size:14px;font-weight:700;text-align:left;cursor:pointer;border:0;background:transparent;color:var(--ink);padding:0}
+.cmp-bomnm:hover{color:var(--beam)}
+.cmp-bomk,.cmp-bomq{font-family:var(--mono);font-size:10px;color:var(--muted)}
+.cmp-bomk.must{color:var(--beam)}
+.cmp-bomrow p{margin:0}
+.cmp-bomr{font-size:13px;line-height:1.6}
+.cmp-bomd{font-size:12.5px;line-height:1.65;color:var(--muted)}
+.cmp-bomh{font-size:11.5px;line-height:1.5;color:var(--muted);padding-top:4px;border-top:1px dashed var(--rule)}
+.cmp-bomw{font-size:12px;line-height:1.55;color:var(--wall)}
+
+.cmp-foot{margin-top:auto;display:flex;flex-direction:column;gap:9px;padding-top:16px;border-top:1px solid var(--rule);font-size:13px;line-height:1.55}
+.cmp-foot > div:not(.cmp-note){display:grid;grid-template-columns:48px 1fr;gap:8px}
+.cmp-foot .lb{font-size:11px;letter-spacing:0;padding-top:2px}
+.cmp-wall{color:var(--wall)}
+.cmp-note p.note,.cmp-note .note{margin:2px 0 0;font-size:13px;line-height:1.55;color:var(--muted)}
+.cmp-note .k{color:var(--beam);font-weight:700}
+.cmp-note b{color:var(--ink)}
+
+/* 좁은 화면: 그림판은 칸 폭, 목차는 1열 */
+@media (max-width:899.98px){
+  .cmp-figbox{padding:48px var(--gutter) 20px;min-height:0}
+  .cmp-figlabel{left:var(--gutter);right:110px}
+  .cmp-markbtn{right:var(--gutter)}
+  .cmp-ov{padding:4px var(--gutter) 24px}
+  .cmp-ovrow{grid-template-columns:minmax(0,1fr);gap:10px}
+  .cmp-ovit{min-width:0;max-width:none;flex:1 1 140px}
+  .cmp-text{padding:28px var(--gutter);max-width:none}
+  .cmp-text h2{font-size:24px}
+  .cmp-tabs{flex-wrap:nowrap;overflow-x:auto;max-width:100%;scrollbar-width:none}
+  .cmp-tabs::-webkit-scrollbar{display:none}
+  aside.cmp-side{padding:20px var(--gutter) 32px}
+}

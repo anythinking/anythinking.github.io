@@ -1,14 +1,7 @@
+/* A군 — 행렬곱. 구조마다 render(S) 순수 모델 + controls. 페이지(compute.js)가 그림·손잡이를 그린다 */
 (function () {
+  'use strict';
   const PAL = { beam: '#C9472F', probe: '#2C7A86', warm: '#B7791F', wall: '#8A5A2B', panel: '#FBFAF7', ink: '#1C1B18', muted: '#6B675E', rule: '#D9D4C9', grid: '#ECE8DF', bg: '#F2F0EB' };
-  const CLS = {
-    wg: 'fill="none" stroke="#8C877C"', bm: 'fill="none" stroke="#C9472F" stroke-linecap="round"',
-    pd: 'fill="none" stroke="#2C7A86"', pdf: 'fill="#2C7A86" stroke="none"', ht: 'fill="#B7791F" stroke="none"',
-    gridl: 'fill="none" stroke="#D9D4C9"', box: 'fill="#FBFAF7" stroke="#D9D4C9"', fillg: 'fill="#ECE8DF" stroke="#D9D4C9"',
-    m: 'fill="#6B675E"', i: 'fill="#1C1B18"', a: 'fill="#C9472F"', p: 'fill="#2C7A86"'
-  };
-  const ink = s => String(s)
-    .replace(/class="([\w ]+)"/g, (m, c) => c.split(' ').map(k => CLS[k] || '').join(' ') + ' data-c="' + c + '"')
-    .replace(/var\(--(\w+)\)/g, (m, k) => PAL[k] || m);
   const col = k => PAL[k.replace(/^--/, '')] || '#000';
   const D2R = Math.PI / 180, clamp = (v, a, b) => Math.max(a, Math.min(b, v)), fmt = (v, n) => v.toFixed(n == null ? 2 : n);
 
@@ -144,7 +137,7 @@
       id: 'a4', key: '4f 상관기', num: '04', tab: '4f 상관기', title: '4f 상관기 · 정합 필터', fig: { type: 'canvas', w: 880, h: 320 }, label: '입력 · 푸리에 면 · 출력 상관',
       stack: { rects: [[22, 8, 270, 250], [302, 8, 262, 250], [566, 8, 304, 250]], rows: [[0, 1], [2]] },
       idea: [['렌즈가 푸리에 변환을 공짜로 해준다. 푸리에 면에 '], ['찾는 패턴의 켤레', 1], ['를 놓으면, 맞을 때만 출력에 뾰족한 봉우리가 선다.']],
-      who: '1기(1953~72) · 내 DIY 8×8', wall: '아날로그 정밀도',
+      who: '1기(1953~72)', wall: '아날로그 정밀도',
       note: '64점 DFT로 실제 상관을 계산한다. 필터와 입력이 어긋나면 봉우리가 주저앉는다.',
       controls: [
         { type: 'seg', k: 'inp', label: '입력', def: 'A', opts: [['A', 'A'], ['B', 'B'], ['AN', 'A+잡음']] },
@@ -299,8 +292,5 @@
     }
   ];
 
-  window.OPT = window.OPT || { groups: {}, ink, PAL };
-  window.OPT.ink = ink; window.OPT.PAL = PAL;
-  window.OPT.groups.a = { id: 'a', name: 'A · 행렬곱', list: A };
-  window.dispatchEvent(new Event('opt-ready'));
+  (window.CMP = window.CMP || { groups: {} }).groups.a = { id: 'a', name: 'A · 행렬곱', list: A };
 })();
