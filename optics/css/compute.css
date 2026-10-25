@@ -205,3 +205,5 @@ aside.cmp-side{padding:22px 28px 28px;gap:20px}
 .cmp-deep span{font-size:12px;opacity:.85}
 .cmp-deep:hover{background:color-mix(in srgb,var(--tint) 70%,var(--beam))}
 .cmp-lab{padding:4px 0 20px}
+.cmp-topapers{align-self:flex-start;font:inherit;font-size:12px;padding:4px 10px;border:1px solid var(--rule);border-radius:999px;background:transparent;color:var(--probe);cursor:pointer}
+.cmp-topapers:hover{border-color:var(--probe)}

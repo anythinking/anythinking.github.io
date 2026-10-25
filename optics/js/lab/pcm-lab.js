@@ -233,8 +233,11 @@
       const rows = [['분배 1/(m·n)', B.fan], ['결합기', B.dc], ['교차', B.cx], ['셀(비정질)', B.pcm]];
       const mx = Math.max(1, B.total);
       const hist = histo(pr.errs, Math.max(0.02, 4 * pr.sigma));
+      const plist = A.papers('a5', pid => io.href(pid));
+      const toP = plist ? h('button.cmp-topapers', { type: 'button', onclick: () => plist.scrollIntoView({ behavior: 'smooth', block: 'start' }) }, `관련 논문 ${plist.querySelectorAll('.paper').length}편 ↓`) : null;
       mount(sideEl,
         h('div', h('span.lb', pre.id === 'lowloss' ? '가정 실험' : '프리셋 · 논문'), h('h2', pre.n), h('p.sub', pre.cite)),
+        toP,
         h('div.det.lb-goal', h('span.lb', '논문이 하려던 것'), h('p', pre.goal), h('ul.lb-facts', pre.facts.map(x => h('li', x)))),
         h('div.lb-res',
           h('div.lb-big', h('b.mono', f(pr.bits, 1)), h('span', ' bit'), pre.report && pre.report.bits ? h('span.lb-rep', ` · 논문 보고 ${pre.report.bits} bit`) : null),
@@ -248,7 +251,7 @@
           h('p.note', mat.note + ' — ' + mat.src)),
         h('div.lb-sec', h('span.lb', '검출기'),
           h('p.lb-kvs', h('span', `최대 신호 ${f(fs, 2)} µW (${f(10 * Math.log10(fs / 1000), 1)} dBm)`), h('span', `잡음 바닥 ${f(noise, 4)} µW · 비 ${isFinite(snr) ? f(snr, 0) : '∞'}`))),
-        A.papers('a5', pid => io.href(pid)));
+        plist);
     }
     function histo(errs, span) {
       const N = 31, bins = new Array(N).fill(0);

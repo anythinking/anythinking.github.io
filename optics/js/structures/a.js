@@ -197,6 +197,8 @@
           g += `<text class="i" x="354" y="${48 + i * 34}" font-size="10.5">${fmt(y[i])}</text>`;
         }
         g += `<text class="m" x="40" y="190" font-size="9.5">교차점의 결정 상태가 가중치 — 누르면 0 → ½ → 1</text>`;
+        // 구역: 왼쪽 입력 → 가운데 행렬 → 오른쪽 검출
+        g += `<text class="m" x="20" y="16" font-size="9">입력</text><text class="m" x="155" y="16" font-size="9" text-anchor="middle">행렬 — PCM</text><text class="m" x="333" y="16" font-size="9" text-anchor="middle">출력 — 검출</text>`;
         if (S.off) g += `<rect x="0" y="0" width="440" height="200" fill="var(--panel)" opacity=".62"/><text class="a" x="220" y="100" font-size="13" text-anchor="middle" font-weight="600">전원 꺼짐 — 가중치는 그대로 남아 있다</text>`;
         return { svg: g, stats: [{ l: '누적 쓰기', v: S.writes + '회', c: PAL.warm }], read: `출력 y = <b>${y.map(v => fmt(v)).join(' · ')}</b><br>실제 PCM 셀은 10⁶~10⁸회에서 지친다` };
       },
