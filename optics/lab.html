@@ -3,12 +3,12 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>실험실 · PCM 크로스바 — 광 연산 지도와 실험실</title>
+<title>실험실 — 광 연산 지도와 실험실</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@500;700&family=Noto+Sans+KR:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
 <link rel="stylesheet" href="css/base.css">
-<link rel="stylesheet" href="css/lab.css">
+
 </head>
 <body data-page="lab">
 <div class="app">
@@ -20,37 +20,14 @@
       <a href="devices.html">소자 42</a>
       <a href="institutions.html">기관 124</a>
       <a href="glossary.html">용어 346</a>
-      <a href="lab.html" aria-current="page">실험실</a>
       <a href="about.html">소개</a></nav>
   </header>
-<script type="application/json" id="data-lab-pcm">{"MAT":[{"id":"gst","n":"GST (Ge₂Sb₂Te₅)","aa":0.039,"ac":2.7,"note":"비정질 0.039 · 결정 2.7 dB/µm, 1550 nm, SiN 도파로","src":"Faneca 외 2021, arXiv:2101.11127 표 1 (원출처 인용)"},{"id":"gsst","n":"GSST (Ge₂Sb₂Se₄Te₁)","aa":0.0001,"ac":0.53,"note":"비정질 < 10⁻⁴ · 결정 0.53 dB/µm(모의값), C-대역","src":"Faneca 외 2021, arXiv:2101.11127 표 1 (원출처 인용)"},{"id":"sb2se3","n":"Sb₂Se₃","aa":0.0001,"ac":0.07,"note":"비정질 < 10⁻⁴ · 결정 0.07 ± 0.01 dB/µm, 1550 nm 측정","src":"Faneca 외 2021, arXiv:2101.11127 표 1"},{"id":"sb2s3","n":"Sb₂S₃","aa":0.0001,"ac":0.023,"note":"비정질 < 10⁻⁴ · 결정 0.023 ± 0.005 dB/µm, 1550 nm 측정","src":"Faneca 외 2021, arXiv:2101.11127 표 1"}],"SRC":[{"id":"comb","n":"주파수 콤","d":"칸마다 다른 파장. 간섭하지 않고 세기로 더해진다."},{"id":"multi","n":"파장 따로","d":"레이저 여러 대. 콤과 같은 셈이지만 채널 수만큼 광원이 든다."},{"id":"single","n":"단일 레이저","d":"한 파장을 나눠 쓴다. 합칠 때 경로 위상에 따라 간섭한다."}],"PRESET":[{"id":"feldmann2021","n":"Feldmann 2021 · 광 텐서 코어","cite":"Feldmann 외, Nature 589, 52–58 (2021) · arXiv:2002.00281","goal":"한 번 써 둔 PCM 행렬에 여러 입력 벡터를 파장으로 동시에 흘려, 합성곱을 TMAC/s 속도로 병렬 처리한다. 입력마다 파장이 달라 간섭 없이 세기로 더해지는 것이 핵심이다.","facts":["16×16 크로스바 제작, 4×4 삽입 — 시연은 9×4까지","교차점 위 PCM 셀 3×3 µm², 광 펄스로 프로그래밍","결합기 0.1 dB · 교차 0.12 dB (측정)","내적 10만 회의 표준편차 0.008 → 5 bit","MNIST CNN 정확도 95.3% (계산 96.1%)"],"set":{"m":4,"n":4,"dc":0.1,"cx":0.12,"mat":"gst","len":3,"lv":32,"src":"comb","p":1,"er":20,"nep":10,"bw":2},"report":{"bits":5}},{"id":"rios2019","n":"Ríos 2019 · 광 인메모리 곱셈","cite":"Ríos 외, Science Advances 5, eaau5759 (2019) · arXiv:1801.06228","goal":"도파로 위 GST 셀의 투과율을 곱하는 수로 쓰고, 펄스 에너지를 다른 수로 써서 스칼라 곱과 행렬-벡터 곱을 빛만으로 한다. 쓰기와 지우기를 펄스 한 번으로 줄였다.","facts":["Si3N4 도파로 위 GST 셀 1·2 µm","2 µm 셀에서 13 단계 구분","지우기 125 ns · 약 917 pJ","시연은 1×2 행렬 — 두 파장을 빔 분할기로 합쳐 검출","4×4는 논문이 말한 일반화를 이 모형이 그려 본 것"],"set":{"m":4,"n":4,"dc":0.1,"cx":0.12,"mat":"gst","len":2,"lv":13,"src":"multi","p":1,"er":20,"nep":10,"bw":1}},{"id":"lowloss","n":"가정 실험 · 저손실 재료","cite":"논문 아님 — Feldmann 토폴로지에 Sb₂Se₃ 를 넣어 본 가정","goal":"저손실 PCM 은 흡수가 거의 없어 투과율 차이가 작다. 흡수로 가중치를 거는 크로스바에 넣으면 가중치 폭이 줄어 잡음에 묻힌다 — 이런 재료는 위상(간섭계·링)으로 쓰는 쪽이 맞다.","facts":["Sb₂Se₃ 결정 손실 0.07 dB/µm — GST 의 약 1/40","셀을 길게 하면 차이는 커지지만 자리를 많이 먹는다"],"set":{"m":4,"n":4,"dc":0.1,"cx":0.12,"mat":"sb2se3","len":3,"lv":32,"src":"comb","p":1,"er":20,"nep":10,"bw":2}}],"ASSUME":"광원 출력·소광비·검출기 NEP·대역폭은 이 모형의 가정값이다(논문 수치 아님)."}</script>
-<div class="bar lb-bar">
-  <span class="lb">실험실 · PCM 크로스바</span>
-  <div class="lb-presets" id="lb-presets" role="group" aria-label="프리셋"></div>
-</div>
-
-<main class="split">
-  <div class="stage lb-stage">
-    <div class="lb-viewbar">
-      <div class="lb-views" id="lb-views" role="group" aria-label="보기"></div>
-      <button type="button" class="pill" id="lb-reseed">새 가중치·입력</button>
-      <span class="mono lb-hint" id="lb-hint"></span>
-    </div>
-    <div class="lb-figbox">
-      <svg id="lb-2d" class="lb-2d" role="img" aria-label="크로스바 회로도"></svg>
-      <div id="lb-3d" class="lb-3d" hidden></div>
-    </div>
-    <div class="lb-legend" id="lb-legend"></div>
-    <div class="lb-knobs" id="lb-knobs"></div>
-    <p class="note lb-assume" id="lb-assume"></p>
-  </div>
-  <aside class="side lb-side" id="lb-side"></aside>
+<main class="one">
+<p class="note lb-moved">실험실은 구조 페이지의 PCM 크로스바 안 「깊게 보기」로 옮겼다. <a href="compute.html#a5?deep=1" id="lb-go">그리로 가기 →</a></p>
 </main>
 
-<script type="application/json" id="routes">{"":["feldmann2021","lowloss","rios2019"]}</script>
 </div>
 <script src="js/core.js"></script>
-<script src="js/lab/pcm-engine.js"></script>
 <script src="js/lab.js"></script>
 </body>
 </html>

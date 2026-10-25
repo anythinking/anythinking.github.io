@@ -15,6 +15,9 @@
   const GROUPS = [['a', 'A', 'A · 행렬곱'], ['b', 'B', 'B · 신경망'], ['c', 'C', 'C · 최적화'], ['d', 'D', 'D · 논리'], ['e', 'E', 'E · 변환 앞'], ['f', 'F', 'F · 양자·신호']];
   const HASH = /^([a-f])(\d+)$/;
   const LAB = { a5: 'feldmann2021' };   // 실험실이 있는 구조 → 그 실험실의 기본 프리셋
+  // 「깊게 보기」가 주소에 쓰는 키 — 기본 보기로 돌아갈 때 함께 지운다
+  const LABKEYS = ['deep', 'pre', 'm', 'n', 'dc', 'cx', 'mat', 'len', 'lv', 'src', 'p', 'er', 'nep', 'bw', 'view', 'seed'];
+  let lab = null, labFor = null, lastR = null;
   const BOM = k => (D.BOM && D.BOM[k]) || [];
   const DEV = id => (D.DEV && D.DEV[id]) || { n: id, d: '' };
   const PRIV = A.hasPrivate('compute');
@@ -359,6 +362,7 @@
   function render() {
     stopFig();
     giveBack();
+    closeLab();
     renderBar();
     stage.classList.toggle('cmp-ovstage', st.grp === 'o');
     if (st.grp === 'o') { renderOverview(); return; }
@@ -368,7 +372,31 @@
       mount(side); return;
     }
     document.title = (E.title ? E.title + ' · ' : '') + '구조 — 광 연산 지도와 실험실';
+    if (st.deep && LAB[E.id] && window.PCMLab) { renderLab(E); return; }
     if (E.text) renderText(E); else renderFig(E);
+  }
+
+  // ── 깊게 보기: 실험실 부품을 그림·패널 자리에 붙인다 ──
+  function closeLab() { if (lab) { lab.destroy(); lab = null; labFor = null; } stage.classList.remove('cmp-labstage'); }
+  function renderLab(E) {
+    const id = E.id, def = LAB[id];
+    const main = h('div.cmp-lab'), sd = h('div.cmp-labside');
+    stage.classList.add('cmp-labstage');
+    mount(stage, main); mount(side, sd);
+    const off = Object.fromEntries(LABKEYS.map(k => [k, null]));
+    lab = window.PCMLab.mount(main, sd, {
+      state: r => ({ pre: A.route.param(r, 'pre', def), params: r.params }),
+      set: (patch, opt) => A.route.set(patch, opt),
+      preset: (pid, reset) => A.route.set(Object.assign({}, reset, { pre: pid === def ? null : pid })),
+      href: s => {
+        const [pid, qs] = s.split('?'), ps = new URLSearchParams(qs || '');
+        ps.set('deep', '1'); if (pid !== def) ps.set('pre', pid);
+        return '#' + id + '?' + ps.toString();
+      },
+      back: () => A.route.set(off),
+    });
+    labFor = lab ? id : null;
+    if (lab) { lab.update(lastR || A.route.get()); document.title = E.title + ' · 깊게 보기 — 광 연산 지도와 실험실'; }
   }
 
   function renderText(E) {
@@ -506,9 +534,10 @@
     const foot = h('div.cmp-foot',
       h('div', h('span.lb', '어디서'), h('span', (CP && CP.WHO && CP.WHO[E.id]) || E.who)),
       h('div', h('span.lb', '벽'), h('span.cmp-wall', E.wall)),
-      LAB[E.id] ? h('div', h('span.lb', '실험실'), h('a', { href: 'lab.html#' + LAB[E.id] }, '논문 프리셋으로 깊게 돌려 보기 →')) : null,
       h('div.cmp-note'));
-    mount(side, h('div.cmp-main-side', head, panes, intro, ctl, stats, read, h('div#cmp-dev'), h('div#cmp-bom')), foot);
+    const deep = LAB[E.id] ? h('button.cmp-deep', { type: 'button', onclick: () => A.route.set({ deep: '1' }) },
+      h('b', '깊게 보기 →'), h('span', '논문 프리셋으로 재료·광원·검출기를 바꿔 돌려 본다 · 3D')) : null;
+    mount(side, h('div.cmp-main-side', head, deep, panes, intro, ctl, stats, read, h('div#cmp-dev'), h('div#cmp-bom')), foot);
     stats.hidden = true;
 
     if (legacy) {
@@ -626,7 +655,12 @@
   });
 
   A.route.on(r => {
+    lastR = r;
     const m = HASH.exec(r.raw);
+    st.deep = A.route.param(r, 'deep', '') === '1';
+    // 실험실이 없는 구조로 옮기면 깊게 보기 키를 걷어 낸다(다시 돌아왔을 때 저절로 열리지 않게)
+    if (LABKEYS.some(k => r.params[k] != null) && !(st.deep && m && LAB[m[1] + m[2]])) { A.route.set(Object.fromEntries(LABKEYS.map(k => [k, null])), { replace: true }); return; }
+    if (lab && st.deep && m && labFor === m[1] + m[2]) { lab.update(r); return; }
     if (m) { st.grp = m[1]; st.sel[m[1]] = m[1] + m[2]; } else st.grp = 'o';
     const ax = A.route.param(r, 'axis', 'para');
     if (ax !== st.ovAxis) { st.ovAxis = ax; st.ovHov = -1; }

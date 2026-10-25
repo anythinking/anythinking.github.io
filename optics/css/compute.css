@@ -198,3 +198,10 @@ aside.cmp-side{padding:22px 28px 28px;gap:20px}
   .cmp-tabs::-webkit-scrollbar{display:none}
   aside.cmp-side{padding:20px var(--gutter) 32px}
 }
+
+/* 깊게 보기 버튼과 실험실 자리 */
+.cmp-deep{display:flex;flex-direction:column;gap:2px;text-align:left;width:100%;padding:10px 12px;border:1px solid var(--beam);border-radius:8px;background:var(--tint);color:var(--tintfg);font:inherit;cursor:pointer}
+.cmp-deep b{font-size:13.5px}
+.cmp-deep span{font-size:12px;opacity:.85}
+.cmp-deep:hover{background:color-mix(in srgb,var(--tint) 70%,var(--beam))}
+.cmp-lab{padding:4px 0 20px}
