@@ -103,3 +103,14 @@ aside.side h2{margin:0;font-family:var(--serif);font-size:22px;letter-spacing:-.
   .row{grid-template-columns:minmax(0,1fr);gap:8px}
   .search{max-width:none}
 }
+
+/* 관련 논문 목록(A.papers) */
+.papers{display:flex;flex-direction:column;gap:10px}
+.paper{display:flex;flex-direction:column;gap:3px;padding:10px 0;border-top:1px solid var(--rule)}
+.paper-t{font-size:13px;font-weight:600;color:var(--ink);text-decoration:none;line-height:1.45}
+.paper-t:hover{color:var(--beam)}
+.paper-m{font-family:var(--mono);font-size:10.5px;color:var(--muted)}
+.paper-d{font-size:12.5px;line-height:1.6;color:var(--ink)}
+.paper-l{display:flex;flex-wrap:wrap;gap:4px 8px;align-items:center;font-size:11.5px}
+.paper-l .tag{font-family:var(--mono);font-size:10.5px;padding:1px 6px;border:1px solid var(--rule);border-radius:4px;color:var(--muted)}
+.paper-l a{color:var(--probe)}

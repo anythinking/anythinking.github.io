@@ -187,5 +187,23 @@
   const narrow = () => window.matchMedia('(max-width: 899.98px)').matches;
   const stars = (n, max = 3) => '★'.repeat(n) + '☆'.repeat(max - n);
 
-  window.A = { data, hasPrivate, merge, route, $, $$, h, esc, pill, mount, fail, narrow, stars };
+  // 관련 논문 목록 — content/papers.json 을 태그(구조 id 등)로 거른다. 페이지에 그 데이터가 없으면 null.
+  // open(preset) 을 주면 프리셋이 있는 논문에 「실험실에서 열기」를 단다. PDF 는 개인판에만 있다
+  function papers(tag, open) {
+    if (!document.getElementById('data-papers')) return null;
+    const P = (data('papers') || {}).PAPERS || [], list = P.filter(p => (p.tags || []).includes(tag));
+    if (!list.length) return null;
+    return h('div.papers', h('span.lb', `관련 논문 ${list.length}편`), list.map(p => h('div.paper',
+      h('a.paper-t', { href: p.arxiv ? 'https://arxiv.org/abs/' + p.arxiv : 'https://doi.org/' + p.doi, target: '_blank', rel: 'noopener' }, p.t),
+      h('span.paper-m', `${p.a} · ${p.y} · ${p.v}`),
+      h('span.paper-d', p.did),
+      h('span.paper-l',
+        (p.tags || []).filter(t => !/^[a-f]\d+$/.test(t)).map(t => h('span.tag', t)),
+        p.arxiv ? h('a', { href: 'https://arxiv.org/abs/' + p.arxiv, target: '_blank', rel: 'noopener' }, 'arXiv') : null,
+        p.doi ? h('a', { href: 'https://doi.org/' + p.doi, target: '_blank', rel: 'noopener' }, 'DOI') : null,
+        p.pdf ? h('a', { href: p.pdf, target: '_blank' }, 'PDF') : null,
+        p.preset && open ? h('a', { href: open(p.preset) }, '실험실에서 열기 →') : null))));
+  }
+
+  window.A = { data, hasPrivate, merge, route, $, $$, h, esc, pill, mount, fail, narrow, stars, papers };
 })();

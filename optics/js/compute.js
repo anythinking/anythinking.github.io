@@ -534,6 +534,7 @@
     const foot = h('div.cmp-foot',
       h('div', h('span.lb', '어디서'), h('span', (CP && CP.WHO && CP.WHO[E.id]) || E.who)),
       h('div', h('span.lb', '벽'), h('span.cmp-wall', E.wall)),
+      A.papers(E.id, LAB[E.id] ? pid => '#' + E.id + '?deep=1' + (pid === LAB[E.id] ? '' : '&pre=' + pid) : null),
       h('div.cmp-note'));
     const deep = LAB[E.id] ? h('button.cmp-deep', { type: 'button', onclick: () => A.route.set({ deep: '1' }) },
       h('b', '깊게 보기 →'), h('span', '논문 프리셋으로 재료·광원·검출기를 바꿔 돌려 본다 · 3D')) : null;

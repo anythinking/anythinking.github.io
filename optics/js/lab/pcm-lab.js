@@ -113,24 +113,34 @@
     }
     const rowColor = (i, m) => st.cfg.src === 'single' ? css('--beam') : `hsl(${Math.round(i * 300 / Math.max(1, m - 1) + 200) % 360}, 62%, 48%)`;
 
-    // ── 2D 회로도 ──
+    // ── 2D 회로도: 입력부 → 행렬부 → 출력부 ──
     function draw2d(S) {
-      const { m, n, lv, len } = st.cfg, mat = MAT[st.cfg.mat];
-      const W = 680, H = 470, L = 96, T = 34, Rr = 24, B = 128;
+      const { m, n, lv, len } = st.cfg, mat = MAT[st.cfg.mat], single = st.cfg.src === 'single';
+      const W = 680, H = 500, L = 176, T = 52, Rr = 20, B = 132;
       const sx = (W - L - Rr) / n, sy = (H - T - B) / m, cs = Math.max(5, Math.min(sx, sy) * 0.42);
-      const X = j => L + sx * (j + 0.5), Y = i => T + sy * (i + 0.5);
-      let g = '';
+      const X = j => L + sx * (j + 0.5), Y = i => T + sy * (i + 0.5), yb = H - B;
+      const zone = (x, y, w, hh, t) => `<rect x="${x}" y="${y}" width="${w}" height="${hh}" rx="6" fill="none" stroke="var(--rule)" stroke-dasharray="4 3"/><text x="${x + 8}" y="${y + 14}" class="lb-t lb-zt">${t}</text>`;
+      let g = zone(4, T - 40, L - 16, yb - T + 50, '입력부') + zone(L - 6, T - 40, W - L - Rr + 14, yb - T + 50, '행렬부 — PCM 크로스바') + zone(L - 6, yb + 16, W - L - Rr + 14, B - 22, '출력부 — 검출기');
+      // 광원 → (분파) → 행마다 변조기
+      const sy0 = (T + yb) / 2;
+      g += `<rect x="14" y="${f(sy0 - 22, 1)}" width="34" height="44" rx="5" fill="var(--panel)" stroke="var(--ink)" stroke-width=".8"/><text x="31" y="${f(sy0 + 4, 1)}" text-anchor="middle" class="lb-t">${single ? '레이저' : '콤'}</text>`;
       for (let i = 0; i < m; i++) {
         const c = rowColor(i, m), wv = 0.8 + 3.2 * S.x[i];
-        g += `<path d="M${L - 70} ${Y(i)} H${W - Rr}" stroke="${c}" stroke-width="${f(wv, 1)}" stroke-opacity=".8" fill="none"/>`;
-        g += `<text x="${L - 74}" y="${Y(i) + 4}" text-anchor="end" class="lb-t">${m <= 10 ? 'x' + (i + 1) + ' ' : ''}${f(S.x[i])}</text>`;
+        g += `<path d="M48 ${f(sy0, 1)} C 70 ${f(sy0, 1)} 70 ${f(Y(i), 1)} 92 ${f(Y(i), 1)}" stroke="${c}" stroke-width="1" stroke-opacity=".6" fill="none"/>`;
+        g += `<rect x="92" y="${f(Y(i) - 7, 1)}" width="22" height="14" rx="3" fill="var(--panel)" stroke="${c}" stroke-width="1"/>`;
+        g += `<path d="M114 ${Y(i)} H${W - Rr}" stroke="${c}" stroke-width="${f(wv, 1)}" stroke-opacity=".8" fill="none"/>`;
+        if (m <= 10) g += `<text x="140" y="${f(Y(i) - 6, 1)}" text-anchor="middle" class="lb-t">x${i + 1} ${f(S.x[i])}</text>`;
       }
-      for (let j = 0; j < n; j++) g += `<path d="M${X(j)} ${T} V${H - B + 14}" stroke="var(--rule)" stroke-width="1.6" fill="none"/>`;
+      g += `<text x="60" y="${T - 6}" class="lb-t lb-tm">${single ? '한 파장을 나눔' : '파장별로 나눔'} → 변조기</text>`;
+      for (let j = 0; j < n; j++) g += `<path d="M${X(j)} ${T} V${yb + 24}" stroke="var(--rule)" stroke-width="1.6" fill="none"/>`;
+      // 교차점마다: 결합기가 행에서 빛을 떼어 굽은 도파로로 꺾고, 셀을 지나 열에 합친다(개념도 — 8×8 이하에서만 그린다)
+      const tap = m <= 8 && n <= 8, r = Math.min(sx, sy) * 0.34;
       for (let i = 0; i < m; i++) for (let j = 0; j < n; j++) {
+        if (tap) g += `<path d="M${f(X(j) - r * 1.6, 1)} ${f(Y(i), 1)} C ${f(X(j) - r * 0.4, 1)} ${f(Y(i), 1)} ${f(X(j), 1)} ${f(Y(i) + r * 0.2, 1)} ${f(X(j), 1)} ${f(Y(i) + r * 1.4, 1)}" stroke="${rowColor(i, m)}" stroke-width=".9" stroke-opacity=".55" fill="none"/>`;
         const wq = P.quant(S.W[i][j], lv), c = P.cOfT(mat, len, P.weightT(mat, len, wq));
         g += `<rect x="${f(X(j) - cs / 2, 1)}" y="${f(Y(i) - cs / 2, 1)}" width="${f(cs, 1)}" height="${f(cs, 1)}" rx="2" fill="var(--wall)" fill-opacity="${f(0.08 + 0.85 * c)}" stroke="var(--wall)" stroke-width=".8"><title>w = ${f(wq)} · 결정화 ${f(c * 100, 0)}%</title></rect>`;
       }
-      const by = H - B + 22, bh = 62, bw = Math.min(26, sx * 0.55);
+      const by = yb + 36, bh = 56, bw = Math.min(26, sx * 0.55);
       // 막대는 열 가운데 가장 큰 값에 맞춘다(결과는 1/m 로 정규화돼 작다)
       const top = Math.max(0.05, ...S.out.ideal, ...S.out.est) * 1.1;
       for (let j = 0; j < n; j++) {
@@ -138,10 +148,9 @@
         g += `<rect x="${f(X(j) - bw / 2, 1)}" y="${by}" width="${f(bw, 1)}" height="${bh}" rx="2" fill="var(--panel)" stroke="var(--rule)"/>`;
         g += `<rect x="${f(X(j) - bw / 2 + 2, 1)}" y="${f(by + bh - bh * es, 1)}" width="${f(bw - 4, 1)}" height="${f(bh * es, 1)}" fill="var(--beam)" fill-opacity=".75"/>`;
         g += `<path d="M${f(X(j) - bw / 2 - 3, 1)} ${f(by + bh - bh * id, 1)} h${f(bw + 6, 1)}" stroke="var(--ink)" stroke-width="1.6"/>`;
-        if (n <= 10) g += `<text x="${X(j)}" y="${by + bh + 16}" text-anchor="middle" class="lb-t">y${j + 1}</text>`;
+        if (n <= 10) g += `<text x="${X(j)}" y="${by + bh + 14}" text-anchor="middle" class="lb-t">y${j + 1}</text>`;
       }
-      g += `<text x="${L - 70}" y="${T - 14}" class="lb-t lb-tm">입력 — ${st.cfg.src === 'single' ? '한 파장을 나눠 씀' : '행마다 다른 파장'} · 선 굵기 = 세기</text>`;
-      g += `<text x="${L - 70}" y="${H - 6}" class="lb-t lb-tm">검출기 — 막대 = 광학 결과 · 가로선 = 이상값 Σx·w/m</text>`;
+      g += `<text x="${L + 2}" y="${H - 4}" class="lb-t lb-tm">막대 = 광학 결과 · 가로선 = 이상값 Σx·w/m</text>`;
       const svg = $('#lb-2d');
       svg.setAttribute('viewBox', `0 0 ${W} ${H}`);
       svg.innerHTML = g;
@@ -174,13 +183,23 @@
       const { THREE, scene, cam, ctl } = T3, { m, n, lv, len } = st.cfg, mat = MAT[st.cfg.mat];
       if (T3.grp) { scene.remove(T3.grp); T3.grp.traverse(o => { o.geometry && o.geometry.dispose(); o.material && o.material.dispose(); }); }
       const grp = new THREE.Group(), col = v => new THREE.Color(v);
-      const sub = new THREE.Mesh(new THREE.BoxGeometry(n + 2.4, 0.25, m + 1.6), new THREE.MeshStandardMaterial({ color: col(css('--grid') || '#ECE8DF') }));
-      sub.position.y = -0.18; grp.add(sub);
+      const sub = new THREE.Mesh(new THREE.BoxGeometry(n + 5.4, 0.25, m + 1.6), new THREE.MeshStandardMaterial({ color: col(css('--grid') || '#ECE8DF') }));
+      sub.position.set(-1.5, -0.18, 0); grp.add(sub);
+      // 입력부: 광원(콤이면 고리 공진기) → 행마다 변조기
+      const x0 = -n / 2 - 0.9, src = st.cfg.src === 'single'
+        ? new THREE.Mesh(new THREE.BoxGeometry(0.7, 0.35, 0.7), new THREE.MeshStandardMaterial({ color: col(css('--beam') || '#C9472F') }))
+        : new THREE.Mesh(new THREE.TorusGeometry(0.45, 0.08, 12, 40), new THREE.MeshStandardMaterial({ color: col(css('--probe') || '#2C7A86'), emissive: col(css('--probe') || '#2C7A86'), emissiveIntensity: 0.4 }));
+      if (st.cfg.src !== 'single') src.rotation.x = Math.PI / 2;
+      src.position.set(x0 - 2.2, 0.1, 0); grp.add(src);
       const X = j => j - (n - 1) / 2, Z = i => i - (m - 1) / 2;
       for (let i = 0; i < m; i++) {
         const c = col(rowColor(i, m));
         const wg = new THREE.Mesh(new THREE.BoxGeometry(n + 1.6, 0.07, 0.12), new THREE.MeshStandardMaterial({ color: c, emissive: c, emissiveIntensity: 0.15 + 0.85 * S.x[i] }));
         wg.position.set(0.2, 0, Z(i)); grp.add(wg);
+        const md = new THREE.Mesh(new THREE.BoxGeometry(0.5, 0.18, 0.3), new THREE.MeshStandardMaterial({ color: c }));
+        md.position.set(x0, 0.06, Z(i)); grp.add(md);
+        const fan = new THREE.Mesh(new THREE.BoxGeometry(1.9, 0.04, 0.05), new THREE.MeshStandardMaterial({ color: c }));
+        fan.position.set(x0 - 1.15, 0, Z(i) / 2); fan.rotation.y = Math.atan2(Z(i) / 2, 1.9); grp.add(fan);
       }
       for (let j = 0; j < n; j++) {
         const wg = new THREE.Mesh(new THREE.BoxGeometry(0.12, 0.07, m + 0.9), new THREE.MeshStandardMaterial({ color: col(css('--muted') || '#6B675E') }));
@@ -228,7 +247,8 @@
           h('p.lb-kvs', h('span', `셀 ${cfg.len} µm: 비정질 T = ${f(R.Ta, 3)} · 결정 T = ${f(R.Tc, 3)}`), h('span', `가중치 폭 ${f(R.contrast * 100, 1)}% (${f(R.contrastDb, 2)} dB)`)),
           h('p.note', mat.note + ' — ' + mat.src)),
         h('div.lb-sec', h('span.lb', '검출기'),
-          h('p.lb-kvs', h('span', `최대 신호 ${f(fs, 2)} µW (${f(10 * Math.log10(fs / 1000), 1)} dBm)`), h('span', `잡음 바닥 ${f(noise, 4)} µW · 비 ${isFinite(snr) ? f(snr, 0) : '∞'}`))));
+          h('p.lb-kvs', h('span', `최대 신호 ${f(fs, 2)} µW (${f(10 * Math.log10(fs / 1000), 1)} dBm)`), h('span', `잡음 바닥 ${f(noise, 4)} µW · 비 ${isFinite(snr) ? f(snr, 0) : '∞'}`))),
+        A.papers('a5', pid => io.href(pid)));
     }
     function histo(errs, span) {
       const N = 31, bins = new Array(N).fill(0);
@@ -252,7 +272,7 @@
       $('#lb-2d').style.display = st.view === '2d' ? '' : 'none';   // SVG 요소는 hidden 속성이 듣지 않는다
       $('#lb-3d').hidden = st.view !== '3d';
       if (st.view === '2d') draw2d(S); else draw3d(S);
-      mount(q('#lb-legend'), h('span', h('i.lb-sw.am'), '비정질 — 밝다(가중치 큼)'), h('span', h('i.lb-sw.cr'), '결정 — 어둡다(가중치 작음)'), h('span', `가중치 ${st.cfg.lv}단계로 양자화`));
+      mount(q('#lb-legend'), st.view === '3d' ? h('span', '왼쪽 = 입력부(광원·변조기) · 가운데 = 행렬부 · 앞 = 출력부(검출기) · 끌어서 돌리기'): null, h('span', h('i.lb-sw.am'), '비정질 — 밝다(가중치 큼)'), h('span', h('i.lb-sw.cr'), '결정 — 어둡다(가중치 작음)'), h('span', `가중치 ${st.cfg.lv}단계로 양자화`));
       side(S);
     }
 
