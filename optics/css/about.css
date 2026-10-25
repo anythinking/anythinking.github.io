@@ -15,3 +15,6 @@
   .ab-wrap{padding:28px var(--gutter) 56px}
   .ab-wrap h1{font-size:26px}
 }
+.ab-dl{display:grid;grid-template-columns:64px minmax(0,1fr);gap:12px 16px;margin:0}
+.ab-dl dt{font-family:var(--mono);font-size:12px;color:var(--muted);letter-spacing:.04em;padding-top:3px}
+.ab-dl dd{margin:0;font-size:14.5px;line-height:1.75}
