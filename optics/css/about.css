@@ -1,0 +1,17 @@
+/* 소개: 만든 사람 · 이 지도 · 연락 */
+.ab-wrap{max-width:720px;margin:0 auto;padding:44px 24px 80px;line-height:1.75}
+.ab-wrap h1{font-size:30px;margin:6px 0 10px;letter-spacing:-.02em;line-height:1.35}
+.ab-en{font-family:var(--mono);font-size:13px;font-weight:400;color:var(--muted);letter-spacing:.02em;margin-left:6px}
+.ab-lede{font-size:16px;margin:0 0 34px;color:var(--ink)}
+.ab-sec{padding-top:18px;margin-top:22px;border-top:1px solid var(--rule)}
+.ab-sec h2{font-family:var(--serif);font-size:17px;margin:0 0 10px}
+.ab-sec p{font-size:14.5px;margin:0 0 12px;color:var(--ink)}
+.ab-note{color:var(--muted)!important;font-size:13px!important}
+.ab-mail{display:flex;flex-wrap:wrap;align-items:center;gap:10px;margin:14px 0 18px;padding:14px 16px;background:var(--panel);border:1px solid var(--rule);border-radius:8px}
+.ab-addr{font-size:16px;color:var(--beam);text-decoration:none;word-break:break-all}
+.ab-addr:hover{text-decoration:underline}
+.ab-links{font-size:13px!important;color:var(--muted)!important}
+@media (max-width:899.98px){
+  .ab-wrap{padding:28px var(--gutter) 56px}
+  .ab-wrap h1{font-size:26px}
+}

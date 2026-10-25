@@ -74,6 +74,7 @@
   .about p { margin: 0 0 14px; color: var(--ink-soft); }
   .about p strong { color: var(--ink); font-weight: 680; }
   .about .goal { color: var(--teal); font-weight: 600; }
+  .about .contact { margin-top: 18px; }
 
   /* writing list */
   .entry { display: block; text-decoration: none; color: inherit; padding: 18px 0; border-bottom: 1px solid var(--line-soft); }
@@ -121,6 +122,7 @@
     <p>I studied <strong>electrical &amp; electronic engineering</strong> at the University of Sydney, and I work as an engineer building <strong>superconducting magnets</strong> (NMR, up to ~20&nbsp;T) — hands-on high-field hardware: REBCO tapes, joints, cryogenics, quench and current-injection measurement.</p>
     <p>That hardware work feeds a broader interest — <strong>next-generation computing</strong>: optical accelerators for AI, and photonic / quantum approaches that reach past the limits of today's chips. I write to think, turning what I study (and where I get stuck) into the explanations I wish I'd had. Hands-on over hand-wavy: simulators I built, competition circuits I actually ran.</p>
     <p class="goal">Looking toward graduate research in optical / photonic-quantum computing.</p>
+    <p class="contact">Get in touch — research, collaboration, or a correction to something I wrote: <a id="mail" data-u="cheol1648" data-d="gmail.com">cheol1648 [at] gmail.com</a></p>
   </section>
 
   <section class="wrap">
@@ -183,5 +185,8 @@
 </footer>
 
 <!-- analytics: GoatCounter (cookieless) -->
+<script>
+  (function () { var a = document.getElementById('mail'); if (!a) return; var m = a.dataset.u + '@' + a.dataset.d; a.textContent = m; a.href = 'mailto:' + m; })();
+</script>
 <script data-goatcounter="https://anythinking.goatcounter.com/count"
         async src="//gc.zgo.at/count.js"></script>
