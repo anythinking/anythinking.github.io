@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://anythinking.github.io/sitemap.xml
+Sitemap: https://anythinking.github.io/optics/sitemap.xml
