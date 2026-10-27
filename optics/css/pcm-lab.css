@@ -62,3 +62,8 @@
 .cmp-labside{display:flex;flex-direction:column;gap:18px}
 .lb-zt{font-size:10.5px;fill:var(--ink);font-weight:600}
 .lb-cap{font-size:10.5px;fill:var(--ink)}
+.lb-specbox{margin-top:10px}
+.lb-specbox .lb{display:block;margin:0 0 4px}
+.lb-w{font-size:9px;fill:var(--ink)}
+.lb-warnt{fill:var(--beam);font-size:10.5px}
+.lb-k.idle{opacity:.45}

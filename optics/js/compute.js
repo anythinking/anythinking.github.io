@@ -14,9 +14,12 @@
 
   const GROUPS = [['a', 'A', 'A · 행렬곱'], ['b', 'B', 'B · 신경망'], ['c', 'C', 'C · 최적화'], ['d', 'D', 'D · 논리'], ['e', 'E', 'E · 변환 앞'], ['f', 'F', 'F · 양자·신호']];
   const HASH = /^([a-f])(\d+)$/;
-  const LAB = { a5: 'feldmann2021' };   // 실험실이 있는 구조 → 그 실험실의 기본 프리셋
+  // 실험실이 있는 구조 → 붙일 부품과 기본 프리셋
+  const LABS = { a5: { mod: 'PCMLab', def: 'feldmann2021' }, a2: { mod: 'RingLab', def: 'tait2017' } };
+  const LAB = Object.fromEntries(Object.entries(LABS).map(([k, v]) => [k, v.def]));
   // 「깊게 보기」가 주소에 쓰는 키 — 기본 보기로 돌아갈 때 함께 지운다
-  const LABKEYS = ['deep', 'pre', 'm', 'n', 'dc', 'cx', 'mat', 'len', 'lv', 'src', 'p', 'er', 'nep', 'bw', 'view', 'seed'];
+  const LABKEYS = ['deep', 'pre', 'm', 'n', 'dc', 'cx', 'mat', 'len', 'lv', 'src', 'p', 'er', 'nep', 'bw', 'view', 'seed',
+    'sp', 'R', 'k2', 'loss', 'ng', 'tune', 'eta', 'xt', 'fab', 'cal'];
   let lab = null, labFor = null, lastR = null;
   const BOM = k => (D.BOM && D.BOM[k]) || [];
   const DEV = id => (D.DEV && D.DEV[id]) || { n: id, d: '' };
@@ -372,7 +375,7 @@
       mount(side); return;
     }
     document.title = (E.title ? E.title + ' · ' : '') + '구조 — 광 연산 지도와 실험실';
-    if (st.deep && LAB[E.id] && window.PCMLab) { renderLab(E); return; }
+    if (st.deep && LABS[E.id] && window[LABS[E.id].mod]) { renderLab(E); return; }
     if (E.text) renderText(E); else renderFig(E);
   }
 
@@ -384,7 +387,7 @@
     stage.classList.add('cmp-labstage');
     mount(stage, main); mount(side, sd);
     const off = Object.fromEntries(LABKEYS.map(k => [k, null]));
-    lab = window.PCMLab.mount(main, sd, {
+    lab = window[LABS[id].mod].mount(main, sd, {
       state: r => ({ pre: A.route.param(r, 'pre', def), params: r.params }),
       set: (patch, opt) => A.route.set(patch, opt),
       preset: (pid, reset) => A.route.set(Object.assign({}, reset, { pre: pid === def ? null : pid })),

@@ -131,7 +131,7 @@
       const MX = 206;   // 변조기 자리
       if (src === 'comb') {
         g += box(12, ym - 18, 44, 36) + under(34, '펌프', '레이저') + wire(56, ym, 72, ym, 'var(--beam)', 1.6);
-        g += `<rect x="70" y="${f(ym - 26, 1)}" width="56" height="52" rx="5" fill="none" stroke="var(--muted)" stroke-dasharray="2 2"/><circle cx="98" cy="${f(ym, 1)}" r="15" fill="none" stroke="var(--probe)" stroke-width="3"/>` +
+        g += `<rect x="70" y="${f(ym - 40, 1)}" width="56" height="52" rx="5" fill="none" stroke="var(--muted)" stroke-dasharray="2 2"/><path d="M70 ${f(ym, 1)} H126" stroke="var(--probe)" stroke-width="2.4"/><circle cx="98" cy="${f(ym - 17.5, 1)}" r="15" fill="none" stroke="var(--probe)" stroke-width="3"/>` +
           under(98, '링', '칩 ① · 콤');
         g += wire(126, ym, 146, ym, 'var(--probe)', 2) + box(146, y0, 18, y1 - y0, '역다중', 'λ 분리') + box(268, y0, 18, y1 - y0, '다중', 'λ 묶음');
         for (let i = 0; i < m; i++) { const c = rowColor(i, m); g += wire(164, Y(i), MX, Y(i), c) + wire(MX + 26, Y(i), 268, Y(i), c) + wire(286, Y(i), L - 14, Y(i), c, 0.8 + 3.2 * S.x[i]); }
@@ -221,11 +221,17 @@
       if (src === 'comb') {
         const xp = xe - 10, xr = xe - 8, xd = xe - 5.8, xx = xe - 1.8;
         add(Bx(0.9, 0.4, 0.6), red, xp, -0.13, 0);                                  // 펌프 레이저
-        add(Bx(1.3, 0.12, 1.3), col(css('--grid') || '#ECE8DF'), xr, -0.27, 0);      // 칩 ①
-        const ring = add(new THREE.TorusGeometry(0.42, 0.07, 12, 40), teal, xr, -0.14, 0, 0.4); ring.rotation.x = Math.PI / 2;
+        // 칩 ①: 마이크로링 + 바로 옆을 지나는 버스 도파로 하나(논문: 링은 버스 도파로와 소산파로 결합)
+        const R = 0.42, wgw = 0.08;
+        add(Bx(1.9, 0.12, 1.5), col(css('--grid') || '#ECE8DF'), xr, -0.27, -0.35);
+        const ann = new THREE.Shape(); ann.absarc(0, 0, R, 0, Math.PI * 2, false);
+        const hole = new THREE.Path(); hole.absarc(0, 0, R - wgw, 0, Math.PI * 2, true); ann.holes.push(hole);
+        const ring = new THREE.Mesh(new THREE.ExtrudeGeometry(ann, { depth: 0.07, bevelEnabled: false, curveSegments: 48 }), mtl(teal, 0.35));
+        ring.rotation.x = -Math.PI / 2; ring.position.set(xr, -0.21, -(R + 0.05)); grp.add(ring);
+        add(Bx(1.9, 0.07, wgw), teal, xr, -0.175, 0, 0.35);                         // 버스 도파로
         add(Bx(0.35, 0.5, m * spread + 0.4), ink, xd, -0.08, 0);                     // 역다중
         add(Bx(0.35, 0.5, m * spread + 0.4), ink, xx, -0.08, 0);                     // 다중
-        fiber(xp + 0.45, 0, xr - 0.5, 0, red); fiber(xr + 0.5, 0, xd - 0.2, 0, teal);
+        fiber(xp + 0.45, 0, xr - 0.95, 0, red); fiber(xr + 0.95, 0, xd - 0.2, 0, teal);
         for (let i = 0; i < m; i++) { const c = col(rowColor(i, m)), zi = Z(i) * spread; fiber(xd + 0.2, zi, xm - 0.25, Z(i), c); fiber(xm + 0.25, Z(i), xx - 0.2, zi, c); fiber(xx + 0.2, zi, xe, Z(i), c); }
       } else if (src === 'multi') {
         for (let i = 0; i < m; i++) { const c = col(rowColor(i, m)); add(Bx(0.6, 0.3, 0.35), c, xe - 6.5, -0.17, Z(i)); fiber(xe - 6.2, Z(i), xm - 0.25, Z(i), c); fiber(xm + 0.25, Z(i), xe, Z(i), c); }
