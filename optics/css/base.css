@@ -49,9 +49,11 @@ nav.g a:focus-visible,.pill:focus-visible,.chip:focus-visible{outline:2px solid 
 .ph{display:flex;align-items:baseline;gap:6px 18px;flex-wrap:wrap;padding:18px var(--gutter) 16px;border-bottom:1px solid var(--rule)}
 .ph h1{margin:0;font-family:var(--serif);font-size:var(--fs-title);font-weight:700;letter-spacing:-.02em;line-height:1.3}
 .ph p{margin:0;flex:1 1 320px;max-width:68ch;font-size:var(--fs-body);line-height:1.6;color:var(--muted)}
+.ph:has(+ main > .doc){flex-direction:column;gap:6px;padding-inline:max(var(--gutter),calc((100% - 720px) / 2))}
+.ph:has(+ main > .doc) p{flex:none}
 
-/* 문서 페이지(소개·글) 공통 칼럼: 지도 페이지와 같은 왼쪽 선에서 시작 */
-.doc{max-width:calc(720px + 2 * var(--gutter));padding:30px var(--gutter) 96px;font-size:var(--fs-body);line-height:1.8}
+/* 문서 페이지(소개·글) 공통 칼럼: 읽기 편하게 가운데, 페이지 머리도 같은 폭으로 맞춘다 */
+.doc{max-width:calc(720px + 2 * var(--gutter));margin:0 auto;padding:30px var(--gutter) 96px;font-size:var(--fs-body);line-height:1.8}
 .doc h2{font-family:var(--serif);font-size:var(--fs-h2);line-height:1.45;margin:40px 0 12px;padding-top:18px;border-top:1px solid var(--rule)}
 .doc p{margin:0 0 14px}
 .doc .lede{font-size:16.5px;line-height:1.75;margin:0 0 10px}
