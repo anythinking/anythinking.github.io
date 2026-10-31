@@ -8,6 +8,8 @@
   --probetint:#DCEBEC; --probefg:#1F5F69;    /* probe 옅은 바탕 / 글자 */
   --sans:'Noto Sans KR',sans-serif; --serif:'Noto Serif KR',serif; --mono:'IBM Plex Mono',monospace;
   --gutter:32px; --side:clamp(300px,34vw,440px);
+  /* 글자 크기 단계 — 페이지마다 따로 정하지 말고 이것만 쓴다 */
+  --fs-title:28px; --fs-h2:19px; --fs-body:15px; --fs-sm:13px; --fs-lb:11.5px;
   color-scheme:light;
 }
 @media (prefers-color-scheme:dark){
@@ -31,14 +33,31 @@ code{font-family:var(--mono);font-size:11.5px;background:var(--grid);padding:1px
 
 /* 틀: 넓은 화면은 고정 전체화면 + 칸마다 스크롤 */
 .app{position:fixed;inset:0;display:flex;flex-direction:column;overflow:hidden}
-header.top{display:flex;justify-content:space-between;align-items:center;gap:24px;padding:16px var(--gutter);border-bottom:1px solid var(--rule)}
-.ttl{display:flex;align-items:baseline;gap:14px;min-width:0;overflow:hidden}
-.ttl b{font-family:var(--serif);font-size:20px;letter-spacing:-.015em;white-space:nowrap}
-.ttl span{font-family:var(--mono);font-size:11px;color:var(--muted);letter-spacing:.06em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0}
-nav.g{flex:none;display:flex;gap:2px;font-family:var(--mono);font-size:11.5px;color:var(--muted);background:var(--panel);border:1px solid var(--rule);border-radius:8px;padding:3px}
-nav.g a{padding:5px 9px;white-space:nowrap;border-radius:5px;color:inherit;text-decoration:none}
+header.top{display:flex;justify-content:space-between;align-items:center;gap:24px;padding:18px var(--gutter);border-bottom:1px solid var(--rule)}
+.ttl{display:flex;align-items:baseline;gap:16px;min-width:0;overflow:hidden}
+.ttl b{font-family:var(--serif);font-size:26px;letter-spacing:-.02em;white-space:nowrap}
+.ttl span{font-size:var(--fs-sm);color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0}
+nav.g{flex:none;display:flex;gap:2px;font-size:15px;font-weight:500;color:var(--muted);background:var(--panel);border:1px solid var(--rule);border-radius:10px;padding:4px}
+nav.g a{display:flex;align-items:baseline;gap:5px;padding:6px 12px;white-space:nowrap;border-radius:7px;color:inherit;text-decoration:none}
+nav.g a .n{font-family:var(--mono);font-size:11.5px;font-weight:400;color:var(--faint)}
 nav.g a:hover{color:var(--ink)}
 nav.g a[aria-current="page"]{background:var(--tint);color:var(--tintfg)}
+nav.g a[aria-current="page"] .n{color:inherit;opacity:.7}
+nav.g a:focus-visible,.pill:focus-visible,.chip:focus-visible{outline:2px solid var(--probe);outline-offset:2px}
+
+/* 페이지 머리: 모든 페이지가 같은 자리·같은 크기의 제목과 한 줄 소개로 시작한다 (메타 h1·lede → build.py) */
+.ph{display:flex;align-items:baseline;gap:6px 18px;flex-wrap:wrap;padding:18px var(--gutter) 16px;border-bottom:1px solid var(--rule)}
+.ph h1{margin:0;font-family:var(--serif);font-size:var(--fs-title);font-weight:700;letter-spacing:-.02em;line-height:1.3}
+.ph p{margin:0;flex:1 1 320px;max-width:68ch;font-size:var(--fs-body);line-height:1.6;color:var(--muted)}
+
+/* 문서 페이지(소개·글) 공통 칼럼: 지도 페이지와 같은 왼쪽 선에서 시작 */
+.doc{max-width:calc(720px + 2 * var(--gutter));padding:30px var(--gutter) 96px;font-size:var(--fs-body);line-height:1.8}
+.doc h2{font-family:var(--serif);font-size:var(--fs-h2);line-height:1.45;margin:40px 0 12px;padding-top:18px;border-top:1px solid var(--rule)}
+.doc p{margin:0 0 14px}
+.doc .lede{font-size:16.5px;line-height:1.75;margin:0 0 10px}
+.doc .meta{font-family:var(--mono);font-size:var(--fs-lb);color:var(--muted);letter-spacing:.03em;margin:0 0 8px}
+.doc .back{display:inline-block;margin:0 0 18px;font-size:var(--fs-sm);color:var(--muted);text-decoration:none}
+.doc .back:hover{color:var(--beam)}
 
 .bar{display:flex;align-items:center;gap:8px 14px;padding:10px var(--gutter);border-bottom:1px solid var(--rule);flex-wrap:wrap;font-size:12.5px;color:var(--muted)}
 .bar.tight{padding-top:8px;padding-bottom:8px;gap:6px}
@@ -51,7 +70,7 @@ aside.side{min-width:0;min-height:0;overflow:auto;border-left:1px solid var(--ru
 .serif{font-family:var(--serif)} .mono{font-family:var(--mono)}
 .muted{color:var(--muted)} .faint{color:var(--faint)}
 .lb{font-family:var(--mono);font-size:10.5px;color:var(--muted);letter-spacing:.06em}
-.sechead{margin:0;font-family:var(--serif);font-size:17px;letter-spacing:-.01em}
+.sechead{margin:0;font-family:var(--serif);font-size:var(--fs-h2);letter-spacing:-.01em}
 aside.side h2{margin:0;font-family:var(--serif);font-size:22px;letter-spacing:-.015em;line-height:1.3}
 .sub{margin:0;font-size:13.5px;line-height:1.75;color:var(--muted)} .sub b{color:var(--ink)}
 .note{margin:0;font-size:12.5px;line-height:1.7;color:var(--muted)}
@@ -94,7 +113,10 @@ aside.side h2{margin:0;font-family:var(--serif);font-size:22px;letter-spacing:-.
   .app{position:static;inset:auto;overflow:visible;min-height:100vh}
   header.top{flex-direction:column;align-items:stretch;gap:10px;padding:12px var(--gutter)}
   .ttl{flex-wrap:wrap;gap:4px 10px}
-  .ttl b{font-size:18px}
+  .ttl b{font-size:22px}
+  .ph{padding:16px var(--gutter) 14px}
+  .ph h1{font-size:24px}
+  .doc{padding:22px var(--gutter) 64px}
   nav.g{flex:none;max-width:100%;overflow-x:auto;scrollbar-width:none;-webkit-overflow-scrolling:touch}
   nav.g::-webkit-scrollbar{display:none}
   main.split{display:block}

@@ -8,11 +8,7 @@
   :root{ --op-st1:#2E2A22; --op-st2:#4A3C2C; --op-st2fg:#F2EEE6; --op-jrule:#5A4A2C; }
 }
 
-.op .op-stage{padding:26px 36px 44px;display:flex;flex-direction:column;gap:28px}
-.op-intro{display:flex;flex-direction:column;gap:6px;max-width:74ch}
-.op-intro .lb{font-size:11px}
-.op-h{margin:0;font-family:var(--serif);font-size:26px;letter-spacing:-.015em;line-height:1.3}
-.op-intro p{margin:0;font-size:15px;line-height:1.75}
+.op .op-stage{padding:26px var(--gutter) 44px;display:flex;flex-direction:column;gap:28px}
 .op-red{color:var(--beam)}
 
 .op-sec{display:flex;flex-direction:column;gap:10px}
@@ -111,7 +107,6 @@
 .op-tree .op-cur{margin:2px 0 8px 22px}
 @media (max-width:899.98px){
   .op .op-stage{padding:20px var(--gutter) 28px;gap:24px}
-  .op-h{font-size:22px}
   .op-head .sechead{white-space:normal}
   .op-jslot{margin-left:0}
   .op-tree{margin-left:8px}

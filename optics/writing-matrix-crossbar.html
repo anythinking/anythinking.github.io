@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>신경망은 어떻게 행렬이 되고, 행렬은 어떻게 칩이 되나 — 광 연산 지도와 실험실</title>
-<meta name="description" content="신경망의 가중치가 선에 있다는 것에서 출발해 행렬 y = σ(Wx + b)와 크로스바 위의 빛의 경로까지. 마이크로링 가중치 뱅크와 순환 실리콘 광 신경망 논문이 말한 「동형」을 그림 3장으로 풀었다.">
+<title>신경망이 어떻게 크로스바로 표현될까? — 광 연산 지도와 실험실</title>
+<meta name="description" content="신경망의 가중치가 선에 있다는 것에서 출발해 행렬 y = σ(Wx + b)와 크로스바 위의 빛의 경로까지. 마이크로링과 PCM 광회로가 왜 신경망이 되는지, 한 세로줄의 빛을 여러 행이 나눠 쓰는 문제까지 그림 6장으로 풀었습니다.">
 <link rel="canonical" href="https://anythinking.github.io/optics/writing-matrix-crossbar.html">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -17,41 +17,49 @@
   <header class="top">
     <div class="ttl"><b>광 연산 지도와 실험실</b><span>지도 6장 · 구조 28개 · 용어 346개</span></div>
     <nav class="g" aria-label="지도"><a href="optics.html">광학</a>
-      <a href="layers.html">층 148</a>
-      <a href="compute.html">구조 28</a>
-      <a href="devices.html">소자 42</a>
-      <a href="institutions.html">기관 124</a>
-      <a href="glossary.html">용어 346</a>
+      <a href="layers.html">층<span class="n">148</span></a>
+      <a href="compute.html">구조<span class="n">28</span></a>
+      <a href="devices.html">소자<span class="n">42</span></a>
+      <a href="institutions.html">기관<span class="n">124</span></a>
+      <a href="glossary.html">용어<span class="n">346</span></a>
       <a href="writing.html" aria-current="page">글</a>
       <a href="about.html">소개</a></nav>
   </header>
+<div class="ph"><h1>신경망이 어떻게 크로스바로 표현될까?</h1></div>
 <main class="one">
-<article class="wr-wrap">
-  <a class="lb" href="writing.html">← 글 목록</a>
-  <h1>신경망은 어떻게 행렬이 되고, 행렬은 어떻게 칩이 되나</h1>
-  <p class="wr-lede">광 신경망 논문의 초록 한 문단을 읽다가 두 단어에서 막혔다. 「마이크로링 가중치 뱅크」와 「수학적 동형」이다. 막힌 순서대로 풀어 본다.</p>
-  <p class="wr-meta">2026-10-28 · 구조 › <a href="compute.html#a2">마이크로링 가중치 뱅크</a> · <a href="compute.html#a5">PCM 크로스바</a></p>
+<article class="doc">
+  <a class="back" href="writing.html">← 글 목록</a>
+  <p class="lede">하이델베르크 대학교 키르히호프 물리학 연구소(KIP) Wolfram Pernice 교수 연구팀의 논문들을 읽다가 시작한 글입니다. 광 신경망 논문들에선 신경망을 크로스바 모형으로 나타내는 경우가 자주 나오는데, 이 부분이 매번 이해되지 않아 논문 전체를 제대로 이해하지 못하곤 했습니다. 그래서 이번에는 격자 모양의 광회로가 왜 신경망이 되는지, 막힌 순서대로 풀어 보겠습니다.</p>
+  <p class="meta">2026-10-28 · 구조 › <a href="compute.html#a2">마이크로링 가중치 뱅크</a> · <a href="compute.html#a5">PCM 크로스바</a></p>
 
   <div class="wr-body">
 
-  <h2>출발점 — 초록의 두 문장</h2>
-  <p>읽던 논문은 프린스턴 그룹의 순환 실리콘 광 신경망 실험이다. 초록에서 걸린 문장은 둘이었다.</p>
+  <h2>출발점 — 격자로 된 두 회로</h2>
+  <p>여러 논문을 읽다 보니 소자는 달라도 같은 구조의 회로를 쓰는 경우가 많았습니다. 예를 들어 Pernice 그룹의 상변화 물질(PCM) 광 텐서 코어는 교차점마다 PCM 조각을, 프린스턴 그룹의 마이크로링 가중치 뱅크는 링 공진기를 가중치 소자로 씁니다. 프린스턴 그룹의 초록에는 이런 문장도 있었습니다.</p>
   <blockquote class="wr-quote"><span class="lb">초록에서 (번역)</span>연결을 마이크로링 가중치 뱅크로 구성한 순환 실리콘 광 신경망을 처음으로 관측했다. 동역학적 분기 분석으로 이 실리콘 광자 회로가 연속 신경망 모델과 수학적으로 동형임을 보였다.</blockquote>
-  <p>링 공진기가 어떻게 생겼는지, 히터로 굴절률을 바꾸면 공진이 움직인다는 것까지는 알고 있었다. 막힌 건 그다음이었다. 링을 격자처럼 늘어놓은 회로가 <b>왜 신경망과 「같은 것」</b>이라고 말할 수 있는가. 신경망은 한 노드가 다음 층의 모든 노드와 이어진 그림인데, 칩은 그냥 격자로 보였다.</p>
 
-  <h2>먼저, 마이크로링 가중치 뱅크</h2>
-  <p>곧은 도파로 옆에 작은 고리 도파로(<a href="glossary.html#%EB%A7%81%20%EA%B3%B5%EC%A7%84%EA%B8%B0">링 공진기</a>)를 붙이면, 고리 둘레에 맞는 파장만 고리로 빨려 들어가 반대편 출구로 빠진다. 전기로 치면 특정 주파수만 걸러내는 노치 필터다. 링 위의 히터로 온도를 바꾸면(<a href="glossary.html#%EC%97%B4%EA%B4%91%ED%95%99%20%ED%9A%A8%EA%B3%BC">열광학 효과</a>) 공진 파장이 조금 움직이고, 그만큼 그 파장이 얼마나 빠질지를 0에서 1 사이로 연속해서 조절할 수 있다. <b>이 비율이 가중치다.</b></p>
-  <p>입력이 여러 개면 입력마다 다른 파장을 쓰고(<a href="glossary.html#WDM">WDM</a>), 도파로 하나에 서로 다른 파장에 맞춘 링을 줄줄이 붙인다. 이 묶음이 「뱅크」다. 끝에 놓인 포토다이오드는 파장을 구분하지 못하고 들어온 빛의 총량만 전류로 바꾸는데, 이 「구분 못 함」이 덧셈을 공짜로 해 준다. 빛의 세기는 음수가 될 수 없으니, 두 출구에 포토다이오드를 하나씩 두고 전류를 빼서 가중치를 −1에서 +1까지 쓴다.</p>
-  <p>여기까지는 부품 이야기다. 신경망과 같다는 말을 이해하려면 신경망 쪽을 먼저 다시 봐야 했다.</p>
+  <figure class="wr-fig">
+    <svg class="wf" viewBox="0 0 640 210" role="img" aria-label="세로선 세 개와 가로선 세 개가 엇갈리고, 교차점마다 빈 원이 놓인 격자.">
+      <text class="sm" x="320" y="14" text-anchor="middle">입력</text>
+      <line class="wire" x1="240" y1="28" x2="240" y2="196"/><line class="wire" x1="320" y1="28" x2="320" y2="196"/><line class="wire" x1="400" y1="28" x2="400" y2="196"/>
+      <line class="wire" x1="190" y1="52" x2="450" y2="52"/><line class="wire" x1="190" y1="112" x2="450" y2="112"/><line class="wire" x1="190" y1="172" x2="450" y2="172"/>
+      <circle class="cell" cx="240" cy="52" r="17"/><circle class="cell" cx="320" cy="52" r="17"/><circle class="cell" cx="400" cy="52" r="17"/>
+      <circle class="cell" cx="240" cy="112" r="17"/><circle class="cell" cx="320" cy="112" r="17"/><circle class="cell" cx="400" cy="112" r="17"/>
+      <circle class="cell" cx="240" cy="172" r="17"/><circle class="cell" cx="320" cy="172" r="17"/><circle class="cell" cx="400" cy="172" r="17"/>
+      <text class="sm" x="462" y="112" dominant-baseline="central">출력</text>
+    </svg>
+    <figcaption>그림 1. 논문 속 광회로를 처음 봤을 때의 모습입니다. 선이 엇갈리는 자리마다 소자가 하나씩 놓인 격자입니다.</figcaption>
+  </figure>
 
-  <h2>잘못 알고 있던 것 — 가중치는 선에 있다</h2>
-  <p>처음에는 신경망 그림에서 가중치 같은 속성이 노드(원)에 있고, 선은 연결을 보여 주는 표시일 뿐이라고 생각하고 있었다. 그래서 링 하나하나에 온도를 따로 줄 수 있다는 게 이상했다. 같은 파장 λ₃에 링이 세 개 있고 셋의 온도를 다르게 둘 수 있다면, 링마다 「노드성」이 있는 것처럼 느껴졌다.</p>
-  <p>알고 보니 출발점이 틀렸다. <b>표준 신경망에서도 가중치는 원래 선에 있다.</b> 역할은 이렇게 나뉜다.</p>
+  <p>소자를 격자처럼 늘어놓은 회로가 왜 신경망과 「같은 것」이라고 말할 수 있을까요? 제가 봐 온 신경망은 한 층(layer)의 노드가 다음 층의 노드들과 이어진 그림인데, 광회로는 그냥 격자로 보였습니다. 다른 광 연산 논문들도 대부분 이런 격자 구조를 갖고 있어서, 한번 깊게 생각해 보고 정리해 보겠습니다.</p>
+
+  <h2>신경망 구조</h2>
+  <p>우선 신경망 구조부터 알아보겠습니다. 신경망은 보통 노드(원)와 선으로 표현됩니다. 단순히 노드 사이의 연결성을 보여 주는 그림 같지만, 노드와 선은 각자 맡은 역할이 있습니다.</p>
   <ul>
-    <li><b>선</b>은 곱셈만 한다. 값 하나를 받아 자기 가중치 wᵢⱼ를 곱해 넘긴다. 선마다 숫자가 다르다.</li>
-    <li><b>노드</b>는 들어온 값을 다 더하고, 바이어스를 더하고, 활성화 함수 σ를 거쳐 <b>값 하나</b>를 내보낸다.</li>
+    <li><b>선</b>: xⱼ와 yᵢ를 이어 줍니다. xⱼ의 값을 yᵢ에 전달할 때 가중치 wᵢⱼ를 곱해 전달합니다.</li>
+    <li><b>노드</b>: 다른 노드에서 들어온 값을 모두 더하고, 바이어스도 더한 뒤 활성화 함수 σ를 거쳐 하나의 값을 내보냅니다.</li>
   </ul>
-  <p>노드 x₃는 y₁, y₂, y₃에게 똑같은 값을 보내고, 그 값이 각 선을 지나며 w₁₃, w₂₃, w₃₃로 서로 다르게 곱해진다. λ₃ 위의 링 세 개를 서로 다른 온도로 두는 건 정확히 이것이다. 「x₃의 신호를 y₁, y₂, y₃가 각자 다른 세기로 듣는다」.</p>
+  <p>그래서 노드 x₂는 y₁, y₂, y₃에게 똑같은 값을 보내지만, 그 값은 각 선을 지나며 w₁₂, w₂₂, w₃₂로 서로 다르게 곱해집니다. y₁, y₂, y₃가 x₂의 신호를 각자 다른 세기로 듣는 셈입니다.</p>
 
   <figure class="wr-fig">
     <svg class="wf" viewBox="0 0 640 210" role="img" aria-label="입력 x1~x3과 출력 y1~y3을 잇는 신경망. y3로 들어오는 세 선에 w31, w32, w33이 적혀 있고 각 출력 옆에 식이 있다.">
@@ -75,14 +83,13 @@
       <text class="eq" x="318" y="110" dominant-baseline="central">y₂ = σ(w₂₁x₁ + w₂₂x₂ + w₂₃x₃ + b₂)</text>
       <text class="eq" x="318" y="170" dominant-baseline="central">y₃ = σ(w₃₁x₁ + <tspan class="hlt">w₃₂x₂</tspan> + w₃₃x₃ + b₃)</text>
     </svg>
-    <figcaption>그림 1. 선 하나에 가중치 하나. 아홉 개를 다 적으면 엇갈려서 y₃로 들어오는 세 개만 적었다. 노란 선 w₃₂를 그림 2, 3에서도 따라간다.</figcaption>
+    <figcaption>그림 2. 선 하나에 가중치가 하나씩 있습니다. 아홉 개를 다 적으면 서로 엇갈려서 y₃로 들어오는 세 개만 적었습니다. 노란 선 w₃₂를 그림 3, 4에서도 따라갑니다.</figcaption>
   </figure>
 
-  <p>가중치가 왜 꼭 선에 있어야 하는지도 따져 보면 분명하다. 가중치를 <b>보내는 노드</b>에 두면, x₃에 붙은 숫자 하나가 y₁, y₂, y₃ 모두에게 똑같이 적용된다. 받는 뉴런들이 전부 같은 합을 계산하게 되니 뉴런을 여러 개 둔 의미가 사라진다. <b>받는 노드</b>에 두면 각 뉴런은 입력을 그냥 다 더한 뒤 자기 숫자 하나를 곱할 뿐이라, 「x₁은 크게, x₃는 무시」 같은 구분을 못 한다. 선에 두어야 N²개의 독립된 숫자가 생기고, 뉴런마다 누구 말을 얼마나 들을지를 따로 정할 수 있다.</p>
-  <p>생물학에서도 이렇게 나뉜다. 뉴런은 신호를 하나만 내보내고, 그 신호가 여러 <b>시냅스</b>로 가는데 시냅스마다 세기가 다르다. 가중치는 시냅스를 흉내 낸 것이다. 그러니 링 하나는 시냅스 하나이고, 「가중치 뱅크」는 시냅스를 줄줄이 모은 묶음이다. 링은 곱하기만 하고 상태도 비선형도 없으니 노드가 아니다.</p>
+  <p>가중치가 왜 꼭 선에 있어야 하는지도 따져 보면 분명합니다. 가중치를 <b>보내는 노드</b>에 두면, x₂에 붙은 숫자 하나가 y₁, y₂, y₃ 모두에게 똑같이 적용됩니다. 받는 뉴런들이 전부 같은 합을 계산하게 되니 뉴런을 여러 개 둔 의미가 사라집니다. <b>받는 노드</b>에 두면 각 뉴런은 입력을 그냥 다 더한 뒤 자기 숫자 하나를 곱할 뿐이라, 「x₁은 크게, x₃는 무시」 같은 구분을 하지 못합니다. 선에 두어야 N²개의 독립된 숫자가 생기고, 뉴런마다 누구 말을 얼마나 들을지를 따로 정할 수 있습니다.</p>
 
-  <h2>선을 표로 적으면 행렬이 된다</h2>
-  <p>그림 1의 식 세 줄을 보면 같은 모양이 반복된다. 이걸 「받는 쪽 i번째 줄, 보내는 쪽 j번째 칸」에 wᵢⱼ를 적는 표로 정리하면 그대로 행렬이 된다.</p>
+  <h2>행렬화</h2>
+  <p>그림 2의 식 세 줄을 보면 같은 모양이 반복됩니다. 이걸 「받는 쪽 i번째 줄, 보내는 쪽 j번째 칸」에 wᵢⱼ를 적는 표로 정리하면 그대로 행렬이 됩니다.</p>
 
   <figure class="wr-fig">
     <svg class="wf" viewBox="0 0 640 150" role="img" aria-label="y 열벡터 = σ(3x3 가중치 행렬 곱하기 x 열벡터 + b 열벡터)">
@@ -114,21 +121,17 @@
       <text class="eq" x="515" y="110" text-anchor="middle" dominant-baseline="central">b₃</text>
       <text class="eq" x="550" y="75" text-anchor="middle" dominant-baseline="central">)</text>
     </svg>
-    <figcaption>그림 2. y = σ(Wx + b). 행 i는 받는 뉴런 yᵢ, 열 j는 보내는 뉴런 xⱼ다. 그림 1의 식 한 줄이 행렬의 한 행이다.</figcaption>
+    <figcaption>그림 3. y = σ(Wx + b). 행 i는 받는 뉴런 yᵢ, 열 j는 보내는 뉴런 xⱼ입니다. 그림 2의 식 한 줄이 행렬의 한 행입니다.</figcaption>
   </figure>
 
-  <p>행렬곱 Wx를 한 줄씩 풀면 yᵢ = wᵢ₁x₁ + wᵢ₂x₂ + wᵢ₃x₃이다. 「뉴런 i가 앞 층의 모든 뉴런에게서 값을 받아 가중합한다」를 식으로 쓴 것이 바로 이 줄이다. 그래서 신경망 라이브러리의 완전연결층은 안에서 행렬곱 한 번으로 계산된다. 그래프는 사람이 보기 좋게 그린 그림이고, 계산은 늘 행렬로 한다.</p>
-  <p>여기에 두 가지가 덧붙는다.</p>
-  <ul>
-    <li><b>바이어스는 행렬 안으로 넣을 수 있다.</b> 입력에 늘 1인 채널을 하나 더 붙이면, 그 채널의 가중치가 곧 b다. 하드웨어에서는 일정한 세기의 빛 채널이나 DC 오프셋 전압이 이 일을 한다.</li>
-    <li><b>활성화 함수는 뒤에 붙지만 빠지면 안 된다.</b> σ가 없으면 층을 쌓아도 W₂(W₁x) = (W₂W₁)x, 즉 행렬 하나로 접힌다. 선형 층 100개는 선형 층 1개와 같은 일밖에 못 한다. 층 사이에 σ가 있어야 깊은 신경망이 행렬곱 이상의 일을 한다.</li>
-  </ul>
+  <p>행렬곱 Wx를 한 줄씩 풀면 yᵢ = wᵢ₁x₁ + wᵢ₂x₂ + wᵢ₃x₃입니다. 「뉴런 i가 앞 층의 모든 뉴런에게서 값을 받아 가중합한다」를 식으로 쓴 것이 바로 이 줄입니다. 그래서 신경망 라이브러리의 완전연결층은 안에서 행렬곱 한 번으로 계산됩니다. 그래프는 사람이 보기 좋게 그린 그림이고, 계산은 늘 행렬로 합니다.</p>
+  <p>식에 남은 바이어스 b와 활성화 함수 σ는 크로스바를 본 뒤에 따로 다루겠습니다.</p>
 
-  <h2>행렬을 그대로 깔면 크로스바가 된다</h2>
-  <p>이제 칩으로 간다. 행렬의 열을 세로선으로, 행을 가로선으로 깔고, 두 선이 만나는 자리마다 가중치 소자를 하나씩 놓는다. 이게 크로스바다.</p>
+  <h2>크로스바 — 격자가 행렬 곱이 되는 이유</h2>
+  <p>이제 그림 1의 격자로 돌아가겠습니다. 행렬의 열을 세로선으로, 행을 가로선으로 깔고, 두 선이 만나는 자리마다 가중치 소자를 하나씩 놓으면 그 격자가 됩니다. 이게 크로스바입니다. 처음 막혔던 그림에 w와 빛의 경로를 적어 넣으면 이렇습니다.</p>
 
   <figure class="wr-fig">
-    <svg class="wf" viewBox="0 0 640 225" role="img" aria-label="입력 세로선과 출력 가로선의 교차점마다 가중치 원이 있고, 원 옆의 ㄴ자 화살표가 빛이 세로선을 따라 내려오다 링에서 가로선으로 꺾이는 경로를 보여 준다.">
+    <svg class="wf" viewBox="0 0 640 225" role="img" aria-label="입력 세로선과 출력 가로선의 교차점마다 가중치 상자가 있고, 상자 옆의 ㄴ자 화살표가 빛이 세로선을 따라 내려오다 소자에서 가로선으로 꺾이는 경로를 보여 준다.">
       <defs>
         <marker id="m-beam" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path class="mk-beam" d="M2 1L8 5L2 9"/></marker>
         <marker id="m-warm" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path class="mk-warm" d="M2 1L8 5L2 9"/></marker>
@@ -148,15 +151,15 @@
       <path class="light" d="M174 154 L174 206 L228 206" marker-end="url(#m-beam)"/>
       <path class="light hl" d="M254 154 L254 206 L308 206" marker-end="url(#m-warm)"/>
       <path class="light" d="M334 154 L334 206 L388 206" marker-end="url(#m-beam)"/>
-      <circle class="cell" cx="200" cy="60" r="17"/><text class="sm" x="200" y="60" text-anchor="middle" dominant-baseline="central">w₁₁</text>
-      <circle class="cell" cx="280" cy="60" r="17"/><text class="sm" x="280" y="60" text-anchor="middle" dominant-baseline="central">w₁₂</text>
-      <circle class="cell" cx="360" cy="60" r="17"/><text class="sm" x="360" y="60" text-anchor="middle" dominant-baseline="central">w₁₃</text>
-      <circle class="cell" cx="200" cy="120" r="17"/><text class="sm" x="200" y="120" text-anchor="middle" dominant-baseline="central">w₂₁</text>
-      <circle class="cell" cx="280" cy="120" r="17"/><text class="sm" x="280" y="120" text-anchor="middle" dominant-baseline="central">w₂₂</text>
-      <circle class="cell" cx="360" cy="120" r="17"/><text class="sm" x="360" y="120" text-anchor="middle" dominant-baseline="central">w₂₃</text>
-      <circle class="cell" cx="200" cy="180" r="17"/><text class="sm" x="200" y="180" text-anchor="middle" dominant-baseline="central">w₃₁</text>
-      <circle class="cell hl" cx="280" cy="180" r="17"/><text class="sm hlt" x="280" y="180" text-anchor="middle" dominant-baseline="central">w₃₂</text>
-      <circle class="cell" cx="360" cy="180" r="17"/><text class="sm" x="360" y="180" text-anchor="middle" dominant-baseline="central">w₃₃</text>
+      <rect class="cell" x="179" y="46" width="42" height="28" rx="3"/><text class="sm" x="200" y="60" text-anchor="middle" dominant-baseline="central">w₁₁</text>
+      <rect class="cell" x="259" y="46" width="42" height="28" rx="3"/><text class="sm" x="280" y="60" text-anchor="middle" dominant-baseline="central">w₁₂</text>
+      <rect class="cell" x="339" y="46" width="42" height="28" rx="3"/><text class="sm" x="360" y="60" text-anchor="middle" dominant-baseline="central">w₁₃</text>
+      <rect class="cell" x="179" y="106" width="42" height="28" rx="3"/><text class="sm" x="200" y="120" text-anchor="middle" dominant-baseline="central">w₂₁</text>
+      <rect class="cell" x="259" y="106" width="42" height="28" rx="3"/><text class="sm" x="280" y="120" text-anchor="middle" dominant-baseline="central">w₂₂</text>
+      <rect class="cell" x="339" y="106" width="42" height="28" rx="3"/><text class="sm" x="360" y="120" text-anchor="middle" dominant-baseline="central">w₂₃</text>
+      <rect class="cell" x="179" y="166" width="42" height="28" rx="3"/><text class="sm" x="200" y="180" text-anchor="middle" dominant-baseline="central">w₃₁</text>
+      <rect class="cell hl" x="259" y="166" width="42" height="28" rx="3"/><text class="sm hlt" x="280" y="180" text-anchor="middle" dominant-baseline="central">w₃₂</text>
+      <rect class="cell" x="339" y="166" width="42" height="28" rx="3"/><text class="sm" x="360" y="180" text-anchor="middle" dominant-baseline="central">w₃₃</text>
       <rect class="sum" x="400" y="50" width="24" height="20" rx="4"/><text class="sm" x="412" y="60" text-anchor="middle" dominant-baseline="central">Σ</text>
       <rect class="sum" x="400" y="110" width="24" height="20" rx="4"/><text class="sm" x="412" y="120" text-anchor="middle" dominant-baseline="central">Σ</text>
       <rect class="sum" x="400" y="170" width="24" height="20" rx="4"/><text class="sm" x="412" y="180" text-anchor="middle" dominant-baseline="central">Σ</text>
@@ -167,38 +170,116 @@
       <text x="464" y="120" dominant-baseline="central">+ b₂ → σ → y₂</text>
       <text x="464" y="180" dominant-baseline="central">+ b₃ → σ → y₃</text>
     </svg>
-    <figcaption>그림 3. 교차점 원 하나가 가중치 하나다. ㄴ자 화살표는 빛의 경로다. 입력 xⱼ의 빛이 세로선을 따라 내려오다 링에서 wᵢⱼ만큼 가로선으로 꺾여 Σ로 간다. 노란 화살표가 x₂ → y₃(w₃₂)다.</figcaption>
+    <figcaption>그림 4. 교차점 상자 하나가 가중치 하나입니다. 상자 안에 어떤 소자가 들어가는지는 뒤에서 다룹니다. ㄴ자 화살표는 빛의 경로입니다. 입력 xⱼ의 빛이 세로선을 따라 내려오다 상자에서 wᵢⱼ만큼 가로선으로 꺾여 Σ로 갑니다. 노란 화살표가 x₂ → y₃(w₃₂)입니다.</figcaption>
   </figure>
 
-  <p>세 그림에서 w₃₁, w₃₂, w₃₃의 자리를 맞대 보면 대응이 보인다. 신경망에서는 y₃로 들어오는 선 세 개, 행렬에서는 셋째 행, 크로스바에서는 맨 아래 가로선의 원 세 개다. 반대로 크로스바의 세로선 하나(x₂ 줄의 w₁₂, w₂₂, w₃₂)는 x₂가 내보내는 선 세 개이고, 앞에서 이상하게 느꼈던 「같은 λ 위에 놓인 링 세 개」가 바로 이 세로줄이다.</p>
-  <p>크로스바에서 「모두와 연결」은 전선을 아홉 가닥 까는 방식이 아니라 두 단계로 이루어진다. 세로선이 입력을 <b>모든 행에 뿌리고</b>(fan-out), 가로선 끝이 그 행의 곱을 <b>모은다</b>(fan-in). 링 가중치 뱅크로 만들면 세로선 세 개는 실제로는 <b>도파로 한 가닥 안의 파장 세 개</b>로 겹쳐 흐르고, Σ 자리에 포토다이오드가 들어간다. 선 아홉 개가 안 보이는 건 연결이 없어서가 아니라 파장으로 겹쳐 있어서다. <a href="compute.html#a5">PCM 크로스바</a>는 입력을 파장 대신 도파로 위치로 가르고, 가중치를 히터 대신 소재의 상태로 붙잡는다는 점만 다르다. 행렬 구조는 같다.</p>
-  <p>꺾이지 않은 빛은 세로선을 따라 아래 행으로 계속 내려가 거기서 다시 나뉜다. 그래서 실제 칩에서는 아래로 갈수록 남은 빛이 줄어드는 손실을 따로 보정해야 한다. 그림에서는 생략했다.</p>
-  <p class="wr-goto">지도에서 이어 보기 — 구조 › <a href="compute.html#a2">마이크로링 가중치 뱅크</a>(링 디튜닝·칩 온도를 직접 움직여 볼 수 있다) · <a href="compute.html#a5">PCM 크로스바</a> · 용어 › <a href="glossary.html#%EC%9E%90%EC%9C%A0%20%EC%8A%A4%ED%8E%99%ED%8A%B8%EB%9F%BC%20%EB%B2%94%EC%9C%84%20(FSR)">자유 스펙트럼 범위 (FSR)</a></p>
+  <p>그림 2~4에서 w₃₁, w₃₂, w₃₃의 자리를 맞대 보면 대응이 보입니다. 신경망에서는 y₃로 들어오는 선 세 개, 행렬에서는 셋째 행, 크로스바에서는 맨 아래 가로선의 상자 세 개입니다. 반대로 크로스바의 세로선 하나(x₂ 줄의 w₁₂, w₂₂, w₃₂)는 x₂가 내보내는 선 세 개이고, 그림 1에서 같은 세로줄에 놓인 소자 세 개가 바로 이것입니다. 세로줄 하나가 노드 하나가 내보내는 선들이니, 소자마다 값을 다르게 주는 건 선마다 가중치를 다르게 주는 것과 같습니다.</p>
+  <p>초록이 말한 「수학적 동형」은 이 대응을 가리킵니다. 그림이 비슷해 보인다는 뜻이 아니라, 회로 안에서 빛이 나뉘고 줄고 모이는 과정을 물리 그대로 식으로 적으면 y = Wx와 같은 식이 나온다는 뜻입니다. 행렬의 칸 하나에 회로의 소자 하나가 짝지어지고, 곱하고 더하는 순서도 같습니다. 그래서 소프트웨어에서 학습시킨 가중치를 짝이 되는 소자에 그대로 옮겨 넣을 수 있습니다. 프린스턴 논문은 여기서 한 걸음 더 나아가, 뒤에서 볼 활성화 함수와 회로의 시간 응답까지 포함한 전체 동작이 연속시간 신경망의 미분방정식과 같은 모양이라는 것을 분기 실험으로 확인했습니다.</p>
 
-  <h2>다시 초록으로 — 「동형」은 무슨 뜻이었나</h2>
-  <p>이제 처음의 두 번째 문장으로 돌아갈 수 있다. 논문이 비교하는 신경망 모델은 퍼셉트론보다 한 단계 일반적인 <b>연속시간 순환 신경망</b>이다. 뉴런 i의 상태 sᵢ가 시간에 따라 이렇게 변한다.</p>
-  <div class="wr-eq">τ · dsᵢ/dt = −sᵢ + Σⱼ Wᵢⱼ · yⱼ + bᵢ ,   yⱼ = σ(sⱼ)</div>
-  <p>퍼셉트론은 여기서 시간항 τ와 되먹임을 뺀 특수한 경우다. 회로 쪽을 따라가 보면 이 식의 항마다 짝이 있다.</p>
-  <table class="wr-tbl">
-    <thead><tr><th>식의 항</th><th>회로에서 그 일을 하는 것</th></tr></thead>
-    <tbody>
-      <tr><td>yⱼ</td><td>뉴런 j가 자기 파장에 실어 내보내는 빛의 세기</td></tr>
-      <tr><td>Wᵢⱼ</td><td>뉴런 i의 뱅크에서 λⱼ에 맞춘 링의 투과율 (두 출구의 차)</td></tr>
-      <tr><td>Σⱼ</td><td>포토다이오드가 모든 파장을 한꺼번에 전류로 바꾸는 것</td></tr>
-      <tr><td>bᵢ</td><td>변조기에 거는 DC 오프셋</td></tr>
-      <tr><td>sᵢ</td><td>포토다이오드 전류가 충전하는 노드 전압</td></tr>
-      <tr><td>τ · ds/dt = −s + …</td><td>그 노드의 RC 충방전</td></tr>
-      <tr><td>σ(·)</td><td>변조기의 전압 → 투과율 곡선</td></tr>
-      <tr><td>되먹임</td><td>변조기 출력이 다시 같은 도파로로 방송되어 모든 뉴런의 입력이 된다</td></tr>
-    </tbody>
-  </table>
-  <p>RC 노드 하나를 키르히호프로 쓰면 C·dV/dt = −V/R + I이고, 양변에 R을 곱하면 RC·dV/dt = −V + R·I다. 여기에 I = Σ(가중치 × 들어온 빛)을 넣으면 위의 신경망 식과 문자만 다르고 모양이 같은 미분방정식이 나온다. <b>회로를 지배하는 물리를 그대로 적었더니 신경망 식이 나온다는 것, 그게 동형이다.</b></p>
-  <p>다만 표의 짝짓기는 설계 의도이고, 실제 칩이 그 식대로 움직이는지는 재 봐야 안다. 논문은 동역학계의 지문인 <b>분기</b>를 비교했다. 뉴런이 자기 자신에게 되먹임하는 가중치를 천천히 키우면, 식은 어느 문턱에서 안정점 하나가 둘로 갈라진다고 예측한다. 칩에서 가중치를 쓸어 가며 쟀더니 같은 자리에서 같은 종류의 분기가 일어났다. 가중치 몇 개가 맞는 게 아니라, 매개변수를 바꿀 때 행동이 바뀌는 구조 전체가 겹친다는 확인이다.</p>
-  <p>이 논문의 망에는 「다음 층」이 없다는 것도 짚어 둔다. 출력 y가 빛으로 바뀌어 같은 도파로로 돌아가니, 보내는 뉴런과 받는 뉴런이 같은 집합이다. 흔히 보는 층 신경망은 이 큰 행렬에서 「1층 → 2층」 칸만 값이 있고 나머지가 0인 특수한 경우다.</p>
-  <p>마지막으로 초록이 「변조기형 뉴런」을 따로 강조한 이유도 여기서 보인다. <b>빛은 행렬곱은 잘하는데 비선형은 못한다.</b> 광자끼리는 거의 상호작용하지 않아서, 빛을 더하고 줄이는 일은 거의 공짜지만 「문턱을 넘으면 꺾는다」는 빛만으로 만들기 어렵다. 그래서 대부분의 칩은 전기로 바꿔 비선형을 처리하고 다시 빛으로 되돌린다. 이 논문은 포토다이오드 전류로 변조기를 직접 구동해, 비선형과 빛으로 되돌리기를 실리콘 칩 위에서 한 번에 처리했다. 같은 동형 덕분에 소프트웨어에서 짠 순환 신경망의 가중치를 칩에 그대로 옮길 수 있고, 논문은 24노드 망이 미분방정식 에뮬레이션에서 기존 방식보다 294배 빠를 것이라고 예측했다(논문의 예측값이고 이 글에서 재현하지 않았다).</p>
 
-  <h2>정리</h2>
-  <p>신경망의 완전연결은 원래 행렬이고, 가중치는 노드가 아니라 선에 있다. 크로스바는 그 행렬을 칩 위에 그대로 깔아 놓은 것이라, 교차점 소자 하나가 선 하나다. 마이크로링 뱅크는 열을 파장으로, PCM 크로스바는 열을 위치로 가를 뿐이다. 그리고 논문이 말한 동형은 여기에 RC 시간항과 변조기 비선형이 더해져, 행렬곱 한 번이 아니라 미분방정식 전체가 같아진다는 뜻이다.</p>
+  <h2>교차점은 블랙박스</h2>
+  <p>지금까지 교차점 소자는 「받은 빛 중 일부를 출력 쪽으로 보내는 상자」로만 다뤘습니다. 크로스바가 행렬 곱이 되는 데 필요한 성질은 그것뿐이라, 상자 안에 무엇을 넣을지는 설계자가 고르는 문제입니다. 그림 1의 두 회로가 갈리는 곳도 여기입니다.</p>
+  <ul>
+    <li><b>마이크로링 공진기</b> — 특정 파장의 빛만 공진시켜 옆 도파로로 넘겨 주는 고리 모양 도파로입니다. 히터로 링의 온도를 바꾸면 공진 파장이 움직이고, 그만큼 넘겨 주는 빛의 양이 달라집니다. 가중치를 유지하려면 히터에 계속 전력을 넣어야 하고, 주변 온도 변화에도 민감합니다. 입력마다 다른 파장을 쓰기 때문에 세로선을 파장으로 구분합니다.</li>
+    <li><b>상변화 물질(PCM)</b> — 결정 상태와 비정질 상태 사이를 오가며 빛을 흡수하는 정도가 달라지는 물질입니다. 펄스로 상태를 한 번 바꿔 두면 전원 없이도 그 값이 유지됩니다. 대신 다시 쓰는 속도가 느리고 다시 쓸 수 있는 횟수에도 한계가 있어서, 정해 둔 가중치로 추론만 하는 데 유리합니다. 세로선은 칩 위의 위치로 구분합니다.</li>
+  </ul>
+  <p>어느 쪽이든 크로스바의 뼈대는 같고, 소자를 바꾸면 전력, 속도, 학습에 쓸 수 있는지가 달라질 뿐입니다.</p>
+  <p class="wr-goto">지도에서 이어 보기 — 구조 › <a href="compute.html#a2">마이크로링 가중치 뱅크</a>(링 디튜닝·칩 온도를 직접 움직여 볼 수 있습니다) · <a href="compute.html#a5">PCM 크로스바</a> · 용어 › <a href="glossary.html#%EC%9E%90%EC%9C%A0%20%EC%8A%A4%ED%8E%99%ED%8A%B8%EB%9F%BC%20%EB%B2%94%EC%9C%84%20(FSR)">자유 스펙트럼 범위 (FSR)</a></p>
+
+  <h2>바이어스와 활성화 함수</h2>
+  <p>크로스바가 해 주는 건 y = Wx까지입니다. 신경망 한 층의 식 y = σ(Wx + b)에는 아직 b와 σ가 남아 있습니다.</p>
+  <p><b>바이어스</b>는 행렬 안으로 넣을 수 있습니다. 입력에 늘 1인 채널을 하나 더 붙이면, 그 채널의 세로줄에 놓인 가중치가 곧 b입니다. 광회로에서는 일정한 세기로 늘 켜져 있는 빛 채널을 하나 더 두거나, 전기 쪽에서 일정한 오프셋 전압을 더하는 식으로 처리합니다.</p>
+  <p><b>활성화 함수</b>는 빠지면 안 됩니다. σ가 없으면 층을 쌓아도 W₂(W₁x) = (W₂W₁)x, 즉 행렬 하나로 접힙니다. 선형 층 100개는 선형 층 1개와 같은 일밖에 못 합니다. 그런데 빛은 이 부분을 잘 못합니다. 광자끼리는 거의 상호작용하지 않아서, 빛을 나누고 줄이고 모으는 선형 연산은 쉽지만 「문턱을 넘으면 꺾는다」 같은 비선형은 빛만으로 만들기 어렵습니다. 그래서 대부분의 광 신경망은 출력 빛을 광검출기로 전류로 바꾼 뒤 전자 회로에서 σ를 처리하고 다시 빛으로 내보냅니다. 프린스턴 논문은 광검출기 전류로 변조기를 직접 구동해서, 변조기의 전압-투과율 곡선이 σ 역할을 하도록 만들었습니다.</p>
+
+  <h2>의문점 — 한 세로줄의 빛은 어떻게 나뉘나</h2>
+  <p>그런데 그림 4를 오래 보면 이상한 점이 하나 보입니다. x₁의 빛은 세로선을 따라 내려가면서 교차점마다 일부가 가로선으로 꺾여 나갑니다. 그러면 아래 교차점일수록 남은 빛이 적습니다. 세 교차점이 모두 절반씩 꺼내도록 맞추면 y₁, y₂, y₃가 받는 양은 0.5, 0.25, 0.125가 됩니다. 신경망 구조에서는 「노드는 다음 층 모두에게 똑같은 값을 보낸다」고 했는데, 광회로에서는 그렇지 않은 셈입니다.</p>
+
+  <figure class="wr-fig">
+    <svg class="wf" viewBox="0 0 640 290" role="img" aria-label="한 세로줄에서 빛이 나뉘는 두 경우. 왼쪽은 교차점마다 50%씩 꺼내 출력이 0.5, 0.25, 0.125로 줄어든다. 오른쪽은 꺼내는 비율을 1/3, 1/2, 전부로 키워 세 출력이 모두 0.33이 된다.">
+      <text x="160" y="18" text-anchor="middle">모두 50%씩 꺼낼 때</text>
+      <text x="470" y="18" text-anchor="middle">꺼내는 비율을 키울 때</text>
+      <text class="sm" x="160" y="42" text-anchor="middle">x₁의 빛 1.0</text>
+      <text class="sm" x="470" y="42" text-anchor="middle">x₁의 빛 1.0</text>
+      <line class="light" style="stroke-width:12;stroke-linecap:butt" x1="160" y1="52" x2="160" y2="80"/>
+      <line class="light" style="stroke-width:6;stroke-linecap:butt" x1="160" y1="80" x2="160" y2="150"/>
+      <line class="light" style="stroke-width:3;stroke-linecap:butt" x1="160" y1="150" x2="160" y2="220"/>
+      <line class="light" style="stroke-width:1.5;opacity:.45" x1="160" y1="220" x2="160" y2="252"/>
+      <line class="light" style="stroke-width:6" x1="176" y1="80" x2="236" y2="80"/>
+      <line class="light" style="stroke-width:3" x1="176" y1="150" x2="236" y2="150"/>
+      <line class="light" style="stroke-width:1.5" x1="176" y1="220" x2="236" y2="220"/>
+      <circle class="cell" cx="160" cy="80" r="14"/><circle class="cell" cx="160" cy="150" r="14"/><circle class="cell" cx="160" cy="220" r="14"/>
+      <text class="sm" x="138" y="80" text-anchor="end" dominant-baseline="central">50%</text>
+      <text class="sm" x="138" y="150" text-anchor="end" dominant-baseline="central">50%</text>
+      <text class="sm" x="138" y="220" text-anchor="end" dominant-baseline="central">50%</text>
+      <text x="248" y="80" dominant-baseline="central">y₁ 0.50</text>
+      <text x="248" y="150" dominant-baseline="central">y₂ 0.25</text>
+      <text x="248" y="220" dominant-baseline="central">y₃ 0.125</text>
+      <text class="sm" x="160" y="274" text-anchor="middle">남은 0.125는 버려집니다</text>
+      <line class="light hl" style="stroke-width:12;stroke-linecap:butt" x1="470" y1="52" x2="470" y2="80"/>
+      <line class="light hl" style="stroke-width:8;stroke-linecap:butt" x1="470" y1="80" x2="470" y2="150"/>
+      <line class="light hl" style="stroke-width:4;stroke-linecap:butt" x1="470" y1="150" x2="470" y2="220"/>
+      <line class="light hl" style="stroke-width:4" x1="486" y1="80" x2="546" y2="80"/>
+      <line class="light hl" style="stroke-width:4" x1="486" y1="150" x2="546" y2="150"/>
+      <line class="light hl" style="stroke-width:4" x1="486" y1="220" x2="546" y2="220"/>
+      <circle class="cell hl" cx="470" cy="80" r="14"/><circle class="cell hl" cx="470" cy="150" r="14"/><circle class="cell hl" cx="470" cy="220" r="14"/>
+      <text class="sm" x="448" y="80" text-anchor="end" dominant-baseline="central">1/3</text>
+      <text class="sm" x="448" y="150" text-anchor="end" dominant-baseline="central">1/2</text>
+      <text class="sm" x="448" y="220" text-anchor="end" dominant-baseline="central">전부</text>
+      <text x="558" y="80" dominant-baseline="central">y₁ 0.33</text>
+      <text x="558" y="150" dominant-baseline="central">y₂ 0.33</text>
+      <text x="558" y="220" dominant-baseline="central">y₃ 0.33</text>
+      <text class="sm" x="470" y="274" text-anchor="middle">버려지는 빛이 없습니다</text>
+    </svg>
+    <figcaption>그림 5. 그림 4의 세로줄 하나(x₁)만 떼어 본 모습입니다. 선의 굵기가 빛의 양입니다. 위에서 꺼낸 만큼 아래로 내려가는 빛이 줄어듭니다.</figcaption>
+  </figure>
+
+  <p>그래도 계산은 성립합니다. 신경망이 따지는 건 x₁이 얼마를 보냈는지가 아니라 yᵢ에 최종적으로 얼마가 도착했는지뿐이기 때문입니다. y₂ 입장에서 x₁에 곱해진 실제 가중치는 소자 값 w₂₁ 혼자가 아니라, 위에서 빠져나가고 남은 비율까지 곱한 값입니다.</p>
+  <div class="wr-eq">W₂₁(실효) = (1 − w₁₁) · w₂₁</div>
+  <p>이 값은 x₁의 크기와 상관없는 상수라서 y = Wx라는 선형 관계는 그대로입니다. 달라지는 건 소자에 넣는 값과 행렬의 값이 같지 않다는 것뿐이고, 원하는 W에서 거꾸로 계산해 소자를 맞추면 됩니다. 예를 들어 y₁에 0.7, y₂에 0.2를 주고 싶다면, 첫 소자가 0.7을 꺼낸 뒤 남은 0.3 중에서 0.2를 꺼내도록 둘째 소자를 0.2 ÷ 0.3 ≈ 0.67로 설정합니다. 그림 5 오른쪽처럼 셋에게 똑같이 나누려면 위에서부터 1/3, 1/2, 전부를 꺼내면 됩니다.</p>
+
+  <p>문제는 이 역산에 예산이 있다는 것입니다. 한 세로줄로 들어온 빛 1을 위에서부터 나눠 가지므로, 세로줄의 가중치를 모두 더해도 1을 넘을 수 없습니다. 극단적으로 w₁₁이 0.99라면 y₂와 y₃에게 남은 빛은 0.01뿐이고, 둘째 소자를 아무리 키워도 W₂₁은 0.01을 넘지 못합니다. 첫 칸을 정하는 순간 아래 칸들이 가질 수 있는 범위도 같이 정해지는 셈입니다.</p>
+  <p>이 점이 딥러닝 학습과 부딪힙니다. 역전파는 W의 칸마다 기울기를 따로 계산해서 「W₁₁은 이만큼, W₂₁은 이만큼」 고치라고 알려 줍니다. 신경망에서는 가중치가 서로 독립이기 때문입니다. 그런데 직렬 구조에서는 w₁₁ 소자를 돌리면 그 아래 칸의 실효값이 전부 같이 움직입니다. 그래서 역전파 결과를 소자에 그대로 옮길 수 없고, 스텝마다 세로줄 전체를 다시 역산해야 합니다. 학습 중에 가중치 하나가 커지면 같은 세로줄의 다른 가중치가 쓸 수 있는 몫이 줄어드는, 신경망에는 없던 제약도 생깁니다.</p>
+
+  <figure class="wr-fig">
+    <svg class="wf" viewBox="0 0 640 265" role="img" aria-label="왼쪽은 한 세로줄에서 빛을 차례로 꺼내는 직렬 구조로, w11을 키우면 y2가 줄어든다. 오른쪽은 분배기가 빛을 반씩 나눈 뒤 감쇠기가 각자 줄이는 구조로, w11을 바꿔도 y2는 0.35 그대로다.">
+      <text x="150" y="18" text-anchor="middle">직렬로 꺼낼 때</text>
+      <text x="480" y="18" text-anchor="middle">먼저 나누고 줄일 때</text>
+      <line class="light" style="stroke-width:12;stroke-linecap:butt" x1="130" y1="34" x2="130" y2="95"/>
+      <line id="f6-s-mid" class="light" style="stroke-width:6;stroke-linecap:butt" x1="130" y1="95" x2="130" y2="175"/>
+      <line id="f6-s-rest" class="light" style="stroke-width:1.8;stroke-linecap:butt;opacity:.45" x1="130" y1="175" x2="130" y2="218"/>
+      <line id="f6-s-y1" class="light" style="stroke-width:6;stroke-linecap:butt;opacity:.55" x1="146" y1="95" x2="222" y2="95"/>
+      <line id="f6-s-y2" class="light hl" style="stroke-width:4.2;stroke-linecap:butt" x1="146" y1="175" x2="222" y2="175"/>
+      <circle class="cell" cx="130" cy="95" r="14"/><circle class="cell hl" cx="130" cy="175" r="14"/>
+      <text class="sm" x="108" y="95" text-anchor="end" dominant-baseline="central">w₁₁</text>
+      <text class="sm" x="108" y="175" text-anchor="end" dominant-baseline="central">0.7</text>
+      <text id="f6-s-y1t" x="230" y="95" dominant-baseline="central">y₁ 0.50</text>
+      <text id="f6-s-y2t" class="hlt" x="230" y="175" dominant-baseline="central">y₂ 0.35</text>
+      <text class="sm" x="150" y="248" text-anchor="middle">w₁₁을 키우면 y₂가 줄어듭니다</text>
+      <line class="light" style="stroke-width:12;stroke-linecap:butt" x1="420" y1="34" x2="420" y2="62"/>
+      <rect class="sum" x="395" y="62" width="50" height="146" rx="4"/>
+      <text class="sm" x="420" y="135" text-anchor="middle" dominant-baseline="central">분배기</text>
+      <line class="light" style="stroke-width:6;stroke-linecap:butt" x1="445" y1="95" x2="475" y2="95"/>
+      <line class="light" style="stroke-width:6;stroke-linecap:butt" x1="445" y1="175" x2="475" y2="175"/>
+      <rect class="cell" x="475" y="82" width="56" height="26" rx="4"/>
+      <rect class="cell hl" x="475" y="162" width="56" height="26" rx="4"/>
+      <text id="f6-p-a1" class="sm" x="503" y="95" text-anchor="middle" dominant-baseline="central">× 0.50</text>
+      <text class="sm" x="503" y="175" text-anchor="middle" dominant-baseline="central">× 0.70</text>
+      <line id="f6-p-y1" class="light" style="stroke-width:3;stroke-linecap:butt;opacity:.55" x1="531" y1="95" x2="560" y2="95"/>
+      <line class="light hl" style="stroke-width:4.2;stroke-linecap:butt" x1="531" y1="175" x2="560" y2="175"/>
+      <text id="f6-p-y1t" x="566" y="95" dominant-baseline="central">y₁ 0.25</text>
+      <text class="hlt" x="566" y="175" dominant-baseline="central">y₂ 0.35</text>
+      <text class="sm" x="480" y="248" text-anchor="middle">w₁₁을 바꿔도 y₂는 그대로입니다</text>
+    </svg>
+    <div class="wr-ctl"><label for="f6-w">w₁₁</label><input type="range" id="f6-w" min="0" max="1" step="0.01" value="0.5"><output id="f6-wo" for="f6-w">0.50</output><button type="button" id="f6-play">자동으로 움직이기</button></div>
+    <figcaption>그림 6. x₁ 세로줄의 위 두 칸(y₁, y₂)만 떼어 본 모습입니다. 선의 굵기가 빛의 양이고, y₂ 쪽 소자는 양쪽 모두 0.7로 고정했습니다. 왼쪽에서는 w₁₁을 지나고 남은 빛이 y₂로 가고, 오른쪽에서는 분배기가 빛을 반씩 먼저 나눠 줍니다.</figcaption>
+  </figure>
+
+  <p>컴퓨터에서 학습을 끝내고 완성된 W를 한 번만 옮겨 넣는 방식(오프라인 학습)이라면 역산도 한 번으로 끝나므로 직렬 구조로도 버틸 수 있습니다. 하지만 칩 위에서 바로 학습시키려면(인시투 학습) 이 얽힘이 매 스텝 걸림돌이 됩니다.</p>
+  <p>그래서 실제 설계는 <b>나누는 일과 곱하는 일을 분리</b>합니다. 그림 6 오른쪽처럼 고정된 분배기가 입력을 모든 행에 똑같이 1/N씩 나눠 주고, 교차점 소자는 받은 빛을 줄이는 일만 합니다. 칸마다 범위가 0부터 1/N까지로 고정되고 다른 칸이 얼마를 쓰든 영향을 받지 않으니, 역전파 결과를 칸별로 바로 반영할 수 있습니다. 대가도 있습니다. 처음부터 1/N씩 나눠 받으므로 한 칸이 받을 수 있는 최대치도 1/N이고, 행이 많을수록 출력이 잡음에 묻히기 쉬운 건 직렬 구조와 같습니다. 빛을 나눠 쓰는 대가는 같고, 분배기 방식은 그 대가로 서로 독립적인 가중치를 얻는 셈입니다. 이 글의 출발점인 Tait 논문의 구조(broadcast-and-weight)도 이 방식입니다.</p>
+
+  <h2>정리와 한계</h2>
+  <p>신경망의 완전연결은 원래 행렬이고, 가중치는 노드가 아니라 선에 있습니다. 크로스바는 그 행렬을 광회로 위에 그대로 깔아 놓은 것이라, 교차점 소자 하나가 선 하나입니다. 링이든 PCM이든 교차점에 무엇을 넣느냐는 그다음 선택입니다. 논문이 말한 동형은 이 짝짓기가 비유가 아니라 식 그대로 성립한다는 뜻이었습니다.</p>
+  <p>다만 격자가 맡는 건 선형 연산뿐입니다. 비선형인 활성화 함수는 광검출기와 전자 회로, 또는 변조기가 따로 맡습니다. 한 세로줄의 빛을 여러 행이 나눠 쓰기 때문에 크로스바가 커질수록 출력이 약해진다는 한계도 있습니다. 그리고 이 글에서는 다루지 않았지만, 빛의 세기는 음수가 될 수 없어서 음수 가중치를 어떻게 만드느냐도 따로 풀어야 할 문제입니다.</p>
 
   </div>
 
@@ -207,14 +288,15 @@
     <ul>
       <li>A. N. Tait et al., “Neuromorphic photonic networks using silicon photonic weight banks,” <i>Scientific Reports</i> 7, 7430 (2017). — 이 글의 출발점인 초록.</li>
       <li>A. N. Tait et al., “Broadcast and weight: an integrated network for scalable photonic spike processing,” <i>Journal of Lightwave Technology</i> 32(21) (2014). — 파장마다 뉴런 하나를 두고 방송하는 구조의 원 제안.</li>
+      <li>J. Feldmann et al., “Parallel convolutional processing using an integrated photonic tensor core,” <i>Nature</i> 589, 52 (2021). — 교차점마다 PCM을 둔 Pernice 그룹의 광 텐서 코어.</li>
     </ul>
-    <p>그림은 3×3 예시로 직접 그린 것이고, 수치(294배)는 논문의 보고값이다.</p>
+    <p>그림은 3×3 예시로 직접 그린 것입니다.</p>
   </div>
 </article>
 </main>
 
 </div>
 <script src="js/core.js"></script>
-
+<script src="js/writing-matrix-crossbar.js"></script>
 </body>
 </html>

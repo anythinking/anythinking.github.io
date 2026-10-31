@@ -1,22 +1,17 @@
-/* 글: 목록 · 본문 · 본문 속 그림 */
-.wr-wrap{max-width:720px;margin:0 auto;padding:44px 24px 96px;line-height:1.8}
-.wr-wrap h1{font-family:var(--serif);font-size:28px;margin:6px 0 12px;letter-spacing:-.02em;line-height:1.4}
-.wr-lede{font-size:15.5px;margin:0 0 8px;color:var(--ink)}
-.wr-meta{font-family:var(--mono);font-size:11.5px;color:var(--muted);letter-spacing:.04em;margin:0 0 30px}
+/* 글: 목록 · 본문 · 본문 속 그림 (칼럼·제목·리드·메타는 base.css .doc) */
+.doc > .meta{margin-bottom:26px}
 
 /* 목록 */
 .wr-list{list-style:none;margin:0;padding:0;border-top:1px solid var(--rule)}
+.doc .wr-list h2{margin:0 0 6px;padding:0;border:0}
 .wr-list li{border-bottom:1px solid var(--rule)}
 .wr-list a{display:block;padding:18px 4px;color:inherit;text-decoration:none}
 .wr-list a:hover h2{color:var(--beam)}
 .wr-list h2{font-family:var(--serif);font-size:18px;margin:0 0 6px;line-height:1.45}
 .wr-list p{font-size:14px;margin:0 0 6px;color:var(--muted)}
-.wr-list .wr-meta{margin:0}
+.wr-list .meta{margin:0}
 
 /* 본문 */
-.wr-body h2{font-family:var(--serif);font-size:19px;margin:42px 0 12px;padding-top:18px;border-top:1px solid var(--rule)}
-.wr-body p,.wr-body li{font-size:15px;color:var(--ink)}
-.wr-body p{margin:0 0 14px}
 .wr-body ul,.wr-body ol{margin:0 0 14px;padding-left:22px}
 .wr-body li{margin:0 0 6px}
 .wr-body b{font-weight:700}
@@ -56,7 +51,8 @@
 .wf .mk-warm{fill:none;stroke:var(--warm);stroke-width:1.5}
 .wf .mk-ink{fill:none;stroke:var(--muted);stroke-width:1.5}
 
-@media (max-width:899.98px){
-  .wr-wrap{padding:28px var(--gutter) 64px}
-  .wr-wrap h1{font-size:24px}
-}
+.wr-ctl{display:flex;flex-wrap:wrap;align-items:center;gap:8px 12px;margin:10px 6px 2px;font-size:13px;color:var(--muted)}
+.wr-ctl input[type=range]{flex:1;min-width:140px;accent-color:var(--beam)}
+.wr-ctl output{font-family:var(--mono);color:var(--ink);min-width:3.2em}
+.wr-ctl button{font:inherit;color:var(--ink);background:var(--bg);border:1px solid var(--rule);border-radius:6px;padding:4px 10px;cursor:pointer}
+.wr-ctl button:hover{border-color:var(--beam)}
