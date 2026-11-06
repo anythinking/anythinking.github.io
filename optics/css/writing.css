@@ -31,6 +31,9 @@
 /* 그림 */
 .wr-fig{margin:6px 0 22px;padding:14px 10px 10px;background:var(--panel);border:1px solid var(--rule);border-radius:8px}
 .wr-fig svg{display:block;width:100%;height:auto}
+.wr-fig img{display:block;width:100%;height:auto;border-radius:4px;border:1px solid var(--rule)}
+.wr-fig .pair{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+@media (max-width:640px){.wr-fig .pair{grid-template-columns:1fr}}
 .wr-fig figcaption{font-size:12.5px;color:var(--muted);margin:8px 6px 2px;line-height:1.6}
 .wf text{font-family:var(--sans);font-size:13px;fill:var(--ink)}
 .wf .sm{font-size:12px;fill:var(--muted)}
