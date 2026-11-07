@@ -10,9 +10,11 @@
   // 개인판 문구 되돌리기: 공개 문장 → 원문 (content/private/compute.json 의 TXT)
   const TX = (CP && CP.TXT) || {}, UI = (CP && CP.UI) || {};
   CMP.tx = s => Object.keys(TX).reduce((r, k) => r.split(k).join(TX[k]), s);
-  if (!D) { mount(stage, h('p.empty.cmp-pad', '데이터 로드 실패 — 구조 데이터를 읽지 못했다.')); return; }
+  if (!D) { mount(stage, h('p.empty.cmp-pad', A.t('데이터 로드 실패 — 구조 데이터를 읽지 못했다.', 'Failed to load — could not read the structure data.'))); return; }
 
-  const GROUPS = [['a', 'A', 'A · 행렬곱'], ['b', 'B', 'B · 신경망'], ['c', 'C', 'C · 최적화'], ['d', 'D', 'D · 논리'], ['e', 'E', 'E · 변환 앞'], ['f', 'F', 'F · 양자·신호']];
+  const GROUPS = A.lang === 'en'
+    ? [['a', 'A', 'A · Matrix multiply'], ['b', 'B', 'B · Neural networks'], ['c', 'C', 'C · Optimization'], ['d', 'D', 'D · Logic'], ['e', 'E', 'E · Front-end transforms'], ['f', 'F', 'F · Quantum · signal']]
+    : [['a', 'A', 'A · 행렬곱'], ['b', 'B', 'B · 신경망'], ['c', 'C', 'C · 최적화'], ['d', 'D', 'D · 논리'], ['e', 'E', 'E · 변환 앞'], ['f', 'F', 'F · 양자·신호']];
   const HASH = /^([a-f])(\d+)$/;
   // 실험실이 있는 구조 → 붙일 부품과 기본 프리셋
   const LABS = { a5: { mod: 'PCMLab', def: 'feldmann2021' }, a2: { mod: 'RingLab', def: 'tait2017' } };
@@ -150,7 +152,7 @@
       const sNum = String(idx + 1), id = card.id.replace(/^(\w)-s/, '$1');
       const h2 = card.querySelector('h2');
       if (card.classList.contains('close')) {
-        return { id, num: '', tab: tabNames[sNum] || '겹쳐 보면', title: txt(h2), text: true, legacy: true, group: g,
+        return { id, num: '', tab: tabNames[sNum] || A.t('겹쳐 보면', 'Side by side'), title: txt(h2), text: true, legacy: true, group: g,
           body: [...card.querySelectorAll(':scope > p')].map(p => p.innerHTML), figEl: card.querySelector('svg.f, canvas.f') };
       }
       const num = txt(card.querySelector('.num'));
@@ -167,7 +169,7 @@
         const ctl = sp.children[1];
         return { fig, ctl, read: ctl && ctl.querySelector('.read'), note: ctl && ctl.querySelector('.note'), intro: intro ? intro.innerHTML : '',
           wbtn: wi ? card.querySelector('[data-w="' + wi + '"]') : null,
-          label: step ? (i === 0 ? '실험' : String(wi)) : (hd || (i === 0 ? '실험' : String(i + 1))), step: !!step };
+          label: step ? (i === 0 ? A.t('실험', 'Try it') : String(wi)) : (hd || (i === 0 ? A.t('실험', 'Try it') : String(i + 1))), step: !!step };
       });
       const walkHead = card.querySelector('.walkhead h3');
       return { id, num, tab: tabNames[sNum] || txt(h2), title: txt(h2), legacy: true, group: g, key,
@@ -207,35 +209,35 @@
   // ── 윗줄: 목차 + 군 · 축 · 구조 탭 ─────────────────────
   function renderBar() {
     mount('#cmp-groups',
-      h('button.cmp-g.cmp-gov' + (st.grp === 'o' ? '.on' : ''), { type: 'button', title: OV ? `구조 ${OV.S.length}개를 축으로 묶어 보기` : '축으로 묶어 보기',
-        'aria-pressed': String(st.grp === 'o'), onclick: () => A.route.go('', '') }, '목차'),
+      h('button.cmp-g.cmp-gov' + (st.grp === 'o' ? '.on' : ''), { type: 'button', title: OV ? A.t(`구조 ${OV.S.length}개를 축으로 묶어 보기`, `Group all ${OV.S.length} structures by axis`) : A.t('축으로 묶어 보기', 'Group by axis'),
+        'aria-pressed': String(st.grp === 'o'), onclick: () => A.route.go('', '') }, A.t('목차', 'Overview')),
       GROUPS.map(([id, l, name]) => {
         const has = !!CMP.groups[id], on = st.grp === id;
-        return h('button.cmp-g' + (on ? '.on' : ''), { type: 'button', title: has ? name : name + ' (준비 중)', disabled: !has, 'aria-pressed': String(on),
+        return h('button.cmp-g' + (on ? '.on' : ''), { type: 'button', title: has ? name : name + A.t(' (준비 중)', ' (coming soon)'), disabled: !has, 'aria-pressed': String(on),
           onclick: () => go(id) }, l);
       }));
     const axes = $('#cmp-axes');
     axes.hidden = st.grp !== 'o';
     if (st.grp === 'o') {
-      mount(axes, h('span.lb', '묶는 축'),
-        [['para', '패러다임 — 어느 갈래에 시간을 쓸까'], ['weight', '가중치가 어디에 있나'], ['vol', '끄면 사라지나']]
+      mount(axes, h('span.lb', A.t('묶는 축', 'Group by')),
+        [['para', A.t('패러다임 — 어느 갈래에 시간을 쓸까', 'Paradigm — which branch to spend time on')], ['weight', A.t('가중치가 어디에 있나', 'Where the weights live')], ['vol', A.t('끄면 사라지나', 'Lost at power-off?')]]
           .filter(([k]) => k === 'para' ? CP : OV && OV.H[k])
           .map(([k, l]) => A.pill(l, st.ovAxis === k, () => A.route.set({ axis: k === 'para' ? null : k }), { class: 'pill cmp-axis' })));
     }
     const G = st.grp === 'o' ? null : group(st.grp), E = entry();
-    mount('#cmp-tabs', G ? G.list.map(e => A.pill([e.num ? h('span.k', e.num) : null, e.tab].filter(Boolean), E && e.id === E.id,
+    mount('#cmp-tabs', G ? G.list.map(e => A.pill([e.num ? h('span.k', e.num) : null, A.tr(e.tab)].filter(Boolean), E && e.id === E.id,
       () => A.route.go('', e.id), { class: 'pill cmp-tab' })) : []);
   }
   // 군을 고르면 그 군에서 마지막으로 본 구조(없으면 첫 구조)로 간다. 옛 장은 그 군을 실제로 열 때 부팅한다
   const go = g => A.route.go('', st.sel[g] || g + '1');
 
   // ── 목차 ─────────────────────────────────────────────
-  const SV = { g: ['살아남았다', 'probe'], m: ['논쟁 중', 'warm'], t: ['태동', 'warm'] };
-  const CV = { y: '있음', p: '조각', n: '없음' };
+  const SV = { g: [A.t('살아남았다', 'Survived'), 'probe'], m: [A.t('논쟁 중', 'Debated'), 'warm'], t: [A.t('태동', 'Emerging'), 'warm'] };
+  const CV = { y: A.t('있음', 'yes'), p: A.t('조각', 'partial'), n: A.t('없음', 'none') };
   const VC = { '휘발': 'var(--warm)', '비휘발': 'var(--probe)', '해당없음': 'var(--link)' };
   const code = s => `${s[1].toUpperCase()}-${String(s[2]).padStart(2, '0')}`;
   function renderOverview() {
-    if (!OV) { mount(stage, h('p.empty.cmp-pad', '데이터 로드 실패 — 목차 데이터를 읽지 못했다.')); mount(side); return; }
+    if (!OV) { mount(stage, h('p.empty.cmp-pad', A.t('데이터 로드 실패 — 목차 데이터를 읽지 못했다.', 'Failed to load — could not read the overview data.'))); mount(side); return; }
     const para = (CP && CP.PARA) || [];
     if (st.ovAxis === 'para' && !para.length) st.ovAxis = 'weight';
     const P = st.ovAxis === 'para';
@@ -247,7 +249,7 @@
       const pp = P ? para[k] : null, sv = pp && SV[pp.sv], cv = pp && CV[pp.cv];
       return h('div.cmp-ovrow',
         h('div.cmp-ovhead',
-          h('div', h('span.cmp-ovt', ax.t[k]), h('span.cmp-ovn' + (st.ovAxis === 'vol' && k === '비휘발' ? '.hl' : ''), items.length + '개')),
+          h('div', h('span.cmp-ovt', ax.t[k]), h('span.cmp-ovn' + (st.ovAxis === 'vol' && k === '비휘발' ? '.hl' : ''), items.length + A.t('개', ''))),
           h('span.cmp-ovd', ax.d[k]),
           sv || cv ? h('div.cmp-ovtags',
             sv ? h('span.cmp-sv.' + sv[1], sv[0]) : null,
@@ -256,9 +258,9 @@
           type: 'button', dataset: { i: String(i) },
           onclick: () => A.route.go('', s[1] + s[2]),
           onmouseenter: () => hover(i), onfocus: () => hover(i) },
-          h('span.cmp-ovname', s[0]),
+          h('span.cmp-ovname', A.tr(s[0])),
           h('span.cmp-ovsub', h('i', { style: { background: VC[s[4]] || 'var(--faint)' } }),
-            `${code(s)} · ${st.ovAxis === 'weight' ? s[4] : s[3]}`)))));
+            `${code(s)} · ${A.tr(st.ovAxis === 'weight' ? s[4] : s[3])}`)))));
     });
     // 올리기는 미리보기일 뿐 — 목록 밖으로 나가면 요약을 거둔다
     mount(stage, h('div.cmp-ov', { onmouseleave: () => hover(-1) }, rows));
@@ -274,17 +276,17 @@
     const s = OV.S[st.ovHov], n = OV.S.length;
     mount(side,
       h('div.det.cmp-ovbox', s ? [
-        h('span.cmp-meta', `${code(s)} · 가중치는 ${s[3]} · ${s[4]}`),
-        h('h3', s[0]), h('p', s[5]), h('p.cmp-who', s[6]), h('p.cmp-wallbox', '벽 — ' + s[7])
+        h('span.cmp-meta', A.t(`${code(s)} · 가중치는 ${s[3]} · ${s[4]}`, `${code(s)} · weights in ${A.tr(s[3])} · ${A.tr(s[4])}`)),
+        h('h3', A.tr(s[0])), h('p', s[5]), h('p.cmp-who', s[6]), h('p.cmp-wallbox', A.t('벽 — ', 'Wall — ') + s[7])
       ] : [
-        h('span.cmp-meta', `목차 · 구조 ${n}`),
-        h('h3', `같은 ${n}개를 가로로 자른다`),
-        h('p.sub', 'A~F가 무엇을 푸는지로 묶은 것이라면, 여기서는 가중치가 어디 있는지와 끄면 남는지로 다시 묶는다. 블록에 올리면 요약, 누르면 그 구조가 열린다.')
+        h('span.cmp-meta', A.t(`목차 · 구조 ${n}`, `Overview · ${n} structures`)),
+        h('h3', A.t(`같은 ${n}개를 가로로 자른다`, `Slicing the same ${n} across`)),
+        h('p.sub', A.t('A~F가 무엇을 푸는지로 묶은 것이라면, 여기서는 가중치가 어디 있는지와 끄면 남는지로 다시 묶는다. 블록에 올리면 요약, 누르면 그 구조가 열린다.', 'Families A–F group structures by what they solve; here they are regrouped by where the weights live and whether they survive power-off. Hover a block for a summary, click to open that structure.'))
       ]),
       h('div.cmp-ovprose',
-        h('p', h('b', '가중치를 어디에 두느냐가 설계를 가른다.'), ' 위상에 두면 임의 행렬이 되지만 소자가 N²로 늘고 히터를 계속 켜둬야 한다. 파장에 두면 합산이 공짜가 되지만 온도에 묶인다. 공간에 두면 전파가 연산을 대신 해주지만 바꾸려면 다시 찍어야 한다. 재료의 상태에 두면 꺼도 남지만 쓰기가 느리다.'),
-        h('p', h('b', '그래서 「끄면 사라지나」가 따로 있는 축이다.'), ` ${n}개 중 전원을 끊어도 값이 남는 건 여섯 개뿐이고, 그중 넷은 바꾸려면 다시 찍어야 하는 쪽이다. 쓰기가 되는 비휘발은 사실상 PCM 계열 둘이다. 리뷰들이 다음 승부처로 가중치 저장·업데이트를 꼽는 이유가 이 숫자에 있다.`),
-        h('p', h('b', '그리고 절반은 연산이 아니라 읽기에서 갈린다.'), ' 검출기는 세기만 읽으니 부호가 사라지고, 되찾으려면 기준 빛을 같이 때려야 한다. 아무리 좋은 행렬곱도 읽는 방식이 음수를 버리면 쓸 수 없다.')));
+        h('p', h('b', A.t('가중치를 어디에 두느냐가 설계를 가른다.', 'Where you put the weights decides the design.')), A.t(' 위상에 두면 임의 행렬이 되지만 소자가 N²로 늘고 히터를 계속 켜둬야 한다. 파장에 두면 합산이 공짜가 되지만 온도에 묶인다. 공간에 두면 전파가 연산을 대신 해주지만 바꾸려면 다시 찍어야 한다. 재료의 상태에 두면 꺼도 남지만 쓰기가 느리다.', ' In phase, you get an arbitrary matrix, but devices grow as N² and the heaters must stay on. In wavelength, summation comes for free, but you are tied to temperature. In space, propagation does the computing for you, but changing it means fabricating again. In the state of a material, the values survive power-off, but writing is slow.')),
+        h('p', h('b', A.t('그래서 「끄면 사라지나」가 따로 있는 축이다.', 'That is why “lost at power-off?” is an axis of its own.')), A.t(` ${n}개 중 전원을 끊어도 값이 남는 건 여섯 개뿐이고, 그중 넷은 바꾸려면 다시 찍어야 하는 쪽이다. 쓰기가 되는 비휘발은 사실상 PCM 계열 둘이다. 리뷰들이 다음 승부처로 가중치 저장·업데이트를 꼽는 이유가 이 숫자에 있다.`, ` Of the ${n}, only six keep their values when the power is cut, and four of those can only be changed by fabricating again. Rewritable non-volatile weights are in practice the two PCM designs. This number is why reviews name weight storage and updating as the next battleground.`)),
+        h('p', h('b', A.t('그리고 절반은 연산이 아니라 읽기에서 갈린다.', 'And half the battle is decided in readout, not computation.')), A.t(' 검출기는 세기만 읽으니 부호가 사라지고, 되찾으려면 기준 빛을 같이 때려야 한다. 아무리 좋은 행렬곱도 읽는 방식이 음수를 버리면 쓸 수 없다.', ' A detector reads only intensity, so the sign is lost; getting it back means mixing in a reference beam. However good the matrix multiply, it is useless if the readout throws away negative values.'))));
   }
 
   // ── 그림 크기: 남은 높이에 맞춘 폭 (넓은 화면). 좁은 화면은 칸 폭 그대로 ──
@@ -371,10 +373,10 @@
     if (st.grp === 'o') { renderOverview(); return; }
     const E = entry();
     if (!E) {
-      mount(stage, h('p.empty.cmp-pad', '데이터 로드 실패 — 이 군의 구조 모듈을 읽지 못했다.'));
+      mount(stage, h('p.empty.cmp-pad', A.t('데이터 로드 실패 — 이 군의 구조 모듈을 읽지 못했다.', 'Failed to load — could not read the structure module for this family.')));
       mount(side); return;
     }
-    document.title = (E.title ? E.title + ' · ' : '') + '구조 — 광 연산 지도와 실험실';
+    document.title = (E.title ? A.tr(E.title) + ' · ' : '') + A.t('구조', 'Structures') + ' — ' + A.site;
     if (st.deep && LABS[E.id] && window[LABS[E.id].mod]) { renderLab(E); return; }
     if (E.text) renderText(E); else renderFig(E);
   }
@@ -399,17 +401,17 @@
       back: () => A.route.set(off),
     });
     labFor = lab ? id : null;
-    if (lab) { lab.update(lastR || A.route.get()); document.title = E.title + ' · 깊게 보기 — 광 연산 지도와 실험실'; }
+    if (lab) { lab.update(lastR || A.route.get()); document.title = A.tr(E.title) + ' · ' + A.t('깊게 보기', 'Deep view') + ' — ' + A.site; }
   }
 
   function renderText(E) {
     const G = group(st.grp), figHost = h('div.cmp-figwrap.cmp-textfig');
     mount(stage, h('div.cmp-text',
-      h('h2', E.title),
+      h('h2', A.tr(E.title)),
       E.legacy ? figHost : null,
       h('div.cmp-body', (E.body || []).map(p => html('p', p)))));
     if (E.figEl) take(E.figEl, figHost); else figHost.remove();
-    mount(side, h('p.note', `${G.name}의 구조를 한자리에 겹쳐 본 요약이다. 위 탭에서 구조를 고르면 그림과 손잡이로 돌아간다.`));
+    mount(side, h('p.note', A.t(`${G.name}의 구조를 한자리에 겹쳐 본 요약이다. 위 탭에서 구조를 고르면 그림과 손잡이로 돌아간다.`, `A summary laying the structures of ${G.name} on top of each other. Pick a structure in the tabs above to go back to its figure and controls.`)));
   }
 
   function renderFig(E) {
@@ -417,7 +419,7 @@
     const p = legacy ? paneOf(E) : null, pi = legacy ? E.panes.indexOf(p) : 0;
     const wrap = h('div.cmp-figwrap'), marks = h('div.cmp-marks'), leg = h('div.cmp-legend');
     const label = h('span.cmp-figlabel');
-    const markBtn = h('button.cmp-opt.cmp-markbtn', { type: 'button', onclick: () => { st.marks = !st.marks; paintMarks(); } }, '자리 표시');
+    const markBtn = h('button.cmp-opt.cmp-markbtn', { type: 'button', onclick: () => { st.marks = !st.marks; paintMarks(); } }, A.t('자리 표시', 'Show parts'));
     const box = h('div.cmp-figbox', label, markBtn, wrap, leg);
     mount(stage, box);
     cur = { E, wrap, marks, leg, label, markBtn };
@@ -439,8 +441,8 @@
       FS = fig ? figSize(fig) : { w: 880, h: 300, L: null };
       const own = BOM(E.key).some(i => i.pf && fig && i.pf.slice(1) === fig.id);
       figId = fig ? (pi === 0 && !E.panes[0].step && !own ? '__main__' : fig.id) : '__main__';
-      label.textContent = `FIG ${st.grp.toUpperCase()}·${E.num}` + (p.step ? ` — ${p.label}단계` : '') + ` — ${fig ? (fig.getAttribute('aria-label') || E.title) : E.title}`;
-      cur.paneLabel = q => q.step ? q.label + '단계' : q.label;
+      label.textContent = `FIG ${st.grp.toUpperCase()}·${E.num}` + (p.step ? A.t(` — ${p.label}단계`, ` — step ${p.label}`) : '') + ` — ${fig ? (fig.getAttribute('aria-label') || A.tr(E.title)) : A.tr(E.title)}`;
+      cur.paneLabel = q => q.step ? A.t(q.label + '단계', 'Step ' + q.label) : q.label;
       // 옛 코드가 그림을 다시 그리면 쌓기·마커를 다시 맞춘다
       if (fig && fig.tagName.toLowerCase() === 'svg') {
         let pend = 0;
@@ -518,15 +520,15 @@
     const legacy = !!E.legacy;
     const idea = legacy ? html('p.cmp-idea', E.idea) : h('p.cmp-idea', E.idea.map(([t, k]) => k ? h('b.k', t) : t));
     const head = h('div.cmp-head',
-      h('button.cmp-ttl', { type: 'button', 'aria-expanded': String(st.info), onclick: () => { st.info = !st.info; ideaBox.hidden = !st.info; tl.textContent = st.info ? '접기 ▴' : '설명 ▾'; head.firstChild.setAttribute('aria-expanded', String(st.info)); } },
-        h('span.cmp-num', E.num), h('span.cmp-title', E.title), h('span.cmp-tl', st.info ? '접기 ▴' : '설명 ▾')));
+      h('button.cmp-ttl', { type: 'button', 'aria-expanded': String(st.info), onclick: () => { st.info = !st.info; ideaBox.hidden = !st.info; tl.textContent = st.info ? A.t('접기 ▴', 'Hide ▴') : A.t('설명 ▾', 'About ▾'); head.firstChild.setAttribute('aria-expanded', String(st.info)); } },
+        h('span.cmp-num', E.num), h('span.cmp-title', A.tr(E.title)), h('span.cmp-tl', st.info ? A.t('접기 ▴', 'Hide ▴') : A.t('설명 ▾', 'About ▾'))));
     const ideaBox = h('div.cmp-ideabox', idea), tl = head.querySelector('.cmp-tl');
     ideaBox.hidden = !st.info;
     head.appendChild(ideaBox);
 
     let panes = null, intro = null;
     if (legacy && E.panes.length > 1) {
-      const wt = (E.walkTitle && p.step) || (!/^[①-⑳]/.test(p.label) && E.walkTitle) ? E.walkTitle : (/^[①-⑳]/.test(p.label) ? p.label : (E.walkTitle || '단계'));
+      const wt = (E.walkTitle && p.step) || (!/^[①-⑳]/.test(p.label) && E.walkTitle) ? E.walkTitle : (/^[①-⑳]/.test(p.label) ? p.label : (E.walkTitle || A.t('단계', 'Steps')));
       panes = h('div.cmp-panes', h('span.lb', wt), h('div.wrap', E.panes.map((q, i) => opt(
         /^[①-⑳]/.test(q.label) ? q.label.slice(0, 1) : (q.label.length > 8 ? String(i + 1) : q.label), i === pi,
         () => { if (q.wbtn) q.wbtn.click(); st.pane[E.id] = i; render(); }, { title: q.label }))));
@@ -537,14 +539,14 @@
     // 논문 목록은 패널 맨 아래라 멀다 — 위에 바로가기를 둔다
     const papers = A.papers(E.id, LAB[E.id] ? pid => '#' + E.id + '?deep=1' + (pid === LAB[E.id] ? '' : '&pre=' + pid) : null);
     const toPapers = papers ? h('button.cmp-topapers', { type: 'button', onclick: () => papers.scrollIntoView({ behavior: 'smooth', block: 'start' }) },
-      `관련 논문 ${papers.querySelectorAll('.paper').length}편 ↓`) : null;
+      A.t(`관련 논문 ${papers.querySelectorAll('.paper').length}편 ↓`, `Related papers (${papers.querySelectorAll('.paper').length}) ↓`)) : null;
     const foot = h('div.cmp-foot',
-      h('div', h('span.lb', '어디서'), h('span', (CP && CP.WHO && CP.WHO[E.id]) || E.who)),
-      h('div', h('span.lb', '벽'), h('span.cmp-wall', E.wall)),
+      h('div', h('span.lb', A.t('어디서', 'Where')), h('span', (CP && CP.WHO && CP.WHO[E.id]) || E.who)),
+      h('div', h('span.lb', A.t('벽', 'Wall')), h('span.cmp-wall', E.wall)),
       papers,
       h('div.cmp-note'));
     const deep = LAB[E.id] ? h('button.cmp-deep', { type: 'button', onclick: () => A.route.set({ deep: '1' }) },
-      h('b', '깊게 보기 →'), h('span', '논문 프리셋으로 재료·광원·검출기를 바꿔 돌려 본다 · 3D')) : null;
+      h('b', A.t('깊게 보기 →', 'Deep view →')), h('span', A.t('논문 프리셋으로 재료·광원·검출기를 바꿔 돌려 본다 · 3D', 'Swap materials, sources and detectors with paper presets and run it · 3D'))) : null;
     mount(side, h('div.cmp-main-side', head, deep, toPapers, panes, intro, ctl, stats, read, h('div#cmp-dev'), h('div#cmp-bom')), foot);
     stats.hidden = true;
 
@@ -563,13 +565,13 @@
   function renderDev() {
     const box = $('#cmp-dev'); if (!box) return;
     if (!st.dev) {
-      mount(box, h('p.note#cmp-devhint', { hidden: !(cur && (cur.E.legacy ? cur.legendCount : cur.hasMarks)) }, '그림의 번호를 누르면 그 소자 설명이 여기에 뜬다.'));
+      mount(box, h('p.note#cmp-devhint', { hidden: !(cur && (cur.E.legacy ? cur.legendCount : cur.hasMarks)) }, A.t('그림의 번호를 누르면 그 소자 설명이 여기에 뜬다.', 'Click a number in the figure to show that device here.')));
       return;
     }
     const d = DEV(st.dev);
     mount(box, h('div.cmp-devbox',
       h('div.cmp-devhead', h('span.cmp-devn', String(st.devNum || '·')), h('span.cmp-devt', d.n),
-        h('button.cmp-x', { type: 'button', 'aria-label': '닫기', onclick: () => { st.dev = null; paintMarks(); renderDev(); } }, '×')),
+        h('button.cmp-x', { type: 'button', 'aria-label': A.t('닫기', 'Close'), onclick: () => { st.dev = null; paintMarks(); renderDev(); } }, '×')),
       h('div.cmp-devd', d.d || '')));
   }
 
@@ -588,18 +590,18 @@
         h('div',
           h('div.cmp-bomtop',
             h('button.cmp-bomnm', { type: 'button', onclick: () => openDev(it.id, it.p ? +num : 0) }, dv.n),
-            h('span.cmp-bomk' + (it.k ? '.must' : ''), it.k ? '필수' : '선택'),
+            h('span.cmp-bomk' + (it.k ? '.must' : ''), it.k ? A.t('필수', 'required') : A.t('선택', 'optional')),
             it.n ? h('span.cmp-bomq', it.n) : null),
           h('p.cmp-bomr', it.r || ''),
           h('p.cmp-bomd', dv.d || ''),
-          how.length ? h('p.cmp-bomh', '만드는 법 · ' + how.join(' · ')) : null,
+          how.length ? h('p.cmp-bomh', A.t('만드는 법 · ', 'How it is made · ') + how.join(' · ')) : null,
           it.w ? h('p.cmp-bomw', '↳ ' + it.w) : null));
     });
     mount(box, h('div.cmp-bom',
       h('button.cmp-bomtg', { type: 'button', 'aria-expanded': String(st.bomOpen), onclick: () => { st.bomOpen = !st.bomOpen; renderBom(); } },
-        '부품표 — 소자 ' + items.length + '종 · 필수 ' + must + '종 ' + (st.bomOpen ? '▴' : '▾')),
+        A.t('부품표 — 소자 ' + items.length + '종 · 필수 ' + must + '종 ', 'Parts list — ' + items.length + ' devices · ' + must + ' required ') + (st.bomOpen ? '▴' : '▾')),
       st.bomOpen ? h('div.cmp-bombody',
-        lines.length ? h('div.cmp-miss', h('span', '무엇이 없나 — 이 구조의 벽'),
+        lines.length ? h('div.cmp-miss', h('span', A.t('무엇이 없나 — 이 구조의 벽', 'What is missing — this structure\'s wall')),
           lines.map(t => h('p', String(t).replace(/<b>(.*?)<\/b>\s*/g, '$1 — ').replace(/<[^>]+>/g, '')))) : null,
         rows) : null));
   }

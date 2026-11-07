@@ -72,11 +72,11 @@
       pub = readJSON('data-' + name);
       priv = readJSON('data-' + name + '-private');
     } catch (e) {
-      fail('데이터 로드 실패: ' + name + '.json (' + e.message + ')');
+      fail(t('데이터 로드 실패: ', 'Failed to load data: ') + name + '.json (' + e.message + ')');
       return (cache[name] = null);
     }
     if (pub === undefined && priv === undefined) {
-      fail('데이터 로드 실패: ' + name + '.json');
+      fail(t('데이터 로드 실패: ', 'Failed to load data: ') + name + '.json');
       return (cache[name] = null);
     }
     return (cache[name] = merge(pub === undefined ? {} : pub, priv));
@@ -184,6 +184,23 @@
     return el;
   }
 
+  // ── 언어 ──────────────────────────────────────────────
+  // 번역판(en/)은 <html lang="en">, 자산은 한 단계 위(root = '../')에 있다.
+  const lang = document.documentElement.lang || 'ko';
+  const root = document.body.dataset.root || '';
+  // 탭 제목 끝의 사이트 이름(빌드가 언어별로 넣는다) — 페이지가 제목을 다시 쓸 때 쓴다
+  const site = document.title.split(' — ').pop();
+  // 이름 사전: 데이터 키(한국어)는 그대로 두고 화면에 그릴 때만 번역판 이름으로 바꾼다
+  const dictEl = document.getElementById('i18n-dict');
+  const DICT = dictEl ? JSON.parse(dictEl.textContent) : {};
+  const tr = s => (s != null && Object.prototype.hasOwnProperty.call(DICT, s) ? DICT[s] : s);
+  const t = (ko, en) => (lang === 'en' && en != null ? en : ko);
+  // 언어 전환 링크는 지금 보고 있는 선택·필터(해시)를 그대로 가지고 간다
+  document.addEventListener('click', e => {
+    const a = e.target.closest && e.target.closest('.lang a');
+    if (a && location.hash) a.href = a.getAttribute('href').split('#')[0] + location.hash;
+  });
+
   const narrow = () => window.matchMedia('(max-width: 899.98px)').matches;
   const stars = (n, max = 3) => '★'.repeat(n) + '☆'.repeat(max - n);
 
@@ -193,7 +210,7 @@
     if (!document.getElementById('data-papers')) return null;
     const P = (data('papers') || {}).PAPERS || [], list = P.filter(p => (p.tags || []).includes(tag));
     if (!list.length) return null;
-    return h('div.papers', h('span.lb', `관련 논문 ${list.length}편`), list.map(p => h('div.paper',
+    return h('div.papers', h('span.lb', t(`관련 논문 ${list.length}편`, `Related papers (${list.length})`)), list.map(p => h('div.paper',
       h('a.paper-t', { href: p.arxiv ? 'https://arxiv.org/abs/' + p.arxiv : 'https://doi.org/' + p.doi, target: '_blank', rel: 'noopener' }, p.t),
       h('span.paper-m', `${p.a} · ${p.y} · ${p.v}`),
       h('span.paper-d', p.did),
@@ -201,9 +218,9 @@
         (p.tags || []).filter(t => !/^[a-f]\d+$/.test(t)).map(t => h('span.tag', t)),
         p.arxiv ? h('a', { href: 'https://arxiv.org/abs/' + p.arxiv, target: '_blank', rel: 'noopener' }, 'arXiv') : null,
         p.doi ? h('a', { href: 'https://doi.org/' + p.doi, target: '_blank', rel: 'noopener' }, 'DOI') : null,
-        p.pdf ? h('a', { href: p.pdf, target: '_blank' }, 'PDF') : null,
-        p.preset && open ? h('a', { href: open(p.preset) }, '실험실에서 열기 →') : null))));
+        p.pdf ? h('a', { href: root + p.pdf, target: '_blank' }, 'PDF') : null,
+        p.preset && open ? h('a', { href: open(p.preset) }, t('실험실에서 열기 →', 'Open in the lab →')) : null))));
   }
 
-  window.A = { data, hasPrivate, merge, route, $, $$, h, esc, pill, mount, fail, narrow, stars, papers };
+  window.A = { lang, root, site, t, tr, data, hasPrivate, merge, route, $, $$, h, esc, pill, mount, fail, narrow, stars, papers };
 })();

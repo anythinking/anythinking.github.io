@@ -11,8 +11,12 @@
   const C = [['all', '전체', [[-46, -128], [66, 158]]], ['uk', '영국', [[49.4, -7.8], [59.2, 2.6]]], ['de', '독일', [[46.8, 4.8], [55.6, 15.8]]], ['us', '미국·캐나다', [[23.5, -127], [52.5, -62]]],
     ['fr', '프랑스', [[41, -5.8], [51.8, 10.2]]], ['it', '이탈리아', [[35.8, 5.6], [47.8, 19.4]]], ['ch', '스위스', [[45.6, 5.5], [48.1, 10.9]]], ['eu2', '유럽 기타', [[35, -11.5], [70, 32]]],
     ['as', '아시아', [[-1, 96], [47, 148]]], ['au', '호주', [[-45, 110], [-9, 156]]]];
+  if (A.lang === 'en') {
+    const CN = { all: 'All', uk: 'UK', de: 'Germany', us: 'US · Canada', fr: 'France', it: 'Italy', ch: 'Switzerland', eu2: 'Rest of Europe', as: 'Asia', au: 'Australia' };
+    C.forEach(c => { c[1] = CN[c[0]] || c[1]; });
+  }
   const PN = U.PN || {};
-  const EK = { p: '논문 공저', m: '이동·계보', i: '협약·공동운영', s: '스핀오프·인수' };
+  const EK = A.lang === 'en' ? { p: 'Co-authored papers', m: 'Moves · lineage', i: 'Agreements · joint operation', s: 'Spin-offs · acquisitions' } : { p: '논문 공저', m: '이동·계보', i: '협약·공동운영', s: '스핀오프·인수' };
   const stars = d => U.star ? (d.fit || '').split(U.star).length - 1 : 0;   // 개인판 UI.star
   const kc = k => 'k-' + (k in LBL || k === 'x' ? k : 'comp');
   const st = { cur: 'all', flt: 'all', sel: null, okind: 'all' };
@@ -99,7 +103,7 @@
       A.route.go('', '', { params: { cur: id === 'all' ? null : id } }))));
     const keys = ['all'].concat(Object.keys(LBL).filter(k => D.some(d => d.k === k || (d.t || []).includes(k))));
     mount('#in-ftabs', keys.map(k => h('button.chip' + (st.flt === k ? '.on' : ''), { type: 'button', 'aria-pressed': st.flt === k ? 'true' : 'false',
-      onclick: () => A.route.set({ flt: k === 'all' ? null : k }) }, k === 'all' ? null : h('span.in-dot.' + kc(k)), k === 'all' ? '전체' : LBL[k])));
+      onclick: () => A.route.set({ flt: k === 'all' ? null : k }) }, k === 'all' ? null : h('span.in-dot.' + kc(k)), k === 'all' ? A.t('전체', 'All') : LBL[k])));
   }
 
   /* 오른쪽 */
@@ -113,8 +117,8 @@
       U.warn ? h('p.in-warn', { html: U.warn }) : null,
       h('div.in-col.in-g6',
         h('div.in-lhead',
-          h('span.lb', `기관 ${list.length}곳${list.length !== D.length ? ` / ${D.length}` : ''}` + (PRIV ? U.sort || '' : '')),
-          h('span.in-ok', [['all', '전체'], ['uni', '대학'], ['lab', '연구소'], ['co', '회사']].map(([v, l]) =>
+          h('span.lb', A.t(`기관 ${list.length}곳${list.length !== D.length ? ` / ${D.length}` : ''}`, `${list.length}${list.length !== D.length ? ` / ${D.length}` : ''} institutions`) + (PRIV ? U.sort || '' : '')),
+          h('span.in-ok', [['all', A.t('전체', 'All')], ['uni', A.t('대학', 'University')], ['lab', A.t('연구소', 'Institute')], ['co', A.t('회사', 'Company')]].map(([v, l]) =>
             A.pill(l, st.okind === v, () => A.route.set({ okind: v === 'all' ? null : v }))))),
         h('div.in-list' + (PRIV ? '.fit' : ''), list.map(d => h('a.in-row' + (inAxis(d) ? '' : '.dim'), { href: A.route.href('', d.id), onclick: e => { e.preventDefault(); pick(d.id); } },
           PRIV ? h('span.f', d.fit || '') : null,
@@ -139,7 +143,7 @@
     const rels = relsOf(d);
     const c = C.find(x => x[0] === d.p);
     return [
-      h('button.in-back', { type: 'button', onclick: clear }, '← 목록'),
+      h('button.in-back', { type: 'button', onclick: clear }, A.t('← 목록', '← List')),
       h('div.in-col.in-g6',
         h('span.lb', (d.city || '') + ' · ' + (c ? c[1] : '')),
         h('h2', d.n),
@@ -147,10 +151,10 @@
       noteBlock(d),
       h('div.in-tags', (d.t || []).map(t => h('span.in-tag', LBL[t] || t))),
       PRIV && d.why ? h('p.in-warn.why', { html: d.why }) : null,
-      h('dl.in-dl', d.fab ? [h('dt', '팹'), h('dd', { html: d.fab })] : null, PRIV && d.gate ? [h('dt', U.gate || ''), h('dd', { html: d.gate })] : null),
-      (d.pi || []).length ? h('div.in-col', h('span.lb', `PI ${d.pi.length}명`),
+      h('dl.in-dl', d.fab ? [h('dt', A.t('팹', 'Fab')), h('dd', { html: d.fab })] : null, PRIV && d.gate ? [h('dt', U.gate || ''), h('dd', { html: d.gate })] : null),
+      (d.pi || []).length ? h('div.in-col', h('span.lb', A.t(`PI ${d.pi.length}명`, `PIs (${d.pi.length})`)),
         h('ul.in-pis', d.pi.map(([n, t]) => h('li', h('b', n), h('span', { html: t }))))) : null,
-      rels.length ? h('div.in-col', h('span.lb', `연결 ${rels.length}건 — 지도에 선으로 표시`),
+      rels.length ? h('div.in-col', h('span.lb', A.t(`연결 ${rels.length}건 — 지도에 선으로 표시`, `${rels.length} links — drawn as lines on the map`)),
         h('div.in-rels', rels.map(({ e, me, ot, od }) => h('button.in-rel.e-' + (EK[e.k] ? e.k : 'p'), { type: 'button', onclick: od ? () => pick(od.id) : null },
           h('span.k', EK[e.k] || EK.p), h('br'), h('b', me.l), ' ↔ ', h('b', ot.l), ' ', h('span.muted', `(${ot.o})`), h('br'), e.t)))) : null
     ];
@@ -183,7 +187,7 @@
     if (!C.some(c => c[0] === st.cur)) st.cur = 'all';
     // 지역이 바뀌었고 기관을 고르지 않았으면 그 지역으로 맞춘다(뒤로가기에서도 같게)
     if (st.cur !== wasCur && !d) { const b = C.find(c => c[0] === st.cur)[2]; if (first) setTimeout(() => fitTo(b, { padding: [20, 20] }), 200); else fitTo(b, { padding: [20, 20] }); }
-    document.title = (d ? d.n + ' · ' : '') + '기관 지도 — 광 연산 지도와 실험실';
+    document.title = (d ? d.n + ' · ' : '') + A.t('기관 지도', 'Institutions') + ' — ' + A.site;
     drawLinks(d);
     render();
     if (d && d.id !== was) {

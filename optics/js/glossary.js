@@ -8,12 +8,18 @@
   const LN = { L0: '빛 자체', L1: '물리 효과', L2: '재료·플랫폼', L3: '소자', L4: '회로', L5: '아키텍처', L6: '시스템·산업', '비교': '층 밖 — 전자와 비교', '기타': '그 밖',
     'G:A': '행렬곱', 'G:B': '신경망 모델', 'G:C': '최적화', 'G:D': '디지털 전광 논리', 'G:E': '센서·이미징', 'G:F': '양자·신호처리', 'G:M': '메시 심화' };
   const LQ = { L0: '무엇을 조절하고 무엇을 잴 수 있나', L1: '무엇을 걸면 빛이 어떻게 변하나', L2: '어떤 재료가 어떤 손잡이를 갖나', L3: '효과와 형상으로 무엇을 만드나', L4: '소자를 엮어 무슨 함수를 만드나', L5: '그 회로로 어떤 계산기를 짓나', L6: '누가 사고 어디서 돈이 나나', '비교': '광이 전자보다 나은 점 — L0 사실의 결과', '기타': '기관·분야 쪽 용어 — 층에 안 걸린다' };
+  if (A.lang === 'en') {
+    Object.assign(LN, { L0: 'Light itself', L1: 'Physical effects', L2: 'Materials · platforms', L3: 'Devices', L4: 'Circuits', L5: 'Architecture', L6: 'Systems · industry', '비교': 'Outside the layers — compared with electronics', '기타': 'Other',
+      'G:A': 'Matrix multiply', 'G:B': 'Neural network models', 'G:C': 'Optimization', 'G:D': 'Digital all-optical logic', 'G:E': 'Sensing · imaging', 'G:F': 'Quantum · signal processing', 'G:M': 'Mesh in depth' });
+    Object.assign(LQ, { L0: 'What can be tuned and what can be measured', L1: 'What you apply and how light changes', L2: 'Which material has which knob', L3: 'What effects and shapes can build', L4: 'What function devices make when combined', L5: 'What computer that circuit builds', L6: 'Who buys, and where the money comes from', '비교': 'Where light beats electronics — consequences of L0 facts', '기타': 'Terms about institutions and fields — not tied to a layer' });
+  }
   const ORDER = ['L0', 'L1', 'L2', 'L3', 'L4', 'L5', 'L6', '비교', '기타', 'G:A', 'G:B', 'G:C', 'G:D', 'G:E', 'G:F', 'G:M'];
-  const KS = [['all', '전체'], ['입자', '입자'], ['관계', '관계'], ['미분류', '미분류']];
+  const KS = [['all', A.t('전체', 'All')], ['입자', A.t('입자', 'Entity')], ['관계', A.t('관계', 'Relation')], ['미분류', A.t('미분류', 'Unsorted')]];
 
   const isG = l => l.startsWith('G:');
-  const key = l => isG(l) ? l.slice(2) + '군' : l === '기타' ? '—' : l;
+  const key = l => isG(l) ? l.slice(2) + A.t('군', '') : l === '기타' ? '—' : l;
   const kind = o => o.c || '미분류';
+  const KN = Object.fromEntries(KS);
   const plain = s => String(s || '').replace(/<[^>]+>/g, '').toLowerCase();
   const byT = new Map(X.map(o => [o.t, o]));
 
@@ -29,7 +35,7 @@
 
   function renderFilters() {
     const have = ORDER.filter(L => X.some(o => o.l === L));
-    mount('#gl-layers', [{ k: '', l: '전체', id: 'all' }].concat(have.map(L => ({ k: key(L), l: LN[L], id: L }))).map(f =>
+    mount('#gl-layers', [{ k: '', l: A.t('전체', 'All'), id: 'all' }].concat(have.map(L => ({ k: key(L), l: LN[L], id: L }))).map(f =>
       pill([f.k ? h('span.k', f.k) : null, f.l].filter(Boolean), st.only === f.id, () => view({ only: f.id }))));
     mount('#gl-kinds', h('span.gl-kl', 'KIND'), KS.map(([id, l]) => {
       const n = id === 'all' ? X.length : X.filter(o => kind(o) === id).length;
@@ -40,7 +46,7 @@
   function renderList() {
     const hit = hits();
     const filtered = st.q.trim() || st.only !== 'all' || st.kind !== 'all';
-    $('#gl-cnt').textContent = filtered ? `${hit.length} / ${X.length}개` : `${X.length}개`;
+    $('#gl-cnt').textContent = filtered ? `${hit.length} / ${X.length}` + A.t('개', '') : `${X.length}` + A.t('개', ' terms');
     const rows = ORDER.map(L => {
       const g = hit.filter(o => o.l === L).sort((a, b) => a.t.localeCompare(b.t, 'ko'));
       if (!g.length) return null;
@@ -48,7 +54,7 @@
       return h('div.row',
         h('div.gl-head',
           h('div', h('span.gl-k' + kc, key(L)), h('span.gl-t', LN[L]), h('span.gl-n', String(g.length))),
-          h('span.gl-q', LQ[L] || '그 구조를 설명할 때 쓰는 말')),
+          h('span.gl-q', LQ[L] || A.t('그 구조를 설명할 때 쓰는 말', 'Words used to explain that structure'))),
         h('div.wrap', g.map(o => {
           const gb = !isG(L) && o.gs.length ? o.gs.join('·') : '';
           const on = st.sel === o.t;
@@ -56,7 +62,7 @@
             onclick: e => { e.preventDefault(); pick(o.t); } }, o.t, gb ? h('span.n', gb) : null);
         })));
     }).filter(Boolean);
-    mount('#gl-list', rows.length ? rows : h('p.empty', '찾는 말이 없다. 다른 낱말로 해보거나 층 필터를 풀어보자.'));
+    mount('#gl-list', rows.length ? rows : h('p.empty', A.t('찾는 말이 없다. 다른 낱말로 해보거나 층 필터를 풀어보자.', 'No match. Try another word or clear the layer filter.')));
   }
 
   function markSel() {
@@ -69,27 +75,27 @@
 
   function renderPanel() {
     const o = st.sel && byT.get(st.sel);
-    document.title = (o ? o.t + ' · ' : '') + '용어 — 광 연산 지도와 실험실';
+    document.title = (o ? o.t + ' · ' : '') + A.t('용어', 'Glossary') + ' — ' + A.site;
     if (!o) {
       mount('#gl-panel', h('div.gl-intro',
-        h('span.gl-where', `용어 정리 · ${X.length}개`),
-        h('h2', '이 페이지가 쓰는 말'),
-        h('p.sub', '층이 붙은 용어는 층 관계도로 건너뛰어 그 말이 어디서 와서 어디로 가는지 사슬로 볼 수 있다. 군이 붙은 용어는 그 구조를 설명할 때 쓰는 말이다.'),
-        h('p.note', '왼쪽에서 말을 누르면 풀이가 여기 열린다.')));
+        h('span.gl-where', A.t(`용어 정리 · ${X.length}개`, `Glossary · ${X.length} terms`)),
+        h('h2', A.t('이 페이지가 쓰는 말', 'The words this site uses')),
+        h('p.sub', A.t('층이 붙은 용어는 층 관계도로 건너뛰어 그 말이 어디서 와서 어디로 가는지 사슬로 볼 수 있다. 군이 붙은 용어는 그 구조를 설명할 때 쓰는 말이다.', 'Terms tagged with a layer jump to the layer map, where you can follow the chain of where the word comes from and where it leads. Terms tagged with a family are words used to explain that structure.')),
+        h('p.note', A.t('왼쪽에서 말을 누르면 풀이가 여기 열린다.', 'Click a term on the left to open its explanation here.'))));
       return;
     }
-    const where = kind(o) + ' · ' + (isG(o.l) ? o.l.slice(2) + '군 · ' + LN[o.l] : o.l === '기타' ? '그 밖' : o.l + ' · ' + LN[o.l]) +
-      (o.gs.length && !isG(o.l) ? ' · ' + o.gs.join('·') + '군에서도 쓴다' : '');
+    const where = (KN[kind(o)] || kind(o)) + ' · ' + (isG(o.l) ? o.l.slice(2) + A.t('군 · ', ' · ') + LN[o.l] : o.l === '기타' ? LN['기타'] : o.l + ' · ' + LN[o.l]) +
+      (o.gs.length && !isG(o.l) ? A.t(' · ' + o.gs.join('·') + '군에서도 쓴다', ' · also used in family ' + o.gs.join('·')) : '');
     const hasRel = o.w && /^L|비교/.test(o.l);
     mount('#gl-panel', h('div.gl-sel',
-      h('div.gl-top', h('span.gl-where', where), h('button.gl-close', { type: 'button', onclick: () => A.route.go('', '') }, '닫기 ✕')),
+      h('div.gl-top', h('span.gl-where', where), h('button.gl-close', { type: 'button', onclick: () => A.route.go('', '') }, A.t('닫기 ✕', 'Close ✕'))),
       h('h2', o.t),
       h('p.gl-def', { html: o.d }),
       o.im ? h('div.gl-fig', { html: o.im }) : null,
-      o.x ? h('div.gl-box', h('span.lb', o.gs.length ? o.gs.join('·') + '군에서는' : '덧붙임'), h('p.gl-x', { html: o.x })) : null,
+      o.x ? h('div.gl-box', h('span.lb', o.gs.length ? o.gs.join('·') + A.t('군에서는', ' family') : A.t('덧붙임', 'Note')), h('p.gl-x', { html: o.x })) : null,
       h('div.gl-links',
-        hasRel ? h('a.gl-go', { href: 'layers.html#' + encodeURIComponent(o.t) }, h('span', '층 관계도에서 사슬 보기'), h('span', `아래 ${o.dn} · 위 ${o.up} →`)) : null,
-        o.sid ? h('a.gl-go', { href: 'compute.html#' + o.sid }, h('span', o.s + ' 열기'), h('span', o.sid.toUpperCase() + ' →')) : null)));
+        hasRel ? h('a.gl-go', { href: 'layers.html#' + encodeURIComponent(o.t) }, h('span', A.t('층 관계도에서 사슬 보기', 'See the chain on the layer map')), h('span', A.t(`아래 ${o.dn} · 위 ${o.up} →`, `below ${o.dn} · above ${o.up} →`))) : null,
+        o.sid ? h('a.gl-go', { href: 'compute.html#' + o.sid }, h('span', A.t(o.s + ' 열기', 'Open ' + o.s)), h('span', o.sid.toUpperCase() + ' →')) : null)));
   }
 
   function pick(t) {

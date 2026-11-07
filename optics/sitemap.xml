@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url><loc>https://anythinking.github.io/optics/about.html</loc></url>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">
+  <url><loc>https://anythinking.github.io/optics/about.html</loc><xhtml:link rel="alternate" hreflang="ko" href="https://anythinking.github.io/optics/about.html"/><xhtml:link rel="alternate" hreflang="en" href="https://anythinking.github.io/optics/en/about.html"/></url>
+  <url><loc>https://anythinking.github.io/optics/en/about.html</loc><xhtml:link rel="alternate" hreflang="ko" href="https://anythinking.github.io/optics/about.html"/><xhtml:link rel="alternate" hreflang="en" href="https://anythinking.github.io/optics/en/about.html"/></url>
   <url><loc>https://anythinking.github.io/optics/compute.html</loc></url>
   <url><loc>https://anythinking.github.io/optics/devices.html</loc></url>
   <url><loc>https://anythinking.github.io/optics/glossary.html</loc></url>
@@ -10,5 +11,6 @@
   <url><loc>https://anythinking.github.io/optics/writing-fdtd-designer.html</loc></url>
   <url><loc>https://anythinking.github.io/optics/writing-ising.html</loc></url>
   <url><loc>https://anythinking.github.io/optics/writing-matrix-crossbar.html</loc></url>
-  <url><loc>https://anythinking.github.io/optics/writing.html</loc></url>
+  <url><loc>https://anythinking.github.io/optics/writing.html</loc><xhtml:link rel="alternate" hreflang="ko" href="https://anythinking.github.io/optics/writing.html"/><xhtml:link rel="alternate" hreflang="en" href="https://anythinking.github.io/optics/en/writing.html"/></url>
+  <url><loc>https://anythinking.github.io/optics/en/writing.html</loc><xhtml:link rel="alternate" hreflang="ko" href="https://anythinking.github.io/optics/writing.html"/><xhtml:link rel="alternate" hreflang="en" href="https://anythinking.github.io/optics/en/writing.html"/></url>
 </urlset>

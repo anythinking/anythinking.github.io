@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Optics — Optical Computing Map & Lab</title>
+<meta name="description" content="All of optics drawn as a family tree that branches from one question: what does light meet? See at a glance where the fields needed for optical computing sit inside optics.">
+<link rel="canonical" href="https://anythinking.github.io/optics/en/optics.html">
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@500;700&family=Noto+Sans+KR:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="../css/base.css">
+<link rel="stylesheet" href="../css/optics.css">
+</head>
+<body data-page="optics" data-root="../">
+<div class="app">
+  <header class="top">
+    <div class="ttl"><b>Optical Computing Map & Lab</b><span>6 maps · 28 structures · 346 terms</span></div>
+    <div class="hd-r">
+      <nav class="g" aria-label="Maps"><a href="optics.html" aria-current="page">Optics</a>
+      <a href="layers.html">Layers<span class="n">148</span></a>
+      <a href="compute.html">Structures<span class="n">28</span></a>
+      <a href="devices.html">Devices<span class="n">42</span></a>
+      <a href="institutions.html">Institutions<span class="n">124</span></a>
+      <a href="glossary.html">Glossary<span class="n">346</span></a>
+      <a href="writing.html">Writing</a>
+      <a href="about.html">About</a></nav>
+      <div class="lang" role="group" aria-label="Language"><span class="lang-lb">Language</span><a href="../optics.html" hreflang="ko" lang="ko">한국어</a><span aria-current="true" lang="en">English</span></div>
+    </div>
+  </header>
+<p class="i18n-note" lang="en">The menu and headings are in English, but the content of this page is still in Korean. Translation is in progress.</p>
+<div class="ph"><h1>Optics</h1><p>One question — what does light meet, and how strongly? — splits optics into seven branches and then 26 fields. The phrase “a field of optics” mixes up three different levels.</p></div>
+<script type="application/json" id="data-optics">{"TREE":[{"id":"g1","meet":"① 아무것도 안 만난다","ph":"회절 · 간섭 · 푸리에 광학","lang":"파동광학","fields":"계산광학 58 · 천문 68 · 적응광학 31 · 라이다 96"},{"id":"g2","meet":"② 매끄러운 경계","ph":"기하광학 · 결상","lang":"기하광학","fields":"이미징 63 · 디스플레이 51 · 광학설계 28 · 시각광학 27"},{"id":"g3","meet":"③ 파장 크기의 구조","ph":"가둠 · 공진 · 도파","lang":"전자기광학","fields":"나노포토 84 · 집적 32 · 광통신 24 · X선 62"},{"id":"g4","meet":"④ 물질의 전자 — 약하게","ph":"광-물질 상호작용(선형)","lang":"EM + 양자기초","fields":"레이저 45 · 소재 23 · 분광 50 · 태양 27"},{"id":"g5","meet":"⑤ 물질의 전자 — 강하게","ph":"비선형 광학 χ² · χ³ · HHG","lang":"비선형 + 양자광학","fields":"초고속 48 · 양자광학 68 · 정밀측정 25 · 광컴 19"},{"id":"g6","meet":"⑥ 물질과 한 몸","ph":"강결합 → 폴라리톤","lang":"양자광학","fields":"✱ 대응 칸 없음 — 19명이 세 분야로 흩어져 있다"},{"id":"g7","meet":"⑦ 물질의 운동량","ph":"광압 · 광력","lang":"EM + 양자","fields":"AMO 32 · 광조작 26 · 광기계 12"}],"RUNG":[{"n":"4. Quantum optics","light":"photons","d":"single photons · entanglement · squeezing · stimulated emission"},{"n":"3. Electromagnetic optics","light":"vector EM waves","d":"polarization · Fresnel · exact waveguide modes"},{"n":"2. Wave optics","light":"scalar waves","d":"interference · diffraction · Fourier optics (lens = FT · 4f)"},{"n":"1. Ray optics","light":"rays","d":"Snell · total internal reflection · imaging"}],"STRATA":[{"n":"Surface","k":"Application fields","what":"What you build or measure","d":"Where the 26 fields and 862 people live. Jobs, labs and conferences are organized at this level","bg":"#FBFAF7","fg":"#1C1B18"},{"n":"Ground","k":"Cross-cutting phenomena · means","what":"The physics of light meeting matter","d":"Not a field but material for every field, so it had no cell on the 26-field map","bg":"#E8E0D2","fg":"#1C1B18"},{"n":"Bedrock","k":"Levels of theory","what":"At what resolution you look at light","d":"Saleh & Teich's four-rung ladder. How far up you climb is set by where you are going","bg":"#5B4A37","fg":"#FBFAF7"}],"NL":[{"n":"Nonlinear 2D materials","id":"d5"},{"n":"All-optical RNN","id":"b4"},{"n":"All-optical logic gates","id":"d2"},{"n":"Self-switching","id":"d6"},{"n":"Frequency combs","id":"f3"}]}</script>
+<main class="split op">
+  <div class="stage op-stage">
+    <section class="op-sec" aria-labelledby="op-tree-h">
+      <div class="op-head">
+        <h2 class="sechead" id="op-tree-h">Family tree — what does light meet?</h2>
+        <span class="op-hint">Light and matter couple more strongly from top to bottom · chip width = number of people in the field</span>
+        <span id="op-judge-slot" class="op-jslot"></span>
+      </div>
+      <div class="op-root"><span class="mono">Root</span><b>What does light meet, and how strongly?</b></div>
+      <div class="op-tree" id="op-tree" role="list"></div>
+    </section>
+
+    <section class="op-sec" aria-labelledby="op-strata-h">
+      <div class="op-head">
+        <h2 class="sechead" id="op-strata-h">Three strata — why it feels easy to get lost</h2>
+        <span class="op-hint">“A field of optics” mixes these three up</span>
+      </div>
+      <div class="op-strata" id="op-strata"></div>
+    </section>
+  </div>
+
+  <aside class="side op-side">
+    <div id="op-cur-home"></div>
+    <div id="op-judge"></div>
+    <div class="op-why">
+      <h2 class="op-why-h">Why nonlinear optics was missing from the 26-field map</h2>
+      <p>It lies <b>beneath</b> every cell, so it never showed up as a cell of its own. ⑤ Nonlinear optics reaches 22 of the 26 fields even outside its own branch — the only zeros are gas sensing, photovoltaics, visual optics and optomechanics. The branches split, but the ground beneath them is continuous, which is why the three strata are needed separately.</p>
+      <div id="op-nl"></div>
+    </div>
+    <p class="op-foot"><b>The tree shows the main lineage, not the only ancestor</b> — metalenses are ③+②, optical tweezers ⑦+①, OCT ①+②.</p>
+  </aside>
+</main>
+
+<script type="application/json" id="i18n-dict">{"MZI 메시":"MZI mesh","마이크로링 가중치 뱅크":"Microring weight bank","링 가중치 뱅크":"Ring weight bank","회절 신경망 D²NN":"Diffractive neural network D²NN","회절 신경망 (D²NN)":"Diffractive neural network (D²NN)","회절 신경망":"Diffractive network","4f 상관기":"4f correlator","4f 상관기 · 정합 필터":"4f correlator · matched filter","PCM 크로스바":"PCM crossbar","호모다인 MVM":"Homodyne MVM","호모다인 · 코히런트 MVM":"Homodyne · coherent MVM","호모다인":"Homodyne","시간다중 MVM":"Time-multiplexed MVM","시간다중":"Time-multiplexed","SLM 자유공간":"SLM free-space","SLM 자유공간 MVM":"SLM free-space MVM","여덟을 겹쳐 보면":"All eight side by side","넷을 겹쳐 보면":"All four side by side","셋을 겹쳐 보면":"All three side by side","여섯을 겹쳐 보면":"All six side by side","겹쳐 보면":"Side by side","리저버 컴퓨팅":"Reservoir computing","스파이킹 광 뉴런":"Spiking photonic neuron","포토닉 텐서코어":"Photonic tensor core","전광 RNN":"All-optical RNN","코히런트 이징 머신":"Coherent Ising machine","코히런트 이징 머신 (OPO 네트워크)":"Coherent Ising machine (OPO network)","공간광 이징 머신":"Spatial-light Ising machine","공간광 이징 머신 (SPIM)":"Spatial-light Ising machine (SPIM)","이징 샘플러":"Ising sampler","포토닉 리커런트 이징 샘플러":"Photonic recurrent Ising sampler","리커런트 샘플러":"Recurrent sampler","S-SEED · 대칭 자기전기광학 소자":"S-SEED · symmetric self-electro-optic effect device","전광 논리 게이트":"All-optical logic gate","전광 논리 게이트 · XGM / XPM / FWM":"All-optical logic gate · XGM / XPM / FWM","펨토패럿 O-E-O":"Femtofarad O-E-O","폴라리톤 논리":"Polariton logic","2D 소재 비선형":"2D-material nonlinearity","자기 스위칭":"Self-switching","자기 스위칭 (PhC·SWG)":"Self-switching (PhC·SWG)","자기 스위칭 · PhC / SWG 비선형 공진기":"Self-switching · PhC / SWG nonlinear resonators","In-sensor":"In-sensor","회절 인코더":"Diffractive encoder","회절 인코더 + 아날로그 전자":"Diffractive encoder + analog electronics","회절 인코더 + 아날로그 전자 (ACCEL)":"Diffractive encoder + analog electronics (ACCEL)","메타표면 연산":"Metasurface computing","메타표면 아날로그 연산":"Metasurface analog computing","메타표면 미분":"Metasurface differentiation","광 전처리기":"Optical preprocessor","보손샘플링":"Boson sampling","선형광학 양자컴":"Linear-optical QC","선형광학 양자컴 · 보손샘플링":"Linear-optical quantum computing · boson sampling","마이크로파 포토닉스":"Microwave photonics","마이크로파 포토닉 프로세서":"Microwave photonic processor","주파수 콤":"Frequency comb","주파수 콤 병렬 처리":"Frequency-comb parallel processing","4×4 메시 실물":"4×4 mesh, real device","위상":"phase","파장":"wavelength","공간":"space","재료":"material","전자":"electronic","동역학":"dynamics","휘발":"volatile","비휘발":"non-volatile","해당없음":"n/a","만든다":"Generate","나눈다·합친다":"Split · combine","바꾼다 (손잡이)":"Modulate (the knobs)","저장한다":"Store","섞는다 (비선형)":"Mix (nonlinear)","자유공간":"Free space","읽는다":"Read","잇는다":"Connect","전자 쪽":"Electronic side","A 행렬곱":"A Matrix multiply","B 신경망":"B Neural networks","C 최적화":"C Optimization","D 논리":"D Logic","E 변환앞":"E Front-end transforms","F 양자·신호":"F Quantum · signal","메시":"Mesh"}</script>
+<script type="application/json" id="routes">{"":["g1","g2","g3","g4","g5","g6","g7"],"judge":["g1","g2","g3","g4","g5","g6","g7"]}</script>
+</div>
+<script src="../js/core.js"></script>
+<script src="../js/optics.js"></script>
+<script data-goatcounter="https://anythinking.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+</body>
+</html>

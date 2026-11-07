@@ -7,7 +7,7 @@
   if (!O || !X) return;
 
   const { DEV, BOM, ST, GN } = O;
-  const VIEWS = [['chips', '소자별'], ['mx', '소자 × 구조'], ['wall', '없는 칸']];
+  const VIEWS = [['chips', A.t('소자별', 'By device')], ['mx', A.t('소자 × 구조', 'Device × structure')], ['wall', A.t('없는 칸', 'Missing cells')]];
   const DEFAULT = 'eom';
 
   // 구조 순서·쓰임 (한 번만 계산)
@@ -31,12 +31,12 @@
 
   function renderBar() {
     mount('#dv-views', VIEWS.map(([k, l]) => A.pill(l, st.view === k, () => setView(k))));
-    $('#dv-stat').textContent = `소자 ${Object.keys(DEV).length}개 · 실제로 쓰이는 소자 ${used.size}개 · 구조 ${ORDER.length}개`;
+    $('#dv-stat').textContent = A.t(`소자 ${Object.keys(DEV).length}개 · 실제로 쓰이는 소자 ${used.size}개 · 구조 ${ORDER.length}개`, `${Object.keys(DEV).length} devices · ${used.size} actually used · ${ORDER.length} structures`);
   }
 
   function renderChips() {
     mount('#dv-groups', X.GROUPS.map(g => h('div.dv-grp',
-      h('span.dv-gname', g),
+      h('span.dv-gname', A.tr(g)),
       h('div.wrap.dv-gitems', Object.keys(DEV).filter(id => DEV[id].g === g).map(id => {
         const n = uses(id).length, on = st.sel === id;
         const b = h('button.chip.dv-chip', { type: 'button', onclick: () => pick(id), 'aria-pressed': on ? 'true' : 'false' },
@@ -48,7 +48,7 @@
 
   function renderMx() {
     const head = h('tr', h('th.dv-corner'), cols.map(c =>
-      h('th.dv-col' + (c.sep ? '.dv-sep' : ''), { title: c.s, scope: 'col' }, c.id)));
+      h('th.dv-col' + (c.sep ? '.dv-sep' : ''), { title: A.tr(c.s), scope: 'col' }, c.id)));
     const rows = Object.keys(DEV).filter(id => used.has(id)).map(id => {
       const on = st.sel === id, go = () => pick(id);
       return h('tr' + (on ? '.on' : ''),
@@ -56,7 +56,7 @@
         ORDER.map((s, i) => {
           const it = BOM[s].find(x => x.id === id);
           const cls = 'td' + (it ? (it.k ? '.dv-k1' : '.dv-k0') : '') + (cols[i].sep ? '.dv-sep' : '');
-          return h(cls, { onclick: go, title: DEV[id].n + ' — ' + s + (it ? ': ' + it.r : ' : 안 쓰인다') });
+          return h(cls, { onclick: go, title: DEV[id].n + ' — ' + A.tr(s) + (it ? ': ' + it.r : A.t(' : 안 쓰인다', ': not used')) });
         }));
     });
     mount('#dv-table', h('thead', head), h('tbody', rows));
@@ -64,7 +64,7 @@
 
   function renderWall() {
     mount('#dv-walls', Object.keys(X.MISS).map(s => h('div.dv-wcard',
-      h('a.dv-wlink', { href: href(s) }, h('b', s), h('span.dv-id', sid(s) + ' →')),
+      h('a.dv-wlink', { href: href(s) }, h('b', A.tr(s)), h('span.dv-id', sid(s) + ' →')),
       X.MISS[s].map(t => h('p', t.replace(/<[^>]+>/g, '')))
     )));
   }
@@ -74,23 +74,23 @@
     if (!D) return mount(side);
     const u = uses(st.sel);
     const out = [
-      h('div.dv-head', h('span.dv-lb', D.g), h('h2', D.n), h('p.dv-d', D.d)),
-      h('div.dv-blk', h('span.dv-lb', '무엇으로 만드나'),
+      h('div.dv-head', h('span.dv-lb', A.tr(D.g)), h('h2', D.n), h('p.dv-d', D.d)),
+      h('div.dv-blk', h('span.dv-lb', A.t('무엇으로 만드나', 'What it is made of')),
         h('div.wrap', (X.HOW[st.sel] || []).map(t => h('span.dv-how', t)))),
     ];
     if (!u.length) {
-      out.push(h('p.dv-zerobox', h('b', '28개 구조 어디에도 안 들어간다.'), ' 광학에서 중요한 소자여도 연산 회로에는 자리가 없다는 뜻이다.'));
+      out.push(h('p.dv-zerobox', h('b', A.t(`${ORDER.length}개 구조 어디에도 안 들어간다.`, `Used in none of the ${ORDER.length} structures.`)), A.t(' 광학에서 중요한 소자여도 연산 회로에는 자리가 없다는 뜻이다.', ' However important it is in optics, it has no place in a computing circuit.')));
     } else {
-      const miss = Object.keys(GN).filter(g => !u.some(x => ST[x.s][0] === g)).map(g => GN[g]);
+      const miss = Object.keys(GN).filter(g => !u.some(x => ST[x.s][0] === g)).map(g => A.tr(GN[g]));
       out.push(h('div.dv-blk',
-        h('span.dv-lb', `이 소자를 쓰는 구조 ${u.length}개`),
+        h('span.dv-lb', A.t(`이 소자를 쓰는 구조 ${u.length}개`, `${u.length} structures use this device`)),
         h('div.dv-uses', u.map(({ s, it }) => h('a.dv-use', { href: href(s) },
           h('span.dv-ut',
-            h('b', s),
-            h('span.dv-k' + (it.k ? '.req' : ''), it.k ? '필수' : '선택'),
+            h('b', A.tr(s)),
+            h('span.dv-k' + (it.k ? '.req' : ''), it.k ? A.t('필수', 'required') : A.t('선택', 'optional')),
             h('span.dv-id', sid(s) + ' →')),
           h('span.dv-r', it.r)))),
-        miss.length ? h('p.dv-miss', h('b', miss.join(' · ')), ' 에는 안 쓰인다.') : null));
+        miss.length ? h('p.dv-miss', h('b', miss.join(' · ')), A.t(' 에는 안 쓰인다.', ' — not used here.')) : null));
     }
     mount(side, out);
   }

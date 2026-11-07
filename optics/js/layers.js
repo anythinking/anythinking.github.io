@@ -43,10 +43,10 @@
         A.h('span.lx-src', {}, l.vault.replace(/^[\s\S]*?<br>/, '').replace(/<[^>]+>/g, '')));
     }
     const more = A.h('div.lx-more.lx-prose', { html: ink(l.more), hidden: true, id: 'more-' + l.id });
-    const tog = A.h('button.lx-tog', { type: 'button', 'aria-expanded': 'false', 'aria-controls': more.id }, '▸ 펼치기');
+    const tog = A.h('button.lx-tog', { type: 'button', 'aria-expanded': 'false', 'aria-controls': more.id }, A.t('▸ 펼치기', '▸ Expand'));
     tog.onclick = () => {
       more.hidden = !more.hidden;
-      tog.textContent = more.hidden ? '▸ 펼치기' : '▾ 접기';
+      tog.textContent = more.hidden ? A.t('▸ 펼치기', '▸ Expand') : A.t('▾ 접기', '▾ Collapse');
       tog.setAttribute('aria-expanded', String(!more.hidden));
       wires();
     };
@@ -115,13 +115,13 @@
       const sl = D.L.find(l => l.id === LOF[st.sel]);
       A.$('#selLayer').textContent = sl ? `${sl.id} · ${sl.nm}` : '';
       A.$('#selName').textContent = st.sel;
-      A.$('#selGloss').innerHTML = ink(D.GLOSS[st.sel] || '풀이가 아직 없다.');
+      A.$('#selGloss').innerHTML = ink(D.GLOSS[st.sel] || A.t('풀이가 아직 없다.', 'No explanation yet.'));
       const grp = (list, dir, sym, first) => {
         const by = {};
         list.forEach(e => { (by[e.hop] = by[e.hop] || []).push(e); });
         return Object.keys(by).map(Number).sort((a, b) => a - b).map(h => {
           const seen = new Set();
-          return A.h('div.lx-rg.' + dir, {}, A.h('span', {}, h === 1 ? first : `${sym} ${h}단`),
+          return A.h('div.lx-rg.' + dir, {}, A.h('span', {}, h === 1 ? first : A.t(`${sym} ${h}단`, `${sym} ${h} steps`)),
             A.h('div.lx-rlist', {}, by[h].filter(e => { const k = e.from + e.to; if (seen.has(k)) return false; seen.add(k); return true; })
               .map(e => {
                 const b = A.h('button.lx-rel', { type: 'button' },
@@ -133,7 +133,7 @@
               })));
         });
       };
-      A.mount('#relGroups', grp(dn, 'dn', '↓', '↓ 아래에서 — 왜 그게 되나'), grp(up, 'up', '↑', '↑ 위로 — 그래서 무엇이 되나'));
+      A.mount('#relGroups', grp(dn, 'dn', '↓', A.t('↓ 아래에서 — 왜 그게 되나', '↓ From below — why it works')), grp(up, 'up', '↑', A.t('↑ 위로 — 그래서 무엇이 되나', '↑ Upward — what it becomes')));
     }
     wires();
   }

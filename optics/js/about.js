@@ -9,7 +9,7 @@
   if (!navigator.clipboard) return;
   btn.hidden = false;
   btn.onclick = () => navigator.clipboard.writeText(addr).then(() => {
-    btn.textContent = '복사했습니다';
-    setTimeout(() => { btn.textContent = '주소 복사'; }, 1600);
+    btn.textContent = A.t('복사했습니다', 'Copied');
+    setTimeout(() => { btn.textContent = A.t('주소 복사', 'Copy address'); }, 1600);
   });
 })();
