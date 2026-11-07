@@ -19,10 +19,10 @@
   }
   let timer = null, dir = 1;
   const btn = $('f6-play');
-  function stop() { clearInterval(timer); timer = null; btn.textContent = '자동으로 움직이기'; }
+  function stop() { clearInterval(timer); timer = null; btn.textContent = A.t('자동으로 움직이기', 'Animate'); }
   btn.addEventListener('click', () => {
     if (timer) return stop();
-    btn.textContent = '멈추기';
+    btn.textContent = A.t('멈추기', 'Stop');
     timer = setInterval(() => {
       let v = +rng.value + dir * 0.01;
       if (v >= 0.99) { v = 0.99; dir = -1; } else if (v <= 0.01) { v = 0.01; dir = 1; }

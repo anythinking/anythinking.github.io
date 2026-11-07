@@ -6,7 +6,9 @@
 <title>Building an FDTD design window — Optical Computing Map & Lab</title>
 <meta name="description" content="After graduating I lost access to commercial simulators, so I built a window for drawing and designing directly on top of MEEP, MIT&#x27;s open-source FDTD. What it can do, and how to trust the results without an answer key.">
 <link rel="canonical" href="https://anythinking.github.io/optics/en/writing-fdtd-designer.html">
-<meta name="robots" content="noindex">
+<link rel="alternate" hreflang="ko" href="https://anythinking.github.io/optics/writing-fdtd-designer.html">
+<link rel="alternate" hreflang="en" href="https://anythinking.github.io/optics/en/writing-fdtd-designer.html">
+<link rel="alternate" hreflang="x-default" href="https://anythinking.github.io/optics/writing-fdtd-designer.html">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@500;700&family=Noto+Sans+KR:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
@@ -29,90 +31,89 @@
       <div class="lang" role="group" aria-label="Language"><span class="lang-lb">Language</span><a href="../writing-fdtd-designer.html" hreflang="ko" lang="ko">한국어</a><span aria-current="true" lang="en">English</span></div>
     </div>
   </header>
-<p class="i18n-note" lang="en">The menu and headings are in English, but the content of this page is still in Korean. Translation is in progress.</p>
 <div class="ph"><h1>Building an FDTD design window</h1></div>
 <main class="one">
 <article class="doc">
-  <a class="back" href="writing.html">← 글 목록</a>
-  <p class="lede">대학을 졸업하면서 학교 라이선스로 쓰던 광학 시뮬레이터를 더는 쓸 수 없게 되었습니다. 논문을 읽다가 「이 구조에 빛을 넣으면 실제로 저렇게 될까」를 확인해 보고 싶을 때마다 손이 비었습니다. 이 글은 그 빈자리를 채우려고 FDTD 시뮬레이터의 설계 창을 직접 만든 과정입니다. 다음 글에서는 같은 방식으로 만든 광회로 시뮬레이터를 다룹니다.</p>
-  <p class="meta">2026-11-07 · 도구 › 시뮬레이션 ① · 다음 글 › 광회로 시뮬레이터 만들기 (준비 중)</p>
+  <a class="back" href="writing.html">← All essays</a>
+  <p class="lede">When I graduated, I lost access to the optical simulator I had used under a university license. Every time I read a paper and wanted to check “if I put light into this structure, will it really do that?”, my hands were empty. This essay is about building the design window of an FDTD simulator myself to fill that gap. The next essay covers a photonic circuit simulator built the same way.</p>
+  <p class="meta">2026-11-07 · Tools › Simulation ① · Next › Building a photonic circuit simulator (coming soon)</p>
 
   <div class="wr-body">
 
-  <h2>시작 — 직접 짜 보다가 오픈소스를 찾다</h2>
-  <p>FDTD(유한차분 시간영역법)는 공간을 작은 칸으로 나누고, 맥스웰 방정식을 시간 순서대로 한 칸씩 풀어 빛이 퍼지는 모습을 그대로 계산하는 방법입니다. 처음에는 시뮬레이션 같은 계산에 강하다고 들은 Rust로 직접 짜 보았습니다. 전기장과 자기장을 반 칸씩 엇갈려 놓는 Yee 격자, 가장자리에서 빛을 반사 없이 삼키는 흡수층, 도파로 모드를 골라 넣는 소스를 차례로 만들었습니다.</p>
-  <p>만든 다음 가장 먼저 해 본 것은 졸업논문 때 학교의 상용 시뮬레이터로 계산했던 광결정을 그대로 넣어 보는 것이었습니다. 실리콘 판에 한 변 240 nm 정사각 구멍을 500 nm 간격으로 뚫은 구조입니다. 밴드 구조를 다시 풀어 예전 결과와 겹쳐 보니 비슷하게 나왔습니다.</p>
+  <h2>The start — writing one myself, then finding open source</h2>
+  <p>FDTD (finite-difference time-domain) divides space into small cells and solves Maxwell's equations cell by cell in time order, computing how light spreads exactly as it happens. At first I wrote one myself in Rust, which I had heard was strong at simulation-like computation. I built, in turn, the Yee grid that staggers electric and magnetic fields by half a cell, absorbing layers that swallow light at the edges without reflection, and sources that inject a chosen waveguide mode.</p>
+  <p>The first thing I tried after building it was the photonic crystal I had computed with the university's commercial simulator for my graduation thesis: a silicon slab with square holes 240 nm on a side at a 500 nm pitch. Solving the band structure again and overlaying the old results, they came out similar.</p>
   <figure class="wr-fig">
-    <img src="../img/fdtd/0-thesis-bands.png" alt="정사각 공기 구멍 광결정의 밴드 구조. 빨간 ×가 졸업논문 때 상용 시뮬레이터 결과, 원과 점이 직접 짠 엔진의 결과로, 아래쪽 밴드들이 거의 겹친다." loading="lazy">
-    <figcaption>그림 1. 졸업논문의 광결정(정사각 격자, 실리콘 속 정사각 공기 구멍, Ez 편광). 빨간 ×가 예전 상용 시뮬레이터 결과, 원과 점이 직접 짠 엔진의 결과입니다(격자를 두 가지로 바꿔 계산). 아래쪽 밴드는 거의 겹치고, 위로 갈수록 조금씩 어긋납니다.</figcaption>
+    <img src="../img/fdtd/0-thesis-bands.png" alt="Band structure of a photonic crystal with square air holes. Red crosses are the commercial simulator results from the graduation thesis; circles and dots are results from the engine I wrote, and the lower bands almost overlap." loading="lazy">
+    <figcaption>Figure 1. The photonic crystal from my graduation thesis (square lattice, square air holes in silicon, Ez polarization). Red crosses are the earlier commercial simulator results; circles and dots are results from the engine I wrote (computed on two different grids). The lower bands almost overlap, and they drift apart slightly toward the top.</figcaption>
   </figure>
-  <p>그런데 그다음부터는 만들어야 할 것이 끝없이 늘어났습니다. 금속처럼 파장마다 굴절률이 바뀌는 재료, 도형 경계를 칸 단위로 끊지 않고 평균 내는 처리, 결과에서 투과율이나 공진의 Q값을 뽑는 분석까지 필요했습니다. 그래서 찾아보니, 이런 기능을 갖춘 도구가 이미 오픈소스로 많이 있었습니다.</p>
+  <p>But from there, the list of things to build grew endlessly: materials like metals whose refractive index changes with wavelength, averaging at shape boundaries instead of cutting them at cell edges, analysis to extract transmission or the Q of a resonance from the results. So I looked around, and found that tools with these features already existed as open source, in abundance.</p>
   <ul>
-    <li><b>MEEP</b> (MIT): 오픈소스 FDTD. 재료 라이브러리, 모드 분해, 공진 분석, 원거리장, 역설계까지 대부분이 이미 들어 있습니다. 2D 계산은 노트북에서도 몇 초~몇십 초면 끝납니다.</li>
-    <li><b>MPB</b> (MIT): 시간 계산 없이 고유모드를 바로 푸는 계산기. 도파로의 유효굴절률이나 광결정의 밴드 구조를 구할 때 씁니다.</li>
-    <li><b>gdsfactory · KLayout</b>: 광칩 도면을 코드와 화면으로 그리는 도구. 계산기와 이어 쓰는 흐름이 잘 정리되어 있습니다.</li>
+    <li><b>MEEP</b> (MIT): open-source FDTD. Material libraries, mode decomposition, resonance analysis, far fields and even inverse design are mostly already in it. 2D runs finish in seconds to tens of seconds even on a laptop.</li>
+    <li><b>MPB</b> (MIT): a solver that finds eigenmodes directly, without time stepping. Used for a waveguide's effective index or a photonic crystal's band structure.</li>
+    <li><b>gdsfactory · KLayout</b>: tools for drawing photonic chip layouts in code and on screen. The workflow of connecting them to solvers is well organized.</li>
   </ul>
-  <p>다만 MEEP은 파이썬 스크립트로 구조를 적는 방식이라, 도형을 그려 보면서 바로 고치는 「설계 창」이 없었습니다. 그래서 역할을 나눴습니다. <b>계산은 MEEP에 맡기고, 그리면서 설계하는 창을 만듭니다.</b> 처음 짰던 Rust 엔진은 버리지 않고, 결과를 빨리 훑어보는 미리보기 엔진으로 남겼습니다.</p>
+  <p>MEEP, however, describes structures in Python scripts, so there was no “design window” for drawing shapes and fixing them on the spot. So I split the roles: <b>leave the computation to MEEP, and build a window for designing while drawing.</b> I did not throw away the Rust engine I first wrote; I kept it as a preview engine for skimming results quickly.</p>
 
-  <h2>설계 창의 구성</h2>
-  <p>화면 왼쪽 세로 막대에 기능을 일곱 구획으로 나눴습니다. 구획마다 색이 있고, 캔버스 위 객체도 같은 색으로 그려져서 「이 선이 무엇인지」가 색으로 이어집니다.</p>
+  <h2>How the design window is organized</h2>
+  <p>The vertical bar on the left of the screen splits the features into seven sections. Each section has a color, and objects on the canvas are drawn in the same color, so color tells you “what this line is”.</p>
   <figure class="wr-fig">
-    <img src="../img/fdtd/1-designer.jpg" alt="설계 창 화면. 왼쪽에 영역·구조·재료·소스·측정·모드·역설계 구획 막대, 가운데 캔버스에 직선 도파로와 링 공진기, 자주색 소스 선과 주황색 측정기가 그려져 있다." loading="lazy">
-    <figcaption>그림 2. 링 공진기 예제. 회색이 실리콘 도파로, 자주색 세로선이 빛을 넣는 소스, 주황색이 측정기입니다. 왼쪽 「속성」 칸에서 고른 도형의 치수와 재료를 바꿉니다.</figcaption>
+    <img src="../img/fdtd/1-designer.jpg" alt="The design window. On the left, a bar of sections — domain, structure, material, source, measure, mode, inverse design; in the center canvas, a straight waveguide and a ring resonator with a purple source line and an orange monitor." loading="lazy">
+    <figcaption>Figure 2. A ring resonator example. Gray is the silicon waveguide, the purple vertical line is the source that injects light, and orange is a monitor. The “Properties” panel on the left changes the dimensions and material of the selected shape.</figcaption>
   </figure>
   <table class="wr-tbl">
-    <tr><th>구획</th><th>하는 일</th></tr>
-    <tr><td>영역</td><td>계산 영역 크기, 격자, 파장, 흡수층 두께, 거울 대칭(계산 절반), 주기 경계</td></tr>
-    <tr><td>구조</td><td>사각형·원·링·삼각형 그리기, 배열 반복, 변수와 식(<code>a = 600</code>, <code>r = 0.2*a</code>처럼)</td></tr>
-    <tr><td>재료</td><td>기본 재료와 MEEP 재료 라이브러리(Ag, Al, cSi, LiNbO₃, GaAs 등 22개)</td></tr>
-    <tr><td>소스</td><td>도파로 모드(방향·차수), 평면파, 점, 가우시안 빔, 평면파 상자(산란 계산)</td></tr>
-    <tr><td>측정</td><td>포트(모드별 투과·반사), 흐름 선, 공진 점(Q), 원거리장, 중심 파장의 |E|² 지도</td></tr>
-    <tr><td>모드</td><td>단면 모드(유효굴절률·군굴절률), 광결정 밴드 구조</td></tr>
-    <tr><td>역설계</td><td>목표 포트로 가는 빛이 커지도록 영역 안의 모양을 자동으로 깎기</td></tr>
+    <tr><th>Section</th><th>What it does</th></tr>
+    <tr><td>Domain</td><td>Simulation size, grid, wavelength, absorbing-layer thickness, mirror symmetry (half the computation), periodic boundaries</td></tr>
+    <tr><td>Structure</td><td>Drawing rectangles, circles, rings and triangles, repeated arrays, variables and expressions (such as <code>a = 600</code>, <code>r = 0.2*a</code>)</td></tr>
+    <tr><td>Material</td><td>Basic materials and the MEEP material library (22, including Ag, Al, cSi, LiNbO₃, GaAs)</td></tr>
+    <tr><td>Source</td><td>Waveguide modes (direction · order), plane waves, points, Gaussian beams, plane-wave boxes (scattering)</td></tr>
+    <tr><td>Measure</td><td>Ports (per-mode transmission · reflection), flux lines, resonance points (Q), far fields, |E|² maps at the center wavelength</td></tr>
+    <tr><td>Mode</td><td>Cross-section modes (effective index · group index), photonic crystal band structures</td></tr>
+    <tr><td>Inverse design</td><td>Automatically carving the shape inside a region so that more light goes to the target port</td></tr>
   </table>
 
-  <h2>무엇을 볼 수 있나</h2>
-  <p>브래그 격자는 도파로 옆에 작은 돌기를 일정한 간격으로 붙인 구조입니다. 간격이 맞는 파장의 빛은 돌기마다 조금씩 반사되고, 그 반사가 같은 위상으로 쌓여 되돌아갑니다. 입력과 출력 쪽에 포트를 두고 펄스를 한 번 쏘면 파장마다의 투과율과 반사율이 함께 나옵니다.</p>
+  <h2>What you can see</h2>
+  <p>A Bragg grating is a waveguide with small teeth attached at regular intervals along its side. Light at the wavelength matching the spacing reflects a little at each tooth, and those reflections pile up in phase and go back. Put ports on the input and output sides and fire a single pulse, and you get transmission and reflection for every wavelength at once.</p>
   <figure class="wr-fig">
-    <img src="../img/fdtd/2-bragg-ports.jpg" alt="브래그 격자 계산 화면. 캔버스에 펄스가 격자에 부딪혀 반사되는 모습, 오른쪽 결과 칸에 파장별 투과(실선)와 반사(점선) 그래프와 표." loading="lazy">
-    <figcaption>그림 3. 브래그 격자. 오른쪽 그래프에서 투과가 꺼지고 반사가 솟는 구간이 저지 대역입니다. 표에는 중심 파장에서의 값과 유효굴절률이 나옵니다.</figcaption>
+    <img src="../img/fdtd/2-bragg-ports.jpg" alt="Bragg grating simulation. The canvas shows a pulse hitting the grating and reflecting; the results panel on the right shows transmission (solid) and reflection (dashed) versus wavelength, and a table." loading="lazy">
+    <figcaption>Figure 3. A Bragg grating. In the graph on the right, the range where transmission drops out and reflection rises is the stopband. The table shows values at the center wavelength and the effective index.</figcaption>
   </figure>
-  <p>광결정은 굴절률이 다른 물질을 주기적으로 늘어놓은 구조입니다. 주기가 파장과 비슷하면 어느 방향으로도 빛이 들어가지 못하는 파장 대역(밴드갭)이 생깁니다. 배열로 그린 rod 하나를 고르면 격자 상수와 반지름을 읽어 와서 MPB로 밴드를 풉니다.</p>
+  <p>A photonic crystal arranges materials of different refractive index periodically. When the period is close to the wavelength, a band of wavelengths (a bandgap) appears where light cannot enter in any direction. Select one rod drawn as an array, and it reads the lattice constant and radius and solves the bands with MPB.</p>
   <figure class="wr-fig">
-    <img src="../img/fdtd/3-phc-bands.jpg" alt="광결정 밴드 구조 화면. 오른쪽에 Γ-X-M-Γ 경로의 밴드 그림, 분홍 띠로 표시한 밴드갭, 중심 파장 1550 nm 점선이 갭 안에 있다." loading="lazy">
-    <figcaption>그림 4. 정사각 격자 실리콘 rod(a = 600 nm, r = 120 nm). 분홍 띠가 밴드갭(파장 1441~2143 nm)이고, 청록 점선(1550 nm)이 그 안에 있어서 이 파장의 빛은 결정 안으로 들어가지 못합니다.</figcaption>
+    <img src="../img/fdtd/3-phc-bands.jpg" alt="Photonic crystal band structure. On the right, the bands along the Γ-X-M-Γ path, the bandgap marked with a pink band, and the dashed 1550 nm center wavelength inside the gap." loading="lazy">
+    <figcaption>Figure 4. Silicon rods on a square lattice (a = 600 nm, r = 120 nm). The pink band is the bandgap (wavelengths 1441–2143 nm), and the teal dashed line (1550 nm) lies inside it, so light at this wavelength cannot enter the crystal.</figcaption>
   </figure>
-  <p>금 나노선처럼 작은 입자에 평면파를 비추면, 입자가 빛을 얼마나 흩뜨리고 얼마나 삼키는지(산란·흡수 단면적), 그리고 흩어진 빛이 어느 방향으로 가는지(원거리장)를 함께 봅니다.</p>
+  <p>Shine a plane wave on a small particle such as a gold nanowire, and you see how much light it scatters and how much it absorbs (scattering and absorption cross sections), and in which directions the scattered light goes (far field).</p>
   <figure class="wr-fig">
     <div class="pair">
-      <img src="../img/fdtd/4b-gold-cs.jpg" alt="금 나노선의 산란·흡수 단면적 그래프 화면." loading="lazy">
-      <img src="../img/fdtd/4-gold-far.jpg" alt="금 나노선의 원거리장 극좌표 그래프 화면." loading="lazy">
+      <img src="../img/fdtd/4b-gold-cs.jpg" alt="Scattering and absorption cross sections of a gold nanowire." loading="lazy">
+      <img src="../img/fdtd/4-gold-far.jpg" alt="Far-field polar plot of a gold nanowire." loading="lazy">
     </div>
-    <figcaption>그림 5. 지름 200 nm 금 나노선. 왼쪽은 파장별 산란·흡수 단면적, 오른쪽은 700 nm에서 흩어진 빛의 방향 분포입니다(0° = 빛이 진행하는 방향).</figcaption>
+    <figcaption>Figure 5. A gold nanowire 200 nm in diameter. Left: scattering and absorption cross sections versus wavelength. Right: the directional distribution of scattered light at 700 nm (0° = the direction the light travels).</figcaption>
   </figure>
 
-  <h2>역설계 — 모양을 컴퓨터가 깎는다</h2>
-  <p>보통은 사람이 모양을 정하고 성능을 계산하지만, 역설계는 반대로 「이 포트로 빛이 가장 많이 가게」라는 목표만 주고 모양을 찾게 합니다. 설계 영역을 수천 개의 픽셀로 나누고, 픽셀마다 실리콘과 산화막 사이의 값을 고릅니다. 픽셀 수천 개를 하나씩 바꿔 보는 대신, adjoint 방법을 쓰면 계산 두 번(앞으로 한 번, 거꾸로 한 번)으로 모든 픽셀에 대한 기울기가 한꺼번에 나옵니다.</p>
+  <h2>Inverse design — the computer carves the shape</h2>
+  <p>Usually a person decides the shape and computes the performance; inverse design does the reverse, giving only the goal “send as much light as possible to this port” and letting it find the shape. The design region is divided into thousands of pixels, each choosing a value between silicon and oxide. Instead of trying each of the thousands of pixels one at a time, the adjoint method gives the gradient for every pixel at once from two simulations (one forward, one backward).</p>
   <figure class="wr-fig">
-    <img src="../img/fdtd/5-inverse.jpg" alt="역설계 화면. 좁은 도파로와 넓은 도파로 사이 설계 영역에 불규칙한 모양이 깎여 있고, 오른쪽에 반복마다 목표 파워가 올라가는 그래프." loading="lazy">
-    <figcaption>그림 6. 좁은 도파로의 기본 모드(TE0)를 넓은 도파로의 2차 모드(TE1)로 바꾸는 변환기. 24번 반복하는 동안 목표 모드로 간 빛이 0%에서 93.6%까지 올라갔습니다.</figcaption>
+    <img src="../img/fdtd/5-inverse.jpg" alt="Inverse design. An irregular shape is carved in the design region between a narrow and a wide waveguide; on the right, a graph of the target power rising with each iteration." loading="lazy">
+    <figcaption>Figure 6. A converter that turns the fundamental mode (TE0) of a narrow waveguide into the second mode (TE1) of a wide waveguide. Over 24 iterations, the light going into the target mode rose from 0% to 93.6%.</figcaption>
   </figure>
-  <p>다만 이 숫자를 그대로 믿으면 안 됩니다. 최적화 중에는 픽셀이 실리콘과 산화막의 중간값을 가질 수 있는데, 실제로 만들 수 있는 것은 둘 중 하나뿐입니다. 픽셀을 0과 1로 굳히면 89.8%가 되고, 이걸 다시 사각형 도형으로 옮겨 처음부터 계산하면 80.0%가 나왔습니다. 마지막 10%p는 매끄럽게 보간된 경계가 25 nm 계단으로 바뀌면서 생긴 차이로 보입니다. 이 손실을 줄이는 것이 남은 숙제입니다.</p>
+  <p>But this number must not be taken at face value. During optimization, pixels can take values between silicon and oxide, while what can actually be made is one or the other. Freezing the pixels to 0 and 1 gave 89.8%, and moving that into rectangle shapes and computing from scratch gave 80.0%. The last 10 percentage points appear to come from smoothly interpolated boundaries turning into 25 nm steps. Reducing this loss is the remaining homework.</p>
 
-  <h2>계산을 어떻게 믿을까</h2>
-  <p>여기서 가장 어려운 질문이 남습니다. 학교에서는 상용 시뮬레이터와 결과를 맞대 볼 수 있었지만, 이제는 그 정답지가 없습니다. 화면에 그럴듯한 그림이 나와도, 그게 맞는 그림인지는 따로 확인해야 합니다.</p>
-  <p>지금까지 가장 믿을 만한 기준은 결과를 이미 아는 구조였습니다. 위의 졸업논문 광결정이 첫 번째 기준이었고, 예전 결과와 비슷하게 나온 덕분에 적어도 밴드 구조를 푸는 부분은 크게 틀리지 않았다고 볼 수 있었습니다. 위쪽 밴드에서 어긋나는 부분은 아직 원인을 끝까지 따라가 보지 못했습니다.</p>
-  <p>그래서 앞으로는 같은 방식을 넓혀 가려고 합니다. 논문에 나온 구조를 치수 그대로 그려서, 논문의 그래프와 같은 결과가 나오는지 비교하는 것입니다. 맞으면 그 기능은 믿을 수 있는 목록에 올리고, 어긋나면 어디서 갈라지는지 따라가 고칩니다. 지도에서 읽은 논문들이 그대로 시험 문제가 되는 셈이라, 이 과정을 다음 글들에 하나씩 남길 생각입니다.</p>
+  <h2>How to trust the computation</h2>
+  <p>This leaves the hardest question. At university I could check results against a commercial simulator, but now there is no answer key. Even if a plausible picture appears on screen, whether it is the right picture has to be checked separately.</p>
+  <p>So far the most reliable yardstick has been structures whose results are already known. The graduation-thesis photonic crystal above was the first, and because it came out similar to the earlier results, I could at least say the band-structure solving part is not badly wrong. I have not yet traced the cause of the mismatch in the upper bands all the way.</p>
+  <p>So from here I plan to widen the same approach: draw structures from papers with their exact dimensions and compare whether the results match the papers' graphs. If they match, that feature goes on the trusted list; if not, I follow where they part ways and fix it. The papers read for the map become the exam questions, and I intend to record this process one by one in the coming essays.</p>
 
-  <h2>다음 글</h2>
-  <p>FDTD는 소자 하나를 정밀하게 보는 도구라 수 마이크로미터가 한계입니다. 칩 위의 회로 전체는 수 밀리미터라 같은 방식으로는 계산할 수 없어서, 소자마다 「들어온 빛이 어디로 얼마나 나가는지」(S행렬)만 남기고 그것들을 이어 회로를 푸는 다른 종류의 시뮬레이터가 필요합니다. 다음 글은 그 광회로 시뮬레이터와, 이 설계 창에서 만든 소자를 회로의 부품으로 넘기는 방법입니다.</p>
+  <h2>Next</h2>
+  <p>FDTD is a tool for looking at a single device precisely, so a few micrometers is its limit. A whole on-chip circuit is millimeters across and cannot be computed the same way, so a different kind of simulator is needed: one that keeps only “where and how much the incoming light goes” (the S-matrix) for each device and connects them to solve the circuit. The next essay is about that photonic circuit simulator, and how devices made in this design window are handed over as circuit parts.</p>
 
   <div class="wr-src">
-    <p>도구</p>
+    <p>Tools</p>
     <ul>
       <li>MEEP — A. F. Oskooi et al., “MEEP: A flexible free-software package for electromagnetic simulations by the FDTD method,” <i>Computer Physics Communications</i> 181, 687 (2010). <a href="https://meep.readthedocs.io/">meep.readthedocs.io</a></li>
       <li>MPB — S. G. Johnson and J. D. Joannopoulos, “Block-iterative frequency-domain methods for Maxwell's equations in a planewave basis,” <i>Optics Express</i> 8, 173 (2001).</li>
-      <li>금 재료 모형 — A. D. Rakić et al., <i>Applied Optics</i> 37, 5271 (1998) (MEEP 재료 라이브러리).</li>
+      <li>Gold material model — A. D. Rakić et al., <i>Applied Optics</i> 37, 5271 (1998) (MEEP material library).</li>
       <li>gdsfactory · KLayout — <a href="https://gdsfactory.github.io/gdsfactory/">gdsfactory.github.io</a> · <a href="https://www.klayout.de/">klayout.de</a></li>
     </ul>
   </div>
