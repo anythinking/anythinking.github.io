@@ -194,6 +194,47 @@
   const dictEl = document.getElementById('i18n-dict');
   const DICT = dictEl ? JSON.parse(dictEl.textContent) : {};
   const tr = s => (s != null && Object.prototype.hasOwnProperty.call(DICT, s) ? DICT[s] : s);
+  // 화면 문구 사전(i18n-tx): 한국어 조각 → 번역. 한글 낱말 중간은 건드리지 않는다(앞뒤가 한글이 아닐 때만)
+  const txEl = document.getElementById('i18n-tx');
+  const TXD = txEl ? JSON.parse(txEl.textContent) : null;
+  let TXR = null;
+  if (TXD) {
+    const keys = Object.keys(TXD).sort((a, b) => b.length - a.length).map(k => k.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'));
+    TXR = new RegExp('(?<![가-힣])(?:' + keys.join('|') + ')(?![가-힣])', 'g');
+  }
+  const HANGUL = /[가-힣]/;
+  const tx = s => (TXR && typeof s === 'string' && HANGUL.test(s) ? s.replace(TXR, m => TXD[m]) : s);
+  if (TXR) {
+    // 캔버스에 직접 그리는 글자
+    const C2 = CanvasRenderingContext2D.prototype;
+    ['fillText', 'strokeText', 'measureText'].forEach(fn => {
+      const orig = C2[fn];
+      C2[fn] = function (text, ...rest) { return orig.call(this, tx(text), ...rest); };
+    });
+    // 그려진 DOM 글자·속성 — 처음 한 번과 바뀔 때마다
+    const ATTRS = ['title', 'aria-label', 'placeholder'];
+    // 바뀔 때만 쓴다 — 같은 값을 다시 쓰면 감시가 또 깨어나 끝없이 돈다
+    const setText = n => { const v = n.nodeValue; if (HANGUL.test(v)) { const nv = tx(v); if (nv !== v) n.nodeValue = nv; } };
+    const fix = root => {
+      if (root.nodeType === 3) { setText(root); return; }
+      if (root.nodeType !== 1 || root.closest('.lang, script, style')) return;
+      const w = document.createTreeWalker(root, NodeFilter.SHOW_TEXT);
+      for (let n = w.nextNode(); n; n = w.nextNode()) if (!n.parentElement.closest('.lang, script, style')) setText(n);
+      [root, ...root.querySelectorAll('[title], [aria-label], [placeholder]')].forEach(el => ATTRS.forEach(a => {
+        const v = el.getAttribute && el.getAttribute(a); if (v && HANGUL.test(v)) { const nv = tx(v); if (nv !== v) el.setAttribute(a, nv); }
+      }));
+    };
+    const start = () => {
+      const main = document.querySelector('.app') || document.body;
+      fix(main);
+      new MutationObserver(ms => ms.forEach(m => {
+        if (m.type === 'characterData') fix(m.target);
+        else if (m.type === 'attributes') fix(m.target);
+        else m.addedNodes.forEach(fix);
+      })).observe(main, { subtree: true, childList: true, characterData: true, attributes: true, attributeFilter: ATTRS });
+    };
+    if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', start); else start();
+  }
   const t = (ko, en) => (lang === 'en' && en != null ? en : ko);
   // 언어 전환 링크는 지금 보고 있는 선택·필터(해시)를 그대로 가지고 간다
   document.addEventListener('click', e => {
@@ -215,12 +256,12 @@
       h('span.paper-m', `${p.a} · ${p.y} · ${p.v}`),
       h('span.paper-d', p.did),
       h('span.paper-l',
-        (p.tags || []).filter(t => !/^[a-f]\d+$/.test(t)).map(t => h('span.tag', t)),
+        (p.tags || []).filter(t => !/^[a-f]\d+$/.test(t)).map(t => h('span.tag', tr(t))),
         p.arxiv ? h('a', { href: 'https://arxiv.org/abs/' + p.arxiv, target: '_blank', rel: 'noopener' }, 'arXiv') : null,
         p.doi ? h('a', { href: 'https://doi.org/' + p.doi, target: '_blank', rel: 'noopener' }, 'DOI') : null,
         p.pdf ? h('a', { href: root + p.pdf, target: '_blank' }, 'PDF') : null,
         p.preset && open ? h('a', { href: open(p.preset) }, t('실험실에서 열기 →', 'Open in the lab →')) : null))));
   }
 
-  window.A = { lang, root, site, t, tr, data, hasPrivate, merge, route, $, $$, h, esc, pill, mount, fail, narrow, stars, papers };
+  window.A = { lang, root, site, t, tr, tx, data, hasPrivate, merge, route, $, $$, h, esc, pill, mount, fail, narrow, stars, papers };
 })();
