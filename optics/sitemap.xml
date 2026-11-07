@@ -8,8 +8,10 @@
   <url><loc>https://anythinking.github.io/optics/en/devices.html</loc><xhtml:link rel="alternate" hreflang="ko" href="https://anythinking.github.io/optics/devices.html"/><xhtml:link rel="alternate" hreflang="en" href="https://anythinking.github.io/optics/en/devices.html"/></url>
   <url><loc>https://anythinking.github.io/optics/glossary.html</loc></url>
   <url><loc>https://anythinking.github.io/optics/institutions.html</loc></url>
-  <url><loc>https://anythinking.github.io/optics/layers.html</loc></url>
-  <url><loc>https://anythinking.github.io/optics/optics.html</loc></url>
+  <url><loc>https://anythinking.github.io/optics/layers.html</loc><xhtml:link rel="alternate" hreflang="ko" href="https://anythinking.github.io/optics/layers.html"/><xhtml:link rel="alternate" hreflang="en" href="https://anythinking.github.io/optics/en/layers.html"/></url>
+  <url><loc>https://anythinking.github.io/optics/en/layers.html</loc><xhtml:link rel="alternate" hreflang="ko" href="https://anythinking.github.io/optics/layers.html"/><xhtml:link rel="alternate" hreflang="en" href="https://anythinking.github.io/optics/en/layers.html"/></url>
+  <url><loc>https://anythinking.github.io/optics/optics.html</loc><xhtml:link rel="alternate" hreflang="ko" href="https://anythinking.github.io/optics/optics.html"/><xhtml:link rel="alternate" hreflang="en" href="https://anythinking.github.io/optics/en/optics.html"/></url>
+  <url><loc>https://anythinking.github.io/optics/en/optics.html</loc><xhtml:link rel="alternate" hreflang="ko" href="https://anythinking.github.io/optics/optics.html"/><xhtml:link rel="alternate" hreflang="en" href="https://anythinking.github.io/optics/en/optics.html"/></url>
   <url><loc>https://anythinking.github.io/optics/writing-fdtd-designer.html</loc></url>
   <url><loc>https://anythinking.github.io/optics/writing-ising.html</loc></url>
   <url><loc>https://anythinking.github.io/optics/writing-matrix-crossbar.html</loc></url>
