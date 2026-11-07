@@ -30,7 +30,7 @@
     s = s || st;
     const n = s.q.trim().toLowerCase();
     return X.filter(o => (s.only === 'all' || o.l === s.only) && (s.kind === 'all' || kind(o) === s.kind) &&
-      (!n || o.t.toLowerCase().includes(n) || plain(o.d).includes(n)));
+      (!n || o.t.toLowerCase().includes(n) || A.tx(o.t).toLowerCase().includes(n) || plain(o.d).includes(n)));
   }
 
   function renderFilters() {
@@ -75,7 +75,7 @@
 
   function renderPanel() {
     const o = st.sel && byT.get(st.sel);
-    document.title = (o ? o.t + ' · ' : '') + A.t('용어', 'Glossary') + ' — ' + A.site;
+    document.title = (o ? A.tx(o.t) + ' · ' : '') + A.t('용어', 'Glossary') + ' — ' + A.site;
     if (!o) {
       mount('#gl-panel', h('div.gl-intro',
         h('span.gl-where', A.t(`용어 정리 · ${X.length}개`, `Glossary · ${X.length} terms`)),
