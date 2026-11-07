@@ -95,7 +95,7 @@
       o.x ? h('div.gl-box', h('span.lb', o.gs.length ? o.gs.join('·') + A.t('군에서는', ' family') : A.t('덧붙임', 'Note')), h('p.gl-x', { html: o.x })) : null,
       h('div.gl-links',
         hasRel ? h('a.gl-go', { href: 'layers.html#' + encodeURIComponent(o.t) }, h('span', A.t('층 관계도에서 사슬 보기', 'See the chain on the layer map')), h('span', A.t(`아래 ${o.dn} · 위 ${o.up} →`, `below ${o.dn} · above ${o.up} →`))) : null,
-        o.sid ? h('a.gl-go', { href: 'compute.html#' + o.sid }, h('span', A.t(o.s + ' 열기', 'Open ' + o.s)), h('span', o.sid.toUpperCase() + ' →')) : null)));
+        o.sid ? h('a.gl-go', { href: 'compute.html#' + o.sid }, h('span', A.t(o.s + ' 열기', 'Open ' + A.tr(o.s))), h('span', o.sid.toUpperCase() + ' →')) : null)));
   }
 
   function pick(t) {

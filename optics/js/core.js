@@ -197,14 +197,23 @@
   // 화면 문구 사전(i18n-tx): 한국어 조각 → 번역. 한글 낱말 중간은 건드리지 않는다(앞뒤가 한글이 아닐 때만)
   const txEl = document.getElementById('i18n-tx');
   const TXD = txEl ? JSON.parse(txEl.textContent) : null;
-  let TXR = null;
+  // 긴 조각부터 차례로 바꾼다 — 한 번에 하나의 정규식으로 하면 왼쪽에 있는 짧은 용어(「Mattis 결합」)가
+  // 먼저 잡혀 그 뒤에서 시작하는 긴 문장 번역을 깨뜨린다. 번역된 영어엔 한글이 없어 짧은 조각이 다시 걸리지 않는다
+  let TXK = null;
   if (TXD) {
-    const keys = Object.keys(TXD).sort((a, b) => b.length - a.length).map(k => k.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'));
-    TXR = new RegExp('(?<![가-힣])(?:' + keys.join('|') + ')(?![가-힣])', 'g');
+    const esc = k => k.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    TXK = Object.keys(TXD).sort((a, b) => b.length - a.length).map(k => [k, null]);
+    TXK.re = i => TXK[i][1] || (TXK[i][1] = new RegExp('(?<![가-힣])' + esc(TXK[i][0]) + '(?![가-힣])', 'g'));
   }
   const HANGUL = /[가-힣]/;
-  const tx = s => (TXR && typeof s === 'string' && HANGUL.test(s) ? s.replace(TXR, m => TXD[m]) : s);
-  if (TXR) {
+  const tx = s => {
+    if (!TXK || typeof s !== 'string' || !HANGUL.test(s)) return s;
+    for (let i = 0; i < TXK.length && HANGUL.test(s); i++) {
+      if (s.includes(TXK[i][0])) { const v = TXD[TXK[i][0]]; s = s.replace(TXK.re(i), () => v); }
+    }
+    return s;
+  };
+  if (TXK) {
     // 캔버스에 직접 그리는 글자
     const C2 = CanvasRenderingContext2D.prototype;
     ['fillText', 'strokeText', 'measureText'].forEach(fn => {
