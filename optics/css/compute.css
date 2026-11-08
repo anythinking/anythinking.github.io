@@ -179,6 +179,10 @@ aside.cmp-side{padding:22px 28px 28px;gap:20px}
 .cmp-devh{margin:0;font-size:11.5px;line-height:1.5;color:var(--muted);padding:6px 12px 0;border-top:1px dashed var(--rule)}
 .cmp-devw{margin:0;font-size:12px;line-height:1.55;color:var(--wall);padding:0 12px}
 .cmp-devgo{font-family:var(--mono);font-size:10.5px;color:var(--probe);text-decoration:none;padding:6px 12px 10px;display:block}
+/* 어디서 — 지도에 있는 기관은 링크로 */
+.cmp-insts{display:flex;flex-wrap:wrap;gap:4px;margin-top:5px}
+.cmp-inst{font-size:11.5px;padding:1px 8px;border-radius:999px;border:1px solid var(--rule);color:var(--ui);text-decoration:none;white-space:nowrap}
+.cmp-inst:hover{border-color:var(--ui)}
 .cmp-devgo:hover{text-decoration:underline}
 
 .cmp-foot{margin-top:auto;display:flex;flex-direction:column;gap:9px;padding-top:16px;border-top:1px solid var(--rule);font-size:13px;line-height:1.55}

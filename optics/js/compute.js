@@ -226,6 +226,7 @@
   const CV = { y: A.t('있음', 'yes'), p: A.t('조각', 'partial'), n: A.t('없음', 'none') };
   const VC = { '휘발': 'var(--warm)', '비휘발': 'var(--probe)', '해당없음': 'var(--link)' };
   const PIC = A.data('pictograms') || {};
+  const INST = A.data('inst-names') || {};   // 기관 id → 이름 (구조 표의 inst 가 가리킨다)
   const code = s => `${s.group.toUpperCase()}-${s.id.slice(1).padStart(2, '0')}`;
   const pict = s => h('span.cmp-pic', { html: PIC[s.id] ? `<svg viewBox="0 0 80 50" aria-hidden="true">${PIC[s.id]}</svg>` : '' });
   function renderOverview() {
@@ -512,7 +513,8 @@
     const toPapers = papers ? h('button.cmp-topapers', { type: 'button', onclick: () => papers.scrollIntoView({ behavior: 'smooth', block: 'start' }) },
       A.t(`관련 논문 ${papers.querySelectorAll('.paper').length}편 ↓`, `Related papers (${papers.querySelectorAll('.paper').length}) ↓`)) : null;
     const foot = h('div.cmp-foot',
-      h('div', h('span.lb', A.t('어디서', 'Where')), h('span', (SROW[E.id] || {}).where || '')),
+      h('div', h('span.lb', A.t('어디서', 'Where')), h('span', (SROW[E.id] || {}).where || '',
+        ((SROW[E.id] || {}).inst || []).length ? h('span.cmp-insts', ((SROW[E.id] || {}).inst || []).map(i => h('a.cmp-inst', { href: 'institutions.html#' + i }, INST[i] || i))) : null)),
       h('div', h('span.lb', A.t('벽', 'Wall')), h('span.cmp-wall', (SROW[E.id] || {}).wall || '')),
       papers,
       h('div.cmp-note'));

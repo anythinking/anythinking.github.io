@@ -1,8 +1,11 @@
 /* 기관 지도: Leaflet 지도 · 지역 탭 · 축 필터 · 기관 목록/상세. 고른 기관은 #<기관 id> 로 남는다 */
 (function () {
   'use strict';
-  const I = A.data('inst');
+  const I = A.data('inst'), OV = A.data('overview');
   if (!I) return;
+  // 구조 표의 inst 참조를 뒤집어 기관 → 구조 (구조 이름은 구조 표에서)
+  const MADE = {};
+  ((OV && OV.S) || []).forEach(s => (s.inst || []).forEach(i => { (MADE[i] = MADE[i] || []).push(s); }));
   const D = I.D, LBL = I.LBL, U = I.UI || {};
   // 연구자 → 분야 이름, 분야 이름 → 한 줄 풀이(옛 용어집 「기타」)
   const FIELD = I.FIELD || {}, FIELDS = I.FIELDS || {};
@@ -41,8 +44,10 @@
 
   /* 지도 */
   const mapEl = $('#in-map');
-  mount('#in-mapnote', String(U.mapnote || '').replace('{n}', D.length));
-  const map = L.map(mapEl, { zoomControl: true, worldCopyJump: true, minZoom: 2, zoomSnap: 0.5, zoomAnimation: false, fadeAnimation: false, markerZoomAnimation: false }).setView([30, 20], 2);
+  mount('#in-mapnote', String(U.mapnote || '').replace('{n}', D.length) + A.t(' · 확대는 +− 또는 ⌘+휠', ' · zoom with +− or ⌘+wheel'));
+  // 휠은 페이지 스크롤에 양보한다(지도가 본문 위에 있어 휠이 지도에 먹히면 아래로 못 내려간다). 확대는 +− · 더블클릭 · ⌘/Ctrl+휠
+  const map = L.map(mapEl, { zoomControl: true, worldCopyJump: true, minZoom: 2, zoomSnap: 0.5, zoomAnimation: false, fadeAnimation: false, markerZoomAnimation: false, scrollWheelZoom: false }).setView([30, 20], 2);
+  mapEl.addEventListener('wheel', e => { if (e.ctrlKey || e.metaKey) { e.preventDefault(); map.scrollWheelZoom.enable(); setTimeout(() => map.scrollWheelZoom.disable(), 400); } }, { passive: false });
   const sized = () => mapEl.clientWidth > 0 && mapEl.clientHeight > 0;
   let pendingFit = [C[0][2], {}];
   const fitTo = (b, o) => { if (!sized()) { pendingFit = [b, o]; return; } map.invalidateSize(); map.fitBounds(b, o); };
@@ -95,7 +100,7 @@
     return h('a.in-card' + (inAxis(d) ? '' : '.dim'), { href: A.route.href('', d.id), onclick: e => { e.preventDefault(); pick(d.id); } },
       h('span.in-ch', PRIV && d.fit ? h('span.in-fit', d.fit) : null, h('b', d.n),
         h('span.in-dots', ks.map(k => h('i.in-dot.' + kc(k), { title: LBL[k] || k })))),
-      h('span.in-meta', (d.city || '') + (linkN[d.id] ? A.t(` · 연결 ${linkN[d.id]}`, ` · ${linkN[d.id]} links`) : '')),
+      h('span.in-meta', (d.city || '') + (MADE[d.id] ? A.t(` · 구조 ${MADE[d.id].length}`, ` · ${MADE[d.id].length} structures`) : '') + (linkN[d.id] ? A.t(` · 연결 ${linkN[d.id]}`, ` · ${linkN[d.id]} links`) : '')),
       first ? h('span.in-sub', first[0] + (FIELD[first[0]] ? ' · ' + FIELD[first[0]] : '')) : null);
   }
   function lanes() {
@@ -137,6 +142,8 @@
       h('div.in-tags', (d.t || []).map(t => h('span.in-tag', LBL[t] || t))),
       PRIV && d.why ? h('p.in-warn.why', { html: d.why }) : null,
       h('dl.in-dl', d.fab ? [h('dt', A.t('팹', 'Fab')), h('dd', { html: d.fab })] : null, PRIV && d.gate ? [h('dt', U.gate || ''), h('dd', { html: d.gate })] : null),
+      MADE[d.id] ? h('div.in-col', h('span.lb', A.t(`여기서 나온 구조 ${MADE[d.id].length}개`, `${MADE[d.id].length} structures from here`)),
+        h('div.in-made', MADE[d.id].map(s => h('a.in-mk', { href: 'compute.html#' + s.id }, h('b', A.tr(s.short)), h('span', s.id.toUpperCase()))))) : null,
       (d.pi || []).length ? h('div.in-col', h('span.lb', A.t(`PI ${d.pi.length}명`, `PIs (${d.pi.length})`)),
         h('ul.in-pis', d.pi.map(([n, t]) => { const f = FIELD[n]; return h('li', h('b', n, f ? h('span.in-field', { title: String(FIELDS[f] || '').replace(/<[^>]+>/g, '') }, f) : null), h('span', { html: t })); }))) : null,
       rels.length ? h('div.in-col', h('span.lb', A.t(`연결 ${rels.length}건 — 지도에 선으로 표시`, `${rels.length} links — drawn as lines on the map`)),
