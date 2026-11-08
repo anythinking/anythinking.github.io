@@ -1,14 +1,15 @@
 /* 광학 전체 지도 */
 :root{
-  --op-st1:#E8E0D2; --op-st1fg:var(--ink);       /* 지반 */
-  --op-st2:#5B4A37; --op-st2fg:#FBFAF7;          /* 기반암 */
-  --op-jrule:#E2CFA6;                            /* 판단 상자 줄 */
+  --op-st1:#E3E9F2; --op-st1fg:var(--ink);       /* 지반 */
+  --op-st2:#2F3E5C; --op-st2fg:#F3F6FB;          /* 기반암 */
+  --op-jrule:#E8D9A8;                            /* 판단 상자 줄 */
 }
 @media (prefers-color-scheme:dark){
-  :root{ --op-st1:#2E2A22; --op-st2:#4A3C2C; --op-st2fg:#F2EEE6; --op-jrule:#5A4A2C; }
+  :root{ --op-st1:#2C3544; --op-st2:#3B4B6B; --op-st2fg:#F3F6FB; --op-jrule:#5A4F2C; }
 }
 
-.op .op-stage{padding:26px var(--gutter) 44px;display:flex;flex-direction:column;gap:28px}
+.op-main{padding:26px var(--gutter) 44px;display:flex;flex-direction:column;gap:30px}
+.op-main > *{flex:none}
 .op-red{color:var(--beam)}
 
 .op-sec{display:flex;flex-direction:column;gap:10px}
@@ -30,9 +31,6 @@
 .op-br.on{background:var(--panel)}
 .op-br.on::before{border-top-color:var(--beam)}
 .op-br:focus-visible{outline:2px solid var(--probe)}
-.op-br.pv{background:color-mix(in srgb,var(--panel) 55%,transparent)}
-.op-br.pv::before{border-top-color:var(--faint)}
-.op-cur.peek{border-style:dashed}
 .op-meta{flex:1 1 170px;max-width:220px;display:flex;flex-direction:column;gap:3px;min-width:0}
 .op-meet{font-family:var(--serif);font-size:15px;font-weight:700;line-height:1.4}
 .op-ph{font-size:12.5px;line-height:1.55;color:var(--muted)}
@@ -54,6 +52,10 @@
 .op-st{display:flex;flex-direction:column;background:var(--panel);color:var(--ink)}
 .op-st.k1{background:var(--op-st1);color:var(--op-st1fg)}
 .op-st.k2{background:var(--op-st2);color:var(--op-st2fg)}
+.op-st{border-left:5px solid var(--c,var(--rule))}
+.op-stl{font-family:var(--mono);font-size:10.5px;color:var(--c,var(--probe));text-decoration:none;margin-top:4px}
+.op-st.k2 .op-stl{color:var(--op-st2fg);opacity:.85}
+.op-stl:hover{text-decoration:underline}
 .op-st-row{display:grid;grid-template-columns:minmax(90px,120px) minmax(0,1fr);gap:16px;padding:16px 18px}
 .op-st-n{display:flex;flex-direction:column;gap:2px}
 .op-st-n b{font-family:var(--serif);font-size:17px}
@@ -73,8 +75,8 @@
 .op-cov i.p{background:var(--warm);border-color:var(--warm)}
 .op-rungs .op-hidden{font-size:12px;line-height:1.6;opacity:.8}
 
-/* 오른쪽 패널 */
-.op .op-side{padding:22px 26px 28px}
+/* 갈래 상세 카드(고른 갈래 아래) */
+.op-cur{max-width:720px}
 .op-cur .lb{font-size:11px;letter-spacing:.04em}
 .op-cur p .muted{color:var(--muted)}
 .op-cur-fs{display:flex;flex-direction:column;border-top:1px solid var(--rule)}
@@ -94,19 +96,18 @@
 .op-jr .s{color:var(--warm);letter-spacing:.5px}
 .op-jbox .op-jfoot{font-size:11.5px;line-height:1.6;color:var(--warmfg)}
 
-.op-why{display:flex;flex-direction:column;gap:10px;font-size:13.5px;line-height:1.8}
-.op-why-h{margin:0;font-family:var(--serif);font-size:16px;font-weight:700}
+.op-why{gap:10px;font-size:13.5px;line-height:1.8;max-width:76ch}
 .op-why p{margin:0}
+.op-jbox{max-width:76ch}
 .op-nl{display:flex;flex-wrap:wrap;gap:6px}
 .op-nl a{font-size:12.5px;padding:3px 10px;border-radius:6px;border:1px solid var(--rule);background:var(--panel);text-decoration:none;color:var(--ink);white-space:nowrap}
 .op-nl a:hover{border-color:var(--beam);color:var(--tintfg)}
 .op-foot{margin:0;font-size:12.5px;line-height:1.75;color:var(--muted);padding-top:14px;border-top:1px solid var(--rule)}
 .op-foot b{color:var(--ink)}
 
-/* 좁은 화면: 선택한 갈래 바로 밑에 요약 카드를 펼친다 */
 .op-tree .op-cur{margin:2px 0 8px 22px}
 @media (max-width:899.98px){
-  .op .op-stage{padding:20px var(--gutter) 28px;gap:24px}
+  .op-main{padding:20px var(--gutter) 28px;gap:24px}
   .op-head .sechead{white-space:normal}
   .op-jslot{margin-left:0}
   .op-tree{margin-left:8px}
@@ -119,4 +120,4 @@
   .op-st-row{grid-template-columns:minmax(0,1fr);gap:6px}
   .op-rung{grid-template-columns:minmax(0,1fr);margin-left:0!important}
 }
-#op-cur-home:empty,#op-judge:empty,#op-nl:empty,#op-judge-slot:empty{display:none}
+#op-judge:empty,#op-nl:empty,#op-judge-slot:empty{display:none}

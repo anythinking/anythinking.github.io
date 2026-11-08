@@ -1,4 +1,4 @@
-/* 광학 전체 지도 — 갈래 선택(#g5) · 판단 보기(#judge/g5, 개인판만) */
+/* 광학의 갈래 — 갈래 선택(#g5)은 그 행 안에 분야 막대를 펼친다 · 판단 보기(#judge/g5, 개인판만) */
 (function () {
   'use strict';
   const D = A.data('optics');
@@ -7,7 +7,6 @@
   const TREE = D.TREE || [], MAX = 96, DEF = 4;
   const STAR = D.STAR || {}, J = D.JTXT || {};
   const COVN = A.lang === 'en' ? { y: 'yes', p: 'partial', n: 'none' } : { y: '있음', p: '조각', n: '없음' };
-  const canHover = window.matchMedia('(hover: hover)');
 
   // "계산광학 58 · 천문 68" → [{n, c}] (숫자 없는 문자열은 메모)
   function parse(s) {
@@ -15,7 +14,6 @@
   }
 
   let st = { i: DEF, judge: false };
-  let pv = -1;   // 마우스를 올린 갈래 — 미리보기일 뿐 선택(주소)은 바꾸지 않는다
   function fromRoute(r) {
     const judge = PRIV && (r.key === 'judge' || (r.key === '' && r.arg === 'judge'));
     const arg = r.key === 'judge' || r.key === '' ? r.arg : '';
@@ -41,7 +39,6 @@
     const el = h('div.op-br' + (on ? '.on' : ''), {
       role: 'listitem', tabindex: '0', 'aria-current': on ? 'true' : null, dataset: { i: String(i) },
       onclick: () => nav({ i, judge: st.judge }, false),
-      onmouseenter: () => { if (canHover.matches && !A.narrow()) preview(i); },
       onkeydown: e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); nav({ i, judge: st.judge }, false); } },
     },
       h('div.op-meta', null, h('span.op-meet', null, t.meet), h('span.op-ph', null, t.ph), h('span.op-lang', null, A.t('언어 · ', 'Language · ') + t.lang)),
@@ -51,9 +48,9 @@
     return el;
   }
 
-  // ── 요약 카드(오른쪽 패널, 좁은 화면에선 선택 갈래 밑) ──
+  // ── 상세 카드: 고른 갈래 바로 밑에 분야별 크기 막대 ──
   function card() {
-    const k = pv >= 0 ? pv : st.i, peek = k !== st.i;
+    const k = st.i, peek = false;
     const T = TREE[k], F = parse(T.fields), tot = F.reduce((a, b) => a + b.c, 0);
     return h('div.det.op-cur' + (peek ? '.peek' : ''), { 'aria-live': 'polite' },
       h('span.lb', null, A.t(`갈래 ${k + 1} / ${TREE.length}`, `Branch ${k + 1} / ${TREE.length}`) + (tot ? A.t(` · ${tot}명`, ` · ${tot} people`) : '') + (peek ? A.t(' · 미리보기 — 누르면 고정', ' · preview — click to pin') : '')),
@@ -67,9 +64,10 @@
   }
 
   function strata() {
-    return (D.STRATA || []).map((s, k) => h('div.op-st.k' + k, null,
+    return (D.STRATA || []).map((s, k) => h('div.op-st.k' + k, s.l ? { style: '--c:var(--l' + s.l[1] + ')' } : null,
       h('div.op-st-row', null,
-        h('div.op-st-n', null, h('b', null, s.n), h('span', null, s.k)),
+        h('div.op-st-n', null, h('b', null, s.n), h('span', null, s.k),
+          s.l ? h('a.op-stl', { href: 'layers.html#' + s.l }, s.l + ' · ' + (s.lt || '')) : null),
         h('div.op-st-t', null, h('b', null, s.what), h('span', null, s.d))),
       st.judge && k === 2 ? h('div.op-rungs', null,
         (D.RUNG || []).map((r, i) => h('div.op-rung', { style: { marginLeft: `min(${i * 14}px, ${i * 2}%)` } },
@@ -90,24 +88,11 @@
       J.foot ? h('span.op-jfoot', null, J.foot) : null);
   }
 
-  function preview(i) {
-    if (pv === i) return;
-    pv = i;
-    A.$$('#op-tree .op-br').forEach(el => el.classList.toggle('pv', +el.dataset.i === pv && pv !== st.i));
-    if (!A.narrow()) A.mount('#op-cur-home', card());
-  }
-
   function render(next) {
     st = next;
-    pv = -1;
     const tree = A.$('#op-tree');
-    tree.onmouseleave = () => preview(-1);
     A.mount(tree, TREE.map(branch));
-    const c = card();
-    if (A.narrow()) {
-      tree.children[st.i].after(c);
-      A.mount('#op-cur-home');
-    } else A.mount('#op-cur-home', c);
+    tree.children[st.i].after(card());
     A.mount('#op-strata', strata());
     A.mount('#op-judge', judgeBox());
     if (PRIV && J.btn) {
@@ -118,10 +103,9 @@
     }
     if (D.NL) {
       A.mount('#op-nl', h('span.lb', null, A.t('비선형이 떠받치는 구조', 'Structures that rest on nonlinearity')),
-        h('div.op-nl', null, D.NL.map(x => h('a', { href: 'compute.html#' + encodeURIComponent(x.id) }, x.n + ' →'))));
+        h('div.op-nl', null, D.NL.map(x => h('a', { href: 'compute.html#' + encodeURIComponent(x.id) }, x.n))));
     }
   }
 
   A.route.on(r => render(fromRoute(r)));
-  window.matchMedia('(max-width: 899.98px)').addEventListener('change', () => render(st));
 })();

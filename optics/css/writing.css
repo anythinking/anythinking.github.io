@@ -6,10 +6,22 @@
 .doc .wr-list h2{margin:0 0 6px;padding:0;border:0}
 .wr-list li{border-bottom:1px solid var(--rule)}
 .wr-list a{display:block;padding:18px 4px;color:inherit;text-decoration:none}
-.wr-list a:hover h2{color:var(--beam)}
+.wr-list a:hover h2{color:var(--ui)}
 .wr-list h2{font-family:var(--serif);font-size:18px;margin:0 0 6px;line-height:1.45}
 .wr-list p{font-size:14px;margin:0 0 6px;color:var(--muted)}
 .wr-list .meta{margin:0}
+.wr-legend{list-style:none;margin:8px 6px 0;padding:0;display:flex;flex-wrap:wrap;gap:6px 18px;font-size:13px;color:var(--muted)}
+.wr-legend li{display:flex;align-items:center;gap:4px}
+.wr-fig .wr-legend svg{width:18px;height:18px;max-width:none;flex:none;display:block;margin:0}
+.wr-tabs{display:flex;flex-wrap:wrap;gap:4px;border-bottom:1px solid var(--rule);margin:14px 0 18px}
+.wr-tabs button{font:inherit;font-size:15px;color:var(--muted);background:none;border:0;border-bottom:2px solid transparent;padding:8px 12px;margin-bottom:-1px;cursor:pointer}
+.wr-tabs button:hover{color:var(--ink)}
+.wr-tabs button[aria-selected="true"]{color:var(--ink);font-weight:600;border-bottom-color:var(--ui)}
+.wr-tabs button:focus-visible{outline:2px solid var(--ui);outline-offset:2px}
+.wr-tabs .n{font-family:var(--mono);font-size:12px;color:var(--muted);margin-left:6px;font-weight:400}
+.doc h2.wr-cat{font-family:var(--sans);font-size:15px;font-weight:600;letter-spacing:.04em;margin:40px 0 4px;padding:0;border:0}
+.doc > .meta + h2.wr-cat{margin-top:20px}
+.wr-cat-d{font-size:14px;color:var(--muted);margin:0 0 12px}
 
 /* 본문 */
 .wr-body ul,.wr-body ol{margin:0 0 14px;padding-left:22px}
@@ -19,6 +31,9 @@
 .wr-quote{margin:0 0 16px;padding:12px 16px;border-left:3px solid var(--probe);background:var(--panel);font-size:14px;color:var(--ink)}
 .wr-quote .lb{display:block;margin-bottom:4px}
 .wr-eq{font-family:var(--mono);font-size:13.5px;background:var(--panel);border:1px solid var(--rule);border-radius:6px;padding:10px 14px;margin:0 0 16px;overflow-x:auto;white-space:pre}
+.wr-math{background:var(--panel);border:1px solid var(--rule);border-radius:6px;padding:10px 14px;margin:0 0 16px;overflow-x:auto;font-size:18px}
+.wr-body math{font-family:"STIX Two Math","Cambria Math","Latin Modern Math",math;font-size:1.08em}
+.wr-math math{font-size:1em}
 .wr-tbl{width:100%;border-collapse:collapse;font-size:13.5px;margin:0 0 18px}
 .wr-tbl th,.wr-tbl td{text-align:left;padding:8px 10px;border-bottom:1px solid var(--rule);vertical-align:top;line-height:1.6}
 .wr-tbl th{font-family:var(--mono);font-size:11.5px;color:var(--muted);font-weight:500}
@@ -28,8 +43,17 @@
 .wr-src{margin-top:48px;padding-top:16px;border-top:1px solid var(--rule)}
 .wr-src p,.wr-src li{font-size:13px;color:var(--muted)}
 
-/* 그림 */
-.wr-fig{margin:6px 0 22px;padding:14px 10px 10px;background:var(--panel);border:1px solid var(--rule);border-radius:8px}
+/* 그림 — 본문(720)보다 넓게 뻗는다(최대 960). 글줄은 좁게, 그림은 넓게 */
+.wr-fig{margin:6px 0 22px;padding:14px 10px 10px;background:var(--panel);border:1px solid var(--rule);border-radius:4px;
+  width:min(960px,calc(100vw - 2 * var(--gutter) - 16px));margin-left:50%;transform:translateX(-50%)}
+/* 차례 — 넓은 화면의 왼쪽 여백에만(본문 칼럼 왼쪽에 자리가 남을 때) */
+.wr-toc{display:none}
+@media (min-width:1240px){
+  .wr-toc{display:flex;flex-direction:column;gap:2px;position:fixed;top:140px;left:max(var(--gutter),calc(50% - 392px - 220px));width:200px;max-height:calc(100vh - 200px);overflow:auto;font-size:13px;line-height:1.45}
+  .wr-toc a{color:var(--muted);text-decoration:none;padding:4px 10px;border-left:2px solid var(--rule)}
+  .wr-toc a:hover{color:var(--ink)}
+  .wr-toc a.on{color:var(--ink);border-left-color:var(--ui)}
+}
 .wr-fig svg{display:block;width:100%;height:auto}
 .wr-fig img{display:block;width:100%;height:auto;border-radius:4px;border:1px solid var(--rule)}
 .wr-fig .pair{display:grid;grid-template-columns:1fr 1fr;gap:8px}
@@ -58,4 +82,5 @@
 .wr-ctl input[type=range]{flex:1;min-width:140px;accent-color:var(--beam)}
 .wr-ctl output{font-family:var(--mono);color:var(--ink);min-width:3.2em}
 .wr-ctl button{font:inherit;color:var(--ink);background:var(--bg);border:1px solid var(--rule);border-radius:6px;padding:4px 10px;cursor:pointer}
-.wr-ctl button:hover{border-color:var(--beam)}
+.wr-ctl button:hover{border-color:var(--ui)}
+.wr-ctl button[aria-pressed="true"]{border-color:var(--ui);background:var(--probetint);color:var(--probefg)}

@@ -269,7 +269,7 @@
         p.arxiv ? h('a', { href: 'https://arxiv.org/abs/' + p.arxiv, target: '_blank', rel: 'noopener' }, 'arXiv') : null,
         p.doi ? h('a', { href: 'https://doi.org/' + p.doi, target: '_blank', rel: 'noopener' }, 'DOI') : null,
         p.pdf ? h('a', { href: root + p.pdf, target: '_blank' }, 'PDF') : null,
-        p.preset && open ? h('a', { href: open(p.preset) }, t('실험실에서 열기 →', 'Open in the lab →')) : null))));
+        p.preset && open ? h('a', { href: open(p.preset) }, t('실험실에서 열기', 'Open in the lab')) : null))));
   }
 
   window.A = { lang, root, site, t, tr, tx, data, hasPrivate, merge, route, $, $$, h, esc, pill, mount, fail, narrow, stars, papers };

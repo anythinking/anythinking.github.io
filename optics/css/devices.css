@@ -1,53 +1,59 @@
-/* 소자 페이지 전용 */
+/* 소자 페이지 전용 — 소자 × 구조 표가 첫 화면 */
 :root{
-  --dv-k1:#D9836E; --dv-k0:#F1D3C9; --dv-rowtint:#FAEEE9;   /* 부품표 칸: 필수 / 선택 / 고른 줄 */
-  --dv-zerobg:#F2EBE3; --dv-faint2:#B5AFA3; --dv-body:#3A3833;
+  --dv-k1:#E06A5F; --dv-k0:#F5CFCA; --dv-rowtint:#FFF1EF;   /* 칸: 필수 / 선택 / 펼친 줄 — 빔의 옅은 값 */
+  --dv-zerobg:#EEF2F8; --dv-body:#2B3A52;
 }
 @media (prefers-color-scheme:dark){
-  :root{
-    --dv-k1:#B5543F; --dv-k0:#5A3128; --dv-rowtint:#2C1F1B;
-    --dv-zerobg:#2A2620; --dv-faint2:#5E5A51; --dv-body:#CFCAC0;
-  }
+  :root{ --dv-k1:#D4574B; --dv-k0:#5E3230; --dv-rowtint:#3A2C2C; --dv-zerobg:#2A3240; --dv-body:#C9D2DE; }
 }
 
-.dv-bar{gap:10px 16px}
-.dv-views{display:flex;gap:4px}
-.dv-views .pill{font-size:13px;padding:5px 13px}
-.dv-stat{font-size:11.5px;color:var(--muted);white-space:nowrap}
-
-.dv-stage{padding-top:22px}
-.dv-stage section{display:flex;flex-direction:column;gap:18px}
-.dv-intro{margin:0;font-size:14px;line-height:1.75;max-width:76ch;color:var(--muted)}
-.dv-beam{color:var(--beam)} .dv-wallc{color:var(--wall)}
-
-/* 소자별 */
-.dv-groups{display:flex;flex-direction:column}
-.dv-grp{display:grid;grid-template-columns:minmax(110px,150px) minmax(0,1fr);gap:16px;padding:13px 0;border-top:1px solid var(--rule)}
-.dv-gname{font-family:var(--serif);font-size:15px;font-weight:700;line-height:1.5}
-.dv-gitems{gap:6px}
-.dv-chip{padding:4px 10px;gap:7px;font-size:13px}
-.dv-chip.dv-zero{background:transparent;color:var(--faint)}
-.dv-chip.dv-zero .n{color:var(--dv-faint2)}
-.dv-chip.on .n{color:var(--faint)}
-
-/* 소자 × 구조 */
+.dv-bar{gap:10px 16px;align-items:center}
 .dv-legend{display:flex;gap:14px;align-items:center;flex-wrap:wrap;font-size:12px;color:var(--muted)}
 .dv-legend span{display:inline-flex;align-items:center;gap:6px}
 .dv-sw{width:12px;height:12px;border-radius:2px;display:inline-block}
 i.dv-k1{background:var(--dv-k1)} i.dv-k0{background:var(--dv-k0)}
-.dv-mxbox{overflow:auto;border:1px solid var(--rule);border-radius:8px;background:var(--panel)}
-.dv-mx{border-collapse:collapse;font-size:12px}
-.dv-mx thead th{position:sticky;top:0;background:var(--panel)}
-.dv-corner{left:0;z-index:2;padding:6px 10px}
-.dv-col{padding:8px 0 6px;width:26px;min-width:26px;font-family:var(--mono);font-size:10px;font-weight:500;color:var(--muted)}
-.dv-rowh{position:sticky;left:0;background:var(--panel);padding:3px 12px 3px 10px;text-align:left;font-weight:400;white-space:nowrap;cursor:pointer;border-top:1px solid var(--grid)}
-.dv-mx td{height:20px;padding:0;cursor:pointer;border-top:1px solid var(--grid)}
-.dv-mx td.dv-k1{background:var(--dv-k1)} .dv-mx td.dv-k0{background:var(--dv-k0)}
-.dv-mx tr.on .dv-rowh{background:var(--tint);color:var(--tintfg);font-weight:700}
-.dv-mx tr.on td:not(.dv-k1):not(.dv-k0){background:var(--dv-rowtint)}
-.dv-mx .dv-sep{border-left:2px solid var(--rule)}
+.dv-stat{font-size:11.5px;color:var(--muted);white-space:nowrap;margin-left:auto}
 
-/* 없는 칸 */
+.dv-main{flex:1;min-height:0;overflow:auto;padding:18px var(--gutter) 48px;display:flex;flex-direction:column;gap:34px}
+.dv-main > *{flex:none}   /* 세로 flex 안에서 표 상자가 줄어들지 않게 */
+.dv-intro{margin:0;font-size:13.5px;line-height:1.75;max-width:76ch;color:var(--muted)}
+.dv-wallc{color:var(--wall)}
+
+/* 표 */
+.dv-mxbox{overflow:auto;border:1px solid var(--rule);border-radius:8px;background:var(--panel)}
+.dv-mx{border-collapse:collapse;font-size:12.5px;min-width:100%}
+.dv-mx th,.dv-mx td{padding:0}
+.dv-mx thead th{position:sticky;top:0;background:var(--panel);z-index:2}
+.dv-corner{left:0;z-index:3!important;text-align:left;padding:8px 10px!important;font-family:var(--mono);font-size:10.5px;font-weight:500;color:var(--muted);vertical-align:bottom;min-width:240px}
+.dv-gh{font-size:11px;font-weight:500;color:var(--muted);text-align:left;padding:8px 4px 2px!important;white-space:nowrap;border-bottom:1px solid var(--rule)}
+.dv-col{width:22px;min-width:22px;font-family:var(--mono);font-size:9.5px;font-weight:500;padding:2px 0 6px!important;text-align:center;border-bottom:1px solid var(--rule)}
+.dv-col a{display:inline-block;writing-mode:vertical-rl;transform:rotate(180deg);color:var(--muted);text-decoration:none;padding:2px 0}
+.dv-col a:hover{color:var(--beam)}
+.dv-gap{width:10px;min-width:10px;background:var(--bg)}
+.dv-cnth{font-family:var(--mono);font-size:10.5px;font-weight:500;color:var(--muted);padding:0 10px!important}
+tr.dv-grp th{position:sticky;left:0;z-index:1;text-align:left;padding:10px 10px 4px;font-family:var(--serif);font-size:13.5px;font-weight:700;color:var(--l3);background:var(--panel);border-top:1px solid var(--rule)}
+tr.dv-grp th .n{font-family:var(--mono);font-size:11px;font-weight:400;color:var(--muted);margin-left:6px}
+tr.dv-dev th{position:sticky;left:0;z-index:1;background:var(--panel);text-align:left;padding:5px 10px;font-weight:400;border-top:1px solid var(--grid);cursor:pointer;vertical-align:top}
+tr.dv-dev:hover th,tr.dv-dev:hover td{background:var(--tint)}
+tr.dv-dev.open th,tr.dv-dev.open td:not(.dv-k1):not(.dv-k0):not(.dv-gap){background:var(--dv-rowtint)}
+.dv-n{display:block;font-weight:500;white-space:nowrap}
+.dv-term{font-family:var(--mono);font-size:10px;color:var(--probe);text-decoration:none;margin-left:6px;border:1px solid var(--probe);border-radius:999px;padding:0 5px}
+.dv-term:hover{background:var(--tint)}
+.dv-d,.dv-how,.dv-zerobox{display:none;font-size:12.5px;line-height:1.55;color:var(--dv-body);max-width:340px;white-space:normal;margin-top:4px}
+.dv-how{font-family:var(--mono);font-size:11px;color:var(--muted)}
+.dv-zerobox{padding:6px 9px;background:var(--dv-zerobg);border-radius:6px;color:var(--muted)}
+tr.dv-dev.open .dv-d,tr.dv-dev.open .dv-how,tr.dv-dev.open .dv-zerobox{display:block}
+tr.dv-dev.open th{padding-bottom:10px}
+.dv-mx td{text-align:center;border-top:1px solid var(--grid);cursor:pointer;height:24px}
+.dv-mx td i{display:inline-block;width:11px;height:11px;border-radius:2px}
+.dv-mx td.dv-k1 i{background:var(--dv-k1)} .dv-mx td.dv-k0 i{background:var(--dv-k0)}
+.dv-mx td.dv-gap{cursor:default}
+.dv-cnt{font-family:var(--mono);font-size:11px;color:var(--muted);padding:0 10px!important}
+tr.dv-zero .dv-n{color:var(--muted)}
+
+/* 없는 부품 */
+.dv-missing{display:flex;flex-direction:column;gap:12px}
+.dv-missing h2{font-family:var(--serif);font-size:17px;margin:0}
 .dv-walls{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(300px,100%),1fr));gap:10px}
 .dv-wcard{display:flex;flex-direction:column;gap:8px;padding:13px 15px;background:var(--panel);border:1px solid var(--rule);border-radius:8px}
 .dv-wcard p{margin:0;font-size:13px;line-height:1.7;color:var(--dv-body)}
@@ -56,30 +62,10 @@ i.dv-k1{background:var(--dv-k1)} i.dv-k0{background:var(--dv-k0)}
 .dv-wlink:hover{color:var(--beam)}
 .dv-id{font-family:var(--mono);font-size:10.5px;color:var(--faint);white-space:nowrap}
 
-/* 상세 패널 */
-.dv-side{gap:16px}
-.dv-head,.dv-blk{display:flex;flex-direction:column;gap:10px}
-.dv-blk{gap:7px}
-.dv-lb{font-family:var(--mono);font-size:11px;color:var(--muted);letter-spacing:.04em}
-.dv-side h2{font-size:24px}
-.dv-d{margin:0;font-size:15px;line-height:1.85}
-.dv-blk .wrap{gap:5px}
-.dv-how{font-size:12.5px;padding:3px 9px;border-radius:999px;border:1px solid var(--rule);background:var(--panel);white-space:nowrap}
-.dv-zerobox{margin:0;font-size:13.5px;line-height:1.75;padding:11px 13px;background:var(--dv-zerobg);border-radius:8px}
-.dv-uses{display:flex;flex-direction:column;border-top:1px solid var(--rule)}
-.dv-use{display:flex;flex-direction:column;gap:3px;padding:9px 2px;border-bottom:1px solid var(--rule);text-decoration:none;color:var(--ink)}
-.dv-use:hover{background:var(--panel);color:var(--ink)}
-.dv-ut{display:flex;align-items:baseline;gap:7px;flex-wrap:wrap}
-.dv-ut b{font-size:13.5px}
-.dv-ut .dv-id{margin-left:auto}
-.dv-k{font-size:11px;padding:0 7px;border-radius:999px;background:var(--grid);color:var(--muted);white-space:nowrap}
-.dv-k.req{background:var(--tint);color:var(--tintfg)}
-.dv-r{font-size:12.5px;line-height:1.6;color:var(--muted)}
-.dv-miss{margin:0;font-size:13px;line-height:1.7;color:var(--muted)}
-.dv-miss b{color:var(--ink)}
-
 @media (max-width:899.98px){
-  .dv-stage{padding-top:16px}
-  .dv-grp{grid-template-columns:minmax(0,1fr);gap:8px}
+  .dv-main{padding:14px var(--gutter) 40px;overflow:visible}
+  .dv-corner{min-width:150px}
+  .dv-n{white-space:normal}
   .dv-bar{gap:8px 12px}
+  .dv-stat{margin-left:0}
 }

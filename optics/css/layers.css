@@ -19,15 +19,18 @@ a{color:var(--probe)}
 .lx-wires{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;overflow:visible;z-index:1}
 .lx-wires path{fill:none}
 
-.lx-layer{display:flex;flex-direction:column;border:1px solid var(--rule);border-left:4px solid var(--rule);border-radius:8px;background:var(--panel)}
-.lx-layer.eo{border-left-color:var(--probe);background:var(--eobg)}
+.lx-layer{display:flex;flex-direction:column;border:1px solid var(--rule);border-left:5px solid var(--lc,var(--rule));border-radius:8px;background:var(--panel)}
+.lx-layer.eo{background:var(--eobg);box-shadow:inset -5px 0 0 color-mix(in srgb,var(--probe) 40%,transparent)}
 .lx-layer.derived{border-left-color:var(--derived);margin-top:14px}
-.lx-lhead{display:grid;grid-template-columns:minmax(140px,180px) minmax(0,1fr);gap:16px;padding:14px 16px 14px 14px;align-items:start}
+.lx-lhead{display:grid;grid-template-columns:minmax(180px,230px) minmax(0,1fr);gap:16px;padding:14px 16px 14px 14px;align-items:start}
 .lx-meta{display:flex;flex-direction:column;gap:3px;min-width:0}
 .lx-idrow{display:flex;align-items:baseline;gap:8px}
-.lx-id{font-family:var(--mono);font-size:12px;font-weight:600;color:var(--muted)}
-.lx-layer.eo .lx-id{color:var(--probe)}
-.lx-nm{font-family:var(--serif);font-size:16px;font-weight:700;line-height:1.35;min-width:0}
+.lx-id{font-family:var(--mono);font-size:12px;font-weight:600;color:var(--lc,var(--muted))}
+.lx-nm{font-family:var(--mono);font-size:11.5px;color:var(--muted)}
+.lx-t{font-family:var(--serif);font-size:16px;font-weight:700;line-height:1.35;min-width:0}
+.lx-here{display:flex;flex-wrap:wrap;gap:2px 12px;margin-top:4px}
+.lx-go{font-family:var(--mono);font-size:10.5px;color:var(--probe);text-decoration:none;white-space:nowrap}
+.lx-go:hover{text-decoration:underline}
 .lx-q{font-size:12px;line-height:1.6;color:var(--muted);text-wrap:pretty}
 .lx-extra{display:flex;flex-direction:column;gap:4px;align-items:flex-start;margin-top:6px}
 .lx-cov{font-size:11.5px;padding:2px 8px;border-radius:999px;background:var(--warmtint);color:var(--warmfg)}

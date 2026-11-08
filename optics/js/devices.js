@@ -1,110 +1,94 @@
-/* 소자 페이지: 보기 3개(소자별 · 소자 × 구조 · 없는 칸) + 오른쪽 상세 패널.
-   해시: #<id> = 소자별, #mx/<id> = 소자 × 구조, #wall/<id> = 없는 칸. 비면 eom. */
+/* 소자 페이지: 소자 × 구조 표가 첫 화면. 행 = 소자(「빛에 무엇을 하나」 군), 열 = 구조(갈래 순). 고른 소자는 #<id> 로 남고 그 행이 펼쳐진다.
+   옛 해시 #mx/<id> · #wall/<id> 도 같은 소자로 받는다. */
 (function () {
   'use strict';
   const { h, mount, $, route } = A;
-  const O = A.data('devices'), X = A.data('dev-extra');
-  if (!O || !X) return;
+  const O = A.data('devices'), X = A.data('dev-extra'), OV = A.data('overview'), CP = A.data('compute');
+  if (!O || !X || !OV) return;
 
-  const { DEV, BOM, ST, GN } = O;
-  const VIEWS = [['chips', A.t('소자별', 'By device')], ['mx', A.t('소자 × 구조', 'Device × structure')], ['wall', A.t('없는 칸', 'Missing cells')]];
-  const DEFAULT = 'eom';
+  const { DEV, BOM } = O;
+  // 구조 표(overview.S)가 이름·갈래의 원천 — 여기 키는 전부 구조 id
+  const SROW = Object.fromEntries(OV.S.map(s => [s.id, s]));
+  const nm = s => (SROW[s] || {}).short || s;
+  const href = s => /^[a-f]/.test(s) ? `compute.html#${s}` : 'compute.html';
 
-  // 구조 순서·쓰임 (한 번만 계산)
-  const ORDER = Object.keys(ST).filter(s => BOM[s]);
-  const usesOf = {};
-  ORDER.forEach(s => BOM[s].forEach(it => { (usesOf[it.id] = usesOf[it.id] || []).push({ s, it }); }));
-  const uses = id => usesOf[id] || [];
-  const used = new Set(Object.keys(usesOf));
-  const sid = s => { const t = ST[s]; return t ? (t[0] + t[1]).toUpperCase() : ''; };
-  const href = s => { const t = ST[s]; return t && /[a-f]/.test(t[0]) ? `compute.html#${t[0]}${t[1]}` : 'compute.html'; };
+  // 열: 갈래 순 → 그 안은 id 순. 갈래 없는 것(실물)은 맨 끝
+  const PARA = ((CP && CP.PARA) || []);
+  const cols = [];
+  PARA.forEach(p => {
+    const ids = OV.S.filter(s => s.para === p.id && BOM[s.id]).map(s => s.id).sort();
+    if (ids.length) cols.push({ t: p.t, ids });
+  });
+  const rest = Object.keys(BOM).filter(id => !cols.some(c => c.ids.includes(id))).sort();
+  if (rest.length) cols.push({ t: A.t('실물', 'Real build'), ids: rest });
+  const allc = cols.flatMap(c => c.ids);
+  const bom = Object.fromEntries(Object.entries(BOM).map(([sid, items]) => [sid, Object.fromEntries(items.map(it => [it.id, it]))]));
+  const uses = Object.fromEntries(Object.keys(DEV).map(d => [d, allc.filter(sid => bom[sid][d])]));
+  const nreq = allc.reduce((n, sid) => n + Object.values(bom[sid]).filter(it => it.k).length, 0);
 
-  let prev = null;
-  const cols = ORDER.map(s => { const g = ST[s][0], sep = prev !== null && prev !== g; prev = g; return { s, id: sid(s), sep }; });
+  const st = { sel: null };
+  const rowEls = {};
 
-  const st = { view: 'chips', sel: DEFAULT };
+  function head() {
+    const span = allc.length + cols.length + 2;
+    const top = h('tr',
+      h('th.dv-corner', { rowspan: 2 }, h('span', A.t('소자 ↓ · 구조 →', 'device ↓ · structure →'))),
+      cols.flatMap(c => [h('th.dv-gh', { colspan: c.ids.length }, A.tr(c.t)), h('th.dv-gap')]),
+      h('th.dv-cnth', { rowspan: 2 }, A.t('쓰임', 'uses')));
+    const sec = h('tr', cols.flatMap(c => c.ids.map(id =>
+      h('th.dv-col', { title: A.tr(nm(id)) }, h('a', { href: href(id) }, id.toUpperCase()))).concat([h('th.dv-gap')])));
+    return [h('thead', top, sec), span];
+  }
+
+  function devRow(id) {
+    const d = DEV[id], u = uses[id], how = X.HOW[id] || [];
+    const cells = cols.flatMap(c => c.ids.map(sid => {
+      const it = bom[sid][id];
+      const cls = it ? (it.k ? '.dv-k1' : '.dv-k0') : '';
+      return h('td' + cls, { title: A.tr(nm(sid)) + (it ? ' — ' + it.r : A.t(' · 안 쓴다', ' · not used')), onclick: () => pick(id) }, h('i'));
+    }).concat([h('td.dv-gap')]));
+    const tr = h('tr.dv-dev' + (u.length ? '' : '.dv-zero'), { dataset: { id } },
+      h('th', { scope: 'row', onclick: () => pick(id) },
+        h('span.dv-n', d.n, d.term ? h('a.dv-term', { href: 'glossary.html#' + encodeURIComponent(d.term), title: A.t('용어집 정의', 'Definition in glossary'), onclick: e => e.stopPropagation() }, A.t('정의', 'def')) : null),
+        h('span.dv-d', d.d),
+        how.length ? h('span.dv-how', A.t('만드는 법 · ', 'How it is made · ') + how.join(' · ')) : null,
+        !u.length ? h('span.dv-zerobox', A.t(`${allc.length}개 구조 어디에도 안 들어간다 — 광학에서 중요해도 연산 회로에는 자리가 없다.`, `Used in none of the ${allc.length} structures — important in optics, no place in a computing circuit.`)) : null),
+      cells, h('td.dv-cnt', u.length ? String(u.length) : '—'));
+    rowEls[id] = tr;
+    return tr;
+  }
+
+  function table() {
+    const [thead, span] = head();
+    const body = h('tbody', X.GROUPS.flatMap(g => {
+      const ids = Object.keys(DEV).filter(id => DEV[id].g === g);
+      return [h('tr.dv-grp', h('th', { colspan: span }, A.tr(g), h('span.n', String(ids.length)))), ids.map(devRow)];
+    }));
+    mount('#dv-table', thead, body);
+  }
+
+  function walls() {
+    mount('#dv-walls', allc.filter(s => X.MISS[s]).map(s => h('div.dv-wcard',
+      h('a.dv-wlink', { href: href(s) }, h('b', A.tr(nm(s))), h('span.dv-id', s.toUpperCase())),
+      X.MISS[s].map(t => h('p', t.replace(/<[^>]+>/g, ''))))));
+  }
+
+  function mark() {
+    Object.entries(rowEls).forEach(([id, tr]) => tr.classList.toggle('open', st.sel === id));
+  }
+  function pick(id) { route.go('', st.sel === id ? '' : id); }
+
+  table(); walls();
+  const used = Object.values(uses).filter(u => u.length).length;
+  $('#dv-stat').textContent = A.t(`소자 ${Object.keys(DEV).length} · 쓰이는 소자 ${used} · 구조 ${allc.length} · 필수 칸 ${nreq}`, `${Object.keys(DEV).length} devices · ${used} in use · ${allc.length} structures · ${nreq} required cells`);
+
   let first = true;
-
-  const keyOf = v => (v === 'chips' ? '' : v);
-  const pick = id => route.go(keyOf(st.view), id);
-  const setView = v => route.go(keyOf(v), st.sel);
-
-  function renderBar() {
-    mount('#dv-views', VIEWS.map(([k, l]) => A.pill(l, st.view === k, () => setView(k))));
-    $('#dv-stat').textContent = A.t(`소자 ${Object.keys(DEV).length}개 · 실제로 쓰이는 소자 ${used.size}개 · 구조 ${ORDER.length}개`, `${Object.keys(DEV).length} devices · ${used.size} actually used · ${ORDER.length} structures`);
-  }
-
-  function renderChips() {
-    mount('#dv-groups', X.GROUPS.map(g => h('div.dv-grp',
-      h('span.dv-gname', A.tr(g)),
-      h('div.wrap.dv-gitems', Object.keys(DEV).filter(id => DEV[id].g === g).map(id => {
-        const n = uses(id).length, on = st.sel === id;
-        const b = h('button.chip.dv-chip', { type: 'button', onclick: () => pick(id), 'aria-pressed': on ? 'true' : 'false' },
-          DEV[id].n, h('span.n', String(n)));
-        if (on) b.classList.add('on'); else if (!n) b.classList.add('dv-zero');
-        return b;
-      })))));
-  }
-
-  function renderMx() {
-    const head = h('tr', h('th.dv-corner'), cols.map(c =>
-      h('th.dv-col' + (c.sep ? '.dv-sep' : ''), { title: A.tr(c.s), scope: 'col' }, c.id)));
-    const rows = Object.keys(DEV).filter(id => used.has(id)).map(id => {
-      const on = st.sel === id, go = () => pick(id);
-      return h('tr' + (on ? '.on' : ''),
-        h('th.dv-rowh', { scope: 'row', onclick: go }, DEV[id].n),
-        ORDER.map((s, i) => {
-          const it = BOM[s].find(x => x.id === id);
-          const cls = 'td' + (it ? (it.k ? '.dv-k1' : '.dv-k0') : '') + (cols[i].sep ? '.dv-sep' : '');
-          return h(cls, { onclick: go, title: DEV[id].n + ' — ' + A.tr(s) + (it ? ': ' + it.r : A.t(' : 안 쓰인다', ': not used')) });
-        }));
-    });
-    mount('#dv-table', h('thead', head), h('tbody', rows));
-  }
-
-  function renderWall() {
-    mount('#dv-walls', Object.keys(X.MISS).map(s => h('div.dv-wcard',
-      h('a.dv-wlink', { href: href(s) }, h('b', A.tr(s)), h('span.dv-id', sid(s) + ' →')),
-      X.MISS[s].map(t => h('p', t.replace(/<[^>]+>/g, '')))
-    )));
-  }
-
-  function renderSide() {
-    const D = DEV[st.sel], side = $('#dv-side');
-    if (!D) return mount(side);
-    const u = uses(st.sel);
-    const out = [
-      h('div.dv-head', h('span.dv-lb', A.tr(D.g)), h('h2', D.n), h('p.dv-d', D.d)),
-      h('div.dv-blk', h('span.dv-lb', A.t('무엇으로 만드나', 'What it is made of')),
-        h('div.wrap', (X.HOW[st.sel] || []).map(t => h('span.dv-how', t)))),
-    ];
-    if (!u.length) {
-      out.push(h('p.dv-zerobox', h('b', A.t(`${ORDER.length}개 구조 어디에도 안 들어간다.`, `Used in none of the ${ORDER.length} structures.`)), A.t(' 광학에서 중요한 소자여도 연산 회로에는 자리가 없다는 뜻이다.', ' However important it is in optics, it has no place in a computing circuit.')));
-    } else {
-      const miss = Object.keys(GN).filter(g => !u.some(x => ST[x.s][0] === g)).map(g => A.tr(GN[g]));
-      out.push(h('div.dv-blk',
-        h('span.dv-lb', A.t(`이 소자를 쓰는 구조 ${u.length}개`, `${u.length} structures use this device`)),
-        h('div.dv-uses', u.map(({ s, it }) => h('a.dv-use', { href: href(s) },
-          h('span.dv-ut',
-            h('b', A.tr(s)),
-            h('span.dv-k' + (it.k ? '.req' : ''), it.k ? A.t('필수', 'required') : A.t('선택', 'optional')),
-            h('span.dv-id', sid(s) + ' →')),
-          h('span.dv-r', it.r)))),
-        miss.length ? h('p.dv-miss', h('b', miss.join(' · ')), A.t(' 에는 안 쓰인다.', ' — not used here.')) : null));
-    }
-    mount(side, out);
-  }
-
   route.on(r => {
-    const v = r.key === 'mx' || r.key === 'wall' ? r.key : 'chips';
-    const sel = DEV[r.arg] ? r.arg : (r.arg ? st.sel : DEFAULT);
-    const moved = !first && sel !== st.sel;
-    st.view = v; st.sel = sel;
-    VIEWS.forEach(([k]) => { $('#dv-' + k).hidden = k !== v; });
-    renderBar(); renderSide();
-    if (v === 'chips') renderChips(); else if (v === 'mx') renderMx(); else renderWall();
-    // 좁은 화면에선 상세가 본문 아래에 있으니, 다른 소자를 고르면 그리로 내려 보낸다
-    if (moved && A.narrow()) $('#dv-side').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    const id = DEV[r.arg] ? r.arg : (DEV[r.raw] ? r.raw : null);
+    st.sel = id;
+    mark();
+    document.title = (id ? DEV[id].n + ' · ' : '') + A.t('소자', 'Devices') + ' — ' + A.site;
+    if (id && first && rowEls[id]) rowEls[id].scrollIntoView({ block: 'center' });
     first = false;
   });
 })();

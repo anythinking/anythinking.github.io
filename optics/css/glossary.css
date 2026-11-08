@@ -1,17 +1,25 @@
-/* 용어 페이지 */
+/* 용어 페이지 — 검색 + 접힌 줄 제목, 풀이 칸은 고르면 */
 .gl-cnt{font-family:var(--mono);font-size:11.5px;color:var(--muted);white-space:nowrap}
-#gl-layers .pill{padding:3px 9px}
-.gl-kl{font-family:var(--mono);font-size:10.5px;color:var(--muted);margin-right:4px}
+body[data-page="glossary"] main.split:has(> .side[hidden]){grid-template-columns:minmax(0,1fr)}
+.gl-stage{padding-top:16px}
+.gl-sec{font-family:var(--serif);font-size:16px;font-weight:700;margin:18px 0 6px}
+.gl-sec:first-child{margin-top:0}
 
-.gl-head{display:flex;flex-direction:column;gap:3px;min-width:0}
-.gl-head > div{display:flex;align-items:baseline;gap:7px;flex-wrap:wrap}
-.gl-k{font-family:var(--mono);font-size:11.5px;font-weight:600;color:var(--muted)}
-.gl-k.g{color:var(--warm)} .gl-k.p{color:var(--probe)}
+/* 줄 */
+.gl-row{border-top:1px solid var(--rule)}
+.gl-gh{width:100%;display:flex;align-items:baseline;gap:10px;font:inherit;text-align:left;padding:10px 6px;background:none;border:0;color:var(--ink);cursor:pointer;border-radius:6px}
+.gl-gh:hover{background:var(--panel)}
+.gl-k{font-family:var(--mono);font-size:11.5px;font-weight:600;color:var(--muted);min-width:34px}
+.gl-k.g{color:var(--warm)}
 .gl-t{font-family:var(--serif);font-size:15px;font-weight:700;line-height:1.35}
 .gl-n{font-family:var(--mono);font-size:10.5px;color:var(--faint)}
-.gl-q{font-size:12px;line-height:1.55;color:var(--muted);text-wrap:pretty}
-#gl-list .chip .n{font-size:9.5px}
+.gl-q{font-size:12px;line-height:1.5;color:var(--muted);margin-left:auto;text-align:right;text-wrap:pretty}
+.gl-tg{font-size:12px;color:var(--muted);transition:transform .15s}
+.gl-row.open .gl-tg{transform:rotate(180deg)}
+.gl-body{padding:2px 6px 14px 50px;gap:6px}
+.gl-body .chip .n{font-size:9.5px}
 
+/* 풀이 칸 */
 body[data-page="glossary"] aside.side{gap:16px}
 .gl-sel{display:flex;flex-direction:column;gap:12px}
 .gl-top{display:flex;justify-content:space-between;align-items:baseline;gap:10px}
@@ -22,7 +30,7 @@ body[data-page="glossary"] aside.side{gap:16px}
 .gl-def{margin:0;font-size:15px;line-height:1.85}
 .gl-def b,.gl-x b{color:var(--beam);font-weight:700}
 /* 그림은 밝은 팔레트로 그려진 SVG라 다크 모드에서도 밝은 판 위에 둔다 */
-.gl-fig{--figbg:#FBFAF7;padding:12px;background:var(--figbg);border:1px solid var(--rule);border-radius:8px;color-scheme:light}
+.gl-fig{--figbg:#FFFFFF;padding:12px;background:var(--figbg);border:1px solid var(--rule);border-radius:8px;color-scheme:light}
 .gl-box{display:flex;flex-direction:column;gap:6px;padding:12px 14px;background:var(--panel);border:1px solid var(--rule);border-radius:8px}
 .gl-box .lb{font-size:11px;letter-spacing:0}
 .gl-x{margin:0;font-size:14px;line-height:1.8}
@@ -30,5 +38,8 @@ body[data-page="glossary"] aside.side{gap:16px}
 .gl-go{display:flex;justify-content:space-between;gap:10px;padding:10px 12px;border:1px solid var(--rule);border-radius:8px;background:var(--panel);text-decoration:none;color:var(--ink);font-size:13.5px}
 .gl-go:hover{border-color:var(--beam);color:var(--ink)}
 .gl-go span:last-child{font-family:var(--mono);font-size:11px;color:var(--muted);white-space:nowrap}
-.gl-intro{display:flex;flex-direction:column;gap:8px}
-.gl-intro .note{font-size:13px}
+
+@media (max-width:899.98px){
+  .gl-q{display:none}
+  .gl-body{padding-left:6px}
+}

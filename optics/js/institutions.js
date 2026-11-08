@@ -4,6 +4,8 @@
   const I = A.data('inst');
   if (!I) return;
   const D = I.D, LBL = I.LBL, U = I.UI || {};
+  // 연구자 → 분야 이름, 분야 이름 → 한 줄 풀이(옛 용어집 「기타」)
+  const FIELD = I.FIELD || {}, FIELDS = I.FIELDS || {};
   const PRIV = A.hasPrivate('inst');
   const NT = A.hasPrivate('notes') ? A.data('notes') : null;   // 노트 연결(개인판만)
   const { h, mount, $ } = A;
@@ -19,7 +21,7 @@
   const EK = A.lang === 'en' ? { p: 'Co-authored papers', m: 'Moves · lineage', i: 'Agreements · joint operation', s: 'Spin-offs · acquisitions' } : { p: '논문 공저', m: '이동·계보', i: '협약·공동운영', s: '스핀오프·인수' };
   const stars = d => U.star ? (d.fit || '').split(U.star).length - 1 : 0;   // 개인판 UI.star
   const kc = k => 'k-' + (k in LBL || k === 'x' ? k : 'comp');
-  const st = { cur: 'all', flt: 'all', sel: null, okind: 'all' };
+  const st = { cur: 'all', flt: 'all', sel: null };
 
   /* 사람(관계도 노드) → 기관 */
   const instOfNode = {};
@@ -35,26 +37,6 @@
     return { e, me: nodeById[mine], ot: nodeById[other], od: instOfNode[other] };
   });
 
-  /* 대학 / 연구소 / 회사 — 한 칸에 둘이 섞인 이름(「KAIST · ETRI」)은 양쪽 다 해당된다 */
-  const CO_W = ['Inc', 'Ltd', 'LLC', 'GmbH', 'Corp', 'Technologies', 'Lightmatter', 'HyperLight', 'Lumentum', 'Infinera',
-    'Intel', 'IBM', 'Nokia', 'Samsung', 'TSMC', 'GlobalFoundries', 'AMF', 'Tower', 'Cisco', 'Ayar', 'Celestial', 'Salience',
-    'Luxtelligence', 'Lightium', 'Q.ANT', 'Xanadu', 'PsiQuantum', 'OpenLight', 'SiFotonics', 'Nexus', 'Lightelligence',
-    'Lumai', 'Oriole', 'NVIDIA', 'Nvidia', 'Broadcom', 'Marvell', 'Coherent', 'Rockley', 'Scintil', 'iPronics', 'Akhetonics',
-    'AMO', 'HPE', 'Jabil', '住友', 'Furukawa', '파운드리', 'Foundry', 'Semiconductor'];
-  const LAB_W = ['Fraunhofer', '프라운호퍼', 'Max Planck', '막스플랑크', 'CNRS', 'CEA', 'AIST', 'NIST', 'NICT', 'ETRI', 'KIST',
-    'A*STAR', 'IHP', 'VTT', 'TNO', 'imec', 'IMEC', 'SINTEF', 'CSIRO', 'Tyndall', 'ICFO', 'Paul Scherrer', 'PETRA', 'NTT',
-    'Sandia', 'Lincoln Lab', 'NRC', 'RIKEN', 'Riken', '연구소', '연구원', 'LETI', 'FBH', 'HHI', 'IPMS', 'IOF', 'MPI', 'Q-APP', 'IME'];
-  const UNI_W = ['University', 'Universit', 'Univ', '대학', 'College', 'Institute of Technology', 'ETH', 'EPFL', 'EPF',
-    'KAIST', 'MIT', 'TU ', 'TU-', 'Politec', 'Polytech', 'UQ', 'SUTD', 'NUS', 'NTU', 'KTH', 'DTU', 'Carleton', 'Boulder',
-    'Ghent', 'Imperial', 'Caltech', 'Stanford', 'Harvard', 'Tsinghua', 'POSTECH', 'Waterloo', 'Toronto', 'Sydney'];
-  function orgKind(d) {
-    const t = (d.n || '') + ' ' + (d.w || '') + ' ' + (d.city || '');
-    const has = ws => ws.some(k => t.indexOf(k) >= 0);
-    const co = has(CO_W), lab = has(LAB_W), uni = has(UNI_W);
-    // 아무 단서도 없으면 대학 — 도시 이름만 적힌 칸이 대부분 대학이다
-    return { uni: uni || (!co && !lab), lab, co };
-  }
-  const KIND_OK = (d, k) => k === 'all' || !!orgKind(d)[k];
   const inAxis = d => st.flt === 'all' || (d.t || []).includes(st.flt) || d.k === st.flt;
 
   /* 지도 */
@@ -78,8 +60,6 @@
   function restyle() {
     D.forEach(d => {
       const m = mk[d.id];
-      if (!KIND_OK(d, st.okind)) { if (map.hasLayer(m)) map.removeLayer(m); return; }
-      if (!map.hasLayer(m)) m.addTo(map);
       const p = m.getElement();
       if (!p) return;
       p.classList.toggle('off', !((st.cur === 'all' || d.p === st.cur) && inAxis(d)));
@@ -106,25 +86,30 @@
       onclick: () => A.route.set({ flt: k === 'all' ? null : k }) }, k === 'all' ? null : h('span.in-dot.' + kc(k)), k === 'all' ? A.t('전체', 'All') : LBL[k])));
   }
 
-  /* 오른쪽 */
-  function railList() {
-    const list = D.filter(d => st.cur === 'all' || d.p === st.cur).filter(d => KIND_OK(d, st.okind))
-      .sort((a, b) => stars(b) - stars(a) || a.n.localeCompare(b.n, 'ko'));
-    const c = C.find(x => x[0] === st.cur);
-    return [
-      h('div.in-col', h('h2', U.title || ''), h('p.sub', U.intro || '')),
-      st.cur !== 'all' ? h('p.sub', h('b', c[1]), ' — ' + (PN[st.cur] || '')) : null,
-      U.warn ? h('p.in-warn', { html: U.warn }) : null,
-      h('div.in-col.in-g6',
-        h('div.in-lhead',
-          h('span.lb', A.t(`기관 ${list.length}곳${list.length !== D.length ? ` / ${D.length}` : ''}`, `${list.length}${list.length !== D.length ? ` / ${D.length}` : ''} institutions`) + (PRIV ? U.sort || '' : '')),
-          h('span.in-ok', [['all', A.t('전체', 'All')], ['uni', A.t('대학', 'University')], ['lab', A.t('연구소', 'Institute')], ['co', A.t('회사', 'Company')]].map(([v, l]) =>
-            A.pill(l, st.okind === v, () => A.route.set({ okind: v === 'all' ? null : v }))))),
-        h('div.in-list' + (PRIV ? '.fit' : ''), list.map(d => h('a.in-row' + (inAxis(d) ? '' : '.dim'), { href: A.route.href('', d.id), onclick: e => { e.preventDefault(); pick(d.id); } },
-          PRIV ? h('span.f', d.fit || '') : null,
-          h('span.n', h('span.in-dot.' + kc(d.k)), d.n),
-          h('span.ct', d.city || '')))))
-    ];
+  /* 지도 아래: 지역이 묶음(갈래 자리), 기관이 카드. 점 = 층 색(EO 는 고리) */
+  const linkN = {};
+  D.forEach(d => { linkN[d.id] = relsOf(d).length; });
+  function card(d) {
+    const first = (d.pi || [])[0];
+    const ks = [d.k].concat((d.t || []).filter(t => t !== d.k));
+    return h('a.in-card' + (inAxis(d) ? '' : '.dim'), { href: A.route.href('', d.id), onclick: e => { e.preventDefault(); pick(d.id); } },
+      h('span.in-ch', PRIV && d.fit ? h('span.in-fit', d.fit) : null, h('b', d.n),
+        h('span.in-dots', ks.map(k => h('i.in-dot.' + kc(k), { title: LBL[k] || k })))),
+      h('span.in-meta', (d.city || '') + (linkN[d.id] ? A.t(` · 연결 ${linkN[d.id]}`, ` · ${linkN[d.id]} links`) : '')),
+      first ? h('span.in-sub', first[0] + (FIELD[first[0]] ? ' · ' + FIELD[first[0]] : '')) : null);
+  }
+  function lanes() {
+    const rows = C.slice(1).filter(([id]) => st.cur === 'all' || id === st.cur).map(([id, nm]) => {
+      const items = D.filter(d => d.p === id).sort((a, b) => stars(b) - stars(a) || a.n.localeCompare(b.n, 'ko'));
+      if (!items.length) return null;
+      return h('section.in-lane', h('header', h('h2', nm, h('span.n', String(items.length))), PN[id] ? h('p.in-pn', PN[id]) : null),
+        h('div.in-cards', items.map(card)));
+    });
+    // 주장·주의는 목록 아래 본문으로
+    mount('#in-lanes', rows, h('div.in-read',
+      U.warn ? h('p', { html: U.warn }) : null,
+      h('p', h('b', A.t(`연결 ${I.EDGES.length}건은 근거가 확인된 것만이다.`, `The ${I.EDGES.length} links are confirmed ones only.`)),
+        A.t(' 논문 공저 · 이동과 계보 · 협약과 공동운영 · 스핀오프와 인수 네 가지이고, 기관을 고르면 지도에 선으로 그린다.', ' Four kinds — co-authored papers, moves and lineage, agreements and joint operation, spin-offs and acquisitions — drawn as lines on the map when an institution is selected.'))));
   }
   function noteBlock(d) {
     const NB = U.note;
@@ -153,7 +138,7 @@
       PRIV && d.why ? h('p.in-warn.why', { html: d.why }) : null,
       h('dl.in-dl', d.fab ? [h('dt', A.t('팹', 'Fab')), h('dd', { html: d.fab })] : null, PRIV && d.gate ? [h('dt', U.gate || ''), h('dd', { html: d.gate })] : null),
       (d.pi || []).length ? h('div.in-col', h('span.lb', A.t(`PI ${d.pi.length}명`, `PIs (${d.pi.length})`)),
-        h('ul.in-pis', d.pi.map(([n, t]) => h('li', h('b', n), h('span', { html: t }))))) : null,
+        h('ul.in-pis', d.pi.map(([n, t]) => { const f = FIELD[n]; return h('li', h('b', n, f ? h('span.in-field', { title: String(FIELDS[f] || '').replace(/<[^>]+>/g, '') }, f) : null), h('span', { html: t })); }))) : null,
       rels.length ? h('div.in-col', h('span.lb', A.t(`연결 ${rels.length}건 — 지도에 선으로 표시`, `${rels.length} links — drawn as lines on the map`)),
         h('div.in-rels', rels.map(({ e, me, ot, od }) => h('button.in-rel.e-' + (EK[e.k] ? e.k : 'p'), { type: 'button', onclick: od ? () => pick(od.id) : null },
           h('span.k', EK[e.k] || EK.p), h('br'), h('b', me.l), ' ↔ ', h('b', ot.l), ' ', h('span.muted', `(${ot.o})`), h('br'), e.t)))) : null
@@ -168,9 +153,10 @@
 
   const rail = $('#in-rail');
   function render() {
-    drawTabs(); restyle();
+    drawTabs(); restyle(); lanes();
     const d = st.sel && D.find(x => x.id === st.sel);
-    mount(rail, d ? railDetail(d) : railList());
+    rail.hidden = !d;   // 오른쪽 칸은 기관을 골랐을 때만
+    mount(rail, d ? railDetail(d) : []);
   }
   function pick(id) { A.route.go('', id); }
   function clear() { A.route.go('', ''); }
@@ -183,11 +169,10 @@
     st.sel = d ? d.id : null;
     st.cur = A.route.param(r, 'cur', 'all');
     st.flt = A.route.param(r, 'flt', 'all');
-    st.okind = A.route.param(r, 'okind', 'all');
     if (!C.some(c => c[0] === st.cur)) st.cur = 'all';
     // 지역이 바뀌었고 기관을 고르지 않았으면 그 지역으로 맞춘다(뒤로가기에서도 같게)
     if (st.cur !== wasCur && !d) { const b = C.find(c => c[0] === st.cur)[2]; if (first) setTimeout(() => fitTo(b, { padding: [20, 20] }), 200); else fitTo(b, { padding: [20, 20] }); }
-    document.title = (d ? d.n + ' · ' : '') + A.t('기관 지도', 'Institutions') + ' — ' + A.site;
+    document.title = (d ? d.n + ' · ' : '') + A.t('기관', 'Institutions') + ' — ' + A.site;
     drawLinks(d);
     render();
     if (d && d.id !== was) {

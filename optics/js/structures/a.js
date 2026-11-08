@@ -1,7 +1,7 @@
 /* A군 — 행렬곱. 구조마다 render(S) 순수 모델 + controls. 페이지(compute.js)가 그림·손잡이를 그린다 */
 (function () {
   'use strict';
-  const PAL = { beam: '#C9472F', probe: '#2C7A86', warm: '#B7791F', wall: '#8A5A2B', panel: '#FBFAF7', ink: '#1C1B18', muted: '#6B675E', rule: '#D9D4C9', grid: '#ECE8DF', bg: '#F2F0EB' };
+  const PAL = { beam: '#D62A1F', probe: '#2457E6', warm: '#D1A017', wall: '#6B5B4E', panel: '#FFFFFF', ink: '#16233A', muted: '#55657F', rule: '#D5DCE8', grid: '#E9EEF5', bg: '#F8F9FB' };
   const col = k => PAL[k.replace(/^--/, '')] || '#000';
   const D2R = Math.PI / 180, clamp = (v, a, b) => Math.max(a, Math.min(b, v)), fmt = (v, n) => v.toFixed(n == null ? 2 : n);
 
@@ -35,9 +35,8 @@
 
   const A = [
     {
-      id: 'a1', key: 'MZI 메시', num: '01', tab: 'MZI 메시', title: 'MZI 메시', fig: { type: 'svg', w: 440, h: 150 }, label: 'MZI 한 개의 나눔',
+      id: 'a1', num: '01', tab: 'MZI 메시', title: 'MZI 메시', fig: { type: 'svg', w: 440, h: 150 }, label: 'MZI 한 개의 나눔',
       idea: [['2×2 유니터리를 격자로 쌓아 임의 행렬을 만든다(Reck·Clements 분해). 가중치는 '], ['위상', 1], ['이 들고 있다.']],
-      who: 'HHI · 스탠포드 S.Fan · Lightmatter', wall: '위상천이기 N² · 6~9비트 · 드리프트',
       note: '4채널 전체 메시와 실물 배치·단면은 따로 있다 → <a href="https://claude.ai/artifact/1rU7rNCNLmKpuXvThQPB9S">4×4 광 연산 메시</a>',
       controls: [{ type: 'range', k: 'th', label: 'θ', min: 0, max: 360, step: 1, def: 90, fmt: v => v + '°' }],
       render(S) {
@@ -60,9 +59,8 @@
       }
     },
     {
-      id: 'a2', key: '마이크로링 가중치 뱅크', num: '02', tab: '링 가중치 뱅크', title: '마이크로링 가중치 뱅크', fig: { type: 'svg', w: 440, h: 190 }, label: '마이크로링 가중치 뱅크',
+      id: 'a2', num: '02', tab: '링 가중치 뱅크', title: '마이크로링 가중치 뱅크', fig: { type: 'svg', w: 440, h: 190 }, label: '마이크로링 가중치 뱅크',
       idea: [['파장마다 가중치 하나. '], ['WDM 채널 수가 곧 행렬 크기', 1], ['이고, 합산은 검출기 하나가 광전류를 더해서 한다.']],
-      who: '프린스턴 계보', wall: '온도 민감 · 파장 락킹',
       note: '온도를 조금만 올려도 네 링이 <b>같이</b> 밀린다. 그게 파장 락킹 회로가 필요한 이유다.',
       controls: [0, 1, 2, 3].map(i => ({ type: 'range', k: 'd' + i, label: 'λ' + (i + 1) + ' 디튜닝', min: -30, max: 30, step: 1, def: 0, fmt: v => v + ' pm' }))
         .concat([{ type: 'range', k: 'T', label: '칩 온도', min: 0, max: 30, step: 1, def: 0, fmt: v => '+' + v + ' K', warm: 1, sep: 1 }]),
@@ -92,10 +90,9 @@
       }
     },
     {
-      id: 'a3', key: '회절 신경망 D²NN', num: '03', tab: '회절 신경망', title: '회절 신경망 (D²NN)', fig: { type: 'canvas', w: 880, h: 300 }, label: '두 장의 마스크와 출력면',
+      id: 'a3', num: '03', tab: '회절 신경망', title: '회절 신경망 (D²NN)', fig: { type: 'canvas', w: 880, h: 300 }, label: '두 장의 마스크와 출력면',
       stack: { rects: [[10, 20, 665, 265], [672, 40, 205, 245]] },
       idea: [['마스크 여러 장을 통과시키면 층이 쌓인다. 가중치는 '], ['마스크의 위상 패턴', 1], ['이고, 연산은 전파가 공짜로 한다.']],
-      who: 'UCLA · 칭화', wall: '커널 고정 — 재학습이 어렵다',
       note: '1차원 프레넬 전파를 128점으로 실제 계산한다. 출력 칸 넷 중 가장 밝은 칸이 분류 결과다.',
       controls: [
         { type: 'range', k: 'fa', label: '마스크1 초점', min: -100, max: 100, step: 1, def: 55 },
@@ -134,10 +131,9 @@
       }
     },
     {
-      id: 'a4', key: '4f 상관기', num: '04', tab: '4f 상관기', title: '4f 상관기 · 정합 필터', fig: { type: 'canvas', w: 880, h: 320 }, label: '입력 · 푸리에 면 · 출력 상관',
+      id: 'a4', num: '04', tab: '4f 상관기', title: '4f 상관기 · 정합 필터', fig: { type: 'canvas', w: 880, h: 320 }, label: '입력 · 푸리에 면 · 출력 상관',
       stack: { rects: [[22, 8, 270, 250], [302, 8, 262, 250], [566, 8, 304, 250]], rows: [[0, 1], [2]] },
       idea: [['렌즈가 푸리에 변환을 공짜로 해준다. 푸리에 면에 '], ['찾는 패턴의 켤레', 1], ['를 놓으면, 맞을 때만 출력에 뾰족한 봉우리가 선다.']],
-      who: '1기(1953~72)', wall: '아날로그 정밀도',
       note: '64점 DFT로 실제 상관을 계산한다. 필터와 입력이 어긋나면 봉우리가 주저앉는다.',
       controls: [
         { type: 'seg', k: 'inp', label: '입력', def: 'A', opts: [['A', 'A'], ['B', 'B'], ['AN', 'A+잡음']] },
@@ -171,9 +167,8 @@
       }
     },
     {
-      id: 'a5', key: 'PCM 크로스바', num: '05', tab: 'PCM 크로스바', title: 'PCM 크로스바', fig: { type: 'svg', w: 440, h: 200 }, label: 'PCM 크로스바 4×4',
+      id: 'a5', num: '05', tab: 'PCM 크로스바', title: 'PCM 크로스바', fig: { type: 'svg', w: 440, h: 200 }, label: 'PCM 크로스바 4×4',
       idea: [['상변화 재료의 결정 상태가 가중치다. '], ['전원을 꺼도 값이 남는다', 1], [' — 위상이 들고 있던 가중치와 갈리는 지점.']],
-      who: '옥스퍼드 Bhaskaran · 하이델베르크 Pernice · 뮌스터', wall: '쓰기 횟수 · 속도',
       note: '칸을 누르면 결정 상태가 바뀐다(0 → 0.5 → 1). 전원을 꺼보면 왜 비휘발이 승부처인지 보인다.',
       init: () => ({ w: [[1, .5, 0, .5], [0, 1, .5, 0], [.5, 0, 1, .5], [1, .5, .5, 0]], off: false, writes: 0 }),
       controls: [
@@ -210,9 +205,8 @@
       }
     },
     {
-      id: 'a6', key: '호모다인 MVM', num: '06', tab: '호모다인', title: '호모다인 · 코히런트 MVM', fig: { type: 'svg', w: 440, h: 180 }, label: '직접검출과 호모다인 비교',
+      id: 'a6', num: '06', tab: '호모다인', title: '호모다인 · 코히런트 MVM', fig: { type: 'svg', w: 440, h: 180 }, label: '직접검출과 호모다인 비교',
       idea: [['검출기는 세기만 읽으니 부호가 사라진다. 기준 빛을 같이 때려 '], ['음수와 복소수', 1], ['를 되찾는 방법.']],
-      who: 'SJTU · Lightmatter', wall: '국부발진기 · 안정화',
       note: 'LO 위상이 틀어지면 결과가 cos만큼 깎인다. 그 각도를 붙잡는 게 안정화 회로가 하는 일이다.',
       controls: [
         { type: 'range', k: 'w', label: '가중치 w', min: -100, max: 100, step: 1, def: -70, fmt: v => fmt(v / 100) },
@@ -236,9 +230,8 @@
       }
     },
     {
-      id: 'a7', key: '시간다중 MVM', num: '07', tab: '시간다중', title: '시간다중 MVM', fig: { type: 'svg', w: 440, h: 170 }, label: '시간다중 누적',
+      id: 'a7', num: '07', tab: '시간다중', title: '시간다중 MVM', fig: { type: 'svg', w: 440, h: 170 }, label: '시간다중 누적',
       idea: [['소자 하나를 시간으로 재사용한다. '], ['공간 대신 시간', 1], ['으로 행렬을 펼치니 면적은 줄고 지연은 늘어난다.']],
-      who: '칭화 Taichi', wall: '처리량이 시간에 묶인다',
       note: 'N×N 행렬 하나에 N 사이클이 든다. 소자는 하나로 줄지만 계산 시간이 N배다.',
       init: () => ({ t: 0 }),
       controls: [
@@ -265,9 +258,8 @@
       }
     },
     {
-      id: 'a8', key: 'SLM 자유공간', num: '08', tab: 'SLM 자유공간', title: 'SLM 자유공간 MVM', fig: { type: 'svg', w: 440, h: 180 }, label: 'SLM 병렬도와 갱신 속도',
+      id: 'a8', num: '08', tab: 'SLM 자유공간', title: 'SLM 자유공간 MVM', fig: { type: 'svg', w: 440, h: 180 }, label: 'SLM 병렬도와 갱신 속도',
       idea: [['공간광변조기 한 장에 큰 행렬을 통째로 올린다. '], ['병렬도는 압도적이고 갱신은 느리다', 1], [' — 07과 정확히 반대의 거래.']],
-      who: '스탠포드 Kiyoul Yang', wall: '속도 (ms~µs)',
       note: '가중치를 고정해두고 입력만 빠르게 흘리면(weight-stationary) 이 거래가 유리해진다.',
       controls: [
         { type: 'range', k: 'N', label: '한 변 N', min: 16, max: 512, step: 16, def: 256 },
@@ -288,7 +280,7 @@
       id: 'a9', num: '', tab: '겹쳐 보면', title: '여덟을 겹쳐 보면', text: true,
       body: [
         '<b>가중치를 어디에 두느냐가 전부를 가른다.</b> 위상에 두면(01) 임의 행렬이 되지만 소자가 N²로 늘고 계속 전기를 먹는다. 파장에 두면(02) 합산이 공짜가 되지만 온도에 묶인다. 마스크에 두면(03·04) 전파가 연산을 대신 해주지만 바꾸려면 다시 찍어야 한다. 재료의 결정 상태에 두면(05) 꺼도 남지만 쓰기가 느리다.',
-        '<b>그리고 검출이 절반이다.</b> 06이 보여주는 건 연산을 아무리 잘해도 <span style="color:#C9472F;font-weight:700">읽는 방식이 부호를 버리면 음수 가중치를 못 쓴다</span>는 것이다. 광 가속기 논문에서 호모다인이 자꾸 나오는 이유가 여기 있다.',
+        '<b>그리고 검출이 절반이다.</b> 06이 보여주는 건 연산을 아무리 잘해도 <span style="color:#D62A1F;font-weight:700">읽는 방식이 부호를 버리면 음수 가중치를 못 쓴다</span>는 것이다. 광 가속기 논문에서 호모다인이 자꾸 나오는 이유가 여기 있다.',
         '<b>07과 08은 같은 축의 양 끝이다.</b> 시간으로 펼치면 소자가 하나로 줄고 지연이 N배, 공간으로 펼치면 병렬도가 N²이고 갱신이 밀리초다. 실제 설계는 둘 사이 어딘가에 선다.'
       ]
     }

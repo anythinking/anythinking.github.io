@@ -11,23 +11,18 @@
 <link rel="alternate" hreflang="x-default" href="https://anythinking.github.io/optics/writing.html">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@500;700&family=Noto+Sans+KR:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
-<link rel="stylesheet" href="css/base.css?v=28e880b9">
-<link rel="stylesheet" href="css/writing.css?v=a3bc78b7">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="css/base.css?v=25b88a60">
+<link rel="stylesheet" href="css/writing.css?v=ff779957">
 </head>
 <body data-page="writing" data-root="">
 <div class="app">
   <header class="top">
-    <div class="ttl"><b>광 연산 지도와 실험실</b><span>지도 6장 · 구조 28개 · 용어 346개</span></div>
+    <div class="ttl"><b>광 연산 지도와 실험실</b></div>
     <div class="hd-r">
-      <nav class="g" aria-label="지도"><a href="optics.html">광학</a>
-      <a href="layers.html">층<span class="n">148</span></a>
-      <a href="compute.html">구조<span class="n">28</span></a>
-      <a href="devices.html">소자<span class="n">42</span></a>
-      <a href="institutions.html">기관<span class="n">124</span></a>
-      <a href="glossary.html">용어<span class="n">346</span></a>
-      <a href="writing.html" aria-current="page">글</a>
-      <a href="about.html">소개</a></nav>
+      <nav class="g" aria-label="지도"><div class="ng"><span class="ngl">포토닉스 기초</span><div class="ngt"><a href="optics.html">광학</a><a href="layers.html">층</a><a href="glossary.html">용어</a></div></div>
+      <div class="ng"><span class="ngl">광 연산</span><div class="ngt"><a href="compute.html">종류</a><a href="devices.html">소자</a><a href="institutions.html">기관</a></div></div>
+      <div class="ng etc"><span class="ngl">&nbsp;</span><div class="ngt"><a href="writing.html" aria-current="page">글</a><a href="about.html">소개</a></div></div></nav>
       <div class="lang" role="group" aria-label="Language"><span class="lang-lb">Language</span><span aria-current="true" lang="ko">한국어</span><a href="en/writing.html" hreflang="en" lang="en">English</a></div>
     </div>
   </header>
@@ -35,28 +30,48 @@
 <main class="one">
 <div class="doc">
   <p class="meta">글 3편</p>
+  <div class="wr-tabs" role="tablist"><button type="button" role="tab" id="tab-basics" aria-controls="basics" data-tab="basics">기초<span class="n"></span></button><button type="button" role="tab" id="tab-sim" aria-controls="sim" data-tab="sim">시뮬레이션<span class="n"></span></button><button type="button" role="tab" id="tab-review" aria-controls="review" data-tab="review">논문 리뷰<span class="n"></span></button><button type="button" role="tab" id="tab-compendium" aria-controls="compendium" data-tab="compendium">단권화<span class="n"></span></button></div>
+  <section class="wr-tab" id="basics" aria-labelledby="tab-basics">
+  <p class="wr-cat-d">논문을 읽기 전에 알아야 하는 원리입니다. 읽는 순서대로 놓았습니다.</p>
   <ul class="wr-list">
-    <li><a href="writing-fdtd-designer.html">
-      <h2>FDTD 설계 창 만들기</h2>
-      <p>졸업 후 상용 시뮬레이터 없이, MIT의 오픈소스 FDTD(MEEP) 위에 그리면서 설계하는 창을 만든 과정. 무엇을 할 수 있는지, 그리고 정답지 없이 계산을 어떻게 믿을지.</p>
-      <p class="meta">2026-11-07 · 도구 › 시뮬레이션 ①</p>
-    </a></li>
-    <li><a href="writing-ising.html">
-      <h2>최적화 문제가 어떻게 이징 머신이 될까?</h2>
-      <p>지도에 이징 머신을 세 번이나 적어 놓고 정작 이징이 무엇인지 몰랐습니다. 자석 모형에서 출발해, 최적화 문제가 왜 그 형태로 번역되는지와 빛의 위상 0·π가 어떻게 스핀이 되는지까지.</p>
-      <p class="meta">2026-11-02 · 구조 › 코히런트 이징 머신 · 공간광 이징 머신 · 이징 샘플러</p>
-    </a></li>
-    <li><a href="writing-matrix-crossbar.html">
+    <li data-page="writing-matrix-crossbar"><a href="writing-matrix-crossbar.html">
       <h2>신경망이 어떻게 크로스바로 표현될까?</h2>
       <p>마이크로링과 PCM 광회로가 둘 다 격자인 이유에서 출발해, 가중치가 선에 있다는 것부터 크로스바 위의 빛의 경로와 세로줄의 빛이 나뉘는 문제까지.</p>
       <p class="meta">2026-10-28 · 구조 › 마이크로링 가중치 뱅크 · PCM 크로스바</p>
     </a></li>
+    <li data-page="writing-ising"><a href="writing-ising.html">
+      <h2>최적화 문제가 어떻게 이징 머신이 될까?</h2>
+      <p>지도에 이징 머신을 세 번이나 적어 놓고 정작 이징이 무엇인지 몰랐습니다. 자석 모형에서 출발해, 최적화 문제가 왜 그 형태로 번역되는지와 빛의 위상 0·π가 어떻게 스핀이 되는지까지.</p>
+      <p class="meta">2026-11-02 · 구조 › 코히런트 이징 머신 · 공간광 이징 머신 · 이징 샘플러</p>
+    </a></li>
   </ul>
+
+  </section>
+  <section class="wr-tab" id="sim" aria-labelledby="tab-sim">
+  <p class="wr-cat-d">직접 만든 계산 도구와, 그 계산을 믿을 수 있는지 확인한 기록입니다.</p>
+  <ul class="wr-list">
+    <li data-page="writing-fdtd-designer"><a href="writing-fdtd-designer.html">
+      <h2>FDTD 설계 창 만들기</h2>
+      <p>졸업 후 상용 시뮬레이터 없이, MIT의 오픈소스 FDTD(MEEP) 위에 그리면서 설계하는 창을 만든 과정. 무엇을 할 수 있는지, 그리고 정답지 없이 계산을 어떻게 믿을지.</p>
+      <p class="meta">2026-11-07 · 도구 › 시뮬레이션 ①</p>
+    </a></li>
+  </ul>
+
+  </section>
+  <section class="wr-tab" id="review" aria-labelledby="tab-review">
+  <p class="wr-cat-d">논문 한 편을 처음부터 끝까지 읽고 정리한 글입니다. 첫 글을 준비하고 있습니다.</p>
+  </section>
+  <section class="wr-tab" id="compendium" aria-labelledby="tab-compendium">
+  <p class="wr-cat-d">공부한 내용을 주제별로 한 권에 묶은 정리본입니다. 논문을 읽을 때마다 해당하는 장이 두꺼워집니다.</p>
+  <ul class="wr-list">
+  </ul>
+  </section>
 </div>
 </main>
 
 </div>
-<script src="js/core.js?v=54ea7385"></script>
+<script src="js/core.js?v=64cbab95"></script>
+<script src="js/writing.js?v=f8062a51"></script>
 <script data-goatcounter="https://anythinking.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
 </body>
 </html>

@@ -1,18 +1,11 @@
 /* 기관 지도 페이지 */
-:root{
-  --in-eo:#C9472F; --in-fab:#B7791F; --in-pcm:#2C7A86; --in-comp:#1C1B18; --in-mat:#8A5A2B;
-  --in-src:#7A4F8F; --in-x:#9A948A; --in-ind:#5E6B3A; --in-quant:#3B5A8A;
-  --in-gold:#D4A017; --in-ring:#FBFAF7; --in-mapbg:#E9E6DF;
-}
-@media (prefers-color-scheme:dark){
-  :root{
-    --in-eo:#E0664C; --in-fab:#D4A017; --in-pcm:#4FA6B2; --in-comp:#ECE8DF; --in-mat:#B9875A;
-    --in-src:#B58CC8; --in-x:#8C877C; --in-ind:#9AAB6A; --in-quant:#7F9FD0;
-    --in-gold:#E6B83A; --in-ring:#1F1E19; --in-mapbg:#26251F;
-  }
-}
-.k-eo{--kc:var(--in-eo)} .k-fab{--kc:var(--in-fab)} .k-pcm{--kc:var(--in-pcm)} .k-comp{--kc:var(--in-comp)} .k-mat{--kc:var(--in-mat)}
-.k-src{--kc:var(--in-src)} .k-x{--kc:var(--in-x)} .k-ind{--kc:var(--in-ind)} .k-quant{--kc:var(--in-quant)}
+:root{ --in-gold:#D1A017; --in-ring:#FFFFFF; --in-mapbg:#E6EBF2; }
+@media (prefers-color-scheme:dark){ :root{ --in-gold:#E6C04A; --in-ring:#1E2430; --in-mapbg:#28303D; } }
+/* 축 → 층 색(base.css 의 --l0~--l6). 광연산·광양자 = L5, 광원·PCM = L3, 재료·팹 = L2, 기업 = L6. EO 는 층이 아니라 세로축 — 고리로 */
+.k-comp{--kc:var(--l5)} .k-quant{--kc:var(--l5)} .k-pcm{--kc:var(--l3)} .k-src{--kc:var(--l3)} .k-mat{--kc:var(--l2)} .k-fab{--kc:var(--l2)}
+.k-ind{--kc:var(--l6)} .k-x{--kc:var(--faint)} .k-eo{--kc:var(--probe)}
+.in-dot.k-eo{background:transparent;border:2px solid var(--probe);box-sizing:border-box}
+path.in-m.k-eo{fill:var(--in-ring);fill-opacity:1;stroke:var(--probe);stroke-width:2.5}
 .e-p{--ec:var(--beam)} .e-m{--ec:var(--probe)} .e-i{--ec:var(--warm)} .e-s{--ec:var(--muted)}
 
 /* 탭 */
@@ -26,7 +19,9 @@
 
 /* 지도 */
 body[data-page="institutions"] main.split{grid-template-columns:minmax(0,1fr) 380px}
-#in-map{position:relative;min-width:0;min-height:0;background:var(--in-mapbg)}
+body[data-page="institutions"] main.split:has(> .side[hidden]){grid-template-columns:minmax(0,1fr)}
+.in-stage{padding:0 0 40px}
+#in-map{position:relative;min-width:0;height:56vh;min-height:340px;background:var(--in-mapbg)}
 #in-map.leaflet-container{font-family:var(--sans);background:var(--in-mapbg)}
 .in-mapnote{position:absolute;left:14px;bottom:26px;z-index:500;background:color-mix(in srgb,var(--panel) 94%,transparent);border:1px solid var(--rule);border-radius:8px;padding:8px 11px;font-size:11.5px;line-height:1.6;color:var(--muted);max-width:420px;pointer-events:none}
 .in-legend{position:absolute;right:12px;top:12px;z-index:500;background:color-mix(in srgb,var(--panel) 95%,transparent);border:1px solid var(--rule);border-radius:8px;padding:8px 11px;font-size:11.5px;display:flex;flex-direction:column;gap:4px;color:var(--ink)}
@@ -50,19 +45,24 @@ body[data-page="institutions"] aside.side{background:var(--bg)}
 .in-g6{gap:6px}
 .in-warn{margin:0;font-size:13px;line-height:1.75;padding:12px 14px;background:var(--panel);border:1px solid var(--rule);border-left:3px solid var(--wall)}
 .in-warn.why{border-left-color:var(--beam)}
-.in-lhead{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
-.in-ok{display:flex;gap:4px;margin-left:auto}
-.in-ok .pill{font-size:11.5px;padding:2px 9px;color:var(--muted)}
-.in-ok .pill.on{color:var(--beam)}
-.in-list{display:flex;flex-direction:column;border-top:1px solid var(--rule)}
-.in-row{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:10px;align-items:baseline;padding:9px 2px;border-bottom:1px solid var(--rule);text-decoration:none;color:var(--ink);cursor:pointer}
-.in-list.fit .in-row{grid-template-columns:44px minmax(0,1fr) auto}
-.in-row:hover{background:var(--panel);color:var(--ink)}
-.in-row .f{font-size:11px;color:var(--warm);letter-spacing:-1px}
-.in-row .n{font-size:14px;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.in-row .n .in-dot{margin-right:7px}
-.in-row .ct{font-family:var(--mono);font-size:10.5px;color:var(--muted);white-space:nowrap}
-.in-row.dim{opacity:.45}
+/* 지역별 묶음 */
+.in-lane{display:grid;grid-template-columns:minmax(180px,220px) minmax(0,1fr);gap:12px 24px;padding:18px var(--gutter);border-bottom:1px solid var(--rule)}
+.in-lane header{min-width:0}
+.in-lane h2{font-family:var(--serif);font-size:16px;font-weight:700;margin:0;line-height:1.4}
+.in-lane h2 .n{font-family:var(--mono);font-size:11px;font-weight:400;color:var(--muted);margin-left:6px}
+.in-pn{margin:6px 0 0;font-size:12.5px;line-height:1.6;color:var(--muted);text-wrap:pretty}
+.in-cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:8px;align-content:flex-start}
+.in-card{display:flex;flex-direction:column;gap:2px;min-width:0;padding:9px 11px;border-radius:8px;border:1px solid var(--rule);background:var(--bg);color:var(--ink);text-decoration:none;cursor:pointer}
+.in-card:hover{border-color:var(--beam);color:var(--ink)}
+.in-card.dim{opacity:.4}
+.in-ch{display:flex;align-items:baseline;gap:7px;min-width:0}
+.in-ch b{font-size:14px;font-weight:500;line-height:1.4;min-width:0}
+.in-ch .in-fit{margin:0;font-size:10.5px;letter-spacing:-1px;flex:none}
+.in-dots{margin-left:auto;display:inline-flex;gap:3px;flex:none;padding-top:5px}
+.in-meta{font-family:var(--mono);font-size:10.5px;color:var(--muted)}
+.in-sub{font-size:12.5px;line-height:1.45;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.in-read{padding:22px var(--gutter) 0;max-width:80ch;font-size:13.5px;line-height:1.75;color:var(--muted);display:flex;flex-direction:column;gap:10px}
+.in-read p{margin:0} .in-read b{color:var(--ink)}
 .in-back{align-self:flex-start;cursor:pointer;border:1px solid var(--rule);background:transparent;border-radius:6px;padding:4px 10px;font-size:12.5px;white-space:nowrap}
 .in-back:hover{border-color:var(--beam)}
 .in-w{font-size:13px;color:var(--muted)}
@@ -77,6 +77,7 @@ body[data-page="institutions"] .ok{color:var(--probe)}
 .in-pis{display:flex;flex-direction:column;gap:10px;margin:0;padding:0;list-style:none}
 .in-pis li{font-size:13.5px;line-height:1.65}
 .in-pis b{display:block;font-size:14px}
+.in-field{display:inline-block;margin-left:8px;font-size:11.5px;font-weight:400;color:var(--muted);border-bottom:1px dotted var(--rule);cursor:help}
 .in-pis li > span{color:var(--muted)}
 .in-rels{display:flex;flex-direction:column;gap:8px}
 .in-rel{font-size:13px;line-height:1.6;border:0;border-left:3px solid var(--ec);background:transparent;text-align:left;padding:8px 10px;border-radius:6px;cursor:pointer}
@@ -94,8 +95,9 @@ body[data-page="institutions"] .ok{color:var(--probe)}
 
 /* 좁은 화면: 지도는 위에 고정 높이, 목록·상세는 그 아래 */
 @media (max-width:899.98px){
-  #in-map{height:62vh;min-height:320px}
+  #in-map{height:58vh;min-height:320px}
+  .in-lane{grid-template-columns:minmax(0,1fr);gap:8px}
+  .in-sub{white-space:normal}
   .in-mapnote{left:8px;right:8px;bottom:22px;max-width:none;font-size:11px;padding:6px 9px}
   .in-legend{right:8px;top:8px;font-size:11px}
-  .in-row .n{white-space:normal}
 }

@@ -2,6 +2,8 @@
 (function () {
   'use strict';
   const D = A.data('layers');
+  // 항목 풀이는 용어 표(glossary)에서 — 층 파일엔 복사본을 두지 않는다
+  const GLOSS = Object.fromEntries((A.data('glossary') || []).map(o => [o.t, o.d]));
   if (!D) return;
   const priv = A.hasPrivate('layers');
   const st = { sel: null, depth: 9, chain: false };
@@ -59,11 +61,16 @@
       chips[c.g] = { el: b, chain: c.chain };
       row.append(b);
     });
-    stack.append(A.h('div.lx-layer' + (eo ? '.eo' : '') + (derived ? '.derived' : ''), { id: l.id },
+    // 층 색은 공통 토큰 --l0~--l6. 제목은 명사구(t), 아래 한 줄(q), 이 층이 사이트 어느 페이지인지(here)
+    const lc = /^L\d$/.test(l.id) ? '--lc:var(--l' + l.id[1] + ')' : null;
+    const here = (l.here || []).map(x => A.h('a.lx-go', { href: x.page + '.html' }, x.l));
+    stack.append(A.h('div.lx-layer' + (eo ? '.eo' : '') + (derived ? '.derived' : ''), { id: l.id, style: lc },
       A.h('div.lx-lhead', {},
         A.h('div.lx-meta', {},
           A.h('div.lx-idrow', {}, A.h('span.lx-id', {}, l.id), A.h('span.lx-nm', {}, l.nm)),
-          A.h('span.lx-q', {}, l.q), extra),
+          A.h('span.lx-t', {}, l.t || ''),
+          A.h('span.lx-q', {}, l.q),
+          here.length ? A.h('div.lx-here', {}, here) : null, extra),
         row),
       more));
   });
@@ -115,7 +122,7 @@
       const sl = D.L.find(l => l.id === LOF[st.sel]);
       A.$('#selLayer').textContent = sl ? `${sl.id} · ${sl.nm}` : '';
       A.$('#selName').textContent = st.sel;
-      A.$('#selGloss').innerHTML = ink(D.GLOSS[st.sel] || A.t('풀이가 아직 없다.', 'No explanation yet.'));
+      A.$('#selGloss').innerHTML = ink(GLOSS[st.sel] || A.t('풀이가 아직 없다.', 'No explanation yet.'));
       const grp = (list, dir, sym, first) => {
         const by = {};
         list.forEach(e => { (by[e.hop] = by[e.hop] || []).push(e); });
