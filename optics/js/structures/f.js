@@ -4,7 +4,7 @@
    run 의 document 는 그 트리를 찾는 좁은 창이다: getElementById · querySelector(All) 만. */
 (window.CMP = window.CMP || { groups: {} }).groups.f = {
   id: 'f', name: "F · 양자·신호",
-  html: "<section id=\"sec-f\" hidden>\n  <p class=\"lede\" style=\"margin-bottom:10px\">회로는 A군의 MZI 메시와 같다. 달라지는 건 그 안에 무엇을 넣느냐다 — 광자를 하나씩 넣으면 양자컴이 되고, 시간 지연을 넣으면 필터가 되고, 주파수 빗살을 넣으면 채널 수천 개가 된다.</p>\n  <div class=\"tabs\" id=\"f-tabs\" role=\"tablist\">\n    <button type=\"button\" data-s=\"1\" aria-pressed=\"true\"><span class=\"n\">01</span>선형광학 양자컴</button>\n    <button type=\"button\" data-s=\"2\" aria-pressed=\"false\"><span class=\"n\">02</span>마이크로파 포토닉스</button>\n    <button type=\"button\" data-s=\"3\" aria-pressed=\"false\"><span class=\"n\">03</span>주파수 콤</button>\n    <button type=\"button\" data-s=\"4\" aria-pressed=\"false\">겹쳐 보면</button>\n  </div>\n\n  <!-- ══ 01 ══════════════════════════════════════════ -->\n  <div class=\"card sec\" id=\"f-s1\">\n    <div class=\"head\">\n      <div><div class=\"num\">01</div><h2>선형광학 양자컴 · 보손샘플링</h2></div>\n      \n    </div>\n    <p class=\"idea\">회로는 A군 01의 MZI 메시와 <span class=\"k\">똑같다</span>. 바뀌는 건 입력뿐이다 — 연산기는 세기 있는 빛을 흘려보내고, 양자컴은 <span class=\"k\">광자를 하나씩</span> 넣는다. 같은 격자, 다른 입력.</p>\n\n    <h3>① 2×2에서 HOM 간섭 — 두 광자가 뭉친다</h3>\n    <div class=\"split\">\n      <div class=\"fig\"><svg class=\"f\" id=\"f-f1a\" viewBox=\"0 0 440 250\" role=\"img\" aria-label=\"HOM 간섭 — 결합기 모형과 동시검출 곡선\"></svg></div>\n      <div>\n        <div class=\"ctl\">\n          <div class=\"row\"><label for=\"f-c1t\">θ (나눔비)</label><input type=\"range\" id=\"f-c1t\" min=\"0\" max=\"180\" step=\"1\" value=\"90\"><output id=\"f-o1t\"></output></div>\n          <div class=\"row\"><label for=\"f-c1v\">광자 겹침 V</label><input type=\"range\" id=\"f-c1v\" min=\"0\" max=\"100\" step=\"1\" value=\"100\"><output id=\"f-o1v\"></output></div>\n        </div>\n        <div class=\"read\" id=\"f-r1a\"></div>\n        <p class=\"note\">동시검출 확률 = (T²+R²) − 2TR·V. θ=90°면 T=R=0.5이고 V=1일 때 <span class=\"k\">정확히 0</span>이 된다. 둘 중 한 포트로 둘이 같이 나가버린다 — 고전적으로는 설명이 안 되는 지점이다. V를 낮추면(두 광자의 도착 시각·모양이 어긋나면) 0.5로 되돌아간다.</p>\n      </div>\n    </div>\n\n    <h3>② 4모드 유니터리에서 보손샘플링 — permanent로 직접 계산</h3>\n    <div class=\"split\">\n      <div class=\"fig\"><svg class=\"f\" id=\"f-f1b\" viewBox=\"0 0 440 210\" role=\"img\" aria-label=\"출력 패턴 확률 분포\"></svg></div>\n      <div>\n        <div class=\"btns\" style=\"margin-bottom:8px\">\n          <button type=\"button\" id=\"f-b1r\">유니터리 바꾸기</button>\n          <button type=\"button\" id=\"f-b1e\">균등 분배로</button>\n        </div>\n        <div class=\"ctl\">\n          <div class=\"row\"><label for=\"f-c1n\">광자 n</label><input type=\"range\" id=\"f-c1n\" min=\"1\" max=\"3\" step=\"1\" value=\"3\"><output id=\"f-o1n\"></output></div>\n        </div>\n        <div class=\"read\" id=\"f-r1b\"></div>\n        <p class=\"note\">4×4 Clements 메시(MZI 6개)를 A군 쪽 코드 그대로 합성하고, 출력 패턴마다 n×n 부분행렬의 <span class=\"k\">permanent</span>를 직접 전개해 확률을 낸다. 확률 합이 1.000으로 닫히는 게 계산이 맞다는 증거다. 모드 m, 광자 n이면 패턴 수가 C(m+n−1, n)으로 늘고, permanent는 n!에 비례해 비싸진다 — 그게 고전 컴퓨터가 못 따라오는 이유다.</p>\n      </div>\n    </div>\n\n    <h3>③ 벽 — 손실은 지수로 깎는다</h3>\n    <div class=\"split\">\n      <div class=\"fig\"><svg class=\"f\" id=\"f-f1c\" viewBox=\"0 0 440 180\" role=\"img\" aria-label=\"광자 수에 따른 생존 확률 지수 붕괴\"></svg></div>\n      <div>\n        <div class=\"ctl\">\n          <div class=\"row\"><label for=\"f-c1e\">부품 투과율 η</label><input type=\"range\" id=\"f-c1e\" min=\"9000\" max=\"9999\" step=\"1\" value=\"9900\"><output id=\"f-o1e\"></output></div>\n          <div class=\"row\"><label for=\"f-c1m\">경로상 부품 m</label><input type=\"range\" id=\"f-c1m\" min=\"4\" max=\"200\" step=\"2\" value=\"40\"><output id=\"f-o1m\"></output></div>\n          <div class=\"row\"><label for=\"f-c1p\">광자 n</label><input type=\"range\" id=\"f-c1p\" min=\"1\" max=\"60\" step=\"1\" value=\"20\"><output id=\"f-o1p\"></output></div>\n        </div>\n        <div class=\"read\" id=\"f-r1c\"></div>\n        <p class=\"note\">광자 하나가 부품 m개를 지나면 η^m, n개가 다 살아남아야 하니 <span class=\"w\">η^(mn)</span>. 지수가 m·n이라 광자 수를 늘리는 순간 무너진다. η=0.99·m=40이면 광자 20개에서 이미 생존 확률이 0.03% 수준이다. 이게 손실 요구가 dB/m 영역으로 내려가는 이유이고, 실리콘 대신 질화실리콘(SiN)을 쓰는 이유다. 단광자 검출기(SNSPD)는 2~4 K 펄스튜브 냉동기가 따라붙는다.</p>\n      </div>\n    </div>\n  </div>\n\n  <!-- ══ 02 ══════════════════════════════════════════ -->\n  <div class=\"card sec\" id=\"f-s2\" hidden>\n    <div class=\"head\">\n      <div><div class=\"num\">02</div><h2>마이크로파 포토닉 프로세서</h2></div>\n      \n    </div>\n    <p class=\"idea\">마이크로파 신호를 빛에 실어 광학 영역에서 적분·미분·필터링을 한다. 회로의 본체는 <span class=\"k\">탭 지연선</span> — 빛을 여러 갈래로 나누고 서로 다른 지연을 준 뒤 계수를 곱해 다시 합친다. 전자회로의 FIR 필터를 빛으로 짓는 것이고, 계수는 각 탭의 세기다.</p>\n    <div class=\"split\">\n      <div class=\"fig\"><svg class=\"f\" id=\"f-f2a\" viewBox=\"0 0 440 220\" role=\"img\" aria-label=\"탭 지연선 구조\"></svg></div>\n      <div>\n        <div class=\"btns\" style=\"margin-bottom:8px\">\n          <button type=\"button\" data-g=\"2k\" data-v=\"diff\" aria-pressed=\"true\">미분기</button>\n          <button type=\"button\" data-g=\"2k\" data-v=\"int\" aria-pressed=\"false\">적분기</button>\n          <button type=\"button\" data-g=\"2k\" data-v=\"bp\" aria-pressed=\"false\">대역통과</button>\n        </div>\n        <div class=\"ctl\">\n          <div class=\"row\"><label for=\"f-c2n\">탭 수 N</label><input type=\"range\" id=\"f-c2n\" min=\"2\" max=\"16\" step=\"1\" value=\"8\"><output id=\"f-o2n\"></output></div>\n          <div class=\"row\"><label for=\"f-c2t\">탭 지연 ΔT</label><input type=\"range\" id=\"f-c2t\" min=\"10\" max=\"200\" step=\"5\" value=\"50\"><output id=\"f-o2t\"></output></div>\n          <div class=\"row\"><label for=\"f-c2f\">중심 주파수</label><input type=\"range\" id=\"f-c2f\" min=\"5\" max=\"95\" step=\"1\" value=\"30\"><output id=\"f-o2f\"></output></div>\n        </div>\n        <div class=\"read\" id=\"f-r2a\"></div>\n      </div>\n    </div>\n    <div class=\"split\">\n      <div class=\"fig\"><svg class=\"f\" id=\"f-f2b\" viewBox=\"0 0 440 210\" role=\"img\" aria-label=\"주파수 응답과 이상적 응답 비교\"></svg></div>\n      <div>\n        <p class=\"note\">응답은 H(f) = Σ cₖ·e^(−j2πf·kΔT)를 주파수 격자 240점에서 <span class=\"k\">직접 합산</span>해 그린다(DFT와 같은 계산). 같은 하드웨어에 계수만 갈아끼우면 기능이 바뀐다 — 미분기는 이상적 미분기의 충격응답을 N개로 잘라 창함수를 씌운 것이고, 적분기는 전부 1(유한구간 이동평균), 대역통과는 cos(2π f_c kΔT)에 창함수를 씌운 것이다.</p>\n        <p class=\"note\">미분기에서 점선은 이상적인 |H| ∝ f 직선이고, 실선이 그 직선을 따라가는 구간이 쓸 수 있는 대역이다. 탭 2개면 나이퀴스트의 38% 정도까지만 선형이고, 16개면 96%까지 간다 — <span class=\"w\">대신 지연선이 길어지고 손실이 쌓인다.</span> 그게 이 구조의 거래다. 탭이 홀수면 대역 끝에 영점이 강제돼 쓸 폭이 반으로 준다.</p>\n        <p class=\"note\"><b>적분기는 정직하게 말해야 한다.</b> 탭 지연선은 FIR이라 되먹임이 없고, 전부 1인 계수는 DC에서 |H|가 1로 평탄하다 — 참 적분기라면 DC에서 발산해야 하니 이건 <span class=\"w\">유한구간 평균이지 적분이 아니다.</span> 실제 마이크로파 포토닉 적분기가 고Q 링 공진기(되먹임 구조)로 만들어지는 이유가 여기 있다. 이 모드의 점선은 이상적 응답이 아니라 이동평균의 해석식이고, 직접 합산한 실선과 겹치는 것이 계산이 맞다는 검산이다.</p>\n        <p class=\"note\">탭 지연 ΔT의 역수가 응답이 되풀이되는 주기(자유 스펙트럼 범위)다. ΔT를 키우면 세밀해지는 대신 쓸 수 있는 주파수 범위가 좁아진다.</p>\n        <div class=\"read\" id=\"f-r2b\"></div>\n      </div>\n    </div>\n    <p class=\"note\" style=\"border-top:1px solid var(--rule);padding-top:10px\">《Nature》 2024에 보고된 마이크로파 포토닉 처리 엔진은 적분·미분 동작에서 <b>98.1%</b> 정확도를 보고했다 — <span class=\"chip\">보고값 · 재현 미확인</span> 이 페이지의 숫자는 위 계수로 직접 계산한 것이고, 98.1%는 그 논문의 주장이다.</p>\n  </div>\n\n  <!-- ══ 03 ══════════════════════════════════════════ -->\n  <div class=\"card sec\" id=\"f-s3\" hidden>\n    <div class=\"head\">\n      <div><div class=\"num\">03</div><h2>주파수 콤 병렬 처리</h2></div>\n      \n    </div>\n    <p class=\"idea\">하나의 레이저에서 수백~수천 개의 등간격 선을 뽑아낸다. <span class=\"k\">빗살 하나가 채널 하나</span>이므로, 파장 다중 연산에서 콤은 곧 병렬도다. A군 02의 링 가중치 뱅크가 파장마다 가중치 하나를 두는 구조라면, 콤은 그 파장을 공급하는 쪽이다.</p>\n    <div class=\"split\">\n      <div class=\"fig\"><svg class=\"f\" id=\"f-f3a\" viewBox=\"0 0 440 200\" role=\"img\" aria-label=\"콤 스펙트럼\"></svg></div>\n      <div>\n        <div class=\"ctl\">\n          <div class=\"row\"><label for=\"f-c3s\">선 간격 FSR</label><input type=\"range\" id=\"f-c3s\" min=\"10\" max=\"200\" step=\"5\" value=\"49\"><output id=\"f-o3s\"></output></div>\n          <div class=\"row\"><label for=\"f-c3n\">선 개수</label><input type=\"range\" id=\"f-c3n\" min=\"9\" max=\"201\" step=\"2\" value=\"81\"><output id=\"f-o3n\"></output></div>\n          <div class=\"row\"><label for=\"f-c3r\">선당 속도</label><input type=\"range\" id=\"f-c3r\" min=\"1\" max=\"100\" step=\"1\" value=\"10\"><output id=\"f-o3r\"></output></div>\n        </div>\n        <div class=\"read\" id=\"f-r3a\"></div>\n        <p class=\"note\">세기 포락선은 sech² 모양으로 그렸다(커 소리톤 콤의 전형). 가장자리 선은 약해서 실제로 쓰려면 평탄화가 따로 필요하다 — 그려진 선 전부가 쓸 수 있는 채널은 아니다.</p>\n      </div>\n    </div>\n\n    <h3>광 기준을 마이크로파로 내릴 때 — 위상잡음 20·log N</h3>\n    <div class=\"split\">\n      <div class=\"fig\"><svg class=\"f\" id=\"f-f3b\" viewBox=\"0 0 440 190\" role=\"img\" aria-label=\"주파수 분할에 따른 위상잡음 저감\"></svg></div>\n      <div>\n        <div class=\"ctl\">\n          <div class=\"row\"><label for=\"f-c3o\">광 기준</label><input type=\"range\" id=\"f-c3o\" min=\"50\" max=\"400\" step=\"5\" value=\"200\"><output id=\"f-o3o\"></output></div>\n          <div class=\"row\"><label for=\"f-c3m\">목표 마이크로파</label><input type=\"range\" id=\"f-c3m\" min=\"1\" max=\"100\" step=\"1\" value=\"10\"><output id=\"f-o3m\"></output></div>\n          <div class=\"row\"><label for=\"f-c3p\">광 기준 위상잡음</label><input type=\"range\" id=\"f-c3p\" min=\"-120\" max=\"-40\" step=\"1\" value=\"-80\"><output id=\"f-o3p\"></output></div>\n        </div>\n        <div class=\"read\" id=\"f-r3b\"></div>\n        <p class=\"note\">주파수를 N배로 나누면 위상 흔들림도 N배로 줄고, 전력 척도(dB)에서는 <span class=\"k\">20·log₁₀N</span>만큼 내려간다. 200 THz를 10 GHz로 내리면 N = 20,000이고 20·log₁₀(20,000) ≈ <span class=\"k\">86.0 dB</span>. 콤이 하는 일은 그 분할의 눈금을 광학적으로 코히런트하게 들고 있는 것이다. 이건 분할의 상한이고, 실제로는 검출기 산탄잡음·열잡음이 바닥을 깐다 — 그 바닥은 이 계산에 들어 있지 않다.</p>\n      </div>\n    </div>\n    <p class=\"note\" style=\"border-top:1px solid var(--rule);padding-top:10px\"><b>벽.</b> 콤을 칩에서 만들려면 Q가 수백만인 공진기와 커(Kerr) 비선형이 둘 다 있어야 한다. 실리콘은 1550 nm에서 <span class=\"w\">2광자 흡수(TPA)</span>가 일어나 세기를 올릴수록 흡수가 늘어 소리톤이 안 선다. 그래서 질화실리콘(SiN)을 쓴다 — 밴드갭이 넓어 TPA가 없고 손실도 낮다. 01의 양자 쪽이 SiN으로 가는 이유와 같은 재료적 결론이 다른 길로 도착한다.</p>\n  </div>\n\n  <!-- ══ 04 ══════════════════════════════════════════ -->\n  <div class=\"card sec close\" id=\"f-s4\" hidden>\n    <h2 style=\"font-size:16px\">셋을 겹쳐 보면</h2>\n    <p style=\"margin-top:8px\"><b>회로는 같고 자원이 다르다.</b> 01은 A군 01의 MZI 메시를 글자 하나 안 바꾸고 쓴다 — 실제로 이 페이지의 보손샘플링은 4×4 Clements 메시 코드를 그대로 돌린 것이다. 통신은 그 격자의 위상을 흔들어 정보를 실어 보내고, 연산은 위상을 값으로 고정해 행렬을 만들고, 양자는 고정한 격자에 광자를 하나씩 넣는다. 세 용도가 같은 하드웨어를 다르게 쓰는 것뿐이다.</p>\n    <p><b>02와 03은 빛의 다른 축을 쓴다.</b> 01이 쓰는 자원은 광자 하나하나의 개수이고, 02는 <span class=\"k\">시간</span>을, 03은 <span class=\"k\">주파수</span>를 쓴다. 02의 탭 지연선은 같은 빛을 시간으로 펼쳐 계수를 곱하고, 03의 콤은 같은 레이저를 주파수로 펼쳐 채널을 만든다. 그래서 둘은 겹쳐 쓸 수 있다 — 콤으로 채널을 공급하고 지연선으로 각 채널을 처리하는 구성이 실제 마이크로파 포토닉 논문들의 기본형이다.</p>\n    <p><b>벽은 셋 다 다르게 생겼지만 재료는 한 군데서 만난다.</b> 01의 벽은 손실이 지수로 깎는 것이고(η^(mn)), 02의 벽은 아날로그 정밀도와 탭 수의 거래이고, 03의 벽은 콤을 세우는 비선형 조건이다. 그런데 01의 손실 요구(dB/m)와 03의 TPA 회피가 <span class=\"k\">둘 다 질화실리콘</span>으로 끝난다. 다른 문제를 풀다 같은 재료에 도착하는 건 우연이 아니라, 저손실·넓은 밴드갭이라는 한 가지 성질이 두 요구를 동시에 만족시키기 때문이다.</p>\n    <p><b>셋 중 어느 것도 \"광 컴퓨터\"가 아니다.</b> 01은 샘플링이라는 특정 문제의 하드웨어이고, 02는 신호처리 전단이고, 03은 광원 겸 시계다. 범용 연산을 노리는 건 A군이고, F군은 <span class=\"k\">빛이 전자보다 확실히 유리한 지점</span>에만 붙어 있다. 그 자리가 어디인지 알아보는 쪽이 범용을 노리는 쪽보다 성적이 좋았다는 게 지금까지의 기록이다.</p>\n  </div>\n\n  <div class=\"src\" id=\"f-src\" hidden>\n    <p><b>이 페이지에서 실제로 계산한 것</b> — HOM 동시검출 확률(2×2 전달행렬 해석식), 보손샘플링 출력 분포(4×4 Clements 메시 + permanent 직접 전개, 확률 합으로 자가검산), 손실 생존 확률(η^(mn)), 탭 지연선 주파수 응답(240점 직접 합산), 콤 스펙트럼, 주파수 분할 위상잡음(20·log₁₀N).</p>\n    <p><b>인용한 주장</b> — 《Nature》 2024 마이크로파 포토닉 처리 엔진의 적분·미분 98.1% 정확도는 논문 보고값이고 여기서 재현하지 않았다. 회사 이름(PsiQuantum·Xanadu·Quandela·스윈번·발렌시아공대·하버드)은 그 구조를 밀고 있는 곳을 가리키는 표시이고, 성능 주장을 옮긴 것은 아니다.</p>\n    <p><b>미확인</b> — SNSPD의 2~4 K 펄스튜브 냉동기 소량 상용 단계라는 서술은 정리 노트의 기록이고 이 페이지에서 다시 확인하지 않았다. 콤의 \"수천 채널\"은 구조적으로 가능한 수이고, 평탄화·잡음을 넘겨 실제로 다 쓴 보고는 별개다.</p>\n    <p><b>같은 틀의 다른 묶음</b> — A군 <a href=\"https://claude.ai/artifact/1rU7rNCNLmKpuXvThQPB9S\">4×4 광 연산 메시</a> · 행렬곱을 만드는 여덟 구조.</p>\n  </div>\n</section>",
+  html: "<section id=\"sec-f\" hidden>\n  <p class=\"lede\" style=\"margin-bottom:10px\">회로는 A군의 MZI 메시와 같다. 달라지는 건 그 안에 무엇을 넣느냐다 — 광자를 하나씩 넣으면 양자컴이 되고, 시간 지연을 넣으면 필터가 되고, 주파수 빗살을 넣으면 채널 수천 개가 된다.</p>\n  <div class=\"tabs\" id=\"f-tabs\" role=\"tablist\">\n    <button type=\"button\" data-s=\"1\" aria-pressed=\"true\"><span class=\"n\">01</span>선형광학 양자컴</button>\n    <button type=\"button\" data-s=\"2\" aria-pressed=\"false\"><span class=\"n\">02</span>마이크로파 포토닉스</button>\n    <button type=\"button\" data-s=\"3\" aria-pressed=\"false\"><span class=\"n\">03</span>주파수 콤</button>\n    <button type=\"button\" data-s=\"4\" aria-pressed=\"false\">겹쳐 보면</button>\n  </div>\n\n  <!-- ══ 01 ══════════════════════════════════════════ -->\n  <div class=\"card sec\" id=\"f-s1\">\n    <div class=\"head\">\n      <div><div class=\"num\">01</div><h2>선형광학 양자컴 · 보손샘플링</h2></div>\n      \n    </div>\n    <p class=\"idea\">회로는 A군 01의 MZI 메시와 <span class=\"k\">똑같다</span>. 바뀌는 건 입력뿐이다 — 연산기는 세기 있는 빛을 흘려보내고, 양자컴은 <span class=\"k\">광자를 하나씩</span> 넣는다. 같은 격자, 다른 입력.</p>\n\n    <h3>① 2×2에서 HOM 간섭 — 두 광자가 뭉친다</h3>\n    <div class=\"split\">\n      <div class=\"fig\"><svg class=\"f\" id=\"f-f1a\" viewBox=\"0 0 880 370\" role=\"img\" aria-label=\"펄스 펌프 → 쌍광자원 → 칩 2×2 간섭 → 단일광자 동시검출\"></svg></div>\n      <div>\n        <div class=\"ctl\">\n          <div class=\"row\"><label for=\"f-c1t\">θ (나눔비)</label><input type=\"range\" id=\"f-c1t\" min=\"0\" max=\"180\" step=\"1\" value=\"90\"><output id=\"f-o1t\"></output></div>\n          <div class=\"row\"><label for=\"f-c1v\">광자 겹침 V</label><input type=\"range\" id=\"f-c1v\" min=\"0\" max=\"100\" step=\"1\" value=\"100\"><output id=\"f-o1v\"></output></div>\n        </div>\n        <div class=\"read\" id=\"f-r1a\"></div>\n        <p class=\"note\">동시검출 확률 = (T²+R²) − 2TR·V. θ=90°면 T=R=0.5이고 V=1일 때 <span class=\"k\">정확히 0</span>이 된다. 둘 중 한 포트로 둘이 같이 나가버린다 — 고전적으로는 설명이 안 되는 지점이다. V를 낮추면(두 광자의 도착 시각·모양이 어긋나면) 0.5로 되돌아간다.</p>\n      </div>\n    </div>\n\n    <h3>② 4모드 유니터리에서 보손샘플링 — permanent로 직접 계산</h3>\n    <div class=\"split\">\n      <div class=\"fig\"><svg class=\"f\" id=\"f-f1b\" viewBox=\"0 0 440 210\" role=\"img\" aria-label=\"출력 패턴 확률 분포\"></svg></div>\n      <div>\n        <div class=\"btns\" style=\"margin-bottom:8px\">\n          <button type=\"button\" id=\"f-b1r\">유니터리 바꾸기</button>\n          <button type=\"button\" id=\"f-b1e\">균등 분배로</button>\n        </div>\n        <div class=\"ctl\">\n          <div class=\"row\"><label for=\"f-c1n\">광자 n</label><input type=\"range\" id=\"f-c1n\" min=\"1\" max=\"3\" step=\"1\" value=\"3\"><output id=\"f-o1n\"></output></div>\n        </div>\n        <div class=\"read\" id=\"f-r1b\"></div>\n        <p class=\"note\">4×4 Clements 메시(MZI 6개)를 A군 쪽 코드 그대로 합성하고, 출력 패턴마다 n×n 부분행렬의 <span class=\"k\">permanent</span>를 직접 전개해 확률을 낸다. 확률 합이 1.000으로 닫히는 게 계산이 맞다는 증거다. 모드 m, 광자 n이면 패턴 수가 C(m+n−1, n)으로 늘고, permanent는 n!에 비례해 비싸진다 — 그게 고전 컴퓨터가 못 따라오는 이유다.</p>\n      </div>\n    </div>\n\n    <h3>③ 벽 — 손실은 지수로 깎는다</h3>\n    <div class=\"split\">\n      <div class=\"fig\"><svg class=\"f\" id=\"f-f1c\" viewBox=\"0 0 440 180\" role=\"img\" aria-label=\"광자 수에 따른 생존 확률 지수 붕괴\"></svg></div>\n      <div>\n        <div class=\"ctl\">\n          <div class=\"row\"><label for=\"f-c1e\">부품 투과율 η</label><input type=\"range\" id=\"f-c1e\" min=\"9000\" max=\"9999\" step=\"1\" value=\"9900\"><output id=\"f-o1e\"></output></div>\n          <div class=\"row\"><label for=\"f-c1m\">경로상 부품 m</label><input type=\"range\" id=\"f-c1m\" min=\"4\" max=\"200\" step=\"2\" value=\"40\"><output id=\"f-o1m\"></output></div>\n          <div class=\"row\"><label for=\"f-c1p\">광자 n</label><input type=\"range\" id=\"f-c1p\" min=\"1\" max=\"60\" step=\"1\" value=\"20\"><output id=\"f-o1p\"></output></div>\n        </div>\n        <div class=\"read\" id=\"f-r1c\"></div>\n        <p class=\"note\">광자 하나가 부품 m개를 지나면 η^m, n개가 다 살아남아야 하니 <span class=\"w\">η^(mn)</span>. 지수가 m·n이라 광자 수를 늘리는 순간 무너진다. η=0.99·m=40이면 광자 20개에서 이미 생존 확률이 0.03% 수준이다. 이게 손실 요구가 dB/m 영역으로 내려가는 이유이고, 실리콘 대신 질화실리콘(SiN)을 쓰는 이유다. 단광자 검출기(SNSPD)는 2~4 K 펄스튜브 냉동기가 따라붙는다.</p>\n      </div>\n    </div>\n  </div>\n\n  <!-- ══ 02 ══════════════════════════════════════════ -->\n  <div class=\"card sec\" id=\"f-s2\" hidden>\n    <div class=\"head\">\n      <div><div class=\"num\">02</div><h2>마이크로파 포토닉 프로세서</h2></div>\n      \n    </div>\n    <p class=\"idea\">마이크로파 신호를 빛에 실어 광학 영역에서 적분·미분·필터링을 한다. 회로의 본체는 <span class=\"k\">탭 지연선</span> — 빛을 여러 갈래로 나누고 서로 다른 지연을 준 뒤 계수를 곱해 다시 합친다. 전자회로의 FIR 필터를 빛으로 짓는 것이고, 계수는 각 탭의 세기다.</p>\n    <div class=\"split\">\n      <div class=\"fig\"><svg class=\"f\" id=\"f-f2a\" viewBox=\"0 0 880 340\" role=\"img\" aria-label=\"탭 지연선 구조\"></svg></div>\n      <div>\n        <div class=\"btns\" style=\"margin-bottom:8px\">\n          <button type=\"button\" data-g=\"2k\" data-v=\"diff\" aria-pressed=\"true\">미분기</button>\n          <button type=\"button\" data-g=\"2k\" data-v=\"int\" aria-pressed=\"false\">적분기</button>\n          <button type=\"button\" data-g=\"2k\" data-v=\"bp\" aria-pressed=\"false\">대역통과</button>\n        </div>\n        <div class=\"ctl\">\n          <div class=\"row\"><label for=\"f-c2n\">탭 수 N</label><input type=\"range\" id=\"f-c2n\" min=\"2\" max=\"16\" step=\"1\" value=\"8\"><output id=\"f-o2n\"></output></div>\n          <div class=\"row\"><label for=\"f-c2t\">탭 지연 ΔT</label><input type=\"range\" id=\"f-c2t\" min=\"10\" max=\"200\" step=\"5\" value=\"50\"><output id=\"f-o2t\"></output></div>\n          <div class=\"row\"><label for=\"f-c2f\">중심 주파수</label><input type=\"range\" id=\"f-c2f\" min=\"5\" max=\"95\" step=\"1\" value=\"30\"><output id=\"f-o2f\"></output></div>\n        </div>\n        <div class=\"read\" id=\"f-r2a\"></div>\n      </div>\n    </div>\n    <div class=\"split\">\n      <div class=\"fig\"><svg class=\"f\" id=\"f-f2b\" viewBox=\"0 0 440 210\" role=\"img\" aria-label=\"주파수 응답과 이상적 응답 비교\"></svg></div>\n      <div>\n        <p class=\"note\">응답은 H(f) = Σ cₖ·e^(−j2πf·kΔT)를 주파수 격자 240점에서 <span class=\"k\">직접 합산</span>해 그린다(DFT와 같은 계산). 같은 하드웨어에 계수만 갈아끼우면 기능이 바뀐다 — 미분기는 이상적 미분기의 충격응답을 N개로 잘라 창함수를 씌운 것이고, 적분기는 전부 1(유한구간 이동평균), 대역통과는 cos(2π f_c kΔT)에 창함수를 씌운 것이다.</p>\n        <p class=\"note\">미분기에서 점선은 이상적인 |H| ∝ f 직선이고, 실선이 그 직선을 따라가는 구간이 쓸 수 있는 대역이다. 탭 2개면 나이퀴스트의 38% 정도까지만 선형이고, 16개면 96%까지 간다 — <span class=\"w\">대신 지연선이 길어지고 손실이 쌓인다.</span> 그게 이 구조의 거래다. 탭이 홀수면 대역 끝에 영점이 강제돼 쓸 폭이 반으로 준다.</p>\n        <p class=\"note\"><b>적분기는 정직하게 말해야 한다.</b> 탭 지연선은 FIR이라 되먹임이 없고, 전부 1인 계수는 DC에서 |H|가 1로 평탄하다 — 참 적분기라면 DC에서 발산해야 하니 이건 <span class=\"w\">유한구간 평균이지 적분이 아니다.</span> 실제 마이크로파 포토닉 적분기가 고Q 링 공진기(되먹임 구조)로 만들어지는 이유가 여기 있다. 이 모드의 점선은 이상적 응답이 아니라 이동평균의 해석식이고, 직접 합산한 실선과 겹치는 것이 계산이 맞다는 검산이다.</p>\n        <p class=\"note\">탭 지연 ΔT의 역수가 응답이 되풀이되는 주기(자유 스펙트럼 범위)다. ΔT를 키우면 세밀해지는 대신 쓸 수 있는 주파수 범위가 좁아진다.</p>\n        <div class=\"read\" id=\"f-r2b\"></div>\n      </div>\n    </div>\n    <p class=\"note\" style=\"border-top:1px solid var(--rule);padding-top:10px\">《Nature》 2024에 보고된 마이크로파 포토닉 처리 엔진은 적분·미분 동작에서 <b>98.1%</b> 정확도를 보고했다 — <span class=\"chip\">보고값 · 재현 미확인</span> 이 페이지의 숫자는 위 계수로 직접 계산한 것이고, 98.1%는 그 논문의 주장이다.</p>\n  </div>\n\n  <!-- ══ 03 ══════════════════════════════════════════ -->\n  <div class=\"card sec\" id=\"f-s3\" hidden>\n    <div class=\"head\">\n      <div><div class=\"num\">03</div><h2>주파수 콤 병렬 처리</h2></div>\n      \n    </div>\n    <p class=\"idea\">하나의 레이저에서 수백~수천 개의 등간격 선을 뽑아낸다. <span class=\"k\">빗살 하나가 채널 하나</span>이므로, 파장 다중 연산에서 콤은 곧 병렬도다. A군 02의 링 가중치 뱅크가 파장마다 가중치 하나를 두는 구조라면, 콤은 그 파장을 공급하는 쪽이다.</p>\n    <div class=\"split\">\n      <div class=\"fig\"><svg class=\"f\" id=\"f-f3a\" viewBox=\"0 0 880 370\" role=\"img\" aria-label=\"펌프 → 마이크로링 콤 → 파장 분리 → 채널마다 검출\"></svg></div>\n      <div>\n        <div class=\"ctl\">\n          <div class=\"row\"><label for=\"f-c3s\">선 간격 FSR</label><input type=\"range\" id=\"f-c3s\" min=\"10\" max=\"200\" step=\"5\" value=\"49\"><output id=\"f-o3s\"></output></div>\n          <div class=\"row\"><label for=\"f-c3n\">선 개수</label><input type=\"range\" id=\"f-c3n\" min=\"9\" max=\"201\" step=\"2\" value=\"81\"><output id=\"f-o3n\"></output></div>\n          <div class=\"row\"><label for=\"f-c3r\">선당 속도</label><input type=\"range\" id=\"f-c3r\" min=\"1\" max=\"100\" step=\"1\" value=\"10\"><output id=\"f-o3r\"></output></div>\n        </div>\n        <div class=\"read\" id=\"f-r3a\"></div>\n        <p class=\"note\">세기 포락선은 sech² 모양으로 그렸다(커 소리톤 콤의 전형). 가장자리 선은 약해서 실제로 쓰려면 평탄화가 따로 필요하다 — 그려진 선 전부가 쓸 수 있는 채널은 아니다.</p>\n      </div>\n    </div>\n\n    <h3>광 기준을 마이크로파로 내릴 때 — 위상잡음 20·log N</h3>\n    <div class=\"split\">\n      <div class=\"fig\"><svg class=\"f\" id=\"f-f3b\" viewBox=\"0 0 440 190\" role=\"img\" aria-label=\"주파수 분할에 따른 위상잡음 저감\"></svg></div>\n      <div>\n        <div class=\"ctl\">\n          <div class=\"row\"><label for=\"f-c3o\">광 기준</label><input type=\"range\" id=\"f-c3o\" min=\"50\" max=\"400\" step=\"5\" value=\"200\"><output id=\"f-o3o\"></output></div>\n          <div class=\"row\"><label for=\"f-c3m\">목표 마이크로파</label><input type=\"range\" id=\"f-c3m\" min=\"1\" max=\"100\" step=\"1\" value=\"10\"><output id=\"f-o3m\"></output></div>\n          <div class=\"row\"><label for=\"f-c3p\">광 기준 위상잡음</label><input type=\"range\" id=\"f-c3p\" min=\"-120\" max=\"-40\" step=\"1\" value=\"-80\"><output id=\"f-o3p\"></output></div>\n        </div>\n        <div class=\"read\" id=\"f-r3b\"></div>\n        <p class=\"note\">주파수를 N배로 나누면 위상 흔들림도 N배로 줄고, 전력 척도(dB)에서는 <span class=\"k\">20·log₁₀N</span>만큼 내려간다. 200 THz를 10 GHz로 내리면 N = 20,000이고 20·log₁₀(20,000) ≈ <span class=\"k\">86.0 dB</span>. 콤이 하는 일은 그 분할의 눈금을 광학적으로 코히런트하게 들고 있는 것이다. 이건 분할의 상한이고, 실제로는 검출기 산탄잡음·열잡음이 바닥을 깐다 — 그 바닥은 이 계산에 들어 있지 않다.</p>\n      </div>\n    </div>\n    <p class=\"note\" style=\"border-top:1px solid var(--rule);padding-top:10px\"><b>벽.</b> 콤을 칩에서 만들려면 Q가 수백만인 공진기와 커(Kerr) 비선형이 둘 다 있어야 한다. 실리콘은 1550 nm에서 <span class=\"w\">2광자 흡수(TPA)</span>가 일어나 세기를 올릴수록 흡수가 늘어 소리톤이 안 선다. 그래서 질화실리콘(SiN)을 쓴다 — 밴드갭이 넓어 TPA가 없고 손실도 낮다. 01의 양자 쪽이 SiN으로 가는 이유와 같은 재료적 결론이 다른 길로 도착한다.</p>\n  </div>\n\n  <!-- ══ 04 ══════════════════════════════════════════ -->\n  <div class=\"card sec close\" id=\"f-s4\" hidden>\n    <h2 style=\"font-size:16px\">셋을 겹쳐 보면</h2>\n    <p style=\"margin-top:8px\"><b>회로는 같고 자원이 다르다.</b> 01은 A군 01의 MZI 메시를 글자 하나 안 바꾸고 쓴다 — 실제로 이 페이지의 보손샘플링은 4×4 Clements 메시 코드를 그대로 돌린 것이다. 통신은 그 격자의 위상을 흔들어 정보를 실어 보내고, 연산은 위상을 값으로 고정해 행렬을 만들고, 양자는 고정한 격자에 광자를 하나씩 넣는다. 세 용도가 같은 하드웨어를 다르게 쓰는 것뿐이다.</p>\n    <p><b>02와 03은 빛의 다른 축을 쓴다.</b> 01이 쓰는 자원은 광자 하나하나의 개수이고, 02는 <span class=\"k\">시간</span>을, 03은 <span class=\"k\">주파수</span>를 쓴다. 02의 탭 지연선은 같은 빛을 시간으로 펼쳐 계수를 곱하고, 03의 콤은 같은 레이저를 주파수로 펼쳐 채널을 만든다. 그래서 둘은 겹쳐 쓸 수 있다 — 콤으로 채널을 공급하고 지연선으로 각 채널을 처리하는 구성이 실제 마이크로파 포토닉 논문들의 기본형이다.</p>\n    <p><b>벽은 셋 다 다르게 생겼지만 재료는 한 군데서 만난다.</b> 01의 벽은 손실이 지수로 깎는 것이고(η^(mn)), 02의 벽은 아날로그 정밀도와 탭 수의 거래이고, 03의 벽은 콤을 세우는 비선형 조건이다. 그런데 01의 손실 요구(dB/m)와 03의 TPA 회피가 <span class=\"k\">둘 다 질화실리콘</span>으로 끝난다. 다른 문제를 풀다 같은 재료에 도착하는 건 우연이 아니라, 저손실·넓은 밴드갭이라는 한 가지 성질이 두 요구를 동시에 만족시키기 때문이다.</p>\n    <p><b>셋 중 어느 것도 \"광 컴퓨터\"가 아니다.</b> 01은 샘플링이라는 특정 문제의 하드웨어이고, 02는 신호처리 전단이고, 03은 광원 겸 시계다. 범용 연산을 노리는 건 A군이고, F군은 <span class=\"k\">빛이 전자보다 확실히 유리한 지점</span>에만 붙어 있다. 그 자리가 어디인지 알아보는 쪽이 범용을 노리는 쪽보다 성적이 좋았다는 게 지금까지의 기록이다.</p>\n  </div>\n\n  <div class=\"src\" id=\"f-src\" hidden>\n    <p><b>이 페이지에서 실제로 계산한 것</b> — HOM 동시검출 확률(2×2 전달행렬 해석식), 보손샘플링 출력 분포(4×4 Clements 메시 + permanent 직접 전개, 확률 합으로 자가검산), 손실 생존 확률(η^(mn)), 탭 지연선 주파수 응답(240점 직접 합산), 콤 스펙트럼, 주파수 분할 위상잡음(20·log₁₀N).</p>\n    <p><b>인용한 주장</b> — 《Nature》 2024 마이크로파 포토닉 처리 엔진의 적분·미분 98.1% 정확도는 논문 보고값이고 여기서 재현하지 않았다. 회사 이름(PsiQuantum·Xanadu·Quandela·스윈번·발렌시아공대·하버드)은 그 구조를 밀고 있는 곳을 가리키는 표시이고, 성능 주장을 옮긴 것은 아니다.</p>\n    <p><b>미확인</b> — SNSPD의 2~4 K 펄스튜브 냉동기 소량 상용 단계라는 서술은 정리 노트의 기록이고 이 페이지에서 다시 확인하지 않았다. 콤의 \"수천 채널\"은 구조적으로 가능한 수이고, 평탄화·잡음을 넘겨 실제로 다 쓴 보고는 별개다.</p>\n    <p><b>같은 틀의 다른 묶음</b> — A군 <a href=\"https://claude.ai/artifact/1rU7rNCNLmKpuXvThQPB9S\">4×4 광 연산 메시</a> · 행렬곱을 만드는 여덟 구조.</p>\n  </div>\n</section>",
   run: function (document, getComputedStyle, MOD) {
 
 
@@ -80,7 +80,7 @@ function r1a(){
   $('f-o1t').textContent=th+'°';
   $('f-o1v').textContent=fmt(V);
   // 곡선: θ 0~180
-  const X=t=>26+t/180*(410-26), Y=p=>160-p*110;
+  const X=t=>26+t/180*(410-26), Y=p=>210-p*110;   // 곡선은 결합기 그림(위 84까지) 아래에서 시작
   let pts='';
   for(let t=0;t<=180;t+=2){
     const TT=Math.sin(t*D2R/2)**2, RR=1-TT;
@@ -106,23 +106,60 @@ function r1a(){
   g.push(bar(268,36,pc,'● | ●'));
   g.push(bar(268,52,p02,'· | ●●'));
   // 하단: 곡선
-  g.push(`<path class="gridl" stroke-width="1" d="M26 160 H410 M26 50 V160"/>`);
+  g.push(`<path class="gridl" stroke-width="1" d="M26 210 H410 M26 100 V210"/>`);
   for(let k=0;k<=4;k++){
     const y=Y(k/4);
     g.push(`<path class="gridl" stroke-width=".7" opacity=".55" d="M26 ${fmt(y,1)} H410"/>`);
     g.push(`<text class="m" x="22" y="${fmt(y+3,1)}" font-size="8.5" text-anchor="end">${fmt(k/4,2)}</text>`);
   }
   [0,45,90,135,180].forEach(t=>{
-    g.push(`<text class="m" x="${fmt(X(t),1)}" y="174" font-size="8.5" text-anchor="middle">${t}°</text>`);
+    g.push(`<text class="m" x="${fmt(X(t),1)}" y="224" font-size="8.5" text-anchor="middle">${t}°</text>`);
   });
   g.push(`<path class="bm" stroke-width="2" d="${pts}"/>`);
   g.push(`<circle class="pdf" cx="${fmt(X(th),1)}" cy="${fmt(Y(pc),1)}" r="4"/>`);
-  g.push(`<text class="m" x="26" y="44" font-size="9.5">● | ● 동시검출 확률</text>`);
-  g.push(`<text class="m" x="410" y="190" font-size="9" text-anchor="end">T=R=0.5 에서 바닥까지 내려간다</text>`);
-  g.push(`<text class="m" x="26" y="208" font-size="9">T = sin²(θ/2) = ${fmt(T,3)} · R = ${fmt(R,3)}</text>`);
-  g.push(`<text class="m" x="26" y="224" font-size="9">V=1 이면 밑바닥 = (T−R)² = cos²θ</text>`);
-  g.push(`<text class="m" x="26" y="240" font-size="9">합 ${fmt(p20+pc+p02,4)} — 닫힌다</text>`);
-  $('f-f1a').innerHTML=g.join('');
+  g.push(`<text class="m" x="26" y="94" font-size="9.5">● | ● 동시검출 확률</text>`);
+  g.push(`<text class="m" x="410" y="240" font-size="9" text-anchor="end">T=R=0.5 에서 바닥까지 내려간다</text>`);
+  g.push(`<text class="m" x="26" y="258" font-size="9">T = sin²(θ/2) = ${fmt(T,3)} · R = ${fmt(R,3)}</text>`);
+  g.push(`<text class="m" x="26" y="274" font-size="9">V=1 이면 밑바닥 = (T−R)² = cos²θ</text>`);
+  g.push(`<text class="m" x="26" y="290" font-size="9">합 ${fmt(p20+pc+p02,4)} — 닫힌다</text>`);
+  // ── 사이클: 펄스 펌프 → 쌍광자원 → 지연선(도착 시각 맞춤) → 칩 결합기 → 도파관 → 2×2 결합기·위상 θ·2×2 결합기 → 단일광자 검출기 둘 → 동시검출 ──
+  const old=g.join(''), P=CYC.pen(), YA=70, YB2=130;
+  const spd=(cx,cy,v,id)=>P.part(id,[cx-8,cy-10,18,20],()=>{
+    const d='M'+(cx-7)+' '+(cy-9)+' H'+cx+' A9 9 0 0 1 '+cx+' '+(cy+9)+' H'+(cx-7)+' Z';
+    P.path(d,{c:'ink',w:1.3,f:'panel'}); if(v>0) P.path(d,{c:'none',f:'probe',fo:.15+.75*clamp(v,0,1)});
+    P.path('M'+(cx-4)+' '+(cy-5)+' l3 3 l-3 3 l3 3',{c:'ink',w:.9}); });
+  P.laser(38,100,{id:'src-pulse',lab:'펄스 펌프'});
+  P.beam([[61,100],[86,100]],{w:2.2});
+  P.box(112,100,52,30,'쌍광자',{id:'qsrc',s:10.5});
+  P.split(138,100,[YA,YB2],{id:false,L:26,w:1.3});
+  [[YA,'γ₁',-9],[YB2,'γ₂',17]].forEach(([y,t,dy])=>{ P.circ(176,y,4,{c:'none',f:'beam'}); P.lab(176,y+dy,t,{a:'middle',s:10}); });
+  P.beam([[164,YA],[198,YA]],{w:1.3}); P.beam([[164,YB2],[262,YB2]],{w:1.3});
+  P.coil(214,YA,{r:11,c:'beam'});
+  P.lab(214,YA+26,'Δt 맞춤',{a:'middle',s:9.5}); P.lab(214,YA+39,'V '+fmt(V,2),{a:'middle',s:9.5,c:V>0.999?'probe':'muted'});
+  P.beam([[232,YA],[262,YA]],{w:1.3});
+  // 칩
+  P.zone(254,40,270,120,'칩 — SiN 도파관');
+  const gc=(y,id)=>P.part(id,[262,y-7,14,14],()=>{ P.rect(262,y-7,14,14,{c:'ink',w:1.1,r:1.5}); for(let i=0;i<4;i++) P.path('M'+(265+i*3)+' '+(y-5)+' V'+(y+5),{c:'ink',w:.9}); });
+  gc(YA,'coup'); gc(YB2,false); P.lab(269,YB2+22,'결합기',{a:'middle',s:9.5});
+  P.part('wg',[278,YA-3,50,YB2-YA+6],()=>{ [YA,YB2].forEach(y=>{ P.path('M276 '+y+' H329',{c:'ink',w:1.4}); P.path('M276 '+y+' H329',{c:'beam',w:1,op:.6}); }); });
+  P.lab(302,100,'도파관',{a:'middle',s:9.5});
+  P.coupler(352,100,{w:46,g:30});
+  P.path('M375 '+YA+' H445 M375 '+YB2+' H445',{c:'ink',w:1.4});
+  P.ps(410,YA+1,{w:26,v:th/180,lab:'θ '+th+'°'});
+  P.coupler(468,100,{w:46,g:30,id:false}); P.at2('bs',[491,YB2-12]);
+  P.lab(410,100,'2×2 간섭',{a:'middle',s:9.5});
+  // 단일광자 검출 (극저온) → 동시검출
+  P.beam([[491,YA],[552,YA]],{w:1.3,op:.4+.6*(p20+pc)}); P.beam([[491,YB2],[552,YB2]],{w:1.3,op:.4+.6*(p02+pc)});
+  P.zone(538,46,58,108,'2–4 K',{f:'probe',fo:.06});
+  spd(558,YA,p20+pc,'spd'); spd(558,YB2,p02+pc,false); P.lab(566,100,'SPD',{a:'middle',s:10,c:'ink'});
+  P.wire([[568,YA],[606,YA],[606,88],[614,88]]); P.wire([[568,YB2],[606,YB2],[606,112],[614,112]]);
+  P.box(640,100,52,40,'동시',{tone:'probe',s:10.5,sub:'동시검출'});
+  P.wire([[666,100],[680,100]],{arrow:false});
+  P.raw(CYC.sub(684,70,190,54,'266 14 176 52',old));
+  P.legend(16,252,['펄스 펌프','쌍광자원','Δt 맞춤','칩','2×2 간섭','SPD','동시검출']);
+  P.aux(470,222,402,142,'동시검출 확률 — θ 를 돌리면');
+  P.raw(CYC.sub(474,244,394,116,'0 97 440 135',old));
+  $('f-f1a').innerHTML=P.out();
   const cls=pc<1e-9?'0 — 사라졌다':fmt(pc,4);
   $('f-r1a').innerHTML=`나눔 T/R <b>${fmt(T,3)} / ${fmt(R,3)}</b><br>`+
     `동시검출 <b>${cls}</b> · 뭉침 합 <b>${fmt(p20+p02,4)}</b><br>`+
@@ -268,31 +305,53 @@ function r2a(){
   $('f-o2t').textContent=dT+' ps';
   $('f-o2f').textContent=fc+' GHz';
   const c=taps();
-  const g=[];
-  // 분배기 → 지연선 → 계수 → 합산
-  g.push(`<path class="bm" stroke-width="4" opacity=".85" d="M10 100 H54"/>`);
-  g.push(`<path class="wg" stroke-width="1.3" opacity=".6" d="M54 100 L72 100"/>`);
-  g.push(`<rect class="box" x="56" y="54" width="18" height="92" rx="3" stroke-width="1.2"/>`);
-  g.push(`<text class="m" x="65" y="166" font-size="8.5" text-anchor="middle">분배</text>`);
-  const show=Math.min(N,8);
-  const amax=Math.max(...c.map(Math.abs),1e-9);
-  for(let k=0;k<show;k++){
-    const y=58+k*(84/Math.max(1,show-1));
-    const len=90+k*18;
-    g.push(`<path class="wg" stroke-width="1.2" opacity=".55" d="M74 ${fmt(y,1)} H${fmt(74+len,1)}"/>`);
-    const a=c[k]/amax;
-    g.push(`<rect class="${a>=0?'pdf':'wmf'}" x="${fmt(74+len,1)}" y="${fmt(y-3.5,1)}" width="${fmt(Math.max(1.5,Math.abs(a)*26),1)}" height="7" rx="2" opacity=".9"/>`);
-    g.push(`<text class="m" x="${fmt(74+len+30,1)}" y="${fmt(y+3,1)}" font-size="8">${fmt(c[k],2)}</text>`);
-    g.push(`<text class="m" x="78" y="${fmt(y-5,1)}" font-size="7.5">${k}ΔT</text>`);
-  }
-  if(N>show) g.push(`<text class="m" x="78" y="158" font-size="8">… 앞 ${show}개만 그렸다 (전체 ${N}개)</text>`);
-  g.push(`<path class="wg" stroke-width="1.3" opacity=".6" d="M376 58 V142"/>`);
-  g.push(`<rect class="pd" x="382" y="88" width="28" height="26" rx="3" stroke-width="1.3"/>`);
-  g.push(`<text class="p" x="396" y="105" font-size="9" text-anchor="middle">Σ</text>`);
-  g.push(`<text class="m" x="10" y="88" font-size="9">마이크로파 신호</text>`);
-  g.push(`<text class="m" x="10" y="190" font-size="9">탭마다 지연 kΔT · 계수 cₖ · 다시 합산 — FIR 필터를 빛으로 지은 구조</text>`);
-  g.push(`<text class="m" x="10" y="206" font-size="9">파랑 = 양수 계수 · 갈색 = 음수 계수</text>`);
-  $('f-f2a').innerHTML=g.join('');
+  // ── 사이클: RF 안테나 → EOM 으로 광 반송파에 싣기 → 1×N 분배 → 탭마다 지연 kΔT + 감쇠기(계수 cₖ) → 부호별로 합쳐 PD 두 개 → 차 → RF 출력 ──
+  const P=CYC.pen(), YM=112, show=Math.min(N,8), amax=Math.max(...c.map(Math.abs),1e-9);
+  const span=show>1?Math.min(150,(show-1)*22):0, TY=[...Array(show)].map((_,k)=>show>1?YM-span/2+k*span/(show-1):YM);
+  P.part('rf',[18,16,58,34],()=>{
+    P.path('M22 18 L30 30 L38 18 M30 30 V50',{c:'probe',w:1.4});
+    P.path('M46 28 L62 36 L46 44 Z',{c:'probe',w:1.3,f:'panel'});
+    P.path('M38 36 H46',{c:'probe',w:1.2});
+  });
+  P.lab(42,64,'RF 입력',{a:'middle'});
+  P.wire([[62,36],[110,36],[110,100]]);
+  P.laser(38,YM);
+  P.beam([[61,YM],[90,YM]],{w:2.2});
+  P.mod(110,YM,{sub:'신호 싣기'});
+  P.beam([[130,YM],[142,YM]],{w:2});
+  P.split(142,YM,TY,{L:34,w:1.2});
+  TY.forEach((y,k)=>{
+    const a=c[k]/amax, pos=c[k]>=0;
+    P.beam([[176,y],[202,y]],{w:1.1,op:.7});
+    if(k) P.coil(214,y,{r:4+Math.min(k,7)*.55,c:'beam',id:k===1?'delay':false});
+    else P.beam([[202,y],[226,y]],{w:1.1,op:.7});
+    P.beam([[226,y],[290,y]],{w:1.1,op:.7});
+    P.lab(244,y-3,k?(k===1?'ΔT':k+'ΔT'):'0',{s:8.5});
+    P.part(k?false:'voa',[290,y-6,44,12],()=>{ P.rect(290,y-6,44,12,{c:'ink',w:1.1,r:2}); P.rect(292,y-4,Math.max(1.5,Math.abs(a)*40),8,{c:'none',f:pos?'beam':'wall',fo:.85,r:1}); });
+    P.lab(340,y+3,fmt(c[k],2),{s:8.5});
+    const ty=pos?84:140;
+    P.path('M372 '+y+' C400 '+y+' 404 '+ty+' 428 '+ty,{c:pos?'beam':'wall',w:1,op:.25+.65*Math.abs(a)});
+  });
+  if(N>show) P.lab(176,212,'… 앞 '+show+'개만 (전체 '+N+'개)',{s:9});
+  P.lab(214,TY[0]-12,'지연 kΔT',{a:'middle',s:9.5}); P.lab(312,TY[0]-12,'계수 cₖ',{a:'middle',s:9.5});
+  const sp=c.reduce((s,v)=>s+Math.max(v,0),0), sn=c.reduce((s,v)=>s+Math.max(-v,0),0), sm=Math.max(sp,sn,1e-9);
+  P.pd(436,84,{v:sp/sm}); P.pd(436,140,{v:sn/sm,id:false});
+  P.lab(452,72,'+',{s:11,c:'ink'}); P.lab(452,160,'−',{s:11,c:'ink'});
+  P.wire([[445,84],[476,84],[476,101]]); P.wire([[445,140],[476,140],[476,123]]);
+  P.box(476,112,26,20,'−',{tone:'probe',s:12});
+  P.wire([[489,112],[528,112]]);
+  P.path('M532 112 q6 -12 12 0 t12 0 t12 0 t12 0',{c:'probe',w:1.5});
+  P.lab(532,136,'RF 출력',{s:10}); P.lab(532,92,'H(f)',{s:10,c:'probe'});
+  P.legend(16,262,['RF 입력','EOM','1×N 분배','지연 kΔT','계수 cₖ','PD 합','RF 출력']);
+  // ── 보조 패널: 탭 계수 = 충격응답 ──
+  P.aux(470,222,402,110,'탭 계수 cₖ — 필터의 충격응답 (N='+N+')');
+  const bx0=500, bx1=856, by=286, bs=(bx1-bx0)/Math.max(1,N-1);
+  P.path('M'+bx0+' '+by+' H'+bx1,{c:'rule',w:1});
+  c.forEach((v,k)=>{ const x=N>1?bx0+k*bs:(bx0+bx1)/2, h=v/amax*36;
+    P.path('M'+x.toFixed(1)+' '+by+' V'+(by-h).toFixed(1),{c:v>=0?'beam':'wall',w:1.6});
+    P.circ(x,by-h,2.4,{c:'none',f:v>=0?'beam':'wall'}); });
+  P.text(bx0,by+40,'k = 0',{s:9}); P.text(bx1,by+40,'k = '+(N-1),{s:9,a:'end'});
+  $('f-f2a').innerHTML=P.out();
   const nm={diff:'절단 이상미분기 × 해밍',int:'전부 1/N — 유한구간 이동평균',bp:'cos(2πf_c kΔT) × 해밍'}[kind2];
   const fsr=1000/dT; // ps → GHz
   $('f-r2a').innerHTML=`계수 <b>${nm}</b><br>시간 창 길이 (N−1)ΔT = <b>${fmt((N-1)*dT,0)} ps</b><br>자유 스펙트럼 범위 1/ΔT = <b>${fmt(fsr,1)} GHz</b>`;
@@ -418,7 +477,41 @@ function r3a(){
   g.push(`<text class="m" x="412" y="18" font-size="9" text-anchor="end">빗살 ${n}개 = 채널 ${n}개</text>`);
   const span=(n-1)*fsr;
   g.push(`<text class="m" x="26" y="190" font-size="9">전체 폭 ${fmt(span/1000,2)} THz · 1550 nm 기준 약 ${fmt(span/1000*1550*1550/299.792458/1000,1)} nm</text>`);
-  $('f-f3a').innerHTML=g.join('');
+  // ── 사이클: 펌프 LD → 증폭 → 아이솔레이터 → 칩 결합기 → Si₃N₄ 마이크로링(커 χ³)에서 콤이 선다 → 콤 출력 → 파장 분리 → PD 채널마다 · 락이 펌프-링 디튜닝을 붙잡는다 ──
+  const old=g.join(''), P=CYC.pen(), Y=100, RC=[300,64], RR=28;
+  P.laser(38,Y,{lab:'펌프 LD'});
+  P.beam([[61,Y],[87,Y]],{w:2.2});
+  P.amp(100,Y,{lab:'증폭'});
+  P.beam([[113,Y],[136,Y]],{w:2.8});
+  P.iso(150,Y,{lab:'역류 차단'});
+  P.beam([[164,Y],[192,Y]],{w:2.8});
+  P.zone(184,24,232,104,'Si₃N₄ 칩');
+  P.part('coup',[192,Y-7,16,14],()=>P.path('M192 '+(Y-7)+' L208 '+(Y-2)+' L208 '+(Y+2)+' L192 '+(Y+7)+' Z',{c:'ink',w:1.1,f:'grid'}));
+  P.lab(200,Y+22,'결합기',{a:'middle',s:9.5});
+  P.path('M208 '+Y+' H414',{c:'ink',w:1.4}); P.beam([[208,Y],[414,Y]],{w:1.8,op:.75});
+  P.ring(RC[0],RC[1],RR,{lab:''});
+  P.circ(RC[0],RC[1],RR,{c:'beam',w:1.6,op:.55});
+  P.mark('kerr',[RC[0]-14,RC[1]-10,28,20],[RC[0]+14,RC[1]-10]);
+  P.text(RC[0],RC[1]+4,'χ³ 커',{a:'middle',s:10,c:'ink'});
+  P.lab(RC[0],Y+18,'마이크로링',{a:'middle',s:9.5});
+  P.lock(RC[0]-RR-8,RC[1]-RR-8,2*RR+16,2*RR+12,{lab:'디튜닝 락',lx:RC[0]-RR-10,ly:RC[1]-RR-12});
+  P.wire([[RC[0]-RR-8,RC[1]-16],[38,RC[1]-16],[38,Y-15]]);
+  // 콤 출력 — 선 개수 손잡이를 따른다
+  const nk=Math.min(n,15), hk=(nk-1)/2;
+  P.beam([[414,Y],[476,Y]],{w:1.4,op:.6});
+  for(let k=-hk;k<=hk;k++){ const u=k/(hk*0.55+1e-9), s=2/(Math.exp(u)+Math.exp(-u)), x=445+k*(26/Math.max(hk,1));
+    P.path('M'+x.toFixed(1)+' '+(Y-3)+' v'+(-4-22*s*s).toFixed(1),{c:'beam',w:1.4,op:.35+.65*s*s}); }
+  P.lab(445,Y+20,'콤 출력',{a:'middle',s:9.5});
+  P.wdm(488,Y,96,{lab:''});
+  const CH=[Y-38,Y-19,Y,Y+19,Y+38];
+  CH.forEach((y,i)=>{ P.beam([[499,y],[552,y]],{w:1.3,op:.85-.12*Math.abs(i-2)});
+    P.pd(560,y,{v:.85-.2*Math.abs(i-2),id:i?false:'pd'}); P.wire([[569,y],[596,y]]); });
+  P.lab(524,Y-44,'λ1…λ'+n,{a:'middle',s:9.5}); P.lab(488,Y+64,'파장 분리',{a:'middle',s:9.5});
+  P.text(602,Y-4,'채널 '+n+'개',{s:10.5,c:'ink'}); P.text(602,Y+12,'= 병렬 '+n,{s:9.5});
+  P.legend(16,250,['펌프 LD','증폭','결합기','마이크로링 χ³','콤','파장 분리','PD']);
+  P.aux(470,222,402,142,'콤 스펙트럼 — 빗살 '+n+'개');
+  P.raw(CYC.sub(474,240,394,120,'0 24 440 154',old));
+  $('f-f3a').innerHTML=P.out();
   const agg=n*rate;
   $('f-r3a').innerHTML=`채널 <b>${n}</b>개 · 전체 폭 <b>${fmt(span/1000,2)} THz</b><br>`+
     `모으면 <b>${agg>=1000?fmt(agg/1000,2)+' Tb/s':agg+' Gb/s'}</b> (선당 ${rate} Gb/s 기준)<br>`+

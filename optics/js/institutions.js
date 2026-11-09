@@ -15,15 +15,31 @@
 
   const C = [['all', '전체', [[-46, -128], [66, 158]]], ['uk', '영국', [[49.4, -7.8], [59.2, 2.6]]], ['de', '독일', [[46.8, 4.8], [55.6, 15.8]]], ['us', '미국·캐나다', [[23.5, -127], [52.5, -62]]],
     ['fr', '프랑스', [[41, -5.8], [51.8, 10.2]]], ['it', '이탈리아', [[35.8, 5.6], [47.8, 19.4]]], ['ch', '스위스', [[45.6, 5.5], [48.1, 10.9]]], ['eu2', '유럽 기타', [[35, -11.5], [70, 32]]],
-    ['as', '아시아', [[-1, 96], [47, 148]]], ['au', '호주', [[-45, 110], [-9, 156]]]];
+    ['as', '아시아', [[-1, 96], [47, 148]]], ['au', '호주', [[-45, 110], [-9, 156]]], ['etc', '그 밖', [[-46, -128], [66, 158]]]];
   if (A.lang === 'en') {
-    const CN = { all: 'All', uk: 'UK', de: 'Germany', us: 'US · Canada', fr: 'France', it: 'Italy', ch: 'Switzerland', eu2: 'Rest of Europe', as: 'Asia', au: 'Australia' };
+    const CN = { all: 'All', uk: 'UK', de: 'Germany', us: 'US · Canada', fr: 'France', it: 'Italy', ch: 'Switzerland', eu2: 'Rest of Europe', as: 'Asia', au: 'Australia', etc: 'Elsewhere' };
     C.forEach(c => { c[1] = CN[c[0]] || c[1]; });
   }
   const PN = U.PN || {};
   const EK = A.lang === 'en' ? { p: 'Co-authored papers', m: 'Moves · lineage', i: 'Agreements · joint operation', s: 'Spin-offs · acquisitions' } : { p: '논문 공저', m: '이동·계보', i: '협약·공동운영', s: '스핀오프·인수' };
   const stars = d => U.star ? (d.fit || '').split(U.star).length - 1 : 0;   // 개인판 UI.star
   const kc = k => 'k-' + (k in LBL || k === 'x' ? k : 'comp');
+  // 층 — work 에서. 점·마커 색은 층 색(EO 는 고리). work 가 없는 기관만 옛 축(k)으로
+  const LAYERS = ['L2', 'L3', 'L4', 'L5', 'L6', 'EO'];
+  const LN = A.lang === 'en' ? { L2: 'Materials · process', L3: 'Devices', L4: 'Structures', L5: 'Computers', L6: 'Industry', EO: 'EO co-integration' }
+    : { L2: '재료·공정', L3: '소자', L4: '구조', L5: '계산기', L6: '산업', EO: 'EO 공동집적' };
+  const layersOf = d => LAYERS.filter(l => (d.work || []).some(w => w.l === l));
+  const lcls = d => (d.work && d.work.length) ? 'l-' + d.work[0].l : kc(d.k);
+  const DEVN = A.data('dev-names') || {}, PARAN = A.data('para-names') || {}, PSH = A.data('para-short') || {};
+  // 종류(갈래) 태그 — work 의 para 참조, struct 참조→그 구조의 갈래, 구조 표의 inst 역참조. 순서는 갈래 표 순
+  const KINDS = Object.keys(PSH).filter(k => k !== 'etc');
+  const SPARA = {}; (((OV && OV.S) || [])).forEach(s => { SPARA[s.id] = s.para; });
+  const kindsOf = d => {
+    const set = new Set();
+    (d.work || []).forEach(w => { const r = w.ref || {}; if (r.para) set.add(r.para); if (r.struct && SPARA[r.struct]) set.add(SPARA[r.struct]); });
+    (MADE[d.id] || []).forEach(s => { if (s.para) set.add(s.para); });
+    return KINDS.filter(k => set.has(k));
+  };
   const st = { cur: 'all', flt: 'all', sel: null };
 
   /* 사람(관계도 노드) → 기관 */
@@ -40,7 +56,7 @@
     return { e, me: nodeById[mine], ot: nodeById[other], od: instOfNode[other] };
   });
 
-  const inAxis = d => st.flt === 'all' || (d.t || []).includes(st.flt) || d.k === st.flt;
+  const inAxis = d => (st.flt === 'all' || (d.work || []).some(w => w.l === st.flt)) && (st.kind === 'all' || kindsOf(d).includes(st.kind));
 
   /* 지도 */
   const mapEl = $('#in-map');
@@ -58,7 +74,7 @@
   const mk = {};
   D.forEach(d => {
     const tip = A.esc(d.n) + (PRIV && d.fit ? ` <span class="in-fit">${A.esc(d.fit)}</span>` : '');
-    mk[d.id] = L.circleMarker([d.lat, d.lon], { radius: 4 + (d.r || 6) * 0.75, className: 'in-m ' + kc(d.k) + (PRIV && stars(d) >= 3 ? ' s3' : '') })
+    mk[d.id] = L.circleMarker([d.lat, d.lon], { radius: 4 + (d.r || 6) * 0.75, className: 'in-m ' + lcls(d) + (PRIV && stars(d) >= 3 ? ' s3' : '') })
       .bindTooltip(tip, { className: 'in-tip', direction: 'top', offset: [0, -6] })
       .on('click', () => pick(d.id)).addTo(map);
   });
@@ -86,9 +102,12 @@
   function drawTabs() {
     mount('#in-ctabs', C.map(([id, nm, b]) => A.pill([nm, h('span.n', String(id === 'all' ? D.length : D.filter(d => d.p === id).length))], st.cur === id, () =>
       A.route.go('', '', { params: { cur: id === 'all' ? null : id } }))));
-    const keys = ['all'].concat(Object.keys(LBL).filter(k => D.some(d => d.k === k || (d.t || []).includes(k))));
+    const keys = ['all'].concat(LAYERS.filter(l => D.some(d => (d.work || []).some(w => w.l === l))));
     mount('#in-ftabs', keys.map(k => h('button.chip' + (st.flt === k ? '.on' : ''), { type: 'button', 'aria-pressed': st.flt === k ? 'true' : 'false',
-      onclick: () => A.route.set({ flt: k === 'all' ? null : k }) }, k === 'all' ? null : h('span.in-dot.' + kc(k)), k === 'all' ? A.t('전체', 'All') : LBL[k])));
+      onclick: () => A.route.set({ flt: k === 'all' ? null : k }) }, k === 'all' ? null : h('span.in-dot.l-' + k), k === 'all' ? A.t('전체', 'All') : (k === 'EO' ? LN.EO : k + ' ' + LN[k]))));
+    const kn = {}; D.forEach(d => kindsOf(d).forEach(k => { kn[k] = (kn[k] || 0) + 1; }));
+    mount('#in-ktabs', ['all'].concat(KINDS.filter(k => kn[k])).map(k => h('button.chip' + (st.kind === k ? '.on' : ''), { type: 'button', 'aria-pressed': st.kind === k ? 'true' : 'false',
+      onclick: () => A.route.set({ kind: k === 'all' ? null : k }) }, k === 'all' ? A.t('전체', 'All') : PSH[k], k === 'all' ? null : h('span.n', String(kn[k])))));
   }
 
   /* 지도 아래: 지역이 묶음(갈래 자리), 기관이 카드. 점 = 층 색(EO 는 고리) */
@@ -96,11 +115,12 @@
   D.forEach(d => { linkN[d.id] = relsOf(d).length; });
   function card(d) {
     const first = (d.pi || [])[0];
-    const ks = [d.k].concat((d.t || []).filter(t => t !== d.k));
+    const ls = layersOf(d), ks = ls.length ? [] : [d.k].concat((d.t || []).filter(t => t !== d.k));
     return h('a.in-card' + (inAxis(d) ? '' : '.dim'), { href: A.route.href('', d.id), onclick: e => { e.preventDefault(); pick(d.id); } },
       h('span.in-ch', PRIV && d.fit ? h('span.in-fit', d.fit) : null, h('b', d.n),
-        h('span.in-dots', ks.map(k => h('i.in-dot.' + kc(k), { title: LBL[k] || k })))),
+        h('span.in-dots', ls.map(l => h('i.in-dot.l-' + l, { title: l === 'EO' ? LN.EO : l + ' ' + LN[l] })), ks.map(k => h('i.in-dot.' + kc(k), { title: LBL[k] || k })))),
       h('span.in-meta', (d.city || '') + (MADE[d.id] ? A.t(` · 구조 ${MADE[d.id].length}`, ` · ${MADE[d.id].length} structures`) : '') + (linkN[d.id] ? A.t(` · 연결 ${linkN[d.id]}`, ` · ${linkN[d.id]} links`) : '')),
+      kindsOf(d).length ? h('span.in-kinds', kindsOf(d).map(k => h('span.in-kd' + (st.kind === k ? '.on' : ''), PSH[k]))) : null,
       first ? h('span.in-sub', first[0] + (FIELD[first[0]] ? ' · ' + FIELD[first[0]] : '')) : null);
   }
   function lanes() {
@@ -139,6 +159,19 @@
         h('h2', d.n),
         h('span.in-w', d.w || '', PRIV && d.fit ? h('span.in-fit', d.fit) : null)),
       noteBlock(d),
+      (d.work || []).length ? h('div.in-col', h('span.lb', A.t('하는 일 — 층 · 무엇 · 우리 표의 자리 · 근거', 'What they do — layer · what · where it sits in this atlas · source')),
+        h('div.in-work', d.work.map(w => {
+          const r = w.ref || {};
+          const link = r.struct ? ['compute.html#' + r.struct, A.tr((((OV && OV.S) || []).find(x => x.id === r.struct) || {}).short || r.struct)] : r.dev ? ['devices.html#' + r.dev, DEVN[r.dev] || r.dev]
+            : r.term ? ['glossary.html#' + encodeURIComponent(r.term), r.term] : r.para ? ['compute.html', PARAN[r.para] || r.para] : null;
+          const yr = (String(w.src || '').match(/\((\d{4})[^)]*\)\s*$/) || [])[1], url = String(w.src || '').replace(/\s*\([^)]*\)\s*$/, '');
+          return h('div.in-wk', h('span.in-wl.l-' + w.l, w.l), h('span.in-ww', w.what,
+            link ? h('a.in-wr', { href: link[0] }, link[1]) : null,
+            w.who ? h('span.in-wwho', w.who) : null,
+            url ? h('a.in-wsrc', { href: url, target: '_blank', rel: 'noopener' }, A.t('근거', 'source') + (yr ? ' ' + yr : '')) : null));
+        }))) : null,
+      kindsOf(d).length ? h('div.in-col', h('span.lb', A.t('종류', 'Kinds')),
+        h('div.in-kinds.big', kindsOf(d).map(k => h('a.in-kd', { href: 'compute.html#kind/' + k, title: PARAN[k] || k }, PARAN[k] || PSH[k])))) : null,
       h('div.in-tags', (d.t || []).map(t => h('span.in-tag', LBL[t] || t))),
       PRIV && d.why ? h('p.in-warn.why', { html: d.why }) : null,
       h('dl.in-dl', d.fab ? [h('dt', A.t('팹', 'Fab')), h('dd', { html: d.fab })] : null, PRIV && d.gate ? [h('dt', U.gate || ''), h('dd', { html: d.gate })] : null),
@@ -176,6 +209,7 @@
     st.sel = d ? d.id : null;
     st.cur = A.route.param(r, 'cur', 'all');
     st.flt = A.route.param(r, 'flt', 'all');
+    st.kind = A.route.param(r, 'kind', 'all');
     if (!C.some(c => c[0] === st.cur)) st.cur = 'all';
     // 지역이 바뀌었고 기관을 고르지 않았으면 그 지역으로 맞춘다(뒤로가기에서도 같게)
     if (st.cur !== wasCur && !d) { const b = C.find(c => c[0] === st.cur)[2]; if (first) setTimeout(() => fitTo(b, { padding: [20, 20] }), 200); else fitTo(b, { padding: [20, 20] }); }

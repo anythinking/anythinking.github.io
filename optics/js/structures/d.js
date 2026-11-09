@@ -4,7 +4,7 @@
    run 의 document 는 그 트리를 찾는 좁은 창이다: getElementById · querySelector(All) 만. */
 (window.CMP = window.CMP || { groups: {} }).groups.d = {
   id: 'd', name: "D · 논리",
-  html: "<section id=\"sec-d\" hidden>\n<div class=\"eyebrow\">D군 · 디지털 전광 논리 · 벽은 클럭이 아니다</div>\n<p class=\"lede\" style=\"margin:6px 0 10px\">빛으로 0과 1을 세우려는 여섯 시도. 전부 같은 벽 앞에 서 있다 — 이득·팬아웃·에너지. 손으로 돌려보면 어느 구조가 그 벽의 어느 면을 깎고 있는지 갈린다.</p>\n<div class=\"tabs\" id=\"d-tabs\" role=\"tablist\">\n  <button type=\"button\" data-s=\"1\" aria-pressed=\"true\"><span class=\"n\">01</span>S-SEED</button>\n  <button type=\"button\" data-s=\"2\" aria-pressed=\"false\"><span class=\"n\">02</span>전광 논리 게이트</button>\n  <button type=\"button\" data-s=\"3\" aria-pressed=\"false\"><span class=\"n\">03</span>펨토패럿 O-E-O</button>\n  <button type=\"button\" data-s=\"4\" aria-pressed=\"false\"><span class=\"n\">04</span>폴라리톤 논리</button>\n  <button type=\"button\" data-s=\"5\" aria-pressed=\"false\"><span class=\"n\">05</span>2D 소재 비선형</button>\n  <button type=\"button\" data-s=\"6\" aria-pressed=\"false\"><span class=\"n\">06</span>자기 스위칭</button>\n  <button type=\"button\" data-s=\"7\" aria-pressed=\"false\">겹쳐 보면</button>\n</div>\n<div class=\"card sec\" id=\"d-s1\">\n  <div class=\"head\">\n    <div><div class=\"num\">01</div><h2>S-SEED · 대칭 자기전기광학 소자</h2></div>\n    \n  </div>\n  <p class=\"idea\">1기에서 <span class=\"k\">유일하게 실제로 돌아간</span> 광 논리 소자. 두 입력 빔의 <span class=\"k\">절대 세기가 아니라 비율</span>로 판정하고, 출력 세기는 입력이 아니라 <span class=\"k\">전원과 읽기 빔</span>이 만든다. 이 둘이 묶여서 「이득」이 생긴다.</p>\n  <div class=\"split\">\n    <div class=\"fig\"><svg class=\"f\" id=\"d-f1\" viewBox=\"0 0 440 232\" role=\"img\" aria-label=\"S-SEED 직렬 다이오드와 쌍안정 히스테리시스\"></svg></div>\n    <div>\n      <div class=\"ctl\">\n        <div class=\"row\"><label for=\"d-c1a\">입력 P1</label><input type=\"range\" id=\"d-c1a\" min=\"-100\" max=\"100\" step=\"1\" value=\"-60\"><output id=\"d-o1a\"></output></div>\n        <div class=\"row\"><label for=\"d-c1b\">입력 P2</label><input type=\"range\" id=\"d-c1b\" min=\"-100\" max=\"100\" step=\"1\" value=\"0\"><output id=\"d-o1b\"></output></div>\n        <div class=\"row\"><label for=\"d-c1r\">읽기 빔</label><input type=\"range\" id=\"d-c1r\" min=\"1\" max=\"100\" step=\"1\" value=\"40\"><output id=\"d-o1r\"></output></div>\n      </div>\n      <div class=\"btns\" style=\"margin-top:8px\">\n        <button type=\"button\" id=\"d-b1u\">P1 천천히 올리기</button>\n        <button type=\"button\" id=\"d-b1d\">천천히 내리기</button>\n        <button type=\"button\" id=\"d-b1z\">초기화</button>\n      </div>\n      <div class=\"read\" id=\"d-r1\"></div>\n      <p class=\"note\">슬라이더를 <span class=\"k\">올렸다 내려보면</span> 같은 비율에서 상태가 갈린다. 그 갈림이 래치다 — 비율이 1 근처로 와도 직전 상태를 붙잡고 있다.</p>\n    </div>\n  </div>\n</div>\n\n<div class=\"card sec\" id=\"d-s2\">\n  <div class=\"head\">\n    <div><div class=\"num\">02</div><h2>전광 논리 게이트 · XGM / XPM / FWM</h2></div>\n    \n  </div>\n  <p class=\"idea\">데이터 빛이 매질의 이득이나 굴절률을 흔들어 다른 빛을 스위칭한다. 논문은 수천 편인데 <span class=\"k\">실물 회로가 거의 없는</span> 이유는 한 단이 아니라 <span class=\"k\">여러 단을 이을 때</span> 드러난다.</p>\n  <div class=\"split\">\n    <div class=\"fig\"><svg class=\"f\" id=\"d-f2\" viewBox=\"0 0 440 248\" role=\"img\" aria-label=\"SOA 이득포화 곡선과 캐스케이드 소광비\"></svg></div>\n    <div>\n      <div class=\"ctl\">\n        <div class=\"row\"><label for=\"d-c2g\">소신호 이득 G₀</label><input type=\"range\" id=\"d-c2g\" min=\"10\" max=\"35\" step=\"1\" value=\"30\"><output id=\"d-o2g\"></output></div>\n        <div class=\"row\"><label for=\"d-c2p\">펌프 「1」 세기</label><input type=\"range\" id=\"d-c2p\" min=\"-30\" max=\"10\" step=\"1\" value=\"-13\"><output id=\"d-o2p\"></output></div>\n        <div class=\"row\"><label for=\"d-c2n\">캐스케이드 단수</label><input type=\"range\" id=\"d-c2n\" min=\"1\" max=\"10\" step=\"1\" value=\"6\"><output id=\"d-o2n\"></output></div>\n      </div>\n      <div class=\"read\" id=\"d-r2\"></div>\n      <p class=\"note\">이득포화 G = G₀·exp(−(G−1)P/P<sub>sat</sub>)를 매 단마다 실제로 푼다. 출력을 다음 단 펌프로 그대로 넣으면 「0」 레벨이 올라오고, 소광비는 단수마다 깎인다.</p>\n    </div>\n  </div>\n</div>\n\n<div class=\"card sec\" id=\"d-s3\">\n  <div class=\"head\">\n    <div><div class=\"num\">03</div><h2>펨토패럿 O-E-O</h2></div>\n    \n  </div>\n  <p class=\"idea\">전광을 고집하지 않는다. 광검출기와 변조기를 <span class=\"k\">배선 없이 맞붙여</span> 용량을 fF로 떨어뜨리면, 전자 한 토막이 끼어도 에너지가 fJ에 머문다. 대신 전광이 못 주던 것 셋 — <span class=\"k\">이득·캐스케이드·파장변환</span> — 이 한 번에 들어온다.</p>\n  <div class=\"split\">\n    <div class=\"fig\"><svg class=\"f\" id=\"d-f3\" viewBox=\"0 0 440 232\" role=\"img\" aria-label=\"용량에 따른 스위칭 에너지와 RC 시정수\"></svg></div>\n    <div>\n      <div class=\"ctl\">\n        <div class=\"row\"><label for=\"d-c3c\">용량 C</label><input type=\"range\" id=\"d-c3c\" min=\"0\" max=\"100\" step=\"1\" value=\"12\"><output id=\"d-o3c\"></output></div>\n        <div class=\"row\"><label for=\"d-c3v\">구동 전압 V</label><input type=\"range\" id=\"d-c3v\" min=\"10\" max=\"200\" step=\"5\" value=\"50\"><output id=\"d-o3v\"></output></div>\n        <div class=\"row\"><label for=\"d-c3r\">부하 저항 R</label><input type=\"range\" id=\"d-c3r\" min=\"0\" max=\"100\" step=\"1\" value=\"50\"><output id=\"d-o3r\"></output></div>\n      </div>\n      <div class=\"read\" id=\"d-r3\"></div>\n      <p class=\"note\">E = ½CV², τ = RC, f₃dB = 1/2πRC를 그대로 계산한다. 광자 수는 1.55 µm(0.80 eV) 기준. 보통 소자(수십 fF)와 2 fF를 나란히 둔 막대가 전부를 말한다.</p>\n    </div>\n  </div>\n</div>\n\n<div class=\"card sec\" id=\"d-s4\">\n  <div class=\"head\">\n    <div><div class=\"num\">04</div><h2>폴라리톤 논리</h2></div>\n    \n  </div>\n  <p class=\"idea\">빛과 물질을 섞어버린다. 광자에 엑시톤을 입히면 <span class=\"k\">광자끼리 서로를 느끼게</span> 되고, 그러면 스위칭에 필요한 광자 수가 내려간다. 비선형을 매질에서 꺼내는 게 아니라 <span class=\"k\">입자를 바꿔</span> 꺼낸다.</p>\n  <div class=\"split\">\n    <div class=\"fig\"><svg class=\"f\" id=\"d-f4\" viewBox=\"0 0 440 214\" role=\"img\" aria-label=\"상호작용 세기에 따른 필요 광자수\"></svg></div>\n    <div>\n      <div class=\"ctl\">\n        <div class=\"row\"><label for=\"d-c4g\">상호작용 배율</label><input type=\"range\" id=\"d-c4g\" min=\"0\" max=\"100\" step=\"1\" value=\"0\"><output id=\"d-o4g\"></output></div>\n        <div class=\"row\"><label for=\"d-c4q\">캐비티 Q</label><input type=\"range\" id=\"d-c4q\" min=\"0\" max=\"100\" step=\"1\" value=\"33\"><output id=\"d-o4q\"></output></div>\n      </div>\n      <div class=\"read\" id=\"d-r4\"></div>\n      <p class=\"note\"><i>보고값</i> — 비선형 60배 · 10 fJ · 상온 동작(IBM 취리히 유기 폴라리톤 소자). <b>측정 조건과 재현성은 확인되지 않았다 — 미확인으로 둔다.</b> 아래 숫자는 N = πℏω/(g·Q) 스케일링이고 상수는 1로 잡은 추정이다.</p>\n    </div>\n  </div>\n</div>\n\n<div class=\"card sec\" id=\"d-s5\">\n  <div class=\"head\">\n    <div><div class=\"num\">05</div><h2>2D 소재 비선형</h2></div>\n    \n  </div>\n  <p class=\"idea\">구조를 바꾸는 게 아니라 <span class=\"k\">재료의 χ⁽³⁾ 자체를 키운다</span>. 도파로 위에 2D 층을 덮으면 n₂가 수백~수천 배로 뛴다. 그러면 π 위상을 만드는 길이가 그만큼 짧아진다 — 거기까지는 맞다.</p>\n  <div class=\"split\">\n    <div class=\"fig\"><svg class=\"f\" id=\"d-f5\" viewBox=\"0 0 440 218\" role=\"img\" aria-label=\"비선형 배율에 따른 필요 길이와 손실\"></svg></div>\n    <div>\n      <div class=\"ctl\">\n        <div class=\"row\"><label for=\"d-c5m\">χ⁽³⁾ 배율</label><input type=\"range\" id=\"d-c5m\" min=\"0\" max=\"100\" step=\"1\" value=\"50\"><output id=\"d-o5m\"></output></div>\n        <div class=\"row\"><label for=\"d-c5p\">광 파워</label><input type=\"range\" id=\"d-c5p\" min=\"1\" max=\"100\" step=\"1\" value=\"30\"><output id=\"d-o5p\"></output></div>\n        <div class=\"row\"><label for=\"d-c5f\">손실 개선</label><input type=\"range\" id=\"d-c5f\" min=\"0\" max=\"100\" step=\"1\" value=\"0\"><output id=\"d-o5f\"></output></div>\n      </div>\n      <div class=\"read\" id=\"d-r5\"></div>\n      <p class=\"note\">π 위상 길이 L = λ/(2n₂I)를 실제로 계산한다. <span class=\"k\">χ⁽³⁾ 배율만 올려보라</span> — 길이는 줄는데 π당 손실은 어느 값에서 멈춘다. 흡수도 같은 진동자 세기에서 나오니 같이 커지기 때문이다. 내려가는 건 「손실 개선」 손잡이뿐이다.</p>\n    </div>\n  </div>\n</div>\n\n<div class=\"card sec\" id=\"d-s6\">\n  <div class=\"head\">\n    <div><div class=\"num\">06</div><h2>자기 스위칭 · PhC / SWG 비선형 공진기</h2></div>\n    \n  </div>\n  <p class=\"idea\">제어 빛이 따로 없다. <span class=\"k\">입력 자신의 세기가 공진 조건을 밀어서</span> 스스로 경로를 바꾼다. 소자가 가장 단순한 대신 승부는 하나로 모인다 — 임계 세기를 어디까지 내리나.</p>\n  <div class=\"split\">\n    <div class=\"fig\"><svg class=\"f\" id=\"d-f6\" viewBox=\"0 0 440 236\" role=\"img\" aria-label=\"Kerr 공진기 쌍안정 S곡선과 임계 파워\"></svg></div>\n    <div>\n      <div class=\"ctl\">\n        <div class=\"row\"><label for=\"d-c6x\">입력 세기 X</label><input type=\"range\" id=\"d-c6x\" min=\"0\" max=\"100\" step=\"1\" value=\"20\"><output id=\"d-o6x\"></output></div>\n        <div class=\"row\"><label for=\"d-c6d\">디튜닝 Δ</label><input type=\"range\" id=\"d-c6d\" min=\"0\" max=\"80\" step=\"1\" value=\"40\"><output id=\"d-o6d\"></output></div>\n        <div class=\"row\"><label for=\"d-c6q\">Q</label><input type=\"range\" id=\"d-c6q\" min=\"0\" max=\"100\" step=\"1\" value=\"40\"><output id=\"d-o6q\"></output></div>\n        <div class=\"row\"><label for=\"d-c6v\">모드부피 V</label><input type=\"range\" id=\"d-c6v\" min=\"0\" max=\"100\" step=\"1\" value=\"30\"><output id=\"d-o6v\"></output></div>\n      </div>\n      <div class=\"read\" id=\"d-r6\"></div>\n      <p class=\"note\">Y³ − 2ΔY² + (1+Δ²)Y = X를 푼다. <span class=\"k\">Δ &gt; √3</span>이라야 히스테리시스가 열리고, 그 아래선 그냥 휘어진 곡선이다. X를 올렸다 내려보면 점프 지점이 갈린다. Q 손잡이가 임계를 <span class=\"k\">Q²로</span> 끌어내린다 — 그게 이 구조의 전부다.</p>\n    </div>\n  </div>\n</div>\n\n<div class=\"card sec close\" id=\"d-s7\">\n  <h2 style=\"font-size:16px\">여섯을 겹쳐 보면</h2>\n  <div class=\"fig\" style=\"margin:12px 0 4px\"><svg class=\"f\" id=\"d-f7\" viewBox=\"0 0 440 230\" role=\"img\" aria-label=\"여섯 구조가 깎는 벽의 면\"></svg></div>\n  <p style=\"margin-top:10px\"><b>벽은 클럭이 아니었다.</b> 광 논리가 전자를 못 이긴 이유로 흔히 속도를 꼽지만, 벨연구소가 1990~93년에 이 길을 접은 실제 이유는 셋이었다 — <span class=\"k\">이득이 없고, 팬아웃이 안 되고, 에너지가 안 맞았다</span>. 게이트 하나는 빠르게 돌아도 그 출력이 다음 게이트 둘을 켜지 못하면 회로가 서지 않는다. 트랜지스터가 공짜로 주던 것(전원에서 이득을 꺼내 쓰기, 출력 하나로 입력 여럿 때리기, 상태를 유지할 때 전력 안 먹기)을 빛은 하나도 공짜로 주지 않는다.</p>\n  <p><b>01이 유일하게 돌아간 건 이득을 포기하지 않았기 때문이다.</b> S-SEED는 입력 빔으로 연산하지 않는다 — 입력은 <span class=\"k\">상태만</span> 정하고, 출력 세기는 바이어스 전원과 읽기 빔이 만든다. 전자회로가 하는 일을 그대로 베낀 셈이다. 그래서 캐스케이드가 됐고, 그래서 1기에서 유일하게 실물이 나왔다. 02가 논문만 많고 회로가 없는 이유는 그 반대다 — 입력 빛 자체가 출력을 만들어서, 슬라이더로 단수를 늘려보면 소광비가 몇 단 안에 주저앉는다.</p>\n  <p><b>03~06은 같은 벽을 서로 다른 면에서 깎는다.</b> 03은 전광을 포기하는 대신 전자 토막을 극단적으로 줄여 이득·캐스케이드·파장변환을 한꺼번에 사온다 — 가장 실용적이고, 가장 「순수하지 않은」 길이다. 04는 광자를 폴라리톤으로 바꿔 상호작용을 키우고, 05는 재료의 χ⁽³⁾를 키우고, 06은 캐비티로 같은 빛을 수천 번 되돌려 실효 비선형을 키운다. 셋은 전부 「같은 광자 수로 더 큰 비선형」을 노리는 같은 문제의 다른 답이다.</p>\n  <p><b>그리고 셋의 바닥이 한 군데서 만난다.</b> 05를 돌려보면 비선형만 키워도 π당 손실이 안 내려간다 — 흡수가 같이 커진다. 06을 돌려보면 임계가 <span class=\"k\">V/Q²</span>로 간다. 04의 스케일링도 g·Q 곱에 묶인다. 결국 전부 <span class=\"k\">캐비티를 작게, Q를 높게</span>로 수렴한다. 재료를 바꾸는 길도, 입자를 바꾸는 길도, 마지막엔 그 작은 캐비티를 만들 수 있느냐에 걸린다.</p>\n  <p><b>남는 질문은 물리가 아니라 사람 수다.</b> 네 경로(폴라리톤 · PhC 나노캐비티와 광 RAM · 펨토패럿 O-E-O · 초전도 광전자)는 물리적으로 열려 있지만, 각각 세계적으로 연구그룹이 얇다. 벽을 낮추는 방법을 아는 것과 그걸 할 자리가 있는 것은 다른 문제다.</p>\n</div>\n\n<div class=\"pending\" id=\"d-pend\">\n  <b>같은 틀의 다른 묶음</b> — A군(행렬곱 여덟 구조)과 4×4 MZI 메시는 따로 있다. B군(리저버·스파이킹·포토닉 텐서코어) · C군(이징 머신) · E군(in-sensor·메타표면) · F군(선형광학 양자컴·주파수 콤)은 이어서 만든다.\n</div>\n</section>",
+  html: "<section id=\"sec-d\" hidden>\n<div class=\"eyebrow\">D군 · 디지털 전광 논리 · 벽은 클럭이 아니다</div>\n<p class=\"lede\" style=\"margin:6px 0 10px\">빛으로 0과 1을 세우려는 여섯 시도. 전부 같은 벽 앞에 서 있다 — 이득·팬아웃·에너지. 손으로 돌려보면 어느 구조가 그 벽의 어느 면을 깎고 있는지 갈린다.</p>\n<div class=\"tabs\" id=\"d-tabs\" role=\"tablist\">\n  <button type=\"button\" data-s=\"1\" aria-pressed=\"true\"><span class=\"n\">01</span>S-SEED</button>\n  <button type=\"button\" data-s=\"2\" aria-pressed=\"false\"><span class=\"n\">02</span>전광 논리 게이트</button>\n  <button type=\"button\" data-s=\"3\" aria-pressed=\"false\"><span class=\"n\">03</span>펨토패럿 O-E-O</button>\n  <button type=\"button\" data-s=\"4\" aria-pressed=\"false\"><span class=\"n\">04</span>폴라리톤 논리</button>\n  <button type=\"button\" data-s=\"5\" aria-pressed=\"false\"><span class=\"n\">05</span>2D 소재 비선형</button>\n  <button type=\"button\" data-s=\"6\" aria-pressed=\"false\"><span class=\"n\">06</span>자기 스위칭</button>\n  <button type=\"button\" data-s=\"7\" aria-pressed=\"false\">겹쳐 보면</button>\n</div>\n<div class=\"card sec\" id=\"d-s1\">\n  <div class=\"head\">\n    <div><div class=\"num\">01</div><h2>S-SEED · 대칭 자기전기광학 소자</h2></div>\n    \n  </div>\n  <p class=\"idea\">1기에서 <span class=\"k\">유일하게 실제로 돌아간</span> 광 논리 소자. 두 입력 빔의 <span class=\"k\">절대 세기가 아니라 비율</span>로 판정하고, 출력 세기는 입력이 아니라 <span class=\"k\">전원과 읽기 빔</span>이 만든다. 이 둘이 묶여서 「이득」이 생긴다.</p>\n  <div class=\"split\">\n    <div class=\"fig\"><svg class=\"f\" id=\"d-f1\" viewBox=\"0 0 880 370\" role=\"img\" aria-label=\"LD → 1×3 분배 → P1·P2 변조 → PBS·렌즈 → 직렬 SEED 쌍 → 반사 출력\"></svg></div>\n    <div>\n      <div class=\"ctl\">\n        <div class=\"row\"><label for=\"d-c1a\">입력 P1</label><input type=\"range\" id=\"d-c1a\" min=\"-100\" max=\"100\" step=\"1\" value=\"-60\"><output id=\"d-o1a\"></output></div>\n        <div class=\"row\"><label for=\"d-c1b\">입력 P2</label><input type=\"range\" id=\"d-c1b\" min=\"-100\" max=\"100\" step=\"1\" value=\"0\"><output id=\"d-o1b\"></output></div>\n        <div class=\"row\"><label for=\"d-c1r\">읽기 빔</label><input type=\"range\" id=\"d-c1r\" min=\"1\" max=\"100\" step=\"1\" value=\"40\"><output id=\"d-o1r\"></output></div>\n      </div>\n      <div class=\"btns\" style=\"margin-top:8px\">\n        <button type=\"button\" id=\"d-b1u\">P1 천천히 올리기</button>\n        <button type=\"button\" id=\"d-b1d\">천천히 내리기</button>\n        <button type=\"button\" id=\"d-b1z\">초기화</button>\n      </div>\n      <div class=\"read\" id=\"d-r1\"></div>\n      <p class=\"note\">슬라이더를 <span class=\"k\">올렸다 내려보면</span> 같은 비율에서 상태가 갈린다. 그 갈림이 래치다 — 비율이 1 근처로 와도 직전 상태를 붙잡고 있다.</p>\n    </div>\n  </div>\n</div>\n\n<div class=\"card sec\" id=\"d-s2\">\n  <div class=\"head\">\n    <div><div class=\"num\">02</div><h2>전광 논리 게이트 · XGM / XPM / FWM</h2></div>\n    \n  </div>\n  <p class=\"idea\">데이터 빛이 매질의 이득이나 굴절률을 흔들어 다른 빛을 스위칭한다. 논문은 수천 편인데 <span class=\"k\">실물 회로가 거의 없는</span> 이유는 한 단이 아니라 <span class=\"k\">여러 단을 이을 때</span> 드러난다.</p>\n  <div class=\"split\">\n    <div class=\"fig\"><svg class=\"f\" id=\"d-f2\" viewBox=\"0 0 880 370\" role=\"img\" aria-label=\"펌프 λ1 + 프로브 λ2 → WDM 합침 → SOA 이득포화 → 아이솔레이터 → λ2만 → 반전 출력\"></svg></div>\n    <div>\n      <div class=\"ctl\">\n        <div class=\"row\"><label for=\"d-c2g\">소신호 이득 G₀</label><input type=\"range\" id=\"d-c2g\" min=\"10\" max=\"35\" step=\"1\" value=\"30\"><output id=\"d-o2g\"></output></div>\n        <div class=\"row\"><label for=\"d-c2p\">펌프 「1」 세기</label><input type=\"range\" id=\"d-c2p\" min=\"-30\" max=\"10\" step=\"1\" value=\"-13\"><output id=\"d-o2p\"></output></div>\n        <div class=\"row\"><label for=\"d-c2n\">캐스케이드 단수</label><input type=\"range\" id=\"d-c2n\" min=\"1\" max=\"10\" step=\"1\" value=\"6\"><output id=\"d-o2n\"></output></div>\n      </div>\n      <div class=\"read\" id=\"d-r2\"></div>\n      <p class=\"note\">이득포화 G = G₀·exp(−(G−1)P/P<sub>sat</sub>)를 매 단마다 실제로 푼다. 출력을 다음 단 펌프로 그대로 넣으면 「0」 레벨이 올라오고, 소광비는 단수마다 깎인다.</p>\n    </div>\n  </div>\n</div>\n\n<div class=\"card sec\" id=\"d-s3\">\n  <div class=\"head\">\n    <div><div class=\"num\">03</div><h2>펨토패럿 O-E-O</h2></div>\n    \n  </div>\n  <p class=\"idea\">전광을 고집하지 않는다. 광검출기와 변조기를 <span class=\"k\">배선 없이 맞붙여</span> 용량을 fF로 떨어뜨리면, 전자 한 토막이 끼어도 에너지가 fJ에 머문다. 대신 전광이 못 주던 것 셋 — <span class=\"k\">이득·캐스케이드·파장변환</span> — 이 한 번에 들어온다.</p>\n  <div class=\"split\">\n    <div class=\"fig\"><svg class=\"f\" id=\"d-f3\" viewBox=\"0 0 880 370\" role=\"img\" aria-label=\"입력 빛 → fF PD → 배선 없는 노드 → 나노캐비티 변조기가 CW λ′ 변조 → WDM 출력\"></svg></div>\n    <div>\n      <div class=\"ctl\">\n        <div class=\"row\"><label for=\"d-c3c\">용량 C</label><input type=\"range\" id=\"d-c3c\" min=\"0\" max=\"100\" step=\"1\" value=\"12\"><output id=\"d-o3c\"></output></div>\n        <div class=\"row\"><label for=\"d-c3v\">구동 전압 V</label><input type=\"range\" id=\"d-c3v\" min=\"10\" max=\"200\" step=\"5\" value=\"50\"><output id=\"d-o3v\"></output></div>\n        <div class=\"row\"><label for=\"d-c3r\">부하 저항 R</label><input type=\"range\" id=\"d-c3r\" min=\"0\" max=\"100\" step=\"1\" value=\"50\"><output id=\"d-o3r\"></output></div>\n      </div>\n      <div class=\"read\" id=\"d-r3\"></div>\n      <p class=\"note\">E = ½CV², τ = RC, f₃dB = 1/2πRC를 그대로 계산한다. 광자 수는 1.55 µm(0.80 eV) 기준. 보통 소자(수십 fF)와 2 fF를 나란히 둔 막대가 전부를 말한다.</p>\n    </div>\n  </div>\n</div>\n\n<div class=\"card sec\" id=\"d-s4\">\n  <div class=\"head\">\n    <div><div class=\"num\">04</div><h2>폴라리톤 논리</h2></div>\n    \n  </div>\n  <p class=\"idea\">빛과 물질을 섞어버린다. 광자에 엑시톤을 입히면 <span class=\"k\">광자끼리 서로를 느끼게</span> 되고, 그러면 스위칭에 필요한 광자 수가 내려간다. 비선형을 매질에서 꺼내는 게 아니라 <span class=\"k\">입자를 바꿔</span> 꺼낸다.</p>\n  <div class=\"split\">\n    <div class=\"fig\"><svg class=\"f\" id=\"d-f4\" viewBox=\"0 0 880 370\" role=\"img\" aria-label=\"펄스 펌프 + 감쇠한 제어 펄스 → 빔 분할기 → 렌즈 → 폴라리톤 미세공동 → 카메라\"></svg></div>\n    <div>\n      <div class=\"ctl\">\n        <div class=\"row\"><label for=\"d-c4g\">상호작용 배율</label><input type=\"range\" id=\"d-c4g\" min=\"0\" max=\"100\" step=\"1\" value=\"0\"><output id=\"d-o4g\"></output></div>\n        <div class=\"row\"><label for=\"d-c4q\">캐비티 Q</label><input type=\"range\" id=\"d-c4q\" min=\"0\" max=\"100\" step=\"1\" value=\"33\"><output id=\"d-o4q\"></output></div>\n      </div>\n      <div class=\"read\" id=\"d-r4\"></div>\n      <p class=\"note\"><i>보고값</i> — 비선형 60배 · 10 fJ · 상온 동작(IBM 취리히 유기 폴라리톤 소자). <b>측정 조건과 재현성은 확인되지 않았다 — 미확인으로 둔다.</b> 아래 숫자는 N = πℏω/(g·Q) 스케일링이고 상수는 1로 잡은 추정이다.</p>\n    </div>\n  </div>\n</div>\n\n<div class=\"card sec\" id=\"d-s5\">\n  <div class=\"head\">\n    <div><div class=\"num\">05</div><h2>2D 소재 비선형</h2></div>\n    \n  </div>\n  <p class=\"idea\">구조를 바꾸는 게 아니라 <span class=\"k\">재료의 χ⁽³⁾ 자체를 키운다</span>. 도파로 위에 2D 층을 덮으면 n₂가 수백~수천 배로 뛴다. 그러면 π 위상을 만드는 길이가 그만큼 짧아진다 — 거기까지는 맞다.</p>\n  <div class=\"split\">\n    <div class=\"fig\"><svg class=\"f\" id=\"d-f5\" viewBox=\"0 0 880 370\" role=\"img\" aria-label=\"펄스 → 격자 결합기 → 2D 층 덮인 도파로(위상) → 결합기 간섭 → PD\"></svg></div>\n    <div>\n      <div class=\"ctl\">\n        <div class=\"row\"><label for=\"d-c5m\">χ⁽³⁾ 배율</label><input type=\"range\" id=\"d-c5m\" min=\"0\" max=\"100\" step=\"1\" value=\"50\"><output id=\"d-o5m\"></output></div>\n        <div class=\"row\"><label for=\"d-c5p\">광 파워</label><input type=\"range\" id=\"d-c5p\" min=\"1\" max=\"100\" step=\"1\" value=\"30\"><output id=\"d-o5p\"></output></div>\n        <div class=\"row\"><label for=\"d-c5f\">손실 개선</label><input type=\"range\" id=\"d-c5f\" min=\"0\" max=\"100\" step=\"1\" value=\"0\"><output id=\"d-o5f\"></output></div>\n      </div>\n      <div class=\"read\" id=\"d-r5\"></div>\n      <p class=\"note\">π 위상 길이 L = λ/(2n₂I)를 실제로 계산한다. <span class=\"k\">χ⁽³⁾ 배율만 올려보라</span> — 길이는 줄는데 π당 손실은 어느 값에서 멈춘다. 흡수도 같은 진동자 세기에서 나오니 같이 커지기 때문이다. 내려가는 건 「손실 개선」 손잡이뿐이다.</p>\n    </div>\n  </div>\n</div>\n\n<div class=\"card sec\" id=\"d-s6\">\n  <div class=\"head\">\n    <div><div class=\"num\">06</div><h2>자기 스위칭 · PhC / SWG 비선형 공진기</h2></div>\n    \n  </div>\n  <p class=\"idea\">제어 빛이 따로 없다. <span class=\"k\">입력 자신의 세기가 공진 조건을 밀어서</span> 스스로 경로를 바꾼다. 소자가 가장 단순한 대신 승부는 하나로 모인다 — 임계 세기를 어디까지 내리나.</p>\n  <div class=\"split\">\n    <div class=\"fig\"><svg class=\"f\" id=\"d-f6\" viewBox=\"0 0 880 370\" role=\"img\" aria-label=\"LD → 감쇠기(세기 X) → 결합기 → 버스 도파로 → Kerr 공진기(쌍안정) → 투과·드롭 PD\"></svg></div>\n    <div>\n      <div class=\"ctl\">\n        <div class=\"row\"><label for=\"d-c6x\">입력 세기 X</label><input type=\"range\" id=\"d-c6x\" min=\"0\" max=\"100\" step=\"1\" value=\"20\"><output id=\"d-o6x\"></output></div>\n        <div class=\"row\"><label for=\"d-c6d\">디튜닝 Δ</label><input type=\"range\" id=\"d-c6d\" min=\"0\" max=\"80\" step=\"1\" value=\"40\"><output id=\"d-o6d\"></output></div>\n        <div class=\"row\"><label for=\"d-c6q\">Q</label><input type=\"range\" id=\"d-c6q\" min=\"0\" max=\"100\" step=\"1\" value=\"40\"><output id=\"d-o6q\"></output></div>\n        <div class=\"row\"><label for=\"d-c6v\">모드부피 V</label><input type=\"range\" id=\"d-c6v\" min=\"0\" max=\"100\" step=\"1\" value=\"30\"><output id=\"d-o6v\"></output></div>\n      </div>\n      <div class=\"read\" id=\"d-r6\"></div>\n      <p class=\"note\">Y³ − 2ΔY² + (1+Δ²)Y = X를 푼다. <span class=\"k\">Δ &gt; √3</span>이라야 히스테리시스가 열리고, 그 아래선 그냥 휘어진 곡선이다. X를 올렸다 내려보면 점프 지점이 갈린다. Q 손잡이가 임계를 <span class=\"k\">Q²로</span> 끌어내린다 — 그게 이 구조의 전부다.</p>\n    </div>\n  </div>\n</div>\n\n<div class=\"card sec close\" id=\"d-s7\">\n  <h2 style=\"font-size:16px\">여섯을 겹쳐 보면</h2>\n  <div class=\"fig\" style=\"margin:12px 0 4px\"><svg class=\"f\" id=\"d-f7\" viewBox=\"0 0 440 230\" role=\"img\" aria-label=\"여섯 구조가 깎는 벽의 면\"></svg></div>\n  <p style=\"margin-top:10px\"><b>벽은 클럭이 아니었다.</b> 광 논리가 전자를 못 이긴 이유로 흔히 속도를 꼽지만, 벨연구소가 1990~93년에 이 길을 접은 실제 이유는 셋이었다 — <span class=\"k\">이득이 없고, 팬아웃이 안 되고, 에너지가 안 맞았다</span>. 게이트 하나는 빠르게 돌아도 그 출력이 다음 게이트 둘을 켜지 못하면 회로가 서지 않는다. 트랜지스터가 공짜로 주던 것(전원에서 이득을 꺼내 쓰기, 출력 하나로 입력 여럿 때리기, 상태를 유지할 때 전력 안 먹기)을 빛은 하나도 공짜로 주지 않는다.</p>\n  <p><b>01이 유일하게 돌아간 건 이득을 포기하지 않았기 때문이다.</b> S-SEED는 입력 빔으로 연산하지 않는다 — 입력은 <span class=\"k\">상태만</span> 정하고, 출력 세기는 바이어스 전원과 읽기 빔이 만든다. 전자회로가 하는 일을 그대로 베낀 셈이다. 그래서 캐스케이드가 됐고, 그래서 1기에서 유일하게 실물이 나왔다. 02가 논문만 많고 회로가 없는 이유는 그 반대다 — 입력 빛 자체가 출력을 만들어서, 슬라이더로 단수를 늘려보면 소광비가 몇 단 안에 주저앉는다.</p>\n  <p><b>03~06은 같은 벽을 서로 다른 면에서 깎는다.</b> 03은 전광을 포기하는 대신 전자 토막을 극단적으로 줄여 이득·캐스케이드·파장변환을 한꺼번에 사온다 — 가장 실용적이고, 가장 「순수하지 않은」 길이다. 04는 광자를 폴라리톤으로 바꿔 상호작용을 키우고, 05는 재료의 χ⁽³⁾를 키우고, 06은 캐비티로 같은 빛을 수천 번 되돌려 실효 비선형을 키운다. 셋은 전부 「같은 광자 수로 더 큰 비선형」을 노리는 같은 문제의 다른 답이다.</p>\n  <p><b>그리고 셋의 바닥이 한 군데서 만난다.</b> 05를 돌려보면 비선형만 키워도 π당 손실이 안 내려간다 — 흡수가 같이 커진다. 06을 돌려보면 임계가 <span class=\"k\">V/Q²</span>로 간다. 04의 스케일링도 g·Q 곱에 묶인다. 결국 전부 <span class=\"k\">캐비티를 작게, Q를 높게</span>로 수렴한다. 재료를 바꾸는 길도, 입자를 바꾸는 길도, 마지막엔 그 작은 캐비티를 만들 수 있느냐에 걸린다.</p>\n  <p><b>남는 질문은 물리가 아니라 사람 수다.</b> 네 경로(폴라리톤 · PhC 나노캐비티와 광 RAM · 펨토패럿 O-E-O · 초전도 광전자)는 물리적으로 열려 있지만, 각각 세계적으로 연구그룹이 얇다. 벽을 낮추는 방법을 아는 것과 그걸 할 자리가 있는 것은 다른 문제다.</p>\n</div>\n\n<div class=\"pending\" id=\"d-pend\">\n  <b>같은 틀의 다른 묶음</b> — A군(행렬곱 여덟 구조)과 4×4 MZI 메시는 따로 있다. B군(리저버·스파이킹·포토닉 텐서코어) · C군(이징 머신) · E군(in-sensor·메타표면) · F군(선형광학 양자컴·주파수 콤)은 이어서 만든다.\n</div>\n</section>",
   run: function (document, getComputedStyle, MOD) {
 
 
@@ -31,6 +31,79 @@ function axes(x0,y0,w,h,xl,yl){
   return `<path class="gridl" stroke-width="1" d="M${x0} ${y0-h} V${y0} H${x0+w}"/>
   <text class="m" x="${x0+w}" y="${y0+14}" font-size="9" text-anchor="end">${xl}</text>
   <text class="m" x="${x0-3}" y="${y0-h-4}" font-size="9" text-anchor="end">${yl}</text>`;
+}
+
+/* ── 사이클 그림 공통 — 부품 도우미(parts.js)에 없는 부품을 이 군 안에서 그린다 ──
+   P.part(id, 상자, 그리기) 로 감싸 BOM 마커 자리를 남긴다. 그림 폭 880, 위 = 사이클, 오른쪽 아래 = 옛 그래프(보조 패널). */
+const XP={
+  // 큐브(편광·빔 분할): '\\' 는 왼쪽으로 오는 빛을 위로, '/' 는 위로 오는 빛을 오른쪽으로 꺾는다
+  cube(P,cx,cy,s,id,diag){
+    P.part(id,[cx-s/2,cy-s/2,s,s],()=>{
+      P.rect(cx-s/2,cy-s/2,s,s,{c:'ink',w:1.3,f:'grid',fo:.6,r:1});
+      P.path(diag==='/'?`M${cx-s/2} ${cy+s/2} L${cx+s/2} ${cy-s/2}`:`M${cx-s/2} ${cy-s/2} L${cx+s/2} ${cy+s/2}`,{c:'ink',w:1.1});
+    });
+  },
+  // SEED 창: MQW 줄무늬 + 흡수 a 만큼 어둡게
+  seed(P,cx,cy,w,h,a,id){
+    P.part(id,[cx-w/2,cy-h/2,w,h],()=>{
+      P.rect(cx-w/2,cy-h/2,w,h,{c:'ink',w:1.3,r:2});
+      P.rect(cx-w/2,cy-h/2,w,h,{c:'none',f:'ink',fo:a*.55,r:2});
+      for(let i=1;i<5;i++) P.path(`M${cx-w/2+3} ${cy-h/2+i*h/5} H${cx+w/2-3}`,{c:'faint',w:.8});
+    });
+  },
+  bias(P,cx,cy,lab,at){
+    P.part('bias',[cx-17,cy-9,34,18],()=>{ P.rect(cx-17,cy-9,34,18,{c:'probe',w:1.2}); P.text(cx,cy+4,lab||'+V',{a:'middle',c:'probe',s:10}); },at);
+  },
+  // 가변 감쇠기: 상자 안 쐐기(ND)
+  voa(P,cx,cy,lab){
+    P.part('voa',[cx-17,cy-10,34,20],()=>{ P.rect(cx-17,cy-10,34,20,{c:'ink',w:1.3}); P.path(`M${cx-12} ${cy+6} L${cx+12} ${cy-6} V${cy+6} Z`,{c:'none',f:'ink',fo:.35}); });
+    if(lab) P.lab(cx,cy+23,lab,{a:'middle'});
+  },
+  // 격자 결합기: 넓은 쪽에 홈
+  coup(P,cx,cy){
+    P.part('coup',[cx-12,cy-10,24,20],()=>{
+      P.path(`M${cx-12} ${cy-9} L${cx+12} ${cy-3} V${cy+3} L${cx-12} ${cy+9} Z`,{c:'ink',w:1.1,f:'grid'});
+      for(let i=0;i<4;i++) P.path(`M${cx-9+i*4} ${cy-7+i} V${cy+7-i}`,{c:'ink',w:1});
+    });
+  },
+  // 도파로: 옅은 굵은 띠(빛은 그 위에 빨강으로)
+  wg(P,x0,y,x1,id,at){ P.part(id,[x0,y-3,x1-x0,6],()=>P.path(`M${x0} ${y} H${x1}`,{c:'faint',w:5,op:.4}),at); },
+  // Kerr·2D 층: 도파로 위 붉은 판
+  kerr(P,x,y,w,v){ P.part('kerr',[x,y-7,w,5],()=>P.rect(x,y-7,w,5,{c:'none',f:'beam',fo:.3+.65*v,r:1.5})); },
+  // 광결정 나노캐비티: 구멍 격자 + 가운데 줄의 빠진 구멍(결함) — 갇힌 빛만큼 노랗게
+  phc(P,x,y,w,h,id,v){
+    P.part(id,[x,y,w,h],()=>{
+      P.rect(x,y,w,h,{c:'ink',w:1.1,f:'grid',fo:.6,r:2});
+      const s=7, nx=Math.floor((w-4)/s), ny=Math.floor((h-2)/s), ox=x+(w-(nx-1)*s)/2, oy=y+(h-(ny-1)*s)/2, mj=Math.floor(nx/2), mi=Math.floor(ny/2);
+      for(let i=0;i<ny;i++) for(let j=0;j<nx;j++){
+        const hx=ox+j*s+(i%2?s/2:0); if(hx>x+w-2) continue;
+        if(i===mi&&Math.abs(j-mj)<=1) continue;
+        P.circ(hx,oy+i*s,1.7,{c:'none',f:'ink',fo:.55});
+      }
+      P.circ(ox+mj*s+(mi%2?s/2:0),oy+mi*s,5,{c:'none',f:'warm',fo:.15+.6*v});
+    });
+  },
+  // 미세공동: DBR 거울 둘 사이 유기층 — 응집이 서면 가운데가 밝아진다
+  dbr(P,cx,cy,h,v){
+    P.part('cav',[cx-14,cy-h/2,28,h],()=>{
+      [cx-10,cx+10].forEach(x0=>{ for(let k=0;k<4;k++) P.rect(x0-4+k*2,cy-h/2,2,h,{c:'none',f:k%2?'ink':'faint',fo:.6,r:0}); });
+      P.rect(cx-6,cy-h/2,12,h,{c:'none',f:'beam',fo:.12+.45*v,r:0});
+      P.circ(cx,cy,4+5*v,{c:'none',f:'warm',fo:.25+.6*v});
+    });
+  }
+};
+// 보조 패널 축 · 점 목록 → path
+function axP(P,x0,y0,w,h,xl,yl){
+  P.path(`M${x0} ${y0-h} V${y0} H${x0+w}`,{c:'rule',w:1});
+  if(xl) P.text(x0+w,y0+13,xl,{a:'end',s:9});
+  if(yl) P.text(x0-4,y0-h-3,yl,{a:'end',s:9});
+}
+const pth=pts=>'M'+pts.map(q=>q[0].toFixed(1)+' '+q[1].toFixed(1)).join(' L');
+// 비트열 파형(작은 사각파)
+function wave(P,x,y,bits,c){
+  let d=`M${x} ${y-(bits[0]?8:0)}`, cx=x;
+  bits.forEach((b,i)=>{ const yy=y-(b?8:0); if(i) d+=` V${yy}`; cx+=8; d+=` H${cx}`; });
+  P.path(d,{c:c,w:1.2});
 }
 
 /* ══ 01 S-SEED ═══════════════════════════════════════════════
@@ -64,47 +137,48 @@ function r1(){
   trail1.push([lr,v1]); if(trail1.length>140) trail1.shift();
   const out1=Pr*T1/2, out2=Pr*T2/2, hi=Math.max(T1,T2), lo=Math.min(T1,T2);
   const st=T1>T2?'1':'0';
-  const px=x=>196+(x+2)*(428-196)/4, py=y=>206-y*140;
-  const path=p=>'M'+p.map(q=>px(q[0]).toFixed(1)+' '+py(q[1]).toFixed(1)).join(' L');
-  const bw=p=>Math.max(1.2,1.2+4.2*Math.min(1,p/3));
-  $('f1').innerHTML=`
-    <path class="wg" stroke-width="1.3" d="M92 22 H92 M62 22 H122"/>
-    <text class="m" x="126" y="25" font-size="9">+V 바이어스</text>
-    <path class="wg" stroke-width="1.3" d="M92 22 V38"/>
-    <rect class="box" x="64" y="38" width="56" height="38" rx="3"/>
-    <rect x="64" y="38" width="56" height="38" rx="3" fill="var(--ink)" opacity="${(a1*0.55).toFixed(3)}"/>
-    <text class="m" x="92" y="33" font-size="9" text-anchor="middle">창 1 · α=${fmt(a1)}</text>
-    <path class="wg" stroke-width="1.3" d="M92 76 V96"/>
-    <circle class="pdf" cx="92" cy="86" r="2.6"/>
-    <text class="p" x="100" y="89" font-size="9">Vm</text>
-    <rect class="box" x="64" y="96" width="56" height="38" rx="3"/>
-    <rect x="64" y="96" width="56" height="38" rx="3" fill="var(--ink)" opacity="${(a2*0.55).toFixed(3)}"/>
-    <text class="m" x="92" y="147" font-size="9" text-anchor="middle">창 2 · α=${fmt(a2)}</text>
-    <path class="wg" stroke-width="1.3" d="M92 134 V152 M76 152 H108 M81 157 H103 M86 162 H98"/>
-    <path class="bm" stroke-width="${bw(P1)}" d="M8 57 H62"/>
-    <path class="bm" stroke-width="${bw(P2)}" d="M8 115 H62"/>
-    <text class="a" x="8" y="50" font-size="9">P1</text>
-    <text class="a" x="8" y="108" font-size="9">P2</text>
-    <path class="pd" stroke-width="${bw(out1*3)}" d="M122 57 H176"/>
-    <path class="pd" stroke-width="${bw(out2*3)}" d="M122 115 H176"/>
-    <text class="p" x="176" y="50" font-size="9" text-anchor="end">읽기</text>
-    <rect class="fillg" x="30" y="38" width="9" height="96"/>
-    <rect class="pdf" x="30" y="${(38+96*(1-v1)).toFixed(1)}" width="9" height="${(96*v1).toFixed(1)}" opacity=".55"/>
-    <text class="m" x="34" y="176" font-size="8" text-anchor="middle">바이어스<tspan x="34" dy="10">분배 v</tspan>
-    <tspan x="34" dy="10">${fmt(v1)}</tspan></text>
-    ${axes(196,206,232,150,'','v')}
-    <path class="gridl" stroke-width="1" stroke-dasharray="2 3" d="M${px(0)} 206 V60"/>
-    <text class="m" x="${px(0)}" y="218" font-size="8" text-anchor="middle">1:1</text>
-    <text class="m" x="196" y="218" font-size="8">0.01</text>
-    <text class="m" x="428" y="218" font-size="8" text-anchor="end">100</text>
-    <text class="m" x="312" y="230" font-size="8" text-anchor="middle">입력 비율 P1/P2</text>
-    <path class="bm" stroke-width="1.6" opacity=".55" d="${path(BR1U)}"/>
-    <path class="pd" stroke-width="1.6" opacity=".55" stroke-dasharray="4 3" d="${path(BR1D)}"/>
-    <path class="bm" stroke-width="2.4" d="${path(trail1)}" opacity=".9"/>
-    <circle class="pdf" cx="${px(clamp(lr,-2,2)).toFixed(1)}" cy="${py(v1).toFixed(1)}" r="4"/>
-    <text class="a" x="204" y="74" font-size="8.5">— 올릴 때</text>
-    <text class="p" x="204" y="86" font-size="8.5">-- 내릴 때</text>
-    <text class="m" x="428" y="74" font-size="8.5" text-anchor="end">두 곡선 사이 = 래치 구간</text>`;
+  // 사이클: LD → 1×3 분배(입력 둘 + 읽기) → P1·P2 변조 → PBS → λ/4 → 렌즈 → 직렬 SEED 쌍(+V) → 반사 → PBS 가 위로 → 다음 단(끝 단만 PD)
+  const P=CYC.pen(), bw=p=>Math.max(1.2,1.2+3.4*Math.min(1,p/3)), YA=72, YB=113, YR=154;
+  P.laser(38,YB);
+  P.split(61,YB,[YA,YB,YR],{L:44});
+  P.beam([[105,YA],[130,YA]],{w:1.6}); P.mod(150,YA,{lab:'P1',drive:true});
+  P.beam([[105,YB],[130,YB]],{w:1.6}); P.mod(150,YB,{lab:'P2',drive:true}); P.at2('eom',[170,YB-11]);
+  P.lab(112,YR-8,'읽기 빔',{s:10});
+  P.beam([[170,YA],[200,YA],[234,99],[345,99]],{w:bw(P1)});
+  P.beam([[170,YB],[345,YB]],{w:bw(P2)});
+  P.beam([[105,YR],[200,YR],[234,127],[345,127]],{w:bw(Pr)});
+  XP.cube(P,262,113,56,'pbs','\\'); P.lab(262,156,'PBS',{a:'middle'});
+  P.rect(309,85,5,56,{c:'ink',w:1,f:'grid',r:1}); P.lab(312,79,'λ/4',{a:'middle',s:9.5});
+  P.lens(345,113,84);
+  // 렌즈가 세 빔을 두 창에 모은다 — 읽기 빔은 두 창을 같이 덮는다
+  P.path('M351 121 L408 91 L408 135 L351 133 Z',{c:'none',f:'beam',fo:.06+.16*Math.min(1,Pr/3)});
+  P.beam([[351,99],[408,101]],{w:bw(P1)}); P.beam([[351,113],[408,125]],{w:bw(P2)});
+  XP.seed(P,420,101,24,20,a1,'seed'); XP.seed(P,420,125,24,20,a2,false); P.at2('seed',[432,115]);
+  // 직렬 회로: +V → 창 1 → Vm → 창 2 → 접지
+  P.wire([[420,91],[420,80],[457,80]],{arrow:false}); XP.bias(P,474,80,'+V',[500,80]);
+  P.wire([[432,113],[444,113]],{arrow:false}); P.circ(444,113,2.4,{c:'none',f:'probe'}); P.lab(449,117,'Vm',{s:9.5,c:'probe'});
+  P.wire([[420,135],[420,146]],{arrow:false}); P.path('M408 146 H432 M412 150 H428 M416 154 H424',{c:'ink',w:1.2});
+  P.lab(420,172,'SEED 쌍',{a:'middle'});
+  P.text(452,136,'상태 '+st,{s:10.5,c:'probe',b:1});
+  // 반사된 읽기 빔(출력)이 같은 축으로 돌아와 PBS 에서 위로 갈린다
+  P.beam([[408,104],[253,104]],{w:1,dash:[3,3]}); P.beam([[408,121],[269,121]],{w:1,dash:[3,3]});
+  P.beam([[253,104],[253,30],[598,30]],{w:bw(out1*3),arrow:true}); P.beam([[269,121],[269,54],[598,54]],{w:bw(out2*3),arrow:true});
+  P.lab(430,23,'반사 출력 → 다음 단',{s:10});
+  P.pd(608,30,{v:T1}); P.pd(608,54,{id:false,v:T2,lab:'끝 단만'});
+  P.wire([[618,30],[640,30],[640,42],[660,42]]); P.wire([[618,54],[640,54],[640,42]],{arrow:false});
+  P.box(688,42,56,26,'판정',{tone:'probe',s:10}); P.text(724,48,st,{s:16,c:'probe',b:1});
+  P.legend(16,250,['광원','변조 P1·P2','PBS·렌즈','SEED 쌍','반사 출력']);
+  // 보조 패널: 쌍안정 래치(옛 그래프)
+  P.aux(470,222,402,142,'쌍안정 래치 — 올릴 때 · 내릴 때가 갈린다');
+  const gx=x=>506+(x+2)*340/4, gy=y=>340-y*86, gp=p=>pth(p.map(q=>[gx(q[0]),gy(q[1])]));
+  axP(P,506,340,340,90,'','v');
+  P.path(`M${gx(0)} 340 V254`,{c:'rule',w:1,dash:[2,3]}); P.text(gx(0)+4,262,'1:1',{s:9});
+  P.text(506,353,'0.01',{s:9}); P.text(846,353,'100',{a:'end',s:9}); P.text(676,353,'입력 비율 P1/P2',{a:'middle',s:9});
+  P.path(gp(BR1U),{c:'beam',w:1.6,op:.55}); P.path(gp(BR1D),{c:'probe',w:1.6,op:.55,dash:[4,3]});
+  P.path(gp(trail1),{c:'beam',w:2.4,op:.9});
+  P.circ(gx(clamp(lr,-2,2)),gy(v1),4,{c:'none',f:'probe'});
+  P.text(520,300,'— 올릴 때',{s:9,c:'beam'}); P.text(520,312,'-- 내릴 때',{s:9,c:'probe'});
+  $('f1').innerHTML=P.out();
   $('r1').innerHTML=`<div>판정 상태 <b>${st}</b> · 비율 P1/P2 = <b>${fmt(P1/P2,3)}</b></div><div>창 투과 T1 <b>${fmt(T1,3)}</b> / T2 <b>${fmt(T2,3)}</b> · 대비 <b>${fmt(hi/lo,2)}:1</b></div><div>출력 <b>${fmt(out1,3)}</b> / <b>${fmt(out2,3)}</b> ← 세기는 읽기 빔이 만든다</div><div>이득 = 출력차 / 입력합 = <b>${(()=>{const g=Pr*Math.abs(T1-T2)/(P1+P2);return g<0.01?g.toExponential(1):fmt(g,2);})()}</b> ← 입력을 약하게 할수록 커진다</div>`;
 }
 function sweep1(dir){
@@ -142,32 +216,47 @@ function r2(){
   }
   const er1=ers[0], erN=ers[N-1];
   let dead=null; for(let i=0;i<10;i++) if(dead===null&&ers[i]<10) dead=i+1;
-  const gMax=10*Math.log10(G0);
-  const px=x=>36+(x+3.5)*(390-36)/4, py=y=>120-(y/Math.max(5,gMax))*100;
-  const path=p=>'M'+p.map(q=>px(q[0]).toFixed(1)+' '+py(q[1]).toFixed(1)).join(' L');
-  let bars='';
+  const gMax=10*Math.log10(G0), g1=10*Math.log10(Gsat(G0,p1)), cmp=clamp((gMax-g1)/Math.max(1,gMax),0,1);
+  // 사이클: λ1 LD → EOM(데이터) ┐ λ2 CW 프로브 ┘ → WDM 합침 → SOA(이득포화) → 아이솔레이터 → WDM 이 λ2 만 → 반전 출력 → 다음 단 펌프
+  const P=CYC.pen(), YP=78, YQ=150, YM=114, pw=1.2+2.6*clamp((pdB+30)/40,0,1);
+  P.zone(180,50,282,128,'한 단 · XGM 인버터');
+  P.laser(38,YP,{lab:'λ1 펌프'});
+  P.beam([[61,YP],[100,YP]],{w:2}); P.mod(120,YP,{lab:'data',drive:true});
+  P.beam([[140,YP],[189,YP]],{w:pw}); wave(P,148,YP-8,[1,0,1,1,0],'beam');
+  P.laser(38,YQ,{lab:'λ2 CW 프로브'}); P.at2('src-cw',[61,YQ-14]);
+  P.beam([[61,YQ],[189,YQ]],{w:1.8});
+  P.wdm(200,YM,84,{flip:true});
+  P.beam([[211,YM],[272,YM]],{w:2.2});
+  P.box(300,YM,56,30,'SOA',{id:'amp'}); P.rect(272,YM-15,56,30,{c:'none',f:'beam',fo:.06+.3*cmp,r:3});
+  P.lab(300,YM+28,'이득포화',{a:'middle',s:10});
+  P.beam([[328,YM],[356,YM]],{w:2}); P.iso(370,YM); P.beam([[384,YM],[419,YM]],{w:2});
+  P.wdm(430,YM,84);
+  P.beam([[441,92],[556,92]],{w:1.4+1.8*clamp(erN/Math.max(10,er1),0,1),arrow:true}); wave(P,470,84,[0,1,0,0,1],'beam');
+  P.lab(500,108,'λ2 = NOT data',{a:'middle',s:9.5});
+  P.beam([[441,140],[476,140]],{w:1.4,op:.35}); P.lab(482,144,'λ1 버림',{s:9.5});
+  P.pd(566,92,{v:clamp(erN/Math.max(10,er1),0,1),lab:'끝 단만'});
+  P.beam([[524,92],[524,198],[160,198],[160,YP+3]],{w:1.2,dash:[4,3],op:.7,arrow:true});
+  P.lab(342,193,`다음 단 펌프로 · ${N}단 이어 붙임`,{a:'middle',s:9.5});
+  P.legend(16,250,['펌프·프로브','WDM 합침','SOA 이득포화','λ2 거름','출력']);
+  // 보조 패널: 이득포화 곡선 + 단별 소광비(옛 그래프)
+  P.aux(470,222,402,142,'이득포화 · 단마다 깎이는 소광비');
+  const gx=x=>500+(x+3.5)*165/4, gy=y=>340-(y/Math.max(5,gMax))*84;
+  axP(P,500,340,165,90,'','dB'); P.text(665,353,'펌프 log P/Psat',{a:'end',s:9});
+  P.text(496,gy(gMax)+3,fmt(gMax,0),{a:'end',s:8.5});
+  P.path(pth(cv.map(q=>[gx(q[0]),gy(q[1])])),{c:'beam',w:2});
+  const q0=[gx(Math.log10(p1*0.01)),gy(10*Math.log10(Gsat(G0,p1*0.01)))], q1=[gx(Math.log10(p1)),gy(g1)];
+  P.circ(q0[0],q0[1],3.5,{c:'none',f:'probe'}); P.circ(q1[0],q1[1],3.5,{c:'none',f:'beam'});
+  P.text(q0[0]+6,q0[1]-6,'펌프 0',{s:9,c:'probe'}); P.text(q1[0]+5,q1[1]+13,'펌프 1',{s:9,c:'beam'});
+  const y10=340-clamp(10/Math.max(12,er1)*78,0.6,78);
+  P.text(690,254,'단별 소광비 dB',{s:9}); P.text(860,254,`${N}단 ${fmt(erN,1)}`,{a:'end',s:9,c:'probe'});
   for(let i=0;i<10;i++){
-    const x=40+i*35, h=clamp(ers[i]/Math.max(12,er1)*78,0.6,78), on=i<N;
-    bars+=`<rect x="${x}" y="${(236-h).toFixed(1)}" width="23" height="${h.toFixed(1)}" rx="2"
-      fill="${ers[i]>=10?'var(--probe)':'var(--wall)'}" opacity="${on?0.85:0.16}"/>
-      <text class="m" x="${x+11.5}" y="246" font-size="8" text-anchor="middle">${i+1}</text>
-      ${on?`<text class="m" x="${x+11.5}" y="${(232-h).toFixed(1)}" font-size="8" text-anchor="middle">${fmt(ers[i],1)}</text>`:''}`;
+    const x=690+i*17, h=clamp(ers[i]/Math.max(12,er1)*78,0.6,78), on=i<N;
+    P.rect(x,340-h,13,h,{c:'none',f:ers[i]>=10?'probe':'wall',fo:on?.85:.16,r:1.5});
+    P.text(x+6.5,353,String(i+1),{a:'middle',s:8.5});
   }
-  const y10=236-clamp(10/Math.max(12,er1)*78,0.6,78);
-  $('f2').innerHTML=`
-    ${axes(36,120,354,100,'펌프 세기 log₁₀(P/P_sat)','dB')}
-    <text class="m" x="33" y="24" font-size="8.5" text-anchor="end">${fmt(gMax,0)}</text>
-    <path class="bm" stroke-width="2" d="${path(cv)}"/>
-    <circle class="pdf" cx="${px(Math.log10(p1*0.01)).toFixed(1)}" cy="${py(10*Math.log10(Gsat(G0,p1*0.01))).toFixed(1)}" r="3.5"/>
-    <circle cx="${px(Math.log10(p1)).toFixed(1)}" cy="${py(10*Math.log10(Gsat(G0,p1))).toFixed(1)}" r="3.5" fill="var(--beam)"/>
-    <text class="p" x="${px(Math.log10(p1*0.01))+6}" y="${py(10*Math.log10(Gsat(G0,p1*0.01)))-6}" font-size="8.5">펌프 0</text>
-    <text class="a" x="${px(Math.log10(p1))+5}" y="${py(10*Math.log10(Gsat(G0,p1)))+12}" font-size="8.5">펌프 1</text>
-    <text class="m" x="390" y="152" font-size="9" text-anchor="end">단수 →</text>
-    <text class="m" x="36" y="152" font-size="9">단별 소광비 (dB)</text>
-    <path class="gridl" stroke-width="1" stroke-dasharray="3 3" d="M36 ${y10.toFixed(1)} H390"/>
-    <text class="m" x="390" y="${(y10-3).toFixed(1)}" font-size="8" text-anchor="end">실용 하한 10 dB(통상)</text>
-    ${bars}`;
-  $('r2').innerHTML=`<div>1단 소광비 <b>${fmt(er1,2)} dB</b> → ${N}단 후 <b>${fmt(erN,2)} dB</b></div><div>펌프 1에서 이득 <b>${fmt(10*Math.log10(Gsat(G0,p1)),2)} dB</b> (소신호 ${fmt(gMax,1)} dB에서 ${fmt(gMax-10*Math.log10(Gsat(G0,p1)),1)} dB 눌림)</div><div>${dead?`<i>${dead}단에서 10 dB 밑으로 내려간다</i>`:'10단까지 10 dB 유지'}</div>`;
+  P.path(`M688 ${y10.toFixed(1)} H862`,{c:'faint',w:1,dash:[3,3]}); P.text(862,y10-3,'10 dB',{a:'end',s:8.5});
+  $('f2').innerHTML=P.out();
+  $('r2').innerHTML=`<div>1단 소광비 <b>${fmt(er1,2)} dB</b> → ${N}단 후 <b>${fmt(erN,2)} dB</b></div><div>펌프 1에서 이득 <b>${fmt(g1,2)} dB</b> (소신호 ${fmt(gMax,1)} dB에서 ${fmt(gMax-g1,1)} dB 눌림)</div><div>${dead?`<i>${dead}단에서 10 dB 밑으로 내려간다</i>`:'10단까지 10 dB 유지'}</div>`;
 }
 
 /* ══ 03 펨토패럿 O-E-O ════════════════════════════════════════
@@ -182,41 +271,46 @@ function r3(){
   $('o3c').textContent=fmt(C,C<10?2:0)+' fF'; $('o3v').textContent=fmt(V,2)+' V';
   $('o3r').textContent=fmt(R,R<10?2:0)+' kΩ';
   const a=oeo(C,V,R), ref=oeo(2,V,R), big=oeo(50,V,R);
+  // 사이클: 입력 빛 λ → (감쇠) → fF PD(−V) → 배선 없는 노드 → 나노캐비티 변조기가 CW λ′ 를 켜고 끈다 → WDM 이 λ′ 만 → 다음 단
+  const P=CYC.pen(), YI=100, YC=162, rad=Math.sqrt(C/200)*10+2.5, lit=clamp(V/1.2,0.15,1);
+  P.zone(198,66,128,124,'');
+  P.beam([[20,YI],[95,YI]],{w:2.4}); P.lab(20,91,'입력 λ (앞 단)',{s:10});
+  XP.voa(P,112,YI);
+  P.beam([[129,YI],[240,YI]],{w:2.4,arrow:true});
+  P.pd(250,YI); P.lab(238,91,'PD',{a:'end',s:10});
+  XP.bias(P,250,40,'−V'); P.wire([[250,49],[250,90]],{arrow:false});
+  // 노드: PD 와 변조기 전극이 맞붙어 있다 — 배선이 없어 용량이 fF 에 머문다
+  P.wire([[250,110],[250,144]],{arrow:false,w:1.6});
+  P.circ(250,127,rad,{c:'warm',w:1,f:'warm',fo:.3});
+  P.lab(268,123,`C ${fmt(C,C<10?1:0)} fF`,{s:9.5,c:'ink'}); P.lab(268,136,'배선 없음',{s:9.5,c:'probe'});
+  P.laser(50,YC,{lab:'CW λ′'});
+  P.split(73,YC,[YC,200],{L:40});
+  P.beam([[113,YC],[218,YC]],{w:2});
+  P.beam([[113,200],[170,200]],{w:1.2,op:.3,dash:[4,3]}); P.lab(176,204,'다른 게이트로',{s:9.5});
+  XP.phc(P,218,YC-14,64,28,'cav',lit);
+  P.part('eom',[226,143,48,5],()=>P.rect(226,143,48,4,{c:'none',f:'probe',fo:.85,r:1}),[220,140]);
+  P.beam([[218,YC],[282,YC]],{w:1.4,op:.6});
+  P.lab(250,188,'나노캐비티 변조기',{a:'middle',s:9.5});
+  P.beam([[282,YC],[349,YC]],{w:1+2.4*lit});
+  P.wdm(360,YC,60);
+  P.beam([[371,146],[452,146]],{w:1+2.4*lit,arrow:true}); P.lab(390,139,'λ′ 출력',{s:9.5});
+  P.beam([[371,178],[398,178]],{w:1.2,op:.3}); P.lab(404,182,'λ 잔여',{s:9.5});
+  P.pd(462,146,{id:false,v:lit,lab:'다음 단 PD'});
+  P.legend(16,250,['입력 빛','PD','fF 노드','나노 변조기','λ′ 출력']);
+  // 보조 패널: 스위칭 에너지 막대(옛 그래프)
+  P.aux(470,222,402,142,'용량이 전부다 — E = ½CV²');
   const mx=Math.max(a.E,big.E);
-  const bar=(x,e,lab,col)=>{ const h=clamp(e/mx*40,1,40);
-    return `<rect x="${x}" y="${(186-h).toFixed(1)}" width="46" height="${h.toFixed(1)}" rx="2" fill="${col}" opacity=".8"/>
-      <text class="m" x="${x+23}" y="199" font-size="8.5" text-anchor="middle">${lab}</text>
-      <text class="i" x="${x+23}" y="${(182-h).toFixed(1)}" font-size="8.5" text-anchor="middle">${eng(e,'J',1)}</text>`; };
-  const rad=Math.sqrt(C/200)*26+4;                        /* 용량을 면적으로 */
-  $('f3').innerHTML=`
-    <circle class="pd" stroke-width="1.4" cx="46" cy="52" r="15"/>
-    <path class="bm" stroke-width="3.4" d="M8 52 H31"/>
-    <text class="m" x="46" y="82" font-size="8.5" text-anchor="middle">PD</text>
-    <path class="wg" stroke-width="1.3" d="M61 52 H${(106-rad).toFixed(1)}"/>
-    <circle cx="106" cy="52" r="${rad.toFixed(1)}" fill="var(--warm)" opacity=".30"/>
-    <circle class="gridl" stroke-width="1.2" cx="106" cy="52" r="${rad.toFixed(1)}" fill="none"/>
-    <text class="m" x="106" y="${(52+rad+13).toFixed(1)}" font-size="8.5" text-anchor="middle">C = ${fmt(C,C<10?2:0)} fF</text>
-    <path class="wg" stroke-width="1.3" d="M${(106+rad).toFixed(1)} 52 H168"/>
-    <rect class="box" x="168" y="36" width="52" height="32" rx="3"/>
-    <text class="m" x="194" y="56" font-size="8.5" text-anchor="middle">변조기</text>
-    <path class="bm" stroke-width="3.4" d="M220 52 H258"/>
-    <text class="a" x="258" y="45" font-size="8.5" text-anchor="end">λ′ 출력</text>
-    <text class="m" x="276" y="30" font-size="8.5">배선 없이 맞붙인다</text>
-    <text class="m" x="276" y="43" font-size="8.5">→ 기생용량이 안 붙는다</text>
-    <text class="p" x="276" y="60" font-size="8.5">τ = RC = ${fmt(a.tau*1e12,2)} ps</text>
-    <text class="p" x="276" y="73" font-size="8.5">f₃dB = ${fmt(a.f/1e9,1)} GHz</text>
-    <text class="m" x="36" y="100" font-size="9">스위칭 에너지 ½CV² — 같은 V·R에서</text>
-    <text class="m" x="36" y="115" font-size="8.5">필요 광자 ${Math.round(a.N).toLocaleString()}개 · 충전 전류 ${eng(a.I,'A',2)}</text>
-    <text class="m" x="36" y="128" font-size="8.5">1 pF로 같은 일을 하면 ${eng(oeo(1000,V,R).E,'J',1)} — 500배다</text>
-    ${bar(36,ref.E,'2 fF','var(--probe)')}
-    ${bar(100,a.E,'현재','var(--beam)')}
-    ${bar(164,big.E,'50 fF','var(--wall)')}
-    <text class="m" x="222" y="148" font-size="8.5">50 fF 대비 <tspan style="fill:var(--probe)">${fmt(big.E/a.E,1)}배</tspan> 적다</text>
-    <text class="m" x="222" y="162" font-size="8.5">전자 CMOS 게이트 ~1 fJ급과</text>
-    <text class="m" x="222" y="175" font-size="8.5">같은 자리에 선다</text>
-    <text class="m" x="222" y="190" font-size="8.5">(비교값은 통상 범위 — 공정별로</text>
-    <text class="m" x="222" y="203" font-size="8.5">다르다)</text>
-    <text class="m" x="36" y="220" font-size="8.5" style="fill:var(--wall)">용량이 전부다 — 배선을 없애는 일이 곧 에너지를 줄이는 일이다.</text>`;
+  [[500,ref.E,'2 fF','probe'],[560,a.E,'현재','beam'],[620,big.E,'50 fF','wall']].forEach(([x,e,lab,c])=>{
+    const h=clamp(e/mx*66,1,66);
+    P.rect(x,340-h,44,h,{c:'none',f:c,fo:.8,r:2});
+    P.text(x+22,353,lab,{a:'middle',s:9}); P.text(x+22,336-h,eng(e,'J',1),{a:'middle',s:9,c:'ink'});
+  });
+  P.path('M494 340 H670',{c:'rule',w:1});
+  P.text(700,270,`τ = RC = ${fmt(a.tau*1e12,2)} ps`,{s:10,c:'probe'});
+  P.text(700,290,`f₃dB = ${fmt(a.f/1e9,1)} GHz`,{s:10,c:'probe'});
+  P.text(700,310,`광자 ${Math.round(a.N).toLocaleString()}개`,{s:10,c:'ink'});
+  P.text(700,330,`50 fF 대비 ${fmt(big.E/a.E,1)}배 적다`,{s:10});
+  $('f3').innerHTML=P.out();
   $('r3').innerHTML=`<div>스위칭 에너지 <b>${eng(a.E,'J',2)}</b> · τ=RC <b>${fmt(a.tau*1e12,2)} ps</b></div><div>대역폭 <b>${fmt(a.f/1e9,1)} GHz</b> · 필요 광자 <b>${Math.round(a.N).toLocaleString()}</b>개</div><div>2 fF 기준 대비 <b>${fmt(a.E/ref.E,2)}배</b></div><div><i>전광이 아니다 — 전자를 못 버리는 대신 이득·캐스케이드·파장변환을 얻는다</i></div>`;
 }
 /* ══ 04 폴라리톤 논리 ═════════════════════════════════════════
@@ -231,24 +325,38 @@ function r4(){
   const a=pol(m,Q), base=pol(1,Q), rep=pol(60,Q);
   const cv=[]; for(let k=0;k<=70;k++){ const mm=Math.pow(10,2.48*k/70); cv.push([Math.log10(mm),Math.log10(pol(mm,Q).E)]); }
   const yLo=Math.log10(pol(300,Q).E), yHi=Math.log10(pol(1,Q).E), sp=Math.max(0.5,yHi-yLo);
-  const px=x=>44+x*(392-44)/2.48, py=y=>146-(y-yLo)/sp*116;
-  const path=p=>'M'+p.map(q=>px(q[0]).toFixed(1)+' '+py(clamp(q[1],yLo,yHi)).toFixed(1)).join(' L');
-  $('f4').innerHTML=`
-    ${axes(44,146,348,120,'','에너지')}
-    <text class="m" x="44" y="160" font-size="8">1×</text>
-    <text class="m" x="${px(Math.log10(60))}" y="160" font-size="8" text-anchor="middle">60×</text>
-    <text class="m" x="392" y="160" font-size="8" text-anchor="end">300×</text>
-    <text class="m" x="218" y="172" font-size="8.5" text-anchor="middle">상호작용 배율 (로그)</text>
-    <text class="m" x="41" y="30" font-size="8" text-anchor="end">${eng(pol(1,Q).E,'J',0)}</text>
-    <text class="m" x="41" y="149" font-size="8" text-anchor="end">${eng(pol(300,Q).E,'J',0)}</text>
-    <path class="bm" stroke-width="2" d="${path(cv)}"/>
-    <path class="gridl" stroke-width="1" stroke-dasharray="2 3" d="M${px(Math.log10(60))} 146 V${py(clamp(Math.log10(rep.E),yLo,yHi)).toFixed(1)}"/>
-    <circle cx="${px(Math.log10(60)).toFixed(1)}" cy="${py(clamp(Math.log10(rep.E),yLo,yHi)).toFixed(1)}" r="3.2" fill="var(--wall)"/>
-    <text class="m" x="${(px(Math.log10(60))+6).toFixed(1)}" y="${(py(clamp(Math.log10(rep.E),yLo,yHi))-6).toFixed(1)}" font-size="8" style="fill:var(--wall)">보고 지점 60×</text>
-    <circle class="pdf" cx="${px(clamp(Math.log10(m),0,2.48)).toFixed(1)}" cy="${py(clamp(Math.log10(a.E),yLo,yHi)).toFixed(1)}" r="4"/>
-    <text class="m" x="44" y="190" font-size="8.5">엑시톤 + 광자 = 폴라리톤 · 입자당 g = ${fmt(a.g,2)} µeV (가정)</text>
-    <text class="m" x="44" y="203" font-size="8.5">같은 비선형을 순수 광자로 얻으려면 광자 ${Math.round(base.N).toLocaleString()}개가 필요하다</text>
-    <text class="m" x="44" y="216" font-size="8.5" style="fill:var(--wall)">곡선은 N ∝ 1/(g·Q) 스케일링 — 보고값과 자리만 맞춰본 추정이다</text>`;
+  const v=clamp((yHi-Math.log10(a.E))/sp,0,1);           /* 필요 에너지가 내려간 만큼 응집이 선다(그림용) */
+  // 사이클: 펄스 펌프 ┐ 펄스 제어 → 감쇠 ┘ → 빔 분할기로 겹침 → 렌즈 → DBR 미세공동(폴라리톤 응집) → 방출 → 렌즈 → 카메라 → 판정
+  const P=CYC.pen(), Y=90;
+  P.laser(38,Y,{id:'src-pulse',lab:'펄스 펌프'}); P.beam([[61,Y],[180,Y]],{w:2.2});
+  P.laser(38,168,{id:'src-pulse',lab:'펄스 제어'}); P.at2('src-pulse',[61,154]);
+  P.beam([[61,168],[103,168]],{w:2}); XP.voa(P,120,168,'광자 수');
+  P.beam([[137,168],[200,168],[200,111]],{w:1.2+1.2*v,arrow:true});
+  XP.cube(P,200,Y,40,'bs','/'); P.lab(200,62,'빔 분할',{a:'middle',s:9.5});
+  P.beam([[220,Y],[264,Y]],{w:2.4});
+  P.lens(270,Y,70);
+  P.path(`M276 ${Y-12} L334 ${Y} L276 ${Y+12} Z`,{c:'none',f:'beam',fo:.22});
+  XP.dbr(P,340,Y,70,v); P.lab(340,140,'미세공동',{a:'middle'}); P.lab(340,153,'DBR · 유기층',{a:'middle',s:9});
+  P.path(`M354 ${Y} L404 ${Y-16} L404 ${Y+16} Z`,{c:'none',f:'beam',fo:.08+.35*v});
+  P.lens(410,Y,60,{id:false});
+  P.path(`M416 ${Y-16} L468 ${Y} L416 ${Y+16} Z`,{c:'none',f:'beam',fo:.08+.35*v});
+  P.cam(490,Y,44,44,{vals:(i,j)=>Math.hypot(i-1.5,j-1.5)<1?v:.05+.1*v});
+  P.wire([[512,Y],[548,Y]]); P.box(582,Y,60,28,'판정',{tone:'probe',s:10}); P.text(620,Y+6,v>.5?'1':'0',{s:16,c:'probe',b:1});
+  P.legend(16,250,['펄스 둘','감쇠·BS','렌즈','폴라리톤 공동','카메라']);
+  // 보조 패널: 상호작용 배율 → 필요 에너지(옛 그래프)
+  P.aux(470,222,402,142,'상호작용을 키우면 필요한 에너지가 준다');
+  const gx=x=>506+x*340/2.48, gy=y=>340-(clamp(y,yLo,yHi)-yLo)/sp*84;
+  axP(P,506,340,340,90,'','');
+  P.text(502,gy(yHi)+3,eng(pol(1,Q).E,'J',0),{a:'end',s:8.5}); P.text(502,343,eng(pol(300,Q).E,'J',0),{a:'end',s:8.5});
+  P.text(510,252,'필요 에너지',{s:9});
+  P.text(506,353,'1×',{s:9}); P.text(gx(Math.log10(60)),353,'60×',{a:'middle',s:9}); P.text(846,353,'300×',{a:'end',s:9});
+  P.text(640,353,'상호작용 배율 (로그)',{a:'middle',s:9});
+  P.path(pth(cv.map(q=>[gx(q[0]),gy(q[1])])),{c:'beam',w:2});
+  const rx=gx(Math.log10(60)), ry=gy(Math.log10(rep.E));
+  P.path(`M${rx.toFixed(1)} 340 V${ry.toFixed(1)}`,{c:'rule',w:1,dash:[2,3]});
+  P.circ(rx,ry,3.2,{c:'none',f:'wall'}); P.text(rx+6,ry-6,'보고 지점 60×',{s:8.5,c:'wall'});
+  P.circ(gx(clamp(Math.log10(m),0,2.48)),gy(Math.log10(a.E)),4,{c:'none',f:'probe'});
+  $('f4').innerHTML=P.out();
   $('r4').innerHTML=`<div>필요 광자 <b>${a.N<1?fmt(a.N,2):Math.round(a.N).toLocaleString()}</b>개 · 에너지 <b>${eng(a.E,'J',2)}</b></div><div>1× 대비 <b>${fmt(base.N/a.N,1)}배</b> 줄었다 (g·Q 곱에 반비례)</div><div><i>보고값 10 fJ·상온·60배 — 측정 조건 미확인</i></div>`;
 }
 
@@ -264,33 +372,45 @@ function nl(m,P_mW,F){
   return {L:L, a:aDB, loss:aDB*L*100, fom:n2/(aDB*LAM)};
 }
 function r5(){
-  const m=lg(+$('c5m').value,1,3000), P=+$('c5p').value*2, F=lg(+$('c5f').value,1,30);
-  $('o5m').textContent=fmt(m,m<10?2:0)+'×'; $('o5p').textContent=P+' mW'; $('o5f').textContent=fmt(F,1)+'×';
-  const a=nl(m,P,F), b=nl(1,P,F), asym=nl(1e6,P,F);
-  const cv=[]; for(let k=0;k<=70;k++){ const mm=Math.pow(10,3.48*k/70); cv.push([Math.log10(mm),nl(mm,P,F).loss]); }
+  const m=lg(+$('c5m').value,1,3000), P0=+$('c5p').value*2, F=lg(+$('c5f').value,1,30);
+  $('o5m').textContent=fmt(m,m<10?2:0)+'×'; $('o5p').textContent=P0+' mW'; $('o5f').textContent=fmt(F,1)+'×';
+  const a=nl(m,P0,F), b=nl(1,P0,F), asym=nl(1e6,P0,F);
+  const cv=[]; for(let k=0;k<=70;k++){ const mm=Math.pow(10,3.48*k/70); cv.push([Math.log10(mm),nl(mm,P0,F).loss]); }
   const lMax=Math.max(b.loss,1);
-  const px=x=>44+x*(392-44)/3.48, py=y=>142-clamp(y/lMax,0,1)*110;
-  const path=p=>'M'+p.map(q=>px(q[0]).toFixed(1)+' '+py(q[1]).toFixed(1)).join(' L');
-  const Lw=clamp(Math.log10(a.L/1e-6)/5.5,0.02,1)*300;    /* 1 µm ~ 30 cm 로그 */
-  $('f5').innerHTML=`
-    <rect class="fillg" x="36" y="22" width="${Lw.toFixed(1)}" height="16" rx="2"/>
-    <rect x="36" y="22" width="${Lw.toFixed(1)}" height="5" rx="1" fill="var(--warm)" opacity=".75"/>
-    <path class="bm" stroke-width="3" d="M8 30 H36"/>
-    <text class="m" x="36" y="52" font-size="8.5">π 위상 길이 L = ${a.L<1e-3?eng(a.L,'m',1):fmt(a.L*100,2)+' cm'}</text>
-    <text class="m" x="36" y="16" font-size="8" style="fill:var(--warm)">2D 층 (χ⁽³⁾ ${fmt(m,m<10?2:0)}×)</text>
-    <text class="m" x="392" y="30" font-size="8.5" text-anchor="end">길이는 1/m로 줄어든다</text>
-    ${axes(44,142,348,114,'','dB')}
-    <text class="m" x="41" y="36" font-size="8" text-anchor="end">${fmt(lMax,0)}</text>
-    <text class="m" x="44" y="156" font-size="8">1×</text>
-    <text class="m" x="392" y="156" font-size="8" text-anchor="end">3000×</text>
-    <text class="m" x="218" y="168" font-size="8.5" text-anchor="middle">χ⁽³⁾ 배율 (로그) · 세로축 = π당 손실 dB</text>
-    <path class="bm" stroke-width="2" d="${path(cv)}"/>
-    <path class="gridl" stroke-width="1" stroke-dasharray="3 3" d="M44 ${py(asym.loss).toFixed(1)} H392"/>
-    <text class="m" x="392" y="${(py(asym.loss)-4).toFixed(1)}" font-size="8" text-anchor="end" style="fill:var(--wall)">바닥 ${fmt(asym.loss,1)} dB — 더는 안 내려간다</text>
-    <circle class="pdf" cx="${px(clamp(Math.log10(m),0,3.48)).toFixed(1)}" cy="${py(a.loss).toFixed(1)}" r="4"/>
-    <text class="m" x="44" y="186" font-size="8.5">흡수 ${fmt(a.a,1)} dB/cm · 세기 ${eng(P*1e-3/AEFF,'W/m²',1)}</text>
-    <text class="m" x="44" y="199" font-size="8.5">바닥값 = (2D층 손실계수)·λ/(2·n₂₀·I) — m이 약분돼 사라진다</text>
-    <text class="m" x="44" y="212" font-size="8.5" style="fill:var(--wall)">손실계수는 그래핀 보고 범위(0.05~0.1 dB/µm)에서 잡은 가정이다</text>`;
+  const Ls=a.L<1e-3?eng(a.L,'m',1):fmt(a.L*100,2)+' cm';
+  const Lw=clamp(Math.log10(a.L/1e-6)/5.5,0.04,1)*150;    /* 2D 층 길이 = π 위상에 드는 길이(1 µm ~ 30 cm 로그) */
+  const Tout=Math.pow(10,-a.loss/10);
+  // 사이클: 펄스 LD → 격자 결합기 → 도파로 → 결합기(둘로) → 위 팔: 2D 층(세기로 위상) / 아래 팔: 기준 → 결합기 간섭(위상 → 세기) → PD → 판정
+  const P=CYC.pen(), YU=84, YL=148, YM=116;
+  P.zone(96,52,372,134,''); P.lab(102,46,'칩 — 2D 층을 덮은 도파로',{s:10});
+  P.laser(38,YU,{id:'src-pulse'}); P.beam([[61,YU],[106,YU]],{w:2.4});
+  XP.coup(P,118,YU);
+  P.path(`M130 ${YU} H170`,{c:'faint',w:5,op:.4});
+  XP.wg(P,210,YU,410,'wg'); P.path(`M210 ${YL} H410`,{c:'faint',w:5,op:.4});
+  P.path(`M450 ${YU} H468 M450 ${YL} H468`,{c:'faint',w:5,op:.4});
+  P.coupler(190,YM,{w:40,g:32});
+  P.coupler(430,YM,{w:40,g:32}); P.at2('bs',[450,YM-34]);
+  P.beam([[130,YU],[170,YU]],{w:2.2});
+  P.beam([[210,YU],[410,YU]],{w:1.8}); P.beam([[210,YL],[410,YL]],{w:1.8});
+  XP.kerr(P,232,YU,Lw,clamp(Math.log10(m)/3.48,0,1));
+  P.lab(232,68,`2D 층 ${fmt(m,m<10?1:0)}× · π 길이 ${Ls}`,{s:9.5,c:'beam'});
+  P.lab(232,YL+18,'기준 팔',{s:9.5});
+  P.beam([[450,YU],[476,YU]],{w:1+2.4*Tout}); P.beam([[450,YL],[476,YL]],{w:1,op:.35});
+  P.pd(486,YU,{v:Tout}); P.pd(486,YL,{id:false,v:.05});
+  P.lab(486,YU+24,`−${fmt(a.loss,1)} dB`,{a:'middle',s:9.5});
+  P.wire([[496,YU],[522,YU],[522,YM],[538,YM]]); P.wire([[496,YL],[522,YL],[522,YM]],{arrow:false});
+  P.box(566,YM,56,28,'판정',{tone:'probe',s:10});
+  P.legend(16,250,['펄스','결합기','2D 층 도파로','간섭','PD','판정']);
+  // 보조 패널: 배율 → π당 손실(옛 그래프)
+  P.aux(470,222,402,142,'배율만 올리면 π당 손실이 바닥에서 멈춘다');
+  const gx=x=>506+x*340/3.48, gy=y=>340-clamp(y/lMax,0,1)*86;
+  axP(P,506,340,340,90,'','dB'); P.text(502,gy(lMax)+3,fmt(lMax,0),{a:'end',s:8.5});
+  P.text(506,353,'1×',{s:9}); P.text(846,353,'3000×',{a:'end',s:9}); P.text(676,353,'χ⁽³⁾ 배율 (로그) · π당 손실',{a:'middle',s:9});
+  P.path(pth(cv.map(q=>[gx(q[0]),gy(q[1])])),{c:'beam',w:2});
+  const fy=gy(asym.loss);
+  P.path(`M506 ${fy.toFixed(1)} H846`,{c:'faint',w:1,dash:[3,3]}); P.text(846,fy-4,`바닥 ${fmt(asym.loss,1)} dB`,{a:'end',s:8.5,c:'wall'});
+  P.circ(gx(clamp(Math.log10(m),0,3.48)),gy(a.loss),4,{c:'none',f:'probe'});
+  $('f5').innerHTML=P.out();
   $('r5').innerHTML=`<div>π 위상 길이 <b>${a.L<1e-3?eng(a.L,'m',2):fmt(a.L*100,2)+' cm'}</b> (1× 대비 ${fmt(b.L/a.L,0)}배 짧다)</div><div>π당 손실 <b>${fmt(a.loss,2)} dB</b> · 흡수 ${fmt(a.a,1)} dB/cm</div><div>배율을 무한히 올려도 바닥 <i>${fmt(asym.loss,2)} dB</i></div><div>FOM = n₂/(α·λ) <b>${fmt(a.fom/b.fom,2)}배</b> ← 이것만 손실 개선 손잡이로 움직인다</div>`;
 }
 /* ══ 06 자기 스위칭 · Kerr 비선형 공진기 ══════════════════════
@@ -324,39 +444,49 @@ function r6(){
   const P0=P0C*Vr/(Q*Q);                                  /* 특성 파워 */
   Y6=solveY(X,D,Y6);
   const T=X>1e-6?Y6/X:1/(1+D*D), tp=turns(D);
-  const cv=[]; for(let k=0;k<=160;k++){ const Y=k*(D+5)/160; cv.push([XofY(Y,D),Y]); }
   const xMax=Math.max(30,tp?tp.Xup*1.4:20);
-  const px=x=>44+clamp(x/xMax,0,1)*(392-44), py=y=>176-clamp(y/(D+5),0,1)*150;
-  const seg=p=>'M'+p.map(q=>px(q[0]).toFixed(1)+' '+py(q[1]).toFixed(1)).join(' L');
+  const cv=[]; for(let k=0;k<=160;k++){ const Y=k*(D+5)/160, x=XofY(Y,D); if(x<=xMax) cv.push([x,Y]); }   /* 패널 밖(오른쪽)으로 나가는 위 가지는 자른다 */
   let lower=cv,mid=[],upper=[];
   if(tp){ lower=cv.filter(q=>q[1]<=tp.Ylo); mid=cv.filter(q=>q[1]>tp.Ylo&&q[1]<tp.Yhi); upper=cv.filter(q=>q[1]>=tp.Yhi); }
-  const jump=tp?`
-    <path class="gridl" stroke-width="1" stroke-dasharray="2 3" d="M${px(tp.Xup)} 176 V26"/>
-    <path class="gridl" stroke-width="1" stroke-dasharray="2 3" d="M${px(tp.Xdn)} 176 V26"/>
-    <text class="a" x="${px(tp.Xup)}" y="22" font-size="8" text-anchor="middle">↑점프 ${fmt(tp.Xup,1)}</text>
-    <text class="p" x="${px(tp.Xdn)}" y="22" font-size="8" text-anchor="middle">↓점프 ${fmt(tp.Xdn,1)}</text>`:
-    `<text class="m" x="218" y="22" font-size="8.5" text-anchor="middle">Δ ≤ √3 = 1.73 — 히스테리시스가 없다</text>`;
-  $('f6').innerHTML=`
-    <path class="wg" stroke-width="1.4" d="M20 42 H160"/>
-    <path class="bm" stroke-width="3" d="M20 42 H74"/>
-    <ellipse class="gridl" stroke-width="1.5" cx="90" cy="60" rx="17" ry="12" fill="var(--warm)" fill-opacity="${clamp(Y6/(D+5),0,1).toFixed(3)}"/>
-    <path class="wg" stroke-width="1.4" d="M20 78 H160"/>
-    <path class="pd" stroke-width="${(1+4*clamp(T,0,1)).toFixed(2)}" d="M106 78 H160"/>
-    <text class="m" x="20" y="36" font-size="8.5">입력</text>
-    <text class="p" x="160" y="70" font-size="8.5" text-anchor="end">드롭 출력</text>
-    <text class="m" x="196" y="46" font-size="8.5">Q = ${Q>=1e5?fmt(Q/1e6,2)+'M':fmt(Q/1e3,0)+'k'} · V = ${fmt(Vr,3)}λ³</text>
-    <text class="m" x="196" y="60" font-size="8.5">특성 파워 P₀ = ${eng(P0,'W',2)}</text>
-    <text class="m" x="196" y="74" font-size="8.5" style="fill:var(--wall)">Q 2배 → 임계 1/4</text>
-    ${axes(44,176,348,150,'입력 X','Y')}
-    ${jump}
-    <path class="pd" stroke-width="2" d="${seg(lower)}"/>
-    ${mid.length?`<path class="wg" stroke-width="1.6" stroke-dasharray="4 3" d="${seg(mid)}"/>`:''}
-    ${upper.length?`<path class="bm" stroke-width="2" d="${seg(upper)}"/>`:''}
-    <circle class="pdf" cx="${px(X).toFixed(1)}" cy="${py(Y6).toFixed(1)}" r="4.2"/>
-    ${mid.length?`<text class="m" x="392" y="${py(tp.Ylo+(tp.Yhi-tp.Ylo)/2).toFixed(1)}" font-size="8" text-anchor="end">-- 불안정 분기</text>`:''}
-    <text class="m" x="44" y="200" font-size="8.5">X를 올렸다 내려보라 — 같은 X에서 Y가 둘이다</text>
-    <text class="m" x="44" y="214" font-size="8.5">임계를 내리는 손잡이는 둘뿐이다 — <tspan style="fill:var(--beam)">Q 올리기 · 모드부피 줄이기</tspan></text>
-    <text class="m" x="44" y="228" font-size="8.5" style="fill:var(--wall)">P₀는 상수 1로 잡은 스케일링 추정 (보고된 µW~mW 자리와 맞다)</text>`;
+  const Tc=clamp(T,0,1), fy=clamp(Y6/(D+5),0,1), on=!!tp&&Y6>=tp.Yhi*0.98;
+  // 사이클: LD → (아이솔레이터) → 감쇠기(입력 세기 X) → 결합기 → 버스 도파로 → Kerr 공진기(링·PhC, 쌍안정) → 투과·드롭 → PD → 판정
+  const P=CYC.pen(), YB=96, RX=360, R=26, RY=YB+8+R, YD=RY+R+8, xw=1.2+3*clamp(X/30,0,1);
+  P.zone(226,58,326,138,''); P.lab(232,52,'칩 — Kerr 공진기',{s:10});
+  P.laser(38,YB); P.beam([[61,YB],[84,YB]],{w:2}); P.iso(98,YB);
+  P.beam([[112,YB],[133,YB]],{w:2}); XP.voa(P,150,YB,'입력 X');
+  P.beam([[167,YB],[200,YB]],{w:xw}); XP.coup(P,212,YB);
+  XP.wg(P,224,YB,540,'wg',[282,YB]); P.path(`M300 ${YD} H540`,{c:'faint',w:5,op:.4});
+  P.beam([[224,YB],[RX,YB]],{w:xw});
+  P.beam([[RX,YB],[540,YB]],{w:1+2.4*clamp(1-Tc*.85,0,1)*clamp(X/30,.2,1)});
+  P.beam([[RX,YD],[540,YD]],{w:1+3*Tc*clamp(X/30,.2,1),op:.4+.6*Tc});
+  // 공진기: 서브파장 격자(SWG) 링 — 갇힌 세기 Y 만큼 노랗게, Kerr 매질(붉음)이 공진을 스스로 민다
+  P.part('ring',[RX-R-3,RY-R-3,2*R+6,2*R+6],()=>{
+    P.circ(RX,RY,R,{c:'faint',w:5,op:.4,f:'warm',fo:.4*fy});
+    P.circ(RX,RY,R,{c:'beam',w:1.6,dash:[3,2.5],op:.45+.55*fy});
+  },[RX-R-6,RY]);
+  P.part('kerr',[RX,RY,R+3,R+3],()=>P.path(`M${RX+R} ${RY} A${R} ${R} 0 0 1 ${RX} ${RY+R}`,{c:'beam',w:3.2,op:.35+.65*fy}));
+  P.at2('coup',[RX+6,YB+3]); P.lab(RX-36,YB+16,'간격 g',{s:9,a:'end'});
+  // 같은 자리의 다른 구현: 광결정 나노캐비티
+  P.rect(436,106,96,34,{c:'rule',w:1,f:'panel',dash:[3,3],r:4});
+  XP.phc(P,446,111,76,24,'cav',fy); P.lab(484,153,'또는 PhC 캐비티',{a:'middle',s:9.5});
+  P.pd(566,YB,{v:clamp(1-Tc*.85,0,1)}); P.lab(566,YB-16,'투과',{a:'middle',s:9.5});
+  P.pd(566,YD,{id:false,v:Tc}); P.lab(566,YD+24,'드롭',{a:'middle',s:9.5});
+  P.wire([[576,YB],[600,YB],[600,RY],[614,RY]]); P.wire([[576,YD],[600,YD],[600,RY]],{arrow:false});
+  P.box(644,RY,58,28,'판정',{tone:'probe',s:10}); P.text(682,RY+6,on?'1':'0',{s:16,c:'probe',b:1});
+  P.legend(16,250,['광원','세기 X','결합','Kerr 공진기','PD','판정']);
+  // 보조 패널: 쌍안정 S곡선(옛 그래프)
+  P.aux(470,222,402,142,'쌍안정 S곡선 — 같은 X 에 Y 가 둘');
+  const gx=x=>506+clamp(x/xMax,0,1)*340, gy=y=>340-clamp(y/(D+5),0,1)*86, gp=p=>pth(p.map(q=>[gx(q[0]),gy(q[1])]));
+  axP(P,506,340,340,90,'입력 X','Y');
+  if(tp){
+    P.path(`M${gx(tp.Xup).toFixed(1)} 340 V258 M${gx(tp.Xdn).toFixed(1)} 340 V258`,{c:'rule',w:1,dash:[2,3]});
+    P.text(gx(tp.Xup)+3,266,'↑ '+fmt(tp.Xup,1),{s:8.5,c:'beam'}); P.text(gx(tp.Xdn)-3,266,'↓ '+fmt(tp.Xdn,1),{a:'end',s:8.5,c:'probe'});
+  } else P.text(676,262,'Δ ≤ √3 — 히스테리시스 없음',{a:'middle',s:9});
+  if(lower.length>1) P.path(gp(lower),{c:'probe',w:2});
+  if(mid.length>1) P.path(gp(mid),{c:'faint',w:1.6,dash:[4,3]});
+  if(upper.length>1) P.path(gp(upper),{c:'beam',w:2});
+  P.circ(gx(X),gy(Y6),4.2,{c:'none',f:'probe'});
+  $('f6').innerHTML=P.out();
   const bist=tp?`쌍안정 창 X <b>${fmt(tp.Xdn,2)} ~ ${fmt(tp.Xup,2)}</b> → <b>${eng(tp.Xdn*P0,'W',1)} ~ ${eng(tp.Xup*P0,'W',1)}</b>`
     :`<i>Δ = ${fmt(D,1)} ≤ 1.73 — 쌍안정 없음. 디튜닝을 올려라</i>`;
   $('r6').innerHTML=`<div>내부 세기 Y <b>${fmt(Y6,2)}</b> · 투과 T = Y/X <b>${fmt(clamp(T,0,1),3)}</b></div><div>${bist}</div><div>입력 파워 <b>${eng(X*P0,'W',2)}</b> · 특성 파워 P₀ ${eng(P0,'W',2)}</div><div><i>P₀ ∝ V/(n₂·Q²) — 그래서 승부가 캐비티 하나로 모인다</i></div>`;

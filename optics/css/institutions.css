@@ -4,6 +4,10 @@
 /* 축 → 층 색(base.css 의 --l0~--l6). 광연산·광양자 = L5, 광원·PCM = L3, 재료·팹 = L2, 기업 = L6. EO 는 층이 아니라 세로축 — 고리로 */
 .k-comp{--kc:var(--l5)} .k-quant{--kc:var(--l5)} .k-pcm{--kc:var(--l3)} .k-src{--kc:var(--l3)} .k-mat{--kc:var(--l2)} .k-fab{--kc:var(--l2)}
 .k-ind{--kc:var(--l6)} .k-x{--kc:var(--faint)} .k-eo{--kc:var(--probe)}
+/* 층(work) — 점·마커·필터 칩이 같은 클래스를 쓴다 */
+.l-L2{--kc:var(--l2)} .l-L3{--kc:var(--l3)} .l-L4{--kc:var(--l4)} .l-L5{--kc:var(--l5)} .l-L6{--kc:var(--l6)} .l-EO{--kc:var(--probe)}
+.in-dot.l-EO{background:transparent;border:2px solid var(--probe);box-sizing:border-box}
+path.in-m.l-EO{fill:var(--in-ring);fill-opacity:1;stroke:var(--probe);stroke-width:2.5}
 .in-dot.k-eo{background:transparent;border:2px solid var(--probe);box-sizing:border-box}
 path.in-m.k-eo{fill:var(--in-ring);fill-opacity:1;stroke:var(--probe);stroke-width:2.5}
 .e-p{--ec:var(--beam)} .e-m{--ec:var(--probe)} .e-i{--ec:var(--warm)} .e-s{--ec:var(--muted)}
@@ -55,6 +59,12 @@ body[data-page="institutions"] aside.side{background:var(--bg)}
 .in-card{display:flex;flex-direction:column;gap:2px;min-width:0;padding:9px 11px;border-radius:8px;border:1px solid var(--rule);background:var(--bg);color:var(--ink);text-decoration:none;cursor:pointer}
 .in-card:hover{border-color:var(--beam);color:var(--ink)}
 .in-card.dim{opacity:.4}
+/* 종류(갈래) 태그 — 카드엔 작게, 상세엔 링크 칩 */
+.in-kinds{display:flex;flex-wrap:wrap;gap:3px;margin-top:2px}
+.in-kd{font-size:10.5px;line-height:16px;padding:0 6px;border-radius:999px;border:1px solid var(--rule);color:var(--muted);white-space:nowrap;text-decoration:none}
+.in-kd.on{border-color:var(--ui);color:var(--ui)}
+.in-kinds.big{gap:5px} .in-kinds.big .in-kd{font-size:12.5px;line-height:22px;padding:0 9px;color:var(--ui)} .in-kinds.big .in-kd:hover{border-color:var(--ui)}
+#in-ktabs .chip .n{font-family:var(--mono);font-size:10px;color:var(--faint);margin-left:4px}
 .in-ch{display:flex;align-items:baseline;gap:7px;min-width:0}
 .in-ch b{font-size:14px;font-weight:500;line-height:1.4;min-width:0}
 .in-ch .in-fit{margin:0;font-size:10.5px;letter-spacing:-1px;flex:none}
@@ -66,6 +76,16 @@ body[data-page="institutions"] aside.side{background:var(--bg)}
 .in-back{align-self:flex-start;cursor:pointer;border:1px solid var(--rule);background:transparent;border-radius:6px;padding:4px 10px;font-size:12.5px;white-space:nowrap}
 .in-back:hover{border-color:var(--beam)}
 .in-w{font-size:13px;color:var(--muted)}
+.in-work{display:flex;flex-direction:column;gap:6px;border-top:1px solid var(--rule)}
+.in-wk{display:grid;grid-template-columns:30px minmax(0,1fr);gap:8px;padding:7px 0;border-bottom:1px solid var(--grid);font-size:13px;line-height:1.55}
+.in-wl{font-family:var(--mono);font-size:10.5px;font-weight:600;color:var(--kc);padding-top:2px}
+.in-wl.l-EO{color:var(--probe)}
+.in-ww{display:flex;flex-wrap:wrap;gap:3px 8px;align-items:baseline;min-width:0}
+.in-wr{font-size:12px;padding:0 7px;border-radius:999px;border:1px solid var(--rule);color:var(--ui);text-decoration:none;white-space:nowrap}
+.in-wr:hover{border-color:var(--ui)}
+.in-wwho{font-size:12px;color:var(--muted)}
+.in-wsrc{font-family:var(--mono);font-size:10.5px;color:var(--muted);text-decoration:none;white-space:nowrap}
+.in-wsrc:hover{color:var(--ui);text-decoration:underline}
 .in-tags{display:flex;flex-wrap:wrap;gap:5px}
 .in-made{display:flex;flex-wrap:wrap;gap:6px}
 .in-mk{display:inline-flex;align-items:baseline;gap:6px;font-size:13px;padding:4px 10px;border-radius:4px;border:1px solid var(--rule);background:var(--panel);color:var(--ink);text-decoration:none}

@@ -37,16 +37,20 @@
   const gcs = () => CS;
 
   // ── 가로로 나란한 그림을 위·아래로 쌓는다 (넓은 그림이 높이에 눌려 작아지지 않게) ──
+  // 쌓기는 칸이 좁을 때만 — 쌓은 쪽이 화면에 실제로 더 크게(면적 1.3배 이상) 그려질 때만 쌓는다 (stackOn)
   const STACK = {
-    'c-f2': { parts: [(x, y) => y < 104 || x < 140, (x, y) => y < 232, () => true], max: 1.7 },
-    'd-f5': { parts: [(x, y, c, b) => b.y + b.height <= 56 && !(c.tagName === 'text' && b.x >= 28 && b.x < 44), () => true] },
-    'd-f6': { parts: [(x, y, c, b) => b.height < 40 && b.y >= 26 && b.y + b.height <= 80 && (x < 165 || (c.tagName === 'text' && x > 190)), () => true] },
-    'e-f2': { rects: [[0, 0, 555, 320], [545, 0, 335, 320]] },
-    'e-f3': { rects: [[0, 0, 295, 300], [295, 0, 302, 300], [597, 0, 283, 300]], rows: [[0, 1], [2]] },
-    'e-f4': { rects: [[0, 0, 440, 340], [440, 0, 440, 340]] },
-    'b-f1': { rects: [[0, 0, 330, 360], [345, 0, 535, 360]] },
-    'b-f4': { rects: [[0, 0, 285, 330], [290, 0, 590, 330]] }
+    // 옛 장 그림은 2026-11 구조 그림 재작업(광원→센서 사이클, 880 폭)으로 모두 새로 그려 쌓기 규격이 없다.
+    // 새로 넣을 때: 'id': { rects: [[x, y, w, h], …], rows } (캔버스) 또는 { parts: [fn, …] } (SVG)
   };
+  function room() {   // 그림이 쓸 수 있는 폭·높이 (fitW 와 같은 셈)
+    const b = $('.cmp-figbox', stage), top = b ? b.getBoundingClientRect().top : 190, ih = window.innerHeight || 800;
+    return { bw: b ? b.clientWidth - (A.narrow() ? 32 : 96) : 480, ah: A.narrow() ? ih * 0.8 : Math.max(200, ih - top - 140) };
+  }
+  function stackOn(fw, fh, L) {
+    if (!L) return false;
+    const { bw, ah } = room(), area = (w, hh) => { const k = Math.min(Math.min(1000, bw) / w, ah / hh); return k * k * w * hh; };
+    return area(L.W, L.H) > 1.3 * area(fw, fh);
+  }
   function layout(rects, spec) {
     const rows = spec.rows || rects.map((_, i) => [i]), max = spec.max || 1.4, gap = 10;
     const rw = rows.map(r => r.reduce((s, i) => s + rects[i][2], 0) + gap * (r.length - 1));
@@ -71,7 +75,9 @@
     kids.filter(k => k.hasAttribute('data-stk')).forEach(g => { while (g.firstChild) el.insertBefore(g.firstChild, g); g.remove(); });
     if (!el._vb0) { const v = el.viewBox.baseVal; el._vb0 = [v.x, v.y, v.width, v.height]; }
     el.setAttribute('viewBox', el._vb0.join(' '));
-    const items = [...el.children], n = spec.parts.length, buckets = Array.from({ length: n }, () => []), box = Array(n).fill(null);
+    const items = [...el.children], n = spec.parts.length;
+    items.forEach((c, i) => { c._o = i; });
+    const buckets = Array.from({ length: n }, () => []), box = Array(n).fill(null);
     items.forEach(c => {
       let b = null; try { b = c.getBBox(); } catch (e) { /* 그려지지 않은 요소 */ }
       let i = n - 1;
@@ -90,7 +96,16 @@
       list.forEach(c => g.appendChild(c)); el.appendChild(g);
     });
     el.setAttribute('viewBox', `0 0 ${L.W.toFixed(1)} ${L.H.toFixed(1)}`);
-    el._stk = L; return L;
+    el._stk = L; el._stkL = L; return L;
+  }
+  function unstackSvg(el) {   // 쌓은 묶음을 풀고 원래 순서·viewBox 로
+    const gs = [...el.children].filter(k => k.hasAttribute('data-stk'));
+    if (!gs.length) { el._stk = null; return; }
+    const kids = gs.flatMap(g => [...g.childNodes]).sort((a, b) => (a._o || 0) - (b._o || 0));
+    gs.forEach(g => g.remove());
+    kids.forEach(c => el.appendChild(c));
+    if (el._vb0) el.setAttribute('viewBox', el._vb0.join(' '));
+    el._stk = null;
   }
   const canvasLayout = spec => spec._L || (spec._L = layout(spec.rects, Object.assign({}, spec, { max: 1 })));
   function blit(src, dst, spec, k) {
@@ -227,6 +242,8 @@
   const VC = { '휘발': 'var(--warm)', '비휘발': 'var(--probe)', '해당없음': 'var(--link)' };
   const PIC = A.data('pictograms') || {};
   const INST = A.data('inst-names') || {};   // 기관 id → 이름 (구조 표의 inst 가 가리킨다)
+  const IR = A.data('inst-refs') || {};        // 기관 → 하는 일의 참조 (work)
+  const instsOf = id => { const a = ((SROW[id] || {}).inst || []).slice(); Object.entries(IR).forEach(([i, v]) => { if (v.w.some(w => w.struct === id) && !a.includes(i)) a.push(i); }); return a; };
   const code = s => `${s.group.toUpperCase()}-${s.id.slice(1).padStart(2, '0')}`;
   const pict = s => h('span.cmp-pic', { html: PIC[s.id] ? `<svg viewBox="0 0 80 50" aria-hidden="true">${PIC[s.id]}</svg>` : '' });
   function renderOverview() {
@@ -236,9 +253,13 @@
       const items = SS.map(s => ({ s })).filter(o => o.s.para === p.id);
       if (!items.length) return null;
       const sv = SV[p.sv], cv = CV[p.cv];
-      return h('div.cmp-ovrow',
+      // 이 갈래를 하는 기관 — 구조별 어디서(inst ∪ work.struct) 와 work 의 para 참조를 합친다
+      const insts = new Set(); items.forEach(({ s }) => instsOf(s.id).forEach(i => insts.add(i)));
+      Object.entries(IR).forEach(([i, v]) => { if (v.w.some(w => w.para === p.id)) insts.add(i); });
+      return h('div.cmp-ovrow', { id: 'kind-' + p.id },
         h('div.cmp-ovhead',
-          h('div', h('span.cmp-ovt', p.id === 'etc' ? p.t : A.t(p.t + '의 종류', p.t)), h('span.cmp-ovn', items.length + A.t('개', ''))),
+          h('div', h('span.cmp-ovt', p.id === 'etc' ? p.t : A.t(p.t + '의 종류', p.t)), h('span.cmp-ovn', items.length + A.t('개', '')),
+            insts.size ? h('a.cmp-ovinst', { href: 'institutions.html#?kind=' + p.id, title: A.t('기관 지도에서 이 종류만 보기', 'Only this kind on the institutions map') }, A.t(`기관 ${insts.size}곳`, `${insts.size} institutions`)) : null),
           sv || cv ? h('div.cmp-ovtags',
             sv ? h('span.cmp-sv.' + sv[1], sv[0]) : null,
             cv ? h('span.cmp-cv.' + p.cv, h('i'), (UI.cv || '') + cv) : null) : null,
@@ -280,7 +301,7 @@
       const pts = [p0, fix.p2 || (fix.p ? null : it.p2)].filter(Boolean).map(remap);
       list.push({ id: it.id, pts, num, lab: it.lab || DEV(it.id).n, name: DEV(it.id).n });
     });
-    const R = wrap.getBoundingClientRect(), px = R.width || 800, ph = R.height || px * 0.5;
+    const R = (wrap.querySelector(':scope > .cmp-marks') || wrap).getBoundingClientRect(), px = R.width || 800, ph = R.height || px * 0.5;
     const svg = wrap.querySelector(':scope > svg');
     const obs = svg && R.width ? [...svg.querySelectorAll('text')].map(t => { const b = t.getBoundingClientRect(); return b.width ? [(b.left - R.left) / R.width * 100, (b.top - R.top) / R.height * 100, (b.right - R.left) / R.width * 100, (b.bottom - R.top) / R.height * 100] : null; }).filter(Boolean) : [];
     const rx = 13 / px * 100, ry = 13 / ph * 100, placed = [];
@@ -289,7 +310,7 @@
     list.forEach(m => {
       m.anchors = m.pts.map(([x0, y0]) => {
         let best = [x0, y0];
-        outer: for (const k of [0, 1.6, 2.6, 3.8, 5.2]) for (const [dx, dy] of D8) { if (!k && (dx || dy)) continue; const x = x0 + dx * k * rx, y = y0 + dy * k * ry; if (!hit(x, y)) { best = [x, y]; break outer; } }
+        outer: for (const k of [0, 1.6, 2.6, 3.8, 5.2]) for (const [dx, dy] of D8) { if (!k && (dx || dy)) continue; const x = x0 + dx * k * rx, y = y0 + dy * k * ry; if (k && (x < 2 || x > 98 || y < 2 || y > 98)) continue; if (!hit(x, y)) { best = [x, y]; break outer; } }
         placed.push(best);
         return best;
       });
@@ -327,9 +348,9 @@
     raf = 0; blitJob = null; seen = false; cur = null;
   }
 
-  function figSize(el) {
+  function figSize(el, stk) {
     const spec = STACK[el.id];
-    if (spec && spec.rects) { const L = canvasLayout(spec); return { w: L.W, h: L.H, L, ow: el.width, oh: el.height }; }
+    if (spec && spec.rects && stk) { const L = canvasLayout(spec); return { w: L.W, h: L.H, L, ow: el.width, oh: el.height }; }
     const vb = el.viewBox && el.viewBox.baseVal, w = vb && vb.width ? vb.width : (+el.getAttribute('width') || 880), hh = vb && vb.height ? vb.height : (+el.getAttribute('height') || 300);
     if (spec && el._stk) return { w, h: hh, L: el._stk, ow: el._vb0[2], oh: el._vb0[3] };
     return { w, h: hh, L: null };
@@ -400,7 +421,10 @@
     if (legacy) {
       fig = p.fig;
       const spec = fig && STACK[fig.id];
-      if (fig && fig.tagName.toLowerCase() === 'canvas' && spec && spec.rects) {
+      const isCv = fig && fig.tagName.toLowerCase() === 'canvas';
+      if (isCv && spec && spec.rects) cur.stkTest = () => stackOn(fig.width, fig.height, canvasLayout(spec));
+      cur.stk = !!(cur.stkTest && cur.stkTest());
+      if (isCv && cur.stk) {
         if (!fig._proxy) fig._proxy = h('canvas', { 'aria-label': fig.getAttribute('aria-label') || E.title, role: 'img' });
         wrap.appendChild(fig._proxy);
         blit(fig, fig._proxy, spec);
@@ -408,9 +432,14 @@
         if (io) io.observe(fig._proxy); else { seen = true; loop(); }
       } else if (fig) {
         take(fig, wrap);
-        if (spec && spec.parts) stackSvg(fig, spec);
+        if (spec && spec.parts) {
+          const L = stackSvg(fig, spec);
+          cur.stkTest = () => !!fig._stkL && stackOn(fig._vb0[2], fig._vb0[3], fig._stkL);
+          cur.stk = !!L && cur.stkTest();
+          if (!cur.stk) unstackSvg(fig);
+        }
       }
-      FS = fig ? figSize(fig) : { w: 880, h: 300, L: null };
+      FS = fig ? figSize(fig, cur.stk) : { w: 880, h: 300, L: null };
       const own = BOM(E.id).some(i => i.pf && fig && i.pf.slice(1) === fig.id);
       figId = fig ? (pi === 0 && !E.panes[0].step && !own ? '__main__' : fig.id) : '__main__';
       label.textContent = `FIG ${st.grp.toUpperCase()}·${E.num}` + (p.step ? A.t(` — ${p.label}단계`, ` — step ${p.label}`) : '') + ` — ${fig ? (fig.getAttribute('aria-label') || A.tr(E.title)) : A.tr(E.title)}`;
@@ -424,8 +453,8 @@
             pend = 0;
             if (!cur || cur.mo !== mo) return;
             mo.disconnect();
-            if (spec && spec.parts) stackSvg(fig, spec);
-            cur.FS = figSize(fig);
+            if (spec && spec.parts && cur.stk) stackSvg(fig, spec);
+            cur.FS = figSize(fig, cur.stk);
             mo.observe(fig, { childList: true, subtree: true, characterData: true });
             paintMarks();
           });
@@ -434,7 +463,9 @@
         cur.mo = mo;
       }
     } else {
-      const SL = E.stack ? canvasLayout(E.stack) : null;
+      if (E.stack) cur.stkTest = () => stackOn(E.fig.w, E.fig.h, canvasLayout(E.stack));
+      cur.stk = !!(cur.stkTest && cur.stkTest());
+      const SL = cur.stk ? canvasLayout(E.stack) : null;
       const fw = SL ? Math.round(SL.W) : E.fig.w, fh = SL ? Math.round(SL.H) : E.fig.h;
       if (E.fig.type === 'svg') {
         fig = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
@@ -514,7 +545,7 @@
       A.t(`관련 논문 ${papers.querySelectorAll('.paper').length}편 ↓`, `Related papers (${papers.querySelectorAll('.paper').length}) ↓`)) : null;
     const foot = h('div.cmp-foot',
       h('div', h('span.lb', A.t('어디서', 'Where')), h('span', (SROW[E.id] || {}).where || '',
-        ((SROW[E.id] || {}).inst || []).length ? h('span.cmp-insts', ((SROW[E.id] || {}).inst || []).map(i => h('a.cmp-inst', { href: 'institutions.html#' + i }, INST[i] || i))) : null)),
+        instsOf(E.id).length ? h('span.cmp-insts', instsOf(E.id).map(i => h('a.cmp-inst', { href: 'institutions.html#' + i }, INST[i] || i))) : null)),
       h('div', h('span.lb', A.t('벽', 'Wall')), h('span.cmp-wall', (SROW[E.id] || {}).wall || '')),
       papers,
       h('div.cmp-note'));
@@ -605,7 +636,7 @@
     (cur.ctlA || []).forEach(f => f(S));
     if (E.fig.type === 'svg' && o.svg != null) { fig.innerHTML = o.svg; if (E.bind) E.bind(fig, S, setter(E)); }
     if (E.fig.type === 'canvas' && o.draw) {
-      if (E.stack) {
+      if (cur.stk) {
         const off = cur.off || (cur.off = document.createElement('canvas')), k = Math.min(3, Math.max(2, window.devicePixelRatio || 2));
         off.width = E.fig.w * k; off.height = E.fig.h * k;
         const cx = off.getContext('2d'); cx.setTransform(k, 0, 0, k, 0, 0);
@@ -627,11 +658,22 @@
   let rs = 0;
   window.addEventListener('resize', () => {
     if (rs) return;
-    rs = requestAnimationFrame(() => { rs = 0; sizeFig(); requestAnimationFrame(paintMarks); });
+    rs = requestAnimationFrame(() => {
+      rs = 0;
+      if (cur && cur.stkTest && cur.stkTest() !== cur.stk) { render(); return; }
+      sizeFig(); requestAnimationFrame(paintMarks);
+    });
   });
 
   A.route.on(r => {
     lastR = r;
+    // #kind/<갈래> — 목차의 그 갈래 행으로(기관 페이지의 종류 칩이 온다)
+    if (r.key === 'kind') {
+      st.grp = 'o'; st.dev = null; st.deep = false; render();
+      const el = document.getElementById('kind-' + r.arg);
+      if (el) { el.classList.add('cmp-ovhl'); el.scrollIntoView({ block: 'start' }); }
+      return;
+    }
     const m = HASH.exec(r.raw);
     st.deep = A.route.param(r, 'deep', '') === '1';
     // 실험실이 없는 구조로 옮기면 깊게 보기 키를 걷어 낸다(다시 돌아왔을 때 저절로 열리지 않게)

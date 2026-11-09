@@ -1,7 +1,7 @@
 /* 용어 페이지: 검색 · 접힌 줄 제목(층의 말 · 갈래의 말) · 고른 말의 풀이. 선택은 #<용어> 로 남는다 */
 (function () {
   'use strict';
-  const X = A.data('glossary'), OV = A.data('overview');
+  const X = A.data('glossary'), OV = A.data('overview'), IR = A.data('inst-refs') || {};
   if (!X) return;
   const { h, mount, $ } = A;
   // 구조 이름은 구조 표에서 — 용어엔 sid 만 있다
@@ -75,6 +75,7 @@
       h('p.gl-def', { html: o.d }),
       o.im ? h('div.gl-fig', { html: o.im }) : null,
       o.x ? h('div.gl-box', h('span.lb', o.gs.length ? o.gs.join('·') + A.t('군에서는', ' family') : A.t('덧붙임', 'Note')), h('p.gl-x', { html: o.x })) : null,
+      (() => { const m = Object.entries(IR).filter(([, v]) => v.w.some(w => w.term === o.t)); return m.length ? h('div.gl-box', h('span.lb', A.t('이 말을 다루는 곳', 'Who works on this')), h('div.gl-insts', m.map(([i, v]) => h('a.gl-inst', { href: 'institutions.html#' + i }, v.n)))) : null; })(),
       h('div.gl-links',
         hasRel ? h('a.gl-go', { href: 'layers.html#' + encodeURIComponent(o.t) }, h('span', A.t('층 관계도에서 사슬 보기', 'See the chain on the layer map')), h('span', A.t(`아래 ${o.dn} · 위 ${o.up}`, `below ${o.dn} · above ${o.up}`))) : null,
         o.sid ? h('a.gl-go', { href: /^[a-f]/.test(o.sid) ? 'compute.html#' + o.sid : 'devices.html#mx' }, h('span', A.t((SNAME[o.sid] || o.sid) + ' 열기', 'Open ' + A.tr(SNAME[o.sid] || o.sid))), h('span', o.sid.toUpperCase())) : null)));

@@ -35,31 +35,64 @@
 
   const A = [
     {
-      id: 'a1', num: '01', tab: 'MZI 메시', title: 'MZI 메시', fig: { type: 'svg', w: 440, h: 150 }, label: 'MZI 한 개의 나눔',
+      id: 'a1', num: '01', tab: 'MZI 메시', title: 'MZI 메시', fig: { type: 'svg', w: 880, h: 370 }, label: '4×4 MZI 메시 — 광원에서 검출까지',
       idea: [['2×2 유니터리를 격자로 쌓아 임의 행렬을 만든다(Reck·Clements 분해). 가중치는 '], ['위상', 1], ['이 들고 있다.']],
       note: '4채널 전체 메시와 실물 배치·단면은 따로 있다 → <a href="https://claude.ai/artifact/1rU7rNCNLmKpuXvThQPB9S">4×4 광 연산 메시</a>',
       controls: [{ type: 'range', k: 'th', label: 'θ', min: 0, max: 360, step: 1, def: 90, fmt: v => v + '°' }],
       render(S) {
         const th = S.th, s = Math.sin(th * D2R / 2) ** 2;
-        return {
-          svg: `<path class="wg" stroke-width="1.4" opacity=".55" d="M40 40 C70 40 70 75 100 75 H150 C180 75 180 40 210 40 H250 C280 40 280 75 310 75"/>
+        const P = CYC.pen(), Y = [60, 92, 124, 156], X0 = 150, X1 = 640;
+        // ① 광원 → 1×4 → ② 변조기(입력 x)
+        P.laser(38, 108);
+        P.split(61, 108, Y, { id: false, L: 40 });
+        Y.forEach((y, i) => P.mod(124, y, { w: 34, lab: 'x' + (i + 1) }));
+        // ③ 칩: Clements 4×4 = MZI 6개. MZI = 결합기 · θ(나눔) · 결합기 · φ(위상)
+        P.zone(X0 + 4, 34, X1 - X0 - 4, 148, '실리콘 칩 · MZI 6개');
+        const MZ = [[210, 0], [210, 2], [300, 1], [390, 0], [390, 2], [480, 1]], gap = {};
+        MZ.forEach(([xc, r]) => [r, r + 1].forEach(k => (gap[k] = gap[k] || []).push([xc - 34, xc - 10], [xc + 10, xc + 34])));
+        Y.forEach((y, k) => { let x = X0; (gap[k] || []).sort((a, b) => a[0] - b[0]).forEach(([a, b]) => { P.path(`M${x} ${y} H${a}`, { c: 'faint', w: 1.5 }); x = b; }); P.path(`M${x} ${y} H${X1}`, { c: 'faint', w: 1.5 }); });
+        P.mark('wg', [560, Y[3] - 3, 60, 6]);
+        MZ.forEach(([xc, r], i) => {
+          const y = Y[r] + 16;
+          P.coupler(xc - 22, y, { w: 24, g: 16 }); P.coupler(xc + 22, y, { w: 24, g: 16 });
+          P.ps(xc, Y[r], { w: 16, v: i ? 0.3 + 0.6 * Math.abs(Math.sin(i * 1.9)) : s, lab: i ? '' : 'θ' });
+          P.ps(xc + 45, Y[r], { w: 14, v: 0.3 + 0.6 * Math.abs(Math.cos(i * 1.3)), lab: i ? '' : 'φ' });
+        });
+        // 첫 MZI 의 나눔이 그 뒤로 퍼지는 빛
+        P.beam([[X0, Y[0]], [176, Y[0]]], { w: 2.4 }); P.beam([[X0, Y[1]], [176, Y[1]]], { w: 1.2, op: .5 });
+        P.beam([[244, Y[0]], [352, Y[0]]], { w: 1 + 3 * s, op: .25 + .75 * s }); P.beam([[244, Y[1]], [266, Y[1]]], { w: 1 + 3 * (1 - s), op: .25 + .75 * (1 - s) });
+        // ④ 검출 → ⑤ TIA → ADC
+        const out = [s, 1 - s, .55, .45];
+        Y.forEach((y, i) => { P.beam([[X1, y], [652, y]], { w: 1.2 + 2 * out[i], op: .4 + .6 * out[i] }); P.pd(660, y, { v: out[i] }); P.wire([[670, y], [706, y]]); });
+        P.box(734, 108, 54, 124, 'TIA', { id: 'tia' });
+        P.wire([[761, 108], [789, 108]]);
+        P.box(815, 108, 48, 124, 'ADC', { id: 'adc' });
+        // 디지털 결과가 다음 층 입력으로 — DAC 가 변조기를 다시 몬다
+        P.wire([[815, 170], [815, 200], [150, 200]], { arrow: false }); P.box(124, 200, 44, 22, 'DAC', { s: 10 }); P.at2('adc', [124, 200]);
+        P.wire([[124, 189], [124, 168]]);
+        P.lab(330, 195, '다음 층 입력', { s: 9.5, c: 'probe' });
+        P.legend(16, 250, ['광원', '변조', '위상 메시', '검출', 'TIA·ADC']);
+        // 보조: MZI 하나의 나눔 (θ)
+        P.aux(470, 222, 402, 142, 'MZI 하나 — θ 가 나눔비');
+        P.raw(CYC.sub(474, 236, 394, 124, '0 0 440 150', `<path class="wg" stroke-width="1.4" opacity=".55" d="M40 40 C70 40 70 75 100 75 H150 C180 75 180 40 210 40 H250 C280 40 280 75 310 75"/>
             <path class="wg" stroke-width="1.4" opacity=".55" d="M40 110 C70 110 70 75 100 75 H150 C180 75 180 110 210 110 H250 C280 110 280 75 310 75"/>
             <path class="bm" stroke-width="5" opacity=".9" d="M14 40 H40"/>
             <rect class="ht" x="155" y="34" width="50" height="6" rx="2" opacity=".9"/>
-            <text class="m" x="180" y="28" font-size="10" text-anchor="middle">θ = ${th}°</text>
+            <text class="m" x="180" y="28" font-size="11" text-anchor="middle">θ = ${th}°</text>
             <path class="bm" stroke-width="${(1 + 5 * s).toFixed(2)}" opacity="${(0.15 + 0.85 * s).toFixed(2)}" d="M310 75 C340 75 340 40 370 40 H400"/>
             <path class="bm" stroke-width="${(1 + 5 * (1 - s)).toFixed(2)}" opacity="${(0.15 + 0.85 * (1 - s)).toFixed(2)}" d="M310 75 C340 75 340 110 370 110 H400"/>
-            <text class="i" x="406" y="44" font-size="11">${fmt(s)}</text>
-            <text class="i" x="406" y="114" font-size="11">${fmt(1 - s)}</text>
-            <text class="m" x="14" y="30" font-size="10">입력 1</text>
-            <text class="m" x="40" y="140" font-size="10">결합기 → 위상 → 결합기</text>`,
+            <text class="i" x="406" y="44" font-size="12">${fmt(s)}</text>
+            <text class="i" x="406" y="114" font-size="12">${fmt(1 - s)}</text>
+            <text class="m" x="40" y="140" font-size="11">결합기 → 위상 → 결합기</text>`));
+        return {
+          svg: P.out(),
           stats: [{ l: '통과', v: fmt(s), c: PAL.beam }, { l: '건너감', v: fmt(1 - s) }],
-          read: '세기 비율 = sin²(θ/2) : cos²(θ/2)'
+          read: '세기 비율 = sin²(θ/2) : cos²(θ/2) — 첫 MZI 의 θ 가 그 뒤 두 줄로 빛을 나눈다'
         };
       }
     },
     {
-      id: 'a2', num: '02', tab: '링 가중치 뱅크', title: '마이크로링 가중치 뱅크', fig: { type: 'svg', w: 440, h: 190 }, label: '마이크로링 가중치 뱅크',
+      id: 'a2', num: '02', tab: '링 가중치 뱅크', title: '마이크로링 가중치 뱅크', fig: { type: 'svg', w: 880, h: 270 }, label: '콤 광원에서 검출기 합까지',
       idea: [['파장마다 가중치 하나. '], ['WDM 채널 수가 곧 행렬 크기', 1], ['이고, 합산은 검출기 하나가 광전류를 더해서 한다.']],
       note: '온도를 조금만 올려도 네 링이 <b>같이</b> 밀린다. 그게 파장 락킹 회로가 필요한 이유다.',
       controls: [0, 1, 2, 3].map(i => ({ type: 'range', k: 'd' + i, label: 'λ' + (i + 1) + ' 디튜닝', min: -30, max: 30, step: 1, def: 0, fmt: v => v + ' pm' }))
@@ -82,9 +115,24 @@
         g += `<rect class="pdf" x="336" y="${(156 - 32 * fill).toFixed(1)}" width="30" height="${(32 * fill).toFixed(1)}" rx="2" opacity=".85"/>`;
         g += `<text class="p" x="374" y="144" font-size="11">Σ ${fmt(sum)}</text><text class="m" x="336" y="176" font-size="9">검출기가 더한다</text>`;
         g += `<text class="m" x="20" y="36" font-size="10">링 하나 = 가중치 하나 · 파장 하나</text>`;
+        // 사이클: 콤 → 디먹스 → 변조기(x) → 먹스 → 링 뱅크(위 그림, 가중치) → PD(합) → TIA → ADC · 파장 락
+        const P = CYC.pen(), YE = [131, 157, 183, 209];
+        P.laser(38, 170, { id: 'src-comb' });
+        P.beam([[61, 170], [79, 170]]);
+        P.wdm(90, 170, 100, { lab: '' });
+        YE.forEach((y, i) => { P.beam([[101, 170 + (y - 170) * .9], [123, y]], { w: 1.4 }); P.mod(140, y, { w: 32, lab: 'x' + (i + 1) }); P.beam([[156, y], [178, 170 + (y - 170) * .9]], { w: 1.4 }); });
+        P.path('M178 120 L200 163 L200 177 L178 220 Z', { c: 'ink', w: 1.3, f: 'grid' });
+        P.beam([[200, 170], [270, 170]], { w: 3 });
+        P.raw(`<g transform="translate(250 30)">${g}</g>`);
+        P.mark('ring', [310, 122, 40, 40], [348, 126]); P.mark('ps', [317, 110, 26, 5]); P.mark('pd', [586, 154, 30, 32]);
+        P.wire([[618, 170], [652, 170]]); P.box(677, 170, 46, 28, 'TIA', { id: 'tia' }); P.wire([[700, 170], [726, 170]]); P.box(749, 170, 44, 28, 'ADC', { id: 'adc' });
+        P.box(700, 96, 74, 24, '파장 락', { id: 'lock', tone: 'probe', s: 10 });
+        P.wire([[677, 156], [677, 108]]); P.wire([[663, 96], [580, 96], [580, 92], [300, 92]], { arrow: false });
+        [330, 398, 466, 534].forEach(x => P.wire([[x + 14, 92], [x + 14, 108]]));
+        P.legend(16, 244, ['콤', '디먹스·변조', '링 가중치', '검출 Σ', 'TIA·ADC']);
         const err = Math.abs(sum - sum0) / Math.max(sum0, 1e-6) * 100;
         return {
-          svg: g, stats: [{ l: '출력 Σwᵢxᵢ', v: fmt(sum), c: PAL.probe }],
+          svg: P.out(), stats: [{ l: '출력 Σwᵢxᵢ', v: fmt(sum), c: PAL.probe }],
           read: `가중치 ${w.map(v => fmt(v)).join(' · ')}<br>` + (S.T > 0 ? `<span style="color:var(--wall)">온도 +${S.T} K → 의도한 값에서 ${fmt(err, 1)}% 벗어남</span>` : '온도 0 K — 의도한 값 그대로')
         };
       }
@@ -131,8 +179,7 @@
       }
     },
     {
-      id: 'a4', num: '04', tab: '4f 상관기', title: '4f 상관기 · 정합 필터', fig: { type: 'canvas', w: 880, h: 320 }, label: '입력 · 푸리에 면 · 출력 상관',
-      stack: { rects: [[22, 8, 270, 250], [302, 8, 262, 250], [566, 8, 304, 250]], rows: [[0, 1], [2]] },
+      id: 'a4', num: '04', tab: '4f 상관기', title: '4f 상관기 · 정합 필터', fig: { type: 'svg', w: 880, h: 330 }, label: '4f 상관기 — 입력면 · 렌즈 · 푸리에 면 필터 · 렌즈 · 출력면',
       idea: [['렌즈가 푸리에 변환을 공짜로 해준다. 푸리에 면에 '], ['찾는 패턴의 켤레', 1], ['를 놓으면, 맞을 때만 출력에 뾰족한 봉우리가 선다.']],
       note: '64점 DFT로 실제 상관을 계산한다. 필터와 입력이 어긋나면 봉우리가 주저앉는다.',
       controls: [
@@ -146,28 +193,42 @@
         const [cr, ci] = dft(PR, PI, true), C = [...cr].map((v, n) => Math.hypot(v, ci[n]));
         const peak = Math.max(...C), at = C.indexOf(peak), mean = C.reduce((a, b) => a + b, 0) / N4, ok = in4[0] === fl4[0];
         const TM = [...TR].map((v, k) => Math.hypot(v, TI[k]));
+        const xm = Math.max(...x), tm = Math.max(...TM), shift = k => TM[(k + N4 / 2) % N4];
+        // 사이클: LD → 입력면(SLM) → f → 렌즈 → f → 푸리에 면 필터(가중치) → f → 렌즈 → f → 출력면(카메라)
+        const P = CYC.pen(), Y = 96, XS = [150, 260, 370, 480, 590];
+        P.laser(38, Y);
+        P.path(`M61 ${Y - 3} L${XS[0]} ${Y - 38} L${XS[1]} ${Y - 38} L${XS[2]} ${Y} L${XS[3]} ${Y - 38} L${XS[4]} ${Y - 38} L${XS[4]} ${Y + 38} L${XS[3]} ${Y + 38} L${XS[2]} ${Y} L${XS[1]} ${Y + 38} L${XS[0]} ${Y + 38} L61 ${Y + 3} Z`, { c: 'none', f: 'beam', fo: .07 });
+        P.beam([[61, Y - 3], [XS[0], Y - 38], [XS[1], Y - 38], [XS[2], Y], [XS[3], Y + 38], [XS[4], Y + 38]], { w: 1.3, op: .8 });
+        P.beam([[61, Y + 3], [XS[0], Y + 38], [XS[1], Y + 38], [XS[2], Y], [XS[3], Y - 38], [XS[4], Y - 38]], { w: 1.3, op: .8 });
+        P.grid(XS[0] - 7, Y - 40, 14, 80, 16, 1, { id: 'slm', vals: i => x[Math.round(i * (N4 - 1) / 15)] / xm });
+        P.lens(XS[1], Y, 96); P.lens(XS[3], Y, 96);
+        P.plate(XS[2], Y, 84, { n: 16, vals: [...Array(16)].map((_, i) => shift(Math.round(i * (N4 - 1) / 15)) / tm) });
+        P.cam(XS[4], Y, 24, 84, { n: 16, vals: i => C[Math.round(i * (N4 - 1) / 15)] / peak, lab: '' });
+        [205, 315, 425, 535].forEach(xx => P.lab(xx, Y + 56, 'f', { a: 'middle', c: 'ink', s: 11 }));
+        [['입력면', 0], ['렌즈', 1], ['푸리에 면', 2], ['렌즈', 3], ['카메라', 4]].forEach(([t, i]) => P.lab(XS[i], Y - 50, t, { a: 'middle', s: 10 }));
+        P.wire([[604, Y], [650, Y]]);
+        P.text(660, Y - 6, '봉우리 / 평균', { s: 10.5, c: 'muted' }); P.text(660, Y + 16, fmt(peak / mean, 1), { s: 18, c: ok ? 'probe' : 'wall', b: 1 });
+        P.text(660, Y + 36, ok ? '정합 — 봉우리' : '불일치', { s: 10, c: ok ? 'probe' : 'wall' });
+        // 아래: 세 면에서 실제로 보이는 것 — 64점 DFT 로 계산
+        const plot = (cx, title, arr, c, norm, dot) => {
+          const x0 = cx - 95, y0 = 276; P.lab(x0, 192, title, { s: 10 });
+          P.path(`M${x0} ${y0} H${x0 + 190}`, { c: 'rule', w: 1 });
+          P.poly(arr.map((v, n) => [x0 + n * 190 / (N4 - 1), y0 - v / norm * 66]), { c, w: 1.8 });
+          if (dot != null) P.circ(x0 + dot * 190 / (N4 - 1), y0 - 66, 4, { c: 'none', f: 'probe' });
+        };
+        plot(130, '입력 ' + (in4 === 'AN' ? 'A+잡음' : in4), [...x], 'beam', xm);
+        plot(XS[2], '푸리에 면 · 필터 ' + fl4, [...Array(N4)].map((_, k) => shift(k)), 'warm', tm);
+        plot(610, '출력 상관', C, 'probe', peak, at);
+        P.legend(16, 292, ['광원', '입력면', '렌즈', '필터 = 가중치', '렌즈', '카메라']);
         return {
-          draw(cx, W, H) {
-            cx.clearRect(0, 0, W, H);
-            const panel = (x0, title, arr, color, norm) => {
-              cx.fillStyle = col('--muted'); cx.font = '13px IBM Plex Mono, monospace'; cx.fillText(title, x0, 26);
-              cx.strokeStyle = col('--rule'); cx.lineWidth = 1; cx.beginPath(); cx.moveTo(x0, 250); cx.lineTo(x0 + 260, 250); cx.stroke();
-              cx.strokeStyle = col(color); cx.lineWidth = 2; cx.beginPath();
-              arr.forEach((v, n) => { const px = x0 + n * (260 / N4), py = 250 - (v / norm) * 180; n ? cx.lineTo(px, py) : cx.moveTo(px, py); }); cx.stroke();
-            };
-            panel(30, '입력 ' + (in4 === 'AN' ? 'A+잡음' : in4), [...x], '--beam', Math.max(...x));
-            panel(310, '푸리에 면 · 필터 ' + fl4, TM, '--warm', Math.max(...TM));
-            panel(590, '출력 상관', C, '--probe', peak);
-            cx.fillStyle = col('--probe'); cx.beginPath(); cx.arc(590 + at * (260 / N4), 70, 5, 0, 7); cx.fill();
-            cx.fillStyle = col('--muted'); cx.font = '12px IBM Plex Mono, monospace'; cx.fillText('봉우리', 590 + at * (260 / N4) - 18, 60);
-          },
+          svg: P.out(),
           stats: [{ l: '봉우리 / 평균', v: fmt(peak / mean, 1), c: PAL.probe }, { l: '위치', v: String(at) }],
           read: ok ? '<span style="color:var(--probe)">정합 — 봉우리가 섰다</span>' : '<span style="color:var(--wall)">불일치 — 봉우리가 주저앉았다</span>'
         };
       }
     },
     {
-      id: 'a5', num: '05', tab: 'PCM 크로스바', title: 'PCM 크로스바', fig: { type: 'svg', w: 440, h: 200 }, label: 'PCM 크로스바 4×4',
+      id: 'a5', num: '05', tab: 'PCM 크로스바', title: 'PCM 크로스바', fig: { type: 'svg', w: 880, h: 292 }, label: 'PCM 크로스바 4×4 — 광원에서 검출까지',
       idea: [['상변화 재료의 결정 상태가 가중치다. '], ['전원을 꺼도 값이 남는다', 1], [' — 위상이 들고 있던 가중치와 갈리는 지점.']],
       note: '칸을 누르면 결정 상태가 바뀐다(0 → 0.5 → 1). 전원을 꺼보면 왜 비휘발이 승부처인지 보인다.',
       init: () => ({ w: [[1, .5, 0, .5], [0, 1, .5, 0], [.5, 0, 1, .5], [1, .5, .5, 0]], off: false, writes: 0 }),
@@ -195,6 +256,19 @@
         // 구역: 왼쪽 입력 → 가운데 행렬 → 오른쪽 검출
         g += `<text class="m" x="20" y="16" font-size="9">입력</text><text class="m" x="155" y="16" font-size="9" text-anchor="middle">행렬 — PCM</text><text class="m" x="333" y="16" font-size="9" text-anchor="middle">출력 — 검출</text>`;
         if (S.off) g += `<rect x="0" y="0" width="440" height="200" fill="var(--panel)" opacity=".62"/><text class="a" x="220" y="100" font-size="13" text-anchor="middle" font-weight="600">전원 꺼짐 — 가중치는 그대로 남아 있다</text>`;
+        const P = CYC.pen(), YR = [84, 118, 152, 186];
+        P.laser(38, 135);
+        P.split(61, 135, YR, { id: false, L: 50 });
+        YR.forEach((y, i) => { P.mod(134, y, { w: 32, lab: 'x' + (i + 1) }); P.beam([[150, y], [262, y]], { w: 1.2 + 1.6 * x[i], op: .35 + .65 * x[i] }); });
+        P.raw(`<g transform="translate(250 40)">${g}</g>`);
+        P.mark('wg', [290, 80, 260, 110], [440, 101]); P.mark('pcm', [310, 76, 20, 16]); P.mark('pd', [570, 74, 26, 20]);
+        P.laser(360, 16, { id: 'src-pulse', lab: '' }); P.lab(392, 20, '쓰기 펄스', { s: 9.5 });
+        P.beam([[360, 30], [360, 70]], { dash: [4, 3], arrow: true, w: 1.6 });
+        P.box(230, 16, 52, 24, 'FPGA', { id: 'fpga', tone: 'probe', s: 10 }); P.wire([[256, 16], [336, 16]]);
+        YR.forEach(y => P.wire([[646, y], [676, y]]));
+        P.box(702, 135, 48, 128, 'TIA', { id: 'tia' }); P.wire([[726, 135], [752, 135]]); P.box(776, 135, 44, 128, 'ADC', { id: 'adc' });
+        P.legend(16, 268, ['광원', '변조', 'PCM 가중치', '검출', 'TIA·ADC']);
+        g = P.out();
         return { svg: g, stats: [{ l: '누적 쓰기', v: S.writes + '회', c: PAL.warm }], read: `출력 y = <b>${y.map(v => fmt(v)).join(' · ')}</b><br>실제 PCM 셀은 10⁶~10⁸회에서 지친다` };
       },
       bind(el, S, set) {
@@ -205,7 +279,7 @@
       }
     },
     {
-      id: 'a6', num: '06', tab: '호모다인', title: '호모다인 · 코히런트 MVM', fig: { type: 'svg', w: 440, h: 180 }, label: '직접검출과 호모다인 비교',
+      id: 'a6', num: '06', tab: '호모다인', title: '호모다인 · 코히런트 MVM', fig: { type: 'svg', w: 880, h: 370 }, label: '신호 팔 + 기준(LO) 팔 → 결합 → 밸런스드 검출',
       idea: [['검출기는 세기만 읽으니 부호가 사라진다. 기준 빛을 같이 때려 '], ['음수와 복소수', 1], ['를 되찾는 방법.']],
       note: 'LO 위상이 틀어지면 결과가 cos만큼 깎인다. 그 각도를 붙잡는 게 안정화 회로가 하는 일이다.',
       controls: [
@@ -215,22 +289,40 @@
       render(S) {
         const w = S.w / 100, x = S.x / 100, p = S.p, prod = w * x, direct = prod * prod, homo = prod * Math.cos(p * D2R);
         const bar = (x0, v, max, cls) => { const h = clamp(Math.abs(v) / max, 0, 1) * 52, y = v >= 0 ? 110 - h : 110; return `<rect class="${cls}" x="${x0}" y="${y.toFixed(1)}" width="46" height="${h.toFixed(1)}" rx="2" opacity=".8"/>`; };
-        const svg = `<path class="wg" stroke-width="1" opacity=".4" d="M40 110 H400"/>
-          <text class="m" x="40" y="30" font-size="10">같은 w·x를 두 방식으로 읽는다</text>
-          ${bar(70, direct, 1, 'pdf')}<text class="m" x="93" y="174" font-size="10" text-anchor="middle">직접검출</text>
-          <text class="i" x="93" y="100" font-size="10.5" text-anchor="middle">${fmt(direct)}</text>
-          ${bar(200, homo, 1, 'pdf')}<text class="m" x="223" y="174" font-size="10" text-anchor="middle">호모다인</text>
-          <text class="i" x="223" y="${homo >= 0 ? (110 - clamp(Math.abs(homo), 0, 1) * 52 - 6).toFixed(0) : (110 + clamp(Math.abs(homo), 0, 1) * 52 + 14).toFixed(0)}" font-size="10.5" text-anchor="middle">${fmt(homo)}</text>
-          ${bar(330, prod, 1, 'ht')}<text class="m" x="353" y="174" font-size="10" text-anchor="middle">참값 w·x</text>
-          <text class="m" x="404" y="114" font-size="9">0</text>`;
+        const old = `<path class="wg" stroke-width="1" opacity=".4" d="M40 110 H400"/>
+          ${bar(70, direct, 1, 'pdf')}<text class="m" x="93" y="174" font-size="11" text-anchor="middle">직접검출</text>
+          <text class="i" x="93" y="100" font-size="11.5" text-anchor="middle">${fmt(direct)}</text>
+          ${bar(200, homo, 1, 'pdf')}<text class="m" x="223" y="174" font-size="11" text-anchor="middle">호모다인</text>
+          <text class="i" x="223" y="${homo >= 0 ? (110 - clamp(Math.abs(homo), 0, 1) * 52 - 6).toFixed(0) : (110 + clamp(Math.abs(homo), 0, 1) * 52 + 14).toFixed(0)}" font-size="11.5" text-anchor="middle">${fmt(homo)}</text>
+          ${bar(330, prod, 1, 'ht')}<text class="m" x="353" y="174" font-size="11" text-anchor="middle">참값 w·x</text>
+          <text class="m" x="404" y="114" font-size="10">0</text>`;
+        // 사이클: LD → 나눔 → [신호 팔: x 변조 → w 변조] / [기준 팔: 위상 φ + 락] → 결합 → 밸런스드 PD → TIA → ADC
+        const P = CYC.pen(), YS = 70, YL = 150;
+        P.laser(38, 110);
+        P.split(61, 110, [YS, YL], { id: 'bs', L: 52 });
+        P.beam([[113, YS], [184, YS]], { w: 2.2 }); P.mod(200, YS, { lab: 'x', sub: '입력', drive: true });
+        P.beam([[220, YS], [274, YS]], { w: 1 + 2 * Math.abs(x), op: .35 + .65 * Math.abs(x) }); P.mod(294, YS, { lab: 'w', red: true, sub: '가중치', drive: true });
+        P.beam([[314, YS], [380, YS]], { w: 1 + 2 * Math.abs(prod), op: .35 + .65 * Math.abs(prod) });
+        P.beam([[113, YL], [380, YL]], { w: 2.2 }); P.lab(150, YL + 18, '기준 빛 (LO)', { s: 10 });
+        P.ps(260, YL, { w: 24, v: p / 180, lab: 'φ', tone: 'probe' });
+        P.lock(240, YL - 18, 40, 30, { lab: '' });
+        P.coupler(410, 110, { w: 60, g: 40 }); P.at2('bs', [410, 110]);
+        P.beam([[440, YS], [456, YS], [473, 97]], { w: 1.6 }); P.beam([[440, YL], [456, YL], [473, 123]], { w: 1.6 });
+        P.bal(480, 110); P.lab(470, 152, '밸런스드', { s: 10 });
+        P.wire([[504, 110], [536, 110]]); P.box(562, 110, 50, 28, 'TIA', { id: 'tia' }); P.wire([[587, 110], [614, 110]]); P.box(638, 110, 46, 28, 'ADC', { id: 'adc' });
+        P.text(672, 105, 'w·x', { s: 10.5 }); P.text(672, 124, fmt(homo), { s: 16, c: 'probe', b: 1 });
+        P.wire([[562, 124], [562, 196], [260, 196], [260, YL + 13]]); P.lab(330, 191, '위상 락 — φ 를 붙잡는다', { s: 9.5, c: 'probe' });
+        P.legend(16, 250, ['광원', '나눔', '변조 x·w', '결합', '밸런스드 PD', 'ADC']);
+        P.aux(470, 222, 402, 142, '같은 w·x 를 세 가지로 읽기');
+        P.raw(CYC.sub(474, 236, 394, 124, '0 40 440 145', old));
         return {
-          svg, stats: [{ l: '참값 w·x', v: fmt(prod), c: PAL.warm }, { l: '호모다인', v: fmt(homo), c: PAL.probe }],
+          svg: P.out(), stats: [{ l: '참값 w·x', v: fmt(prod), c: PAL.warm }, { l: '호모다인', v: fmt(homo), c: PAL.probe }],
           read: `직접검출 |E|² = <b>${fmt(direct)}</b> — 부호를 잃고 제곱된다` + (p > 0 ? `<br><span style="color:var(--wall)">호모다인이 cos ${p}° 만큼 깎임</span>` : '')
         };
       }
     },
     {
-      id: 'a7', num: '07', tab: '시간다중', title: '시간다중 MVM', fig: { type: 'svg', w: 440, h: 170 }, label: '시간다중 누적',
+      id: 'a7', num: '07', tab: '시간다중', title: '시간다중 MVM', fig: { type: 'svg', w: 880, h: 370 }, label: '펄스 → 변조기 하나 → 누적 고리 → 검출 → FPGA 가 다음 가중치',
       idea: [['소자 하나를 시간으로 재사용한다. '], ['공간 대신 시간', 1], ['으로 행렬을 펼치니 면적은 줄고 지연은 늘어난다.']],
       note: 'N×N 행렬 하나에 N 사이클이 든다. 소자는 하나로 줄지만 계산 시간이 N배다.',
       init: () => ({ t: 0 }),
@@ -244,36 +336,68 @@
         } }],
       render(S) {
         const N = S.N, f = S.f, t7 = S.t, lat = N / f, ops = 2 * N * N / (lat * 1e-9) / 1e12, cols = Math.min(N, 16);
-        let g = `<text class="m" x="20" y="26" font-size="10">소자 하나가 사이클마다 다른 가중치를 쓴다</text>`;
+        let g = '';
         for (let k = 0; k < cols; k++) {
           const on = k <= t7 % cols;
           g += `<rect class="${on ? 'ht' : 'fillg'}" x="${20 + k * 25}" y="46" width="19" height="28" rx="3" opacity="${on ? .85 : .6}" stroke-width="1"/>`;
-          g += `<text class="m" x="${29.5 + k * 25}" y="86" font-size="8.5" text-anchor="middle">w${k + 1}</text>`;
+          g += `<text class="m" x="${29.5 + k * 25}" y="88" font-size="9.5" text-anchor="middle">w${k + 1}</text>`;
         }
-        const acc = (t7 % cols + 1) / cols;
+        const acc = (t7 % cols + 1) / cols, k0 = t7 % cols;
         g += `<rect class="pd" x="20" y="104" width="400" height="18" rx="3" stroke-width="1.2"/><rect class="pdf" x="20" y="104" width="${(400 * acc).toFixed(1)}" height="18" rx="2" opacity=".75"/>`;
-        g += `<text class="m" x="20" y="140" font-size="10">누적 ${Math.round(acc * 100)}% — 사이클 ${t7 % cols + 1} / ${cols}${N > 16 ? ' (앞 16개만 표시)' : ''}</text>`;
-        g += `<text class="m" x="20" y="160" font-size="10">N 사이클을 다 돌아야 결과 한 벌이 나온다</text>`;
-        return { svg: g, stats: [{ l: '지연', v: fmt(lat, 1) + ' ns', c: PAL.beam }, { l: '유효', v: fmt(ops, 1) + ' TOPS' }], read: '지연 = N / 속도 · 소자는 1개 — 공간을 시간으로 바꾼 값이다' };
+        g += `<text class="m" x="20" y="142" font-size="11">누적 ${Math.round(acc * 100)}% — 사이클 ${k0 + 1} / ${cols}${N > 16 ? ' (앞 16)' : ''}</text>`;
+        // 사이클: 펄스 LD → 변조기(xₖ·wₖ) → 누적 고리(지연선 + 증폭) → 탭 → PD → TIA → ADC → FPGA → 다음 wₖ
+        const P = CYC.pen(), Y = 110;
+        P.laser(38, Y, { id: 'src-pulse' });
+        P.beam([[61, Y], [124, Y]]);
+        for (let k = 0; k < 4; k++) P.path(`M${72 + k * 12} ${Y - 9} v-8`, { c: 'beam', w: 2, op: k === 3 - (k0 % 4) ? 1 : .3 });
+        P.mod(144, Y, { lab: 'xₖwₖ', red: true, w: 44 });
+        P.beam([[166, Y], [236, Y]], { w: 2 });
+        // 고리: 결합기로 들어가 한 바퀴 돌며 직전 슬롯과 더해진다
+        P.path(`M236 ${Y} C250 ${Y} 252 ${Y - 8} 266 ${Y - 8} H430 Q450 ${Y - 8} 450 ${Y - 28} V${Y - 58} Q450 ${Y - 78} 430 ${Y - 78} H286 Q266 ${Y - 78} 266 ${Y - 58} V${Y - 28}`, { c: 'beam', w: 1.6, op: .35 + .65 * acc });
+        P.coupler(258, Y - 4, { w: 30, g: 5, id: false });
+        P.coil(350, Y - 78, { r: 11, lab: '' }); P.lab(350, Y - 98, '지연 = 한 슬롯', { a: 'middle', s: 9.5 });
+        P.amp(450, Y - 44, { lab: '' }); P.lab(470, Y - 40, '증폭', { s: 9.5 });
+        P.beam([[430, Y - 8], [470, Y - 8], [482, Y], [520, Y]], { w: 1.6 });
+        P.pd(528, Y, { v: acc }); P.wire([[538, Y], [566, Y]]);
+        P.box(592, Y, 48, 28, 'TIA', { id: 'tia' }); P.wire([[616, Y], [642, Y]]);
+        P.box(666, Y, 44, 28, 'ADC', { id: 'adc' }); P.wire([[688, Y], [716, Y]]);
+        P.box(748, Y, 60, 34, 'FPGA', { id: 'fpga', tone: 'probe' });
+        P.wire([[748, Y + 17], [748, 190], [144, 190], [144, Y + 12]]); P.lab(380, 185, '다음 슬롯의 wₖ', { s: 9.5, c: 'probe' });
+        P.legend(16, 250, ['펄스', '변조 xₖwₖ', '누적 고리', '검출', 'ADC', 'FPGA']);
+        P.aux(470, 222, 402, 142, '소자 하나가 사이클마다 다른 w');
+        P.raw(CYC.sub(474, 236, 394, 124, '0 34 440 116', g));
+        return { svg: P.out(), stats: [{ l: '지연', v: fmt(lat, 1) + ' ns', c: PAL.beam }, { l: '유효', v: fmt(ops, 1) + ' TOPS' }], read: '지연 = N / 속도 · 소자는 1개 — 공간을 시간으로 바꾼 값이다' };
       }
     },
     {
-      id: 'a8', num: '08', tab: 'SLM 자유공간', title: 'SLM 자유공간 MVM', fig: { type: 'svg', w: 440, h: 180 }, label: 'SLM 병렬도와 갱신 속도',
+      id: 'a8', num: '08', tab: 'SLM 자유공간', title: 'SLM 자유공간 MVM', fig: { type: 'svg', w: 880, h: 300 }, label: 'LD → 입력 벡터 → SLM 행렬 → 원통 렌즈 합 → 카메라',
       idea: [['공간광변조기 한 장에 큰 행렬을 통째로 올린다. '], ['병렬도는 압도적이고 갱신은 느리다', 1], [' — 07과 정확히 반대의 거래.']],
       note: '가중치를 고정해두고 입력만 빠르게 흘리면(weight-stationary) 이 거래가 유리해진다.',
       controls: [
         { type: 'range', k: 'N', label: '한 변 N', min: 16, max: 512, step: 16, def: 256 },
         { type: 'range', k: 'T', label: '갱신 주기', min: 1, max: 200, step: 1, def: 50, fmt: v => v + ' ms' }],
       render(S) {
-        const N = S.N, T = S.T, cells = N * N, ops = 2 * cells / (T * 1e-3) / 1e9, g = [];
-        g.push(`<text class="m" x="20" y="26" font-size="10">한 장에 ${cells.toLocaleString()}개 가중치가 동시에 올라간다</text>`);
-        const px = Math.max(2, Math.min(12, Math.round(180 / Math.sqrt(cells) * 8))), n = Math.min(28, Math.floor(170 / px));
-        for (let i = 0; i < n; i++) for (let j = 0; j < n; j++) { const v = 0.2 + 0.8 * Math.abs(Math.sin(i * 0.7 + j * 1.3)); g.push(`<rect class="ht" x="${30 + j * px}" y="${44 + i * px}" width="${px - 1}" height="${px - 1}" opacity="${(v * 0.8).toFixed(2)}"/>`); }
-        g.push(`<text class="m" x="30" y="${50 + n * px + 14}" font-size="9.5">SLM 화면 (일부만 표시)</text>`);
-        g.push(`<path class="bm" stroke-width="2" opacity=".5" d="M250 110 L300 70 M250 110 L300 110 M250 110 L300 150"/>`);
-        g.push(`<rect class="pd" x="304" y="62" width="30" height="96" rx="3" stroke-width="1.2"/><text class="m" x="304" y="174" font-size="9.5">센서</text>`);
-        g.push(`<text class="p" x="344" y="106" font-size="11">${fmt(ops, 0)} GOPS</text>`);
-        return { svg: g.join(''), stats: [{ l: '병렬 채널', v: cells.toLocaleString(), c: PAL.warm }, { l: '연산량', v: fmt(ops, 1) + ' GOPS', c: PAL.probe }], read: `갱신 ${T} ms — 07과 반대의 거래다` };
+        const N = S.N, T = S.T, cells = N * N, ops = 2 * cells / (T * 1e-3) / 1e9;
+        // 사이클: LD → 입력 벡터 x(행마다 펼침) → SLM 행렬(가중치) → 원통 렌즈(행을 모아 합) → 카메라 열
+        const P = CYC.pen(), Y = 120, n = 8;
+        P.laser(38, Y);
+        P.path(`M61 ${Y - 3} L150 ${Y - 66} L150 ${Y + 66} L61 ${Y + 3} Z`, { c: 'none', f: 'beam', fo: .08 });
+        P.beam([[61, Y - 3], [150, Y - 66]], { w: 1.2, op: .7 }); P.beam([[61, Y + 3], [150, Y + 66]], { w: 1.2, op: .7 });
+        P.grid(152, Y - 64, 16, 128, n, 1, { id: false, tone: 'beam', vals: j => 0.3 + 0.7 * Math.abs(Math.cos(j * 0.9)) });
+        P.lab(160, Y - 74, '입력 x', { a: 'middle', s: 10 });
+        P.path(`M172 ${Y - 64} H300 V${Y + 64} H172 Z`, { c: 'none', f: 'beam', fo: .06 });
+        P.grid(300, Y - 64, 128, 128, n, n, { id: 'slm', vals: (i, j) => 0.2 + 0.8 * Math.abs(Math.sin(i * 0.7 + j * 1.3)) });
+        P.lab(364, Y - 74, `SLM ${N}×${N}`, { a: 'middle', s: 10 });
+        P.path(`M430 ${Y - 64} L500 ${Y - 64} L590 ${Y - 6} L590 ${Y + 6} L500 ${Y + 64} L430 ${Y + 64} Z`, { c: 'none', f: 'beam', fo: .08 });
+        P.lens(500, Y, 132, { lab: '' }); P.lab(500, Y + 82, '원통 렌즈', { a: 'middle', s: 10 });
+        P.cam(596, Y, 16, 132, { n: 8, lab: '', vals: i => 0.25 + 0.7 * Math.abs(Math.sin(i * 1.1)) }); P.lab(596, Y + 82, '카메라', { a: 'middle', s: 10 });
+        P.wire([[606, Y], [640, Y]]);
+        P.aux(650, 50, 220, 140, '');
+        P.text(664, 78, '가중치', { s: 10.5 }); P.text(664, 100, cells.toLocaleString() + '개', { s: 15, c: 'warm', b: 1 });
+        P.text(664, 128, '갱신 ' + T + ' ms', { s: 10.5 }); P.text(664, 156, fmt(ops, 0) + ' GOPS', { s: 15, c: 'probe', b: 1 });
+        P.text(664, 178, '한 장에 통째로', { s: 9.5 });
+        P.legend(16, 268, ['광원', '입력 x', 'SLM 가중치', '렌즈 Σ', '카메라']);
+        return { svg: P.out(), stats: [{ l: '병렬 채널', v: cells.toLocaleString(), c: PAL.warm }, { l: '연산량', v: fmt(ops, 1) + ' GOPS', c: PAL.probe }], read: `갱신 ${T} ms — 07과 반대의 거래다` };
       }
     },
     {

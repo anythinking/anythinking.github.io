@@ -4,7 +4,7 @@
    run 의 document 는 그 트리를 찾는 좁은 창이다: getElementById · querySelector(All) 만. */
 (window.CMP = window.CMP || { groups: {} }).groups.c = {
   id: 'c', name: "C · 최적화",
-  html: "<section id=\"sec-c\" hidden>\n  <p class=\"lede\" style=\"margin-bottom:10px\">A군은 행렬곱을 빠르게 하는 얘기였다. C군 셋은 다르다 — 답을 계산하지 않고, 물리계가 <span class=\"k\">스스로 낮은 에너지로 떨어지게</span> 두고 그 자리를 읽는다. 셋은 같은 이징 문제를 서로 다른 방식으로 풀고, 서로 다른 벽에 막힌다.</p>\n<div class=\"tabs\" id=\"c-tabs\" role=\"tablist\">\n  <button type=\"button\" data-s=\"1\" aria-pressed=\"true\"><span class=\"n\">01</span>코히런트 이징 머신</button>\n  <button type=\"button\" data-s=\"2\" aria-pressed=\"false\"><span class=\"n\">02</span>공간광 이징 머신</button>\n  <button type=\"button\" data-s=\"3\" aria-pressed=\"false\"><span class=\"n\">03</span>리커런트 샘플러</button>\n  <button type=\"button\" data-s=\"4\" aria-pressed=\"false\">겹쳐 보면</button>\n</div>\n\n<div class=\"card sec\" id=\"c-s1\">\n  <div class=\"head\">\n    <div><div class=\"num\">01</div><h2>코히런트 이징 머신 (OPO 네트워크)</h2></div>\n    \n  </div>\n  <p class=\"idea\">광 파라메트릭 발진기는 발진할 때 위상이 0 또는 π 둘 중 하나로 잠긴다. 그 <span class=\"k\">두 갈래가 곧 스핀 ±1</span>이다. 발진기 사이를 결합해두고 펌프를 문턱 아래에서 천천히 올리면, 가장 적게 손해 보는 위상 조합이 먼저 켜진다 — <span class=\"k\">적어도 설계는 그렇다.</span> 아래에서 돌려보면 그게 보장이 아닌 것도 같이 보인다.</p>\n  <div class=\"split\">\n    <div class=\"fig\"><svg class=\"f\" id=\"c-f1\" viewBox=\"0 0 440 268\" role=\"img\" aria-label=\"OPO 네트워크의 Max-Cut 수렴\"></svg></div>\n    <div>\n      <div class=\"btns\" style=\"margin-bottom:8px\">\n        <span class=\"chip\">노드</span>\n        <button type=\"button\" data-g=\"1n\" data-v=\"8\" aria-pressed=\"true\">8</button>\n        <button type=\"button\" data-g=\"1n\" data-v=\"12\" aria-pressed=\"false\">12</button>\n        <button type=\"button\" data-g=\"1n\" data-v=\"16\" aria-pressed=\"false\">16</button>\n      </div>\n      <div class=\"ctl\">\n        <div class=\"row\"><label for=\"c-c1p\">펌프 p</label><input type=\"range\" id=\"c-c1p\" min=\"60\" max=\"190\" step=\"1\" value=\"130\"><output id=\"c-o1p\"></output></div>\n        <div class=\"row\"><label for=\"c-c1k\">결합 K</label><input type=\"range\" id=\"c-c1k\" min=\"0\" max=\"40\" step=\"1\" value=\"12\"><output id=\"c-o1k\"></output></div>\n        <div class=\"row\"><label for=\"c-c1z\">잡음</label><input type=\"range\" id=\"c-c1z\" min=\"0\" max=\"60\" step=\"1\" value=\"12\"><output id=\"c-o1z\"></output></div>\n      </div>\n      <div class=\"btns\" style=\"margin-top:8px\">\n        <button type=\"button\" id=\"c-b1run\">한 번 돌리기</button>\n        <button type=\"button\" id=\"c-b1stat\">100회 통계</button>\n      </div>\n      <div class=\"read\" id=\"c-r1\"></div>\n      <p class=\"note\">실제로 적분한다 — ẋᵢ = (p−1−xᵢ²)xᵢ − K·Σⱼ wᵢⱼxⱼ + 잡음, 오일러 400스텝. 최적 컷은 2ⁿ 전수조사로 미리 구해놓고 비교한다.</p>\n    </div>\n  </div>\n  <div class=\"walk\">\n    <div class=\"walkhead\">\n      <h3>어떻게 돌아가나 — 하나씩 돌려보기</h3>\n      <div class=\"steps\" id=\"wtabs\">\n        <button type=\"button\" data-w=\"1\" aria-pressed=\"true\">1</button>\n        <button type=\"button\" data-w=\"2\" aria-pressed=\"false\">2</button>\n        <button type=\"button\" data-w=\"3\" aria-pressed=\"false\">3</button>\n        <button type=\"button\" data-w=\"4\" aria-pressed=\"false\">4</button>\n        <button type=\"button\" data-w=\"5\" aria-pressed=\"false\">5</button>\n        <button type=\"button\" data-w=\"6\" aria-pressed=\"false\">6</button>\n      </div>\n    </div>\n\n    <div class=\"wstep\" id=\"c-w1\">\n      <p class=\"wtext\"><b>펄스 하나가 스핀 하나다.</b> 축퇴 광 파라메트릭 발진기로 펄스를 수천 개 만든다. 섬유 고리를 한 바퀴 도는 동안 펄스들이 시간축에 줄지어 늘어서고, 그 줄 하나하나가 스핀이 된다. <b>고리 길이가 스핀 수의 상한을 정한다</b> — 둘을 움직여 보면 왜 그런지 숫자로 나온다.</p>\n      <div class=\"split\">\n        <div class=\"fig\"><svg class=\"f\" id=\"c-wf1\" viewBox=\"0 0 440 210\" role=\"img\" aria-label=\"섬유 고리와 펄스 열\"></svg></div>\n        <div>\n          <div class=\"ctl\">\n            <div class=\"row\"><label for=\"c-wc1L\">고리 길이</label><input type=\"range\" id=\"c-wc1L\" min=\"1\" max=\"200\" step=\"1\" value=\"10\"><output id=\"c-wo1L\"></output></div>\n            <div class=\"row\"><label for=\"c-wc1N\">스핀 수 N</label><input type=\"range\" id=\"c-wc1N\" min=\"0\" max=\"5\" step=\"1\" value=\"2\"><output id=\"c-wo1N\"></output></div>\n          </div>\n          <div class=\"read\" id=\"c-wr1\"></div>\n          <p class=\"note\">빛은 석영 섬유에서 n≈1.468 만큼 느려진다 — 진공의 2.04×10⁸ m/s. 라운드트립을 스핀 수로 나눈 게 슬롯 하나다.</p>\n        </div>\n      </div>\n    </div>\n\n    <div class=\"wstep\" id=\"c-w2\" hidden>\n      <p class=\"wtext\"><b>위상은 0 아니면 π.</b> 축퇴 OPO는 문턱을 넘는 순간 둘 중 하나로 잠기는데, 어느 쪽으로 잠길지는 미리 정해져 있지 않다. 잡음이 민다. 그 두 갈래를 +1, −1에 대응시킨다.</p>\n      <div class=\"split\">\n        <div class=\"fig\"><svg class=\"f\" id=\"c-wf2\" viewBox=\"0 0 440 210\" role=\"img\" aria-label=\"갈래질 그림\"></svg></div>\n        <div>\n          <div class=\"ctl\">\n            <div class=\"row\"><label for=\"c-wc2p\">펌프 p</label><input type=\"range\" id=\"c-wc2p\" min=\"0\" max=\"250\" step=\"1\" value=\"150\"><output id=\"c-wo2p\"></output></div>\n            <div class=\"row\"><label for=\"c-wc2z\">잡음 σ</label><input type=\"range\" id=\"c-wc2z\" min=\"1\" max=\"80\" step=\"1\" value=\"20\"><output id=\"c-wo2z\"></output></div>\n          </div>\n          <div class=\"btns\" style=\"margin-top:8px\">\n            <button type=\"button\" id=\"c-wb2one\">한 개 켜보기</button>\n            <button type=\"button\" id=\"c-wb2many\">50번 켜보기</button>\n          </div>\n          <div class=\"read\" id=\"c-wr2\"></div>\n          <p class=\"note\">ẋ = (p−1−x²)x + 잡음 을 실제로 적분한다. p&lt;1이면 0으로 죽고, p&gt;1이면 ±√(p−1)로 간다.</p>\n        </div>\n      </div>\n    </div>\n\n    <div class=\"wstep\" id=\"c-w3\" hidden>\n      <p class=\"wtext\"><b>J<sub>ij</sub>는 사실 FPGA가 만든다.</b> 결합 방법은 둘인데 나란한 선택지가 아니라 세대가 다르다. 광학적 지연선이 초기·소규모였고, 규모를 낸 건 전부 측정-피드백이다 — 2016년 NTT의 2000스핀, 2021년의 100,512스핀이 모두 이쪽이다(같은 2016년 스탠포드 쪽은 100스핀이었다). 펄스를 재서 Σⱼ Jᵢⱼxⱼ를 FPGA가 디지털로 계산하고 그 결과를 다시 빛에 실어준다. <b>J를 거의 자유롭게 쓸 수 있다는 CIM의 가장 큰 장점은, 광이 아니라 전자 쪽이 치르는 값이다.</b></p>\n      <div class=\"split\">\n        <div class=\"fig\"><svg class=\"f\" id=\"c-wf3\" viewBox=\"0 0 440 210\" role=\"img\" aria-label=\"측정-피드백 고리와 처리량\"></svg></div>\n        <div>\n          <div class=\"ctl\">\n            <div class=\"row\"><label for=\"c-wc3N\">스핀 수 N</label><input type=\"range\" id=\"c-wc3N\" min=\"0\" max=\"5\" step=\"1\" value=\"2\"><output id=\"c-wo3N\"></output></div>\n            <div class=\"row\"><label for=\"c-wc3L\">고리 길이</label><input type=\"range\" id=\"c-wc3L\" min=\"1\" max=\"200\" step=\"1\" value=\"10\"><output id=\"c-wo3L\"></output></div>\n            <div class=\"row\"><label for=\"c-wc3F\">FPGA 처리량</label><input type=\"range\" id=\"c-wc3F\" min=\"1\" max=\"400\" step=\"1\" value=\"20\"><output id=\"c-wo3F\"></output></div>\n          </div>\n          <div class=\"read\" id=\"c-wr3\"></div>\n          <p class=\"note\">조밀 결합이면 라운드트립 한 번에 N²번 곱해야 한다. 이게 안 되면 기계가 아예 못 돈다 — 벽에 적어둔 「측정-되먹임 지연」이 이것이다.</p>\n        </div>\n      </div>\n    </div>\n\n    <div class=\"wstep\" id=\"c-w4\" hidden>\n      <p class=\"wtext\"><b>설계 논리는 「최소 이득」이다.</b> 펌프를 문턱 아래에서 천천히 올리면 손실이 가장 작은 모드가 가장 먼저 발진한다. 결합이 만드는 손실이 스핀 배치마다 다르니, 가장 적게 손해 보는 배치가 먼저 켜지고 나머지는 이득을 빼앗겨 눌린다. <b>펌프를 올려보면 「천천히」가 왜 조건인지 보인다</b> — 빨리 올리면 여러 모드가 한꺼번에 문턱을 넘는다.</p>\n      <div class=\"split\">\n        <div class=\"fig\"><svg class=\"f\" id=\"c-wf4\" viewBox=\"0 0 440 210\" role=\"img\" aria-label=\"모드별 성장률\"></svg></div>\n        <div>\n          <div class=\"ctl\">\n            <div class=\"row\"><label for=\"c-wc4p\">펌프 p</label><input type=\"range\" id=\"c-wc4p\" min=\"40\" max=\"190\" step=\"1\" value=\"72\"><output id=\"c-wo4p\"></output></div>\n            <div class=\"row\"><label for=\"c-wc4K\">결합 K</label><input type=\"range\" id=\"c-wc4K\" min=\"1\" max=\"40\" step=\"1\" value=\"12\"><output id=\"c-wo4K\"></output></div>\n          </div>\n          <div class=\"read\" id=\"c-wr4\"></div>\n          <p class=\"note\">결합 행렬 J를 야코비 회전으로 실제 고유분해한다. 모드 k의 문턱은 p = 1 + K·λₖ, 성장률은 (p−1) − K·λₖ다. 그래프 크기는 위 카드의 노드 버튼을 따라간다.</p>\n        </div>\n      </div>\n    </div>\n\n    <div class=\"wstep\" id=\"c-w5\" hidden>\n      <p class=\"wtext\"><b class=\"w\">그런데 먼저 켜지는 모드가 바닥상태라는 보장은 없다.</b> 최소 이득 논증은 잡음이 없다는 가정 아래의 이상화다. 문턱 근처 선형 해석에서 먼저 켜지는 건 J의 최소 고유벡터인데, 그건 ±1 제약을 풀어버린 <b>연속 완화</b> 문제의 해지 이징 바닥상태가 아니다. 거기에 발진기들의 진폭이 서로 다르다는 문제가 겹친다(amplitude heterogeneity) — 고유벡터 성분의 크기가 제각각인 게 바로 그것이다.</p>\n      <div class=\"split\">\n        <div class=\"fig\"><svg class=\"f\" id=\"c-wf5\" viewBox=\"0 0 440 210\" role=\"img\" aria-label=\"최소 고유벡터 성분과 반올림\"></svg></div>\n        <div>\n          <div class=\"btns\" style=\"margin-bottom:8px\">\n            <button type=\"button\" id=\"c-wb5scan\">그래프 60개로 재보기</button>\n          </div>\n          <div class=\"read\" id=\"c-wr5\"></div>\n          <p class=\"note\">최소 고유벡터를 부호로 자른 해와, 2ⁿ 전수조사로 구한 진짜 최적을 같은 그래프에서 비교한다. 한 그래프만 보면 우연히 맞을 수 있어서 60개를 돌려보는 버튼을 뒀다. <b>위 카드의 노드를 16으로 올리고 다시 눌러봐라</b> — 적중률이 뚝 떨어진다.</p>\n        </div>\n      </div>\n    </div>\n\n    <div class=\"wstep\" id=\"c-w6\" hidden>\n      <p class=\"wtext\"><b>그래서 실제로는 여러 번 돌린다.</b> 초기조건을 바꿔 반복하고 가장 좋은 것을 고른다. 진폭을 공통 목표값으로 끌어당기는 오차보정 되먹임이 제안됐지만, 저자들 스스로 이 둘을 「부분적으로만」 해결한다고 쓴다. <b>그러면 「한 번 푸는 시간」은 라운드트립이 아니라 반복 횟수가 정한다.</b></p>\n      <div class=\"split\">\n        <div class=\"fig\"><svg class=\"f\" id=\"c-wf6\" viewBox=\"0 0 440 210\" role=\"img\" aria-label=\"반복에 따른 누적 성공확률\"></svg></div>\n        <div>\n          <div class=\"btns\" style=\"margin-bottom:8px\">\n            <button type=\"button\" id=\"c-wb6run\">1회 성공률 재보기 (100회)</button>\n          </div>\n          <div class=\"ctl\">\n            <div class=\"row\"><label for=\"c-wc6R\">반복 횟수 R</label><input type=\"range\" id=\"c-wc6R\" min=\"1\" max=\"200\" step=\"1\" value=\"20\"><output id=\"c-wo6R\"></output></div>\n          </div>\n          <div class=\"read\" id=\"c-wr6\"></div>\n          <p class=\"note\">99%로 답을 얻는 데 드는 반복 수 R₉₉ = ln(0.01)/ln(1−p)를 실측 p로 계산하고, 1단계의 라운드트립을 곱해 시간으로 바꾼다.</p>\n        </div>\n      </div>\n    </div>\n\n    <div class=\"nav\">\n      <button type=\"button\" id=\"c-wprev\">← 이전</button>\n      <button type=\"button\" id=\"c-wnext\">다음 →</button>\n    </div>\n  </div>\n  </div>\n\n<div class=\"card sec\" id=\"c-s2\">\n  <div class=\"head\">\n    <div><div class=\"num\">02</div><h2>공간광 이징 머신 (SPIM)</h2></div>\n    \n  </div>\n  <p class=\"idea\">SLM 화소 하나가 스핀 하나다. 빛을 통째로 모아 한 점에 맺으면 그 세기가 <span class=\"k\">전체 에너지를 한 번에</span> 준다 — 스핀이 몇 개든 측정 한 번은 한 프레임. 대신 결합 행렬을 자유롭게 못 쓰고, 프레임이 밀리초고, <span class=\"k\">필요한 프레임 수는 N과 함께 늘어난다</span>.</p>\n  <div class=\"split\">\n    <div class=\"fig\"><svg class=\"f\" id=\"c-f2\" viewBox=\"0 0 440 268\" role=\"img\" aria-label=\"SPIM 에너지 하강과 프레임 환산\"></svg></div>\n    <div>\n      <div class=\"ctl\">\n        <div class=\"row\"><label for=\"c-c2n\">스핀 N</label><input type=\"range\" id=\"c-c2n\" min=\"0\" max=\"7\" step=\"1\" value=\"3\"><output id=\"c-o2n\"></output></div>\n        <div class=\"row\"><label for=\"c-c2k\">패턴 수 k</label><input type=\"range\" id=\"c-c2k\" min=\"1\" max=\"8\" step=\"1\" value=\"4\"><output id=\"c-o2k\"></output></div>\n        <div class=\"row\"><label for=\"c-c2f\">프레임 시간</label><input type=\"range\" id=\"c-c2f\" min=\"1\" max=\"200\" step=\"1\" value=\"50\"><output id=\"c-o2f\"></output></div>\n      </div>\n      <div class=\"btns\" style=\"margin-top:8px\">\n        <button type=\"button\" id=\"c-b2run\">담금질 돌리기</button>\n      </div>\n      <div class=\"read\" id=\"c-r2\"></div>\n      <p class=\"note\">Mattis 결합 Jᵢⱼ = (1/N)Σₖξᵢᵏξⱼᵏ 으로 에너지를 실제로 계산하고, 프레임마다 한 번 읽는 담금질을 1200회 돈다. 걸린 시간은 프레임 수 × 프레임 시간이다.</p>\n    </div>\n  </div>\n</div>\n\n<div class=\"card sec\" id=\"c-s3\">\n  <div class=\"head\">\n    <div><div class=\"num\">03</div><h2>포토닉 리커런트 이징 샘플러</h2></div>\n    \n  </div>\n  <p class=\"idea\">앞의 둘은 답 하나를 찾으려고 잡음을 <span class=\"k\">줄인다</span>. 이쪽은 잡음을 자원으로 쓴다 — 되먹임 고리에 광 잡음을 일부러 남겨두면 계가 한 자리에 멈추지 않고 상태 공간을 돌아다니고, 그 체류 빈도가 <span class=\"k\">볼츠만 분포</span>를 이룬다. 얻는 건 최적해 하나가 아니라 분포다.</p>\n  <div class=\"split\">\n    <div class=\"fig\"><svg class=\"f\" id=\"c-f3\" viewBox=\"0 0 440 268\" role=\"img\" aria-label=\"샘플러가 만든 해의 분포\"></svg></div>\n    <div>\n      <div class=\"ctl\">\n        <div class=\"row\"><label for=\"c-c3z\">잡음 σ</label><input type=\"range\" id=\"c-c3z\" min=\"4\" max=\"120\" step=\"1\" value=\"30\"><output id=\"c-o3z\"></output></div>\n        <div class=\"row\"><label for=\"c-c3m\">샘플 수</label><input type=\"range\" id=\"c-c3m\" min=\"200\" max=\"4000\" step=\"100\" value=\"1500\"><output id=\"c-o3m\"></output></div>\n      </div>\n      <div class=\"btns\" style=\"margin-top:8px\">\n        <button type=\"button\" id=\"c-b3run\">다시 뽑기</button>\n        <button type=\"button\" id=\"c-b3ov\" aria-pressed=\"true\">이론값 겹치기</button>\n      </div>\n      <div class=\"read\" id=\"c-r3\"></div>\n      <p class=\"note\">10노드 그래프를 글라우버 되먹임으로 실제 샘플링하고, 2¹⁰=1024 상태 전수조사로 구한 볼츠만 분포를 점선으로 겹친다. 두 곡선이 겹치면 「분포를 뽑았다」가 말 그대로 참이라는 뜻이다.</p>\n  </div>\n  </div>\n</div>\n\n<div class=\"card sec close\" id=\"c-s4\">\n  <h2 style=\"font-size:16px\">셋을 겹쳐 보면</h2>\n  <p style=\"margin-top:8px\"><b>셋 다 같은 이징 에너지를 내려가지만, 무엇을 희생했는지가 다르다.</b> CIM은 결합 행렬을 거의 자유롭게 쓸 수 있는 대신 스핀을 시간축에 줄 세워 쓴다 — 펄스가 N개면 한 라운드트립이 N 슬롯이라, 스핀을 늘리면 한 바퀴 도는 시간이 비례해 늘어난다. SPIM은 정반대다. 스핀을 10만 개로 늘려도 에너지 한 번 읽는 값은 한 프레임으로 그대로다 — 광이 합산을 공짜로 해주니까. 그런데 02를 실제로 돌려보면 이게 공짜가 아닌 게 드러난다. 프레임 수를 1200장으로 고정해놓고 N만 키우면, N=200에서 달성 가능한 바닥의 90% 가까이 내려가던 것이 N=50,000에서는 1%도 못 내려간다. 즉 비용은 프레임 <b>한 장</b>에서 사라지고 프레임 <b>장수</b>로 되살아난다. 거기에 결합 행렬이 Mattis 꼴(소수의 패턴으로 만든 낮은 랭크)에 묶인다. 샘플러는 두 축을 다 포기하고 세 번째를 가져간다 — 답이 아니라 분포.</p>\n  <p><b>그래서 쓸 곳이 갈린다.</b> 조밀한 결합에 스핀이 수백~수천이면 CIM 쪽, 결합이 몇 개 패턴의 합으로 표현되고 스핀이 수만이면 SPIM 쪽이다. 그리고 애초에 분포가 필요한 작업 — 볼츠만 머신 학습, 베이지안 추론, 확률적 조합 생성 — 은 1·2로는 할 수 없다. 해 하나를 아무리 빨리 찾아도 그건 분포의 한 점일 뿐이다.</p>\n  <table class=\"cmp\">\n    <tr><th>축</th><th>01 CIM</th><th>02 SPIM</th><th>03 샘플러</th></tr>\n    <tr><td>스핀이 사는 곳</td><td>시간다중 광펄스의 위상</td><td>SLM 화소의 위상</td><td>되먹임 고리의 광 진폭</td></tr>\n    <tr><td>결합 Jᵢⱼ</td><td>거의 자유 (측정-되먹임)</td><td>Mattis 꼴 · 낮은 랭크</td><td>자유 (전자 되먹임)</td></tr>\n    <tr><td>스핀 수를 늘리면</td><td>라운드트립이 N에 비례해 길어진다</td><td>프레임 한 장 값은 그대로, 필요한 <b>장수</b>가 늘어난다</td><td>갱신 횟수가 늘어난다</td></tr>\n    <tr><td>한 번 갱신</td><td class=\"n\">N × ~ns 급</td><td class=\"n\">프레임 1장 = ms 급</td><td class=\"n\">전자 되먹임이 결정</td></tr>\n    <tr><td>얻는 것</td><td>해 하나 (국부 최적 가능)</td><td>해 하나</td><td>해의 <span class=\"k\">분포</span></td></tr>\n    <tr><td>막히는 곳</td><td>되먹임 지연이 라운드트립보다 길면 못 돈다</td><td>프레임레이트 · 랭크 제한</td><td>잡음↔온도 대응을 측정해야 안다</td></tr>\n  </table>\n  <p style=\"margin-top:12px\"><b>숫자를 믿을 때 조심할 것.</b> 이 분야에서 「GPU 대비 몇백 배」가 나올 때, 대개 광 쪽은 라운드트립 시간만 세고 측정·AD 변환·FPGA 되먹임·SLM 로딩은 빼고, GPU 쪽은 담금질 코드를 최적화하지 않은 채 비교한다. 이 페이지가 내놓는 숫자도 전부 <span class=\"k\">이 시뮬레이션 안의 숫자</span>지 측정값이 아니다 — 프레임 시간이나 슬롯 시간처럼 물리에서 온 값은 가정으로 명시해뒀다.</p>\n</div>\n\n<div class=\"pending\" id=\"c-pend\">\n  <b>이 페이지가 안 다루는 것</b> — 같은 분류표의 B군(리저버·스파이킹·텐서코어) · D군(전광 논리·스위칭) · E군(in-sensor·전처리기) · F군(선형광학 양자컴·주파수 콤)은 다른 장이다. 여기서 쓴 잡음 세기·결합 상수는 물리 단위가 아니라 <span style=\"color:var(--wall)\">무차원 모형 값</span>이고, 실제 소자의 값과 맞춘 적 없다(미확인).\n</div>\n</section>",
+  html: "<section id=\"sec-c\" hidden>\n  <p class=\"lede\" style=\"margin-bottom:10px\">A군은 행렬곱을 빠르게 하는 얘기였다. C군 셋은 다르다 — 답을 계산하지 않고, 물리계가 <span class=\"k\">스스로 낮은 에너지로 떨어지게</span> 두고 그 자리를 읽는다. 셋은 같은 이징 문제를 서로 다른 방식으로 풀고, 서로 다른 벽에 막힌다.</p>\n<div class=\"tabs\" id=\"c-tabs\" role=\"tablist\">\n  <button type=\"button\" data-s=\"1\" aria-pressed=\"true\"><span class=\"n\">01</span>코히런트 이징 머신</button>\n  <button type=\"button\" data-s=\"2\" aria-pressed=\"false\"><span class=\"n\">02</span>공간광 이징 머신</button>\n  <button type=\"button\" data-s=\"3\" aria-pressed=\"false\"><span class=\"n\">03</span>리커런트 샘플러</button>\n  <button type=\"button\" data-s=\"4\" aria-pressed=\"false\">겹쳐 보면</button>\n</div>\n\n<div class=\"card sec\" id=\"c-s1\">\n  <div class=\"head\">\n    <div><div class=\"num\">01</div><h2>코히런트 이징 머신 (OPO 네트워크)</h2></div>\n    \n  </div>\n  <p class=\"idea\">광 파라메트릭 발진기는 발진할 때 위상이 0 또는 π 둘 중 하나로 잠긴다. 그 <span class=\"k\">두 갈래가 곧 스핀 ±1</span>이다. 발진기 사이를 결합해두고 펌프를 문턱 아래에서 천천히 올리면, 가장 적게 손해 보는 위상 조합이 먼저 켜진다 — <span class=\"k\">적어도 설계는 그렇다.</span> 아래에서 돌려보면 그게 보장이 아닌 것도 같이 보인다.</p>\n  <div class=\"split\">\n    <div class=\"fig\"><svg class=\"f\" id=\"c-f1\" viewBox=\"0 0 880 370\" role=\"img\" aria-label=\"펄스 펌프 → OPO 고리 → 호모다인 → FPGA 되먹임\"></svg></div>\n    <div>\n      <div class=\"btns\" style=\"margin-bottom:8px\">\n        <span class=\"chip\">노드</span>\n        <button type=\"button\" data-g=\"1n\" data-v=\"8\" aria-pressed=\"true\">8</button>\n        <button type=\"button\" data-g=\"1n\" data-v=\"12\" aria-pressed=\"false\">12</button>\n        <button type=\"button\" data-g=\"1n\" data-v=\"16\" aria-pressed=\"false\">16</button>\n      </div>\n      <div class=\"ctl\">\n        <div class=\"row\"><label for=\"c-c1p\">펌프 p</label><input type=\"range\" id=\"c-c1p\" min=\"60\" max=\"190\" step=\"1\" value=\"130\"><output id=\"c-o1p\"></output></div>\n        <div class=\"row\"><label for=\"c-c1k\">결합 K</label><input type=\"range\" id=\"c-c1k\" min=\"0\" max=\"40\" step=\"1\" value=\"12\"><output id=\"c-o1k\"></output></div>\n        <div class=\"row\"><label for=\"c-c1z\">잡음</label><input type=\"range\" id=\"c-c1z\" min=\"0\" max=\"60\" step=\"1\" value=\"12\"><output id=\"c-o1z\"></output></div>\n      </div>\n      <div class=\"btns\" style=\"margin-top:8px\">\n        <button type=\"button\" id=\"c-b1run\">한 번 돌리기</button>\n        <button type=\"button\" id=\"c-b1stat\">100회 통계</button>\n      </div>\n      <div class=\"read\" id=\"c-r1\"></div>\n      <p class=\"note\">실제로 적분한다 — ẋᵢ = (p−1−xᵢ²)xᵢ − K·Σⱼ wᵢⱼxⱼ + 잡음, 오일러 400스텝. 최적 컷은 2ⁿ 전수조사로 미리 구해놓고 비교한다.</p>\n    </div>\n  </div>\n  <div class=\"walk\">\n    <div class=\"walkhead\">\n      <h3>어떻게 돌아가나 — 하나씩 돌려보기</h3>\n      <div class=\"steps\" id=\"wtabs\">\n        <button type=\"button\" data-w=\"1\" aria-pressed=\"true\">1</button>\n        <button type=\"button\" data-w=\"2\" aria-pressed=\"false\">2</button>\n        <button type=\"button\" data-w=\"3\" aria-pressed=\"false\">3</button>\n        <button type=\"button\" data-w=\"4\" aria-pressed=\"false\">4</button>\n        <button type=\"button\" data-w=\"5\" aria-pressed=\"false\">5</button>\n        <button type=\"button\" data-w=\"6\" aria-pressed=\"false\">6</button>\n      </div>\n    </div>\n\n    <div class=\"wstep\" id=\"c-w1\">\n      <p class=\"wtext\"><b>펄스 하나가 스핀 하나다.</b> 축퇴 광 파라메트릭 발진기로 펄스를 수천 개 만든다. 섬유 고리를 한 바퀴 도는 동안 펄스들이 시간축에 줄지어 늘어서고, 그 줄 하나하나가 스핀이 된다. <b>고리 길이가 스핀 수의 상한을 정한다</b> — 둘을 움직여 보면 왜 그런지 숫자로 나온다.</p>\n      <div class=\"split\">\n        <div class=\"fig\"><svg class=\"f\" id=\"c-wf1\" viewBox=\"0 0 440 210\" role=\"img\" aria-label=\"섬유 고리와 펄스 열\"></svg></div>\n        <div>\n          <div class=\"ctl\">\n            <div class=\"row\"><label for=\"c-wc1L\">고리 길이</label><input type=\"range\" id=\"c-wc1L\" min=\"1\" max=\"200\" step=\"1\" value=\"10\"><output id=\"c-wo1L\"></output></div>\n            <div class=\"row\"><label for=\"c-wc1N\">스핀 수 N</label><input type=\"range\" id=\"c-wc1N\" min=\"0\" max=\"5\" step=\"1\" value=\"2\"><output id=\"c-wo1N\"></output></div>\n          </div>\n          <div class=\"read\" id=\"c-wr1\"></div>\n          <p class=\"note\">빛은 석영 섬유에서 n≈1.468 만큼 느려진다 — 진공의 2.04×10⁸ m/s. 라운드트립을 스핀 수로 나눈 게 슬롯 하나다.</p>\n        </div>\n      </div>\n    </div>\n\n    <div class=\"wstep\" id=\"c-w2\" hidden>\n      <p class=\"wtext\"><b>위상은 0 아니면 π.</b> 축퇴 OPO는 문턱을 넘는 순간 둘 중 하나로 잠기는데, 어느 쪽으로 잠길지는 미리 정해져 있지 않다. 잡음이 민다. 그 두 갈래를 +1, −1에 대응시킨다.</p>\n      <div class=\"split\">\n        <div class=\"fig\"><svg class=\"f\" id=\"c-wf2\" viewBox=\"0 0 440 210\" role=\"img\" aria-label=\"갈래질 그림\"></svg></div>\n        <div>\n          <div class=\"ctl\">\n            <div class=\"row\"><label for=\"c-wc2p\">펌프 p</label><input type=\"range\" id=\"c-wc2p\" min=\"0\" max=\"250\" step=\"1\" value=\"150\"><output id=\"c-wo2p\"></output></div>\n            <div class=\"row\"><label for=\"c-wc2z\">잡음 σ</label><input type=\"range\" id=\"c-wc2z\" min=\"1\" max=\"80\" step=\"1\" value=\"20\"><output id=\"c-wo2z\"></output></div>\n          </div>\n          <div class=\"btns\" style=\"margin-top:8px\">\n            <button type=\"button\" id=\"c-wb2one\">한 개 켜보기</button>\n            <button type=\"button\" id=\"c-wb2many\">50번 켜보기</button>\n          </div>\n          <div class=\"read\" id=\"c-wr2\"></div>\n          <p class=\"note\">ẋ = (p−1−x²)x + 잡음 을 실제로 적분한다. p&lt;1이면 0으로 죽고, p&gt;1이면 ±√(p−1)로 간다.</p>\n        </div>\n      </div>\n    </div>\n\n    <div class=\"wstep\" id=\"c-w3\" hidden>\n      <p class=\"wtext\"><b>J<sub>ij</sub>는 사실 FPGA가 만든다.</b> 결합 방법은 둘인데 나란한 선택지가 아니라 세대가 다르다. 광학적 지연선이 초기·소규모였고, 규모를 낸 건 전부 측정-피드백이다 — 2016년 NTT의 2000스핀, 2021년의 100,512스핀이 모두 이쪽이다(같은 2016년 스탠포드 쪽은 100스핀이었다). 펄스를 재서 Σⱼ Jᵢⱼxⱼ를 FPGA가 디지털로 계산하고 그 결과를 다시 빛에 실어준다. <b>J를 거의 자유롭게 쓸 수 있다는 CIM의 가장 큰 장점은, 광이 아니라 전자 쪽이 치르는 값이다.</b></p>\n      <div class=\"split\">\n        <div class=\"fig\"><svg class=\"f\" id=\"c-wf3\" viewBox=\"0 0 440 210\" role=\"img\" aria-label=\"측정-피드백 고리와 처리량\"></svg></div>\n        <div>\n          <div class=\"ctl\">\n            <div class=\"row\"><label for=\"c-wc3N\">스핀 수 N</label><input type=\"range\" id=\"c-wc3N\" min=\"0\" max=\"5\" step=\"1\" value=\"2\"><output id=\"c-wo3N\"></output></div>\n            <div class=\"row\"><label for=\"c-wc3L\">고리 길이</label><input type=\"range\" id=\"c-wc3L\" min=\"1\" max=\"200\" step=\"1\" value=\"10\"><output id=\"c-wo3L\"></output></div>\n            <div class=\"row\"><label for=\"c-wc3F\">FPGA 처리량</label><input type=\"range\" id=\"c-wc3F\" min=\"1\" max=\"400\" step=\"1\" value=\"20\"><output id=\"c-wo3F\"></output></div>\n          </div>\n          <div class=\"read\" id=\"c-wr3\"></div>\n          <p class=\"note\">조밀 결합이면 라운드트립 한 번에 N²번 곱해야 한다. 이게 안 되면 기계가 아예 못 돈다 — 벽에 적어둔 「측정-되먹임 지연」이 이것이다.</p>\n        </div>\n      </div>\n    </div>\n\n    <div class=\"wstep\" id=\"c-w4\" hidden>\n      <p class=\"wtext\"><b>설계 논리는 「최소 이득」이다.</b> 펌프를 문턱 아래에서 천천히 올리면 손실이 가장 작은 모드가 가장 먼저 발진한다. 결합이 만드는 손실이 스핀 배치마다 다르니, 가장 적게 손해 보는 배치가 먼저 켜지고 나머지는 이득을 빼앗겨 눌린다. <b>펌프를 올려보면 「천천히」가 왜 조건인지 보인다</b> — 빨리 올리면 여러 모드가 한꺼번에 문턱을 넘는다.</p>\n      <div class=\"split\">\n        <div class=\"fig\"><svg class=\"f\" id=\"c-wf4\" viewBox=\"0 0 440 210\" role=\"img\" aria-label=\"모드별 성장률\"></svg></div>\n        <div>\n          <div class=\"ctl\">\n            <div class=\"row\"><label for=\"c-wc4p\">펌프 p</label><input type=\"range\" id=\"c-wc4p\" min=\"40\" max=\"190\" step=\"1\" value=\"72\"><output id=\"c-wo4p\"></output></div>\n            <div class=\"row\"><label for=\"c-wc4K\">결합 K</label><input type=\"range\" id=\"c-wc4K\" min=\"1\" max=\"40\" step=\"1\" value=\"12\"><output id=\"c-wo4K\"></output></div>\n          </div>\n          <div class=\"read\" id=\"c-wr4\"></div>\n          <p class=\"note\">결합 행렬 J를 야코비 회전으로 실제 고유분해한다. 모드 k의 문턱은 p = 1 + K·λₖ, 성장률은 (p−1) − K·λₖ다. 그래프 크기는 위 카드의 노드 버튼을 따라간다.</p>\n        </div>\n      </div>\n    </div>\n\n    <div class=\"wstep\" id=\"c-w5\" hidden>\n      <p class=\"wtext\"><b class=\"w\">그런데 먼저 켜지는 모드가 바닥상태라는 보장은 없다.</b> 최소 이득 논증은 잡음이 없다는 가정 아래의 이상화다. 문턱 근처 선형 해석에서 먼저 켜지는 건 J의 최소 고유벡터인데, 그건 ±1 제약을 풀어버린 <b>연속 완화</b> 문제의 해지 이징 바닥상태가 아니다. 거기에 발진기들의 진폭이 서로 다르다는 문제가 겹친다(amplitude heterogeneity) — 고유벡터 성분의 크기가 제각각인 게 바로 그것이다.</p>\n      <div class=\"split\">\n        <div class=\"fig\"><svg class=\"f\" id=\"c-wf5\" viewBox=\"0 0 440 210\" role=\"img\" aria-label=\"최소 고유벡터 성분과 반올림\"></svg></div>\n        <div>\n          <div class=\"btns\" style=\"margin-bottom:8px\">\n            <button type=\"button\" id=\"c-wb5scan\">그래프 60개로 재보기</button>\n          </div>\n          <div class=\"read\" id=\"c-wr5\"></div>\n          <p class=\"note\">최소 고유벡터를 부호로 자른 해와, 2ⁿ 전수조사로 구한 진짜 최적을 같은 그래프에서 비교한다. 한 그래프만 보면 우연히 맞을 수 있어서 60개를 돌려보는 버튼을 뒀다. <b>위 카드의 노드를 16으로 올리고 다시 눌러봐라</b> — 적중률이 뚝 떨어진다.</p>\n        </div>\n      </div>\n    </div>\n\n    <div class=\"wstep\" id=\"c-w6\" hidden>\n      <p class=\"wtext\"><b>그래서 실제로는 여러 번 돌린다.</b> 초기조건을 바꿔 반복하고 가장 좋은 것을 고른다. 진폭을 공통 목표값으로 끌어당기는 오차보정 되먹임이 제안됐지만, 저자들 스스로 이 둘을 「부분적으로만」 해결한다고 쓴다. <b>그러면 「한 번 푸는 시간」은 라운드트립이 아니라 반복 횟수가 정한다.</b></p>\n      <div class=\"split\">\n        <div class=\"fig\"><svg class=\"f\" id=\"c-wf6\" viewBox=\"0 0 440 210\" role=\"img\" aria-label=\"반복에 따른 누적 성공확률\"></svg></div>\n        <div>\n          <div class=\"btns\" style=\"margin-bottom:8px\">\n            <button type=\"button\" id=\"c-wb6run\">1회 성공률 재보기 (100회)</button>\n          </div>\n          <div class=\"ctl\">\n            <div class=\"row\"><label for=\"c-wc6R\">반복 횟수 R</label><input type=\"range\" id=\"c-wc6R\" min=\"1\" max=\"200\" step=\"1\" value=\"20\"><output id=\"c-wo6R\"></output></div>\n          </div>\n          <div class=\"read\" id=\"c-wr6\"></div>\n          <p class=\"note\">99%로 답을 얻는 데 드는 반복 수 R₉₉ = ln(0.01)/ln(1−p)를 실측 p로 계산하고, 1단계의 라운드트립을 곱해 시간으로 바꾼다.</p>\n        </div>\n      </div>\n    </div>\n\n    <div class=\"nav\">\n      <button type=\"button\" id=\"c-wprev\">← 이전</button>\n      <button type=\"button\" id=\"c-wnext\">다음 →</button>\n    </div>\n  </div>\n  </div>\n\n<div class=\"card sec\" id=\"c-s2\">\n  <div class=\"head\">\n    <div><div class=\"num\">02</div><h2>공간광 이징 머신 (SPIM)</h2></div>\n    \n  </div>\n  <p class=\"idea\">SLM 화소 하나가 스핀 하나다. 빛을 통째로 모아 한 점에 맺으면 그 세기가 <span class=\"k\">전체 에너지를 한 번에</span> 준다 — 스핀이 몇 개든 측정 한 번은 한 프레임. 대신 결합 행렬을 자유롭게 못 쓰고, 프레임이 밀리초고, <span class=\"k\">필요한 프레임 수는 N과 함께 늘어난다</span>.</p>\n  <div class=\"split\">\n    <div class=\"fig\"><svg class=\"f\" id=\"c-f2\" viewBox=\"0 0 880 370\" role=\"img\" aria-label=\"레이저 → 진폭 마스크 → SLM 스핀 → 렌즈 → 카메라 → FPGA 되먹임\"></svg></div>\n    <div>\n      <div class=\"ctl\">\n        <div class=\"row\"><label for=\"c-c2n\">스핀 N</label><input type=\"range\" id=\"c-c2n\" min=\"0\" max=\"7\" step=\"1\" value=\"3\"><output id=\"c-o2n\"></output></div>\n        <div class=\"row\"><label for=\"c-c2k\">패턴 수 k</label><input type=\"range\" id=\"c-c2k\" min=\"1\" max=\"8\" step=\"1\" value=\"4\"><output id=\"c-o2k\"></output></div>\n        <div class=\"row\"><label for=\"c-c2f\">프레임 시간</label><input type=\"range\" id=\"c-c2f\" min=\"1\" max=\"200\" step=\"1\" value=\"50\"><output id=\"c-o2f\"></output></div>\n      </div>\n      <div class=\"btns\" style=\"margin-top:8px\">\n        <button type=\"button\" id=\"c-b2run\">담금질 돌리기</button>\n      </div>\n      <div class=\"read\" id=\"c-r2\"></div>\n      <p class=\"note\">Mattis 결합 Jᵢⱼ = (1/N)Σₖξᵢᵏξⱼᵏ 으로 에너지를 실제로 계산하고, 프레임마다 한 번 읽는 담금질을 1200회 돈다. 걸린 시간은 프레임 수 × 프레임 시간이다.</p>\n    </div>\n  </div>\n</div>\n\n<div class=\"card sec\" id=\"c-s3\">\n  <div class=\"head\">\n    <div><div class=\"num\">03</div><h2>포토닉 리커런트 이징 샘플러</h2></div>\n    \n  </div>\n  <p class=\"idea\">앞의 둘은 답 하나를 찾으려고 잡음을 <span class=\"k\">줄인다</span>. 이쪽은 잡음을 자원으로 쓴다 — 되먹임 고리에 광 잡음을 일부러 남겨두면 계가 한 자리에 멈추지 않고 상태 공간을 돌아다니고, 그 체류 빈도가 <span class=\"k\">볼츠만 분포</span>를 이룬다. 얻는 건 최적해 하나가 아니라 분포다.</p>\n  <div class=\"split\">\n    <div class=\"fig\"><svg class=\"f\" id=\"c-f3\" viewBox=\"0 0 880 370\" role=\"img\" aria-label=\"LD → 감쇠기 → 변조기 → MZI 메시 → 문턱 → FPGA 되먹임\"></svg></div>\n    <div>\n      <div class=\"ctl\">\n        <div class=\"row\"><label for=\"c-c3z\">잡음 σ</label><input type=\"range\" id=\"c-c3z\" min=\"4\" max=\"120\" step=\"1\" value=\"30\"><output id=\"c-o3z\"></output></div>\n        <div class=\"row\"><label for=\"c-c3m\">샘플 수</label><input type=\"range\" id=\"c-c3m\" min=\"200\" max=\"4000\" step=\"100\" value=\"1500\"><output id=\"c-o3m\"></output></div>\n      </div>\n      <div class=\"btns\" style=\"margin-top:8px\">\n        <button type=\"button\" id=\"c-b3run\">다시 뽑기</button>\n        <button type=\"button\" id=\"c-b3ov\" aria-pressed=\"true\">이론값 겹치기</button>\n      </div>\n      <div class=\"read\" id=\"c-r3\"></div>\n      <p class=\"note\">10노드 그래프를 글라우버 되먹임으로 실제 샘플링하고, 2¹⁰=1024 상태 전수조사로 구한 볼츠만 분포를 점선으로 겹친다. 두 곡선이 겹치면 「분포를 뽑았다」가 말 그대로 참이라는 뜻이다.</p>\n  </div>\n  </div>\n</div>\n\n<div class=\"card sec close\" id=\"c-s4\">\n  <h2 style=\"font-size:16px\">셋을 겹쳐 보면</h2>\n  <p style=\"margin-top:8px\"><b>셋 다 같은 이징 에너지를 내려가지만, 무엇을 희생했는지가 다르다.</b> CIM은 결합 행렬을 거의 자유롭게 쓸 수 있는 대신 스핀을 시간축에 줄 세워 쓴다 — 펄스가 N개면 한 라운드트립이 N 슬롯이라, 스핀을 늘리면 한 바퀴 도는 시간이 비례해 늘어난다. SPIM은 정반대다. 스핀을 10만 개로 늘려도 에너지 한 번 읽는 값은 한 프레임으로 그대로다 — 광이 합산을 공짜로 해주니까. 그런데 02를 실제로 돌려보면 이게 공짜가 아닌 게 드러난다. 프레임 수를 1200장으로 고정해놓고 N만 키우면, N=200에서 달성 가능한 바닥의 90% 가까이 내려가던 것이 N=50,000에서는 1%도 못 내려간다. 즉 비용은 프레임 <b>한 장</b>에서 사라지고 프레임 <b>장수</b>로 되살아난다. 거기에 결합 행렬이 Mattis 꼴(소수의 패턴으로 만든 낮은 랭크)에 묶인다. 샘플러는 두 축을 다 포기하고 세 번째를 가져간다 — 답이 아니라 분포.</p>\n  <p><b>그래서 쓸 곳이 갈린다.</b> 조밀한 결합에 스핀이 수백~수천이면 CIM 쪽, 결합이 몇 개 패턴의 합으로 표현되고 스핀이 수만이면 SPIM 쪽이다. 그리고 애초에 분포가 필요한 작업 — 볼츠만 머신 학습, 베이지안 추론, 확률적 조합 생성 — 은 1·2로는 할 수 없다. 해 하나를 아무리 빨리 찾아도 그건 분포의 한 점일 뿐이다.</p>\n  <table class=\"cmp\">\n    <tr><th>축</th><th>01 CIM</th><th>02 SPIM</th><th>03 샘플러</th></tr>\n    <tr><td>스핀이 사는 곳</td><td>시간다중 광펄스의 위상</td><td>SLM 화소의 위상</td><td>되먹임 고리의 광 진폭</td></tr>\n    <tr><td>결합 Jᵢⱼ</td><td>거의 자유 (측정-되먹임)</td><td>Mattis 꼴 · 낮은 랭크</td><td>자유 (전자 되먹임)</td></tr>\n    <tr><td>스핀 수를 늘리면</td><td>라운드트립이 N에 비례해 길어진다</td><td>프레임 한 장 값은 그대로, 필요한 <b>장수</b>가 늘어난다</td><td>갱신 횟수가 늘어난다</td></tr>\n    <tr><td>한 번 갱신</td><td class=\"n\">N × ~ns 급</td><td class=\"n\">프레임 1장 = ms 급</td><td class=\"n\">전자 되먹임이 결정</td></tr>\n    <tr><td>얻는 것</td><td>해 하나 (국부 최적 가능)</td><td>해 하나</td><td>해의 <span class=\"k\">분포</span></td></tr>\n    <tr><td>막히는 곳</td><td>되먹임 지연이 라운드트립보다 길면 못 돈다</td><td>프레임레이트 · 랭크 제한</td><td>잡음↔온도 대응을 측정해야 안다</td></tr>\n  </table>\n  <p style=\"margin-top:12px\"><b>숫자를 믿을 때 조심할 것.</b> 이 분야에서 「GPU 대비 몇백 배」가 나올 때, 대개 광 쪽은 라운드트립 시간만 세고 측정·AD 변환·FPGA 되먹임·SLM 로딩은 빼고, GPU 쪽은 담금질 코드를 최적화하지 않은 채 비교한다. 이 페이지가 내놓는 숫자도 전부 <span class=\"k\">이 시뮬레이션 안의 숫자</span>지 측정값이 아니다 — 프레임 시간이나 슬롯 시간처럼 물리에서 온 값은 가정으로 명시해뒀다.</p>\n</div>\n\n<div class=\"pending\" id=\"c-pend\">\n  <b>이 페이지가 안 다루는 것</b> — 같은 분류표의 B군(리저버·스파이킹·텐서코어) · D군(전광 논리·스위칭) · E군(in-sensor·전처리기) · F군(선형광학 양자컴·주파수 콤)은 다른 장이다. 여기서 쓴 잡음 세기·결합 상수는 물리 단위가 아니라 <span style=\"color:var(--wall)\">무차원 모형 값</span>이고, 실제 소자의 값과 맞춘 적 없다(미확인).\n</div>\n</section>",
   run: function (document, getComputedStyle, MOD) {
 
 
@@ -91,26 +91,27 @@ function r1(){
   const s=new Int8Array(n);
   for(let i=0;i<n;i++) s[i]=fr[i]>=0?1:-1;
   const cut=cutOf(E,s);
-  const cx=118, cy=132, R=92;
+  // 보조 패널(440×140): 왼쪽 그래프 · 오른쪽 진폭 궤적 — 옛 그림을 납작하게 다시 놓은 것
+  const cx=62, cy=76, R=48;
   const px=i=>cx+R*Math.cos(-Math.PI/2+2*Math.PI*i/n);
   const py=i=>cy+R*Math.sin(-Math.PI/2+2*Math.PI*i/n);
-  let g='<text class="m" x="14" y="20" font-size="10">발진기 '+n+'개 · 간선 '+E.length+'개 — 색이 위상(0 / π)</text>';
+  let g='<text class="m" x="6" y="14" font-size="10">발진기 '+n+' · 간선 '+E.length+'</text>';
   for(let e=0;e<E.length;e++){
     const a=E[e][0], b=E[e][1], isCut=s[a]!==s[b];
     g+='<line x1="'+fmt(px(a),1)+'" y1="'+fmt(py(a),1)+'" x2="'+fmt(px(b),1)+'" y2="'+fmt(py(b),1)+'" stroke="'+(isCut?'var(--probe)':'var(--rule)')+'" stroke-width="'+(isCut?2.1:1.1)+'" opacity="'+(isCut?0.95:0.5)+'"/>';
   }
   for(let i=0;i<n;i++){
-    const amp=Math.min(1,Math.abs(fr[i])/1.1), rr=5+7*amp;
+    const amp=Math.min(1,Math.abs(fr[i])/1.1), rr=3+4.5*amp;
     const up=fr[i]>=0;
     g+='<circle cx="'+fmt(px(i),1)+'" cy="'+fmt(py(i),1)+'" r="'+fmt(rr,1)+'" fill="'+(up?'var(--beam)':'var(--warm)')+'" opacity="'+fmt(0.25+0.7*amp,2)+'" stroke="var(--panel)" stroke-width="1"/>';
   }
-  g+='<text class="a" x="14" y="250" font-size="10">● 위상 0 (+1)</text>';
-  g+='<text class="m" x="14" y="264" font-size="10" fill="var(--warm)">● 위상 π (−1)</text>';
+  g+='<text class="a" x="6" y="138" font-size="9.5">● 0 (+1)</text>';
+  g+='<text class="m" x="62" y="138" font-size="9.5" fill="var(--warm)">● π (−1)</text>';
   // 오른쪽: 진폭 궤적
-  const X0=236, X1=430, Y0=40, Y1=210;
+  const X0=140, X1=428, Y0=22, Y1=118;
   g+='<rect class="gridl" x="'+X0+'" y="'+Y0+'" width="'+(X1-X0)+'" height="'+(Y1-Y0)+'" fill="none" stroke-width="1"/>';
   g+='<line class="gridl" x1="'+X0+'" y1="'+((Y0+Y1)/2)+'" x2="'+X1+'" y2="'+((Y0+Y1)/2)+'" stroke-width="1" stroke-dasharray="3 3"/>';
-  g+='<text class="m" x="'+X0+'" y="32" font-size="10">발진기 진폭 xᵢ(t)</text>';
+  g+='<text class="m" x="'+X0+'" y="14" font-size="10">발진기 진폭 xᵢ(t)</text>';
   g+='<text class="m" x="'+(X1+2)+'" y="'+((Y0+Y1)/2+3)+'" font-size="9" text-anchor="end">0</text>';
   if(G1.traj.length>1){
     const T=G1.traj.length, sx=t=>X0+(X1-X0)*t/(T-1), sy=v=>(Y0+Y1)/2-(Y1-Y0)/2*clamp(v/1.6,-1,1);
@@ -123,9 +124,49 @@ function r1(){
     g+='<line x1="'+fmt(mx,1)+'" y1="'+Y0+'" x2="'+fmt(mx,1)+'" y2="'+Y1+'" stroke="var(--probe)" stroke-width="1.4" opacity=".8"/>';
   }
   // 펌프 램프 표시
-  g+='<text class="m" x="'+X0+'" y="230" font-size="9.5">펌프를 0 → p로 올리는 동안</text>';
-  g+='<text class="m" x="'+X0+'" y="244" font-size="9.5">진폭이 ±로 갈라진다</text>';
-  $('f1').innerHTML=g;
+  g+='<text class="m" x="'+X0+'" y="134" font-size="9.5">펌프 0 → p 동안 ±로 갈라진다</text>';
+  // ── 주 패널: 펄스 LD → SHG(펌프) → PPLN 고리(OPO) → 탭 → 호모다인 → ADC → FPGA → EOM 주입 → 고리 ──
+  const P=CYC.pen();
+  P.laser(42,110,{id:'src-pulse'});
+  P.split(65,110,[22,45,186],{id:false,L:40});
+  // 기준 빛(LO): 같은 광원에서 — 위상을 펌프에 묶는다
+  P.beam([[105,22],[610,22],[610,97],[633,97]],{w:1.4,op:.8});
+  P.lab(300,15,'LO — 같은 광원',{s:9.5});
+  P.lock(520,13,50,18,{lab:''}); P.lab(545,44,'위상 락',{a:'middle',c:'probe',s:9.5});
+  // 고리(반시계): 아래 왼→오, 오른쪽 위로, 위 오→왼, 왼쪽 아래로
+  P.path('M318 165 H482',{c:'beam',w:1.8,op:.75});
+  P.path('M518 165 H546 Q560 165 560 151 V94 Q560 80 546 80 H234 Q220 80 220 94 V151 Q220 165 234 165 H282',{c:'beam',w:1.8,op:.75});
+  P.beam([[352,80],[336,80]],{arrow:true,w:1.8}); P.beam([[410,165],[426,165]],{arrow:true,w:1.8});
+  P.box(275,80,52,22,'PPLN',{id:'freq',s:10}); P.lab(275,104,'OPO 0/π',{a:'middle',s:9.5});
+  P.box(150,45,44,22,'SHG',{id:'freq',s:10}); P.at2('freq',[172,34]);
+  P.beam([[105,45],[128,45]]);
+  P.beam([[172,45],[262,45],[262,69]],{dash:[5,3],arrow:true,w:1.6}); P.lab(196,39,'펌프 2ω',{s:9.5});
+  P.coil(390,80,{r:11}); P.lab(390,62,'수 km 섬유',{a:'middle',s:9.5});
+  P.iso(480,80); P.lab(480,64,'단방향',{a:'middle',s:9.5});
+  // 고리 속 펄스 열 = 스핀 열 (지금 프레임의 진폭·부호)
+  for(let i=0;i<n;i++){
+    const x=252+i*(276/Math.max(1,n-1)), a=clamp(fr[i]/1.1,-1,1), hgt=4+16*Math.abs(a);
+    P.path('M'+fmt(x,1)+' 124 V'+fmt(124-(a>=0?1:-1)*hgt,1),{c:a>=0?'beam':'warm',w:3,op:.35+.6*Math.abs(a)});
+  }
+  P.path('M246 124 H534',{c:'rule',w:1});
+  P.lab(390,156,'펄스 '+n+'개 = 스핀 '+n+'개',{a:'middle',s:9.5});
+  // 주입·탭 결합기
+  P.coupler(300,172,{w:36,g:7}); P.coupler(500,172,{w:36,g:7}); P.at2('bs',[518,186]);
+  P.lab(500,198,'탭',{a:'middle',s:9.5});
+  P.beam([[518,179],[600,179],[600,123],[633,123]],{w:1.4});
+  P.bal(640,110); P.lab(640,152,'호모다인',{a:'middle',s:10});
+  P.wire([[664,110],[684,110]]); P.box(705,110,40,28,'ADC',{id:'adc',s:10});
+  P.wire([[725,110],[757,110]]); P.box(790,110,64,34,'FPGA',{id:'fpga',tone:'probe',sub:'Σ J·x'});
+  // 되먹임: FPGA → (DAC) → EOM 이 주입 세기에 Σ J·x 를 싣는다 — 가중치가 사는 길이라 붉게
+  P.wire([[822,110],[850,110],[850,212],[150,212],[150,198]]); P.lab(600,207,'Σ J·x → 주입 세기',{c:'probe',s:9.5});
+  P.beam([[105,186],[130,186]]);
+  P.mod(150,186,{red:true});
+  P.beam([[170,186],[255,186],[282,179]],{w:2.8}); P.lab(176,177,'주입 J',{s:9.5,c:'beam'});
+  P.text(760,160,'컷 '+cut+' / '+G1.opt,{s:10.5,c:'probe'});
+  P.legend(16,250,['펄스 LD','SHG·PPLN','섬유 고리','탭','호모다인','FPGA','주입']);
+  P.aux(470,222,402,142,'그래프와 진폭 — 펌프를 올리는 동안');
+  P.raw(CYC.sub(474,236,394,124,'0 0 440 140',g));
+  $('f1').innerHTML=P.out();
   // 라운드트립 산수 — 시간다중 CIM 가정: 펄스 슬롯 2.5 ns
   const slot=2.5, rt=n*slot, steps=400, total=rt*steps;
   let out='컷 <b>'+cut+'</b> / 최적 <b>'+G1.opt+'</b> ('+fmt(cut/G1.opt*100,1)+'%)<br>'+
@@ -200,22 +241,10 @@ function r2(){
   r2labels();
   const N=N2LIST[+$('c2n').value], K=+$('c2k').value, fms=+$('c2f').value/10;
   const frames=G2.iters||1200;
-  let g='<text class="m" x="14" y="20" font-size="10">SLM 한 장 = 스핀 '+N.toLocaleString()+'개 · 패턴 '+K+'장</text>';
-  // SLM 모사 격자
-  const px=7, cols=16, rows=12;
-  for(let i=0;i<rows;i++)for(let j=0;j<cols;j++){
-    const up=Math.sin(i*1.7+j*2.3+K)>0;
-    g+='<rect x="'+(16+j*px)+'" y="'+(34+i*px)+'" width="'+(px-1)+'" height="'+(px-1)+'" fill="'+(up?'var(--beam)':'var(--warm)')+'" opacity=".55"/>';
-  }
-  g+='<text class="m" x="16" y="'+(34+rows*px+14)+'" font-size="9.5">(일부만 표시)</text>';
-  g+='<path class="bm" stroke-width="1.6" opacity=".45" d="M138 70 L186 76 M138 90 L186 76 M138 50 L186 76"/>';
-  g+='<circle class="pdf" cx="194" cy="76" r="7" opacity=".85"/>';
-  g+='<text class="p" x="206" y="72" font-size="10">세기 1점</text>';
-  g+='<text class="m" x="206" y="86" font-size="9.5">= 에너지 전체</text>';
-  // 에너지 하강 곡선
-  const X0=150, X1=430, Y0=120, Y1=228;
+  // 보조 패널(440×140): 에너지 하강 곡선 — 옛 그림을 납작하게 다시 놓은 것
+  let g='<text class="m" x="40" y="14" font-size="10">스핀당 에너지 — 스핀 '+N.toLocaleString()+' · 패턴 '+K+'장</text>';
+  const X0=40, X1=430, Y0=22, Y1=118;
   g+='<rect class="gridl" x="'+X0+'" y="'+Y0+'" width="'+(X1-X0)+'" height="'+(Y1-Y0)+'" fill="none" stroke-width="1"/>';
-  g+='<text class="m" x="'+X0+'" y="112" font-size="10">스핀당 에너지 (프레임 수에 따라)</text>';
   if(G2.curve.length>1){
     const C=G2.curve, lo=Math.min.apply(null,C), hi=Math.max.apply(null,C), sp=(hi-lo)||1;
     const sx=t=>X0+(X1-X0)*t/(C.length-1);
@@ -225,15 +254,34 @@ function r2(){
       d+=(t?'L':'M')+fmt(sx(t),1)+' '+fmt(y,1);
     }
     g+='<path d="'+d+'" fill="none" stroke="var(--beam)" stroke-width="1.8"/>';
-    g+='<text class="m" x="'+(X0+3)+'" y="'+(Y0+12)+'" font-size="9">'+fmt(hi/N,4)+' (시작)</text>';
-    g+='<text class="m" x="'+(X0+3)+'" y="'+(Y1-5)+'" font-size="9">'+fmt(lo/N,4)+' (바닥)</text>';
+    g+='<text class="m" x="'+(X1-4)+'" y="'+(Y0+12)+'" font-size="9" text-anchor="end">'+fmt(hi/N,4)+' (시작)</text>';
+    g+='<text class="m" x="'+(X1-4)+'" y="'+(Y1-5)+'" font-size="9" text-anchor="end">'+fmt(lo/N,4)+' (바닥)</text>';
     g+='<text class="m" x="'+(X1-4)+'" y="'+(Y1+14)+'" font-size="9" text-anchor="end">'+frames+' 프레임</text>';
   }else{
     g+='<text class="m" x="'+(X0+10)+'" y="'+((Y0+Y1)/2)+'" font-size="10">「담금질 돌리기」를 눌러라</text>';
   }
-  g+='<text class="m" x="14" y="250" font-size="10">한 프레임 = 설정 한 번 올리고 에너지 한 번 읽기</text>';
-  g+='<text class="m" x="14" y="264" font-size="10">N이 커질수록 같은 프레임 수로는 덜 내려간다 — 그게 진짜 벽이다</text>';
-  $('f2').innerHTML=g;
+  // ── 주 패널: LD → 진폭 마스크(ξ = J) → SLM(스핀 0/π) → 렌즈(푸리에) → 카메라(초점 세기 = 에너지) → FPGA → SLM ──
+  const reach0=G2.curve.length>1?clamp(G2.E1/N/(-0.5),0,1):0, Y=110;
+  const P=CYC.pen();
+  P.laser(40,Y);
+  // 넓힌 평면파 → 마스크 → SLM → 렌즈, 렌즈 뒤에서 한 점으로 모인다
+  const sheet=(x0,h0,x1,h1)=>{P.path('M'+x0+' '+(Y-h0)+' L'+x1+' '+(Y-h1)+' L'+x1+' '+(Y+h1)+' L'+x0+' '+(Y+h0)+' Z',{c:'none',f:'beam',fo:.13});
+    P.beam([[x0,Y-h0],[x1,Y-h1]],{w:1,op:.7}); P.beam([[x0,Y+h0],[x1,Y+h1]],{w:1,op:.7});};
+  sheet(63,4,145,40); sheet(155,40,208,40); sheet(284,40,355,40); sheet(365,40,443,1);
+  P.plate(150,Y,88,{n:8,seed:K,lab:'진폭 마스크'}); P.lab(150,Y-52,'ξ → J',{a:'middle',s:9.5,c:'beam'});
+  P.grid(210,70,72,80,8,8,{tone:'ink',vals:(i,j)=>Math.sin(i*1.7+j*2.3+K)>0?.85:.12});
+  P.lab(246,58,'SLM · 스핀 0/π',{a:'middle',s:10});
+  P.lens(360,Y,88,{lab:'푸리에 렌즈'});
+  P.cam(470,Y,52,52,{n:5,lab:'카메라',vals:(i,j)=>(i===2&&j===2)?.2+.8*reach0:.08});
+  P.lab(470,72,'초점 세기 = 에너지',{a:'middle',s:9.5});
+  P.wire([[496,Y],[540,Y]]);
+  P.box(575,Y,64,34,'FPGA',{id:'fpga',tone:'probe',sub:'뒤집기 결정'});
+  // 되먹임: 다음 스핀 배치를 SLM 에 다시 올린다 — 한 바퀴 = 프레임 한 장
+  P.wire([[607,Y],[640,Y],[640,200],[246,200],[246,154]]); P.lab(420,195,'다음 스핀 배치 = 프레임 한 장',{c:'probe',s:9.5});
+  P.legend(16,250,['LD','진폭 마스크','SLM 스핀','렌즈','카메라','FPGA']);
+  P.aux(470,222,402,142,'에너지 하강 — 프레임 수에 따라');
+  P.raw(CYC.sub(474,236,394,124,'0 0 440 140',g));
+  $('f2').innerHTML=P.out();
   const wall=frames*fms;
   let out;
   if(G2.curve.length>1){
@@ -302,8 +350,9 @@ function r3(){
   r3labels();
   const E=G3.E, M=E.length, beta=beta3();
   const h=G3.hist, ex=G3.exact;
-  let g='<text class="m" x="14" y="20" font-size="10">같은 10노드 그래프를 '+(+$('c3m').value).toLocaleString()+'번 읽은 결과</text>';
-  const X0=34, X1=424, Y0=42, Y1=196;
+  // 보조 패널(440×140): 컷 값 분포 — 옛 그림을 납작하게 다시 놓은 것
+  let g='<text class="m" x="14" y="14" font-size="10">빈도 — 10노드 그래프를 '+(+$('c3m').value).toLocaleString()+'번 읽은 결과</text>';
+  const X0=34, X1=424, Y0=26, Y1=108;
   g+='<line class="gridl" x1="'+X0+'" y1="'+Y1+'" x2="'+X1+'" y2="'+Y1+'" stroke-width="1"/>';
   g+='<line class="gridl" x1="'+X0+'" y1="'+Y0+'" x2="'+X0+'" y2="'+Y1+'" stroke-width="1"/>';
   const cLo=Math.max(0,Math.floor(M*0.35)), cHi=M;
@@ -334,10 +383,43 @@ function r3(){
     g+='<text class="i" x="'+(X1-4)+'" y="'+(Y0+2)+'" font-size="9.5" text-anchor="end">--- 전수조사 볼츠만</text>';
   }
   g+='<text class="m" x="'+((X0+X1)/2)+'" y="'+(Y1+26)+'" font-size="10" text-anchor="middle">컷 값 (오른쪽이 좋은 해 · 최적 '+G3.opt+')</text>';
-  g+='<text class="m" x="14" y="'+(Y0-10)+'" font-size="10">빈도</text>';
-  g+='<text class="m" x="14" y="244" font-size="10">잡음을 줄이면(σ↓) 막대가 오른쪽 끝으로 몰린다 — 그게 1·2가 하는 일이다.</text>';
-  g+='<text class="m" x="14" y="260" font-size="10">잡음을 키우면 퍼진다. 어느 쪽이 쓸모 있는지는 문제가 정한다.</text>';
-  $('f3').innerHTML=g;
+  // ── 주 패널: LD → VOA(잡음 = 온도) → 1×N → 변조기(스핀 x) → MZI 메시(J) → PD → TIA → 문턱 → ADC → FPGA → 변조기 ──
+  const sg=clamp((+$('c3z').value-4)/116,0,1), YC=[70,100,130,160], Ym=115;
+  const P=CYC.pen();
+  P.laser(40,Ym,{lab:'LD'});
+  P.beam([[63,Ym],[85,Ym]]);
+  P.box(105,Ym,40,24,'VOA',{id:'voa',s:10,f:'ink',fo:.06+.3*sg}); P.lab(105,Ym+26,'잡음 = 온도',{a:'middle',s:9.5});
+  P.beam([[125,Ym],[130,Ym]],{op:1-.55*sg});
+  P.split(130,Ym,YC,{L:38,op:1-.55*sg});
+  YC.forEach((y,i)=>{P.beam([[168,y],[176,y]]); P.mod(192,y,{w:32,lab:'x'+'₁₂₃₄'[i]});});
+  // MZI 메시: 결합기(2×2) 사이사이 위상(붉음) = J
+  P.zone(222,50,196,128,'MZI 메시 · J');
+  const COLS=[{x:258,pr:[[0,1],[2,3]]},{x:318,pr:[[1,2]]},{x:378,pr:[[0,1],[2,3]]}], hw=17;
+  YC.forEach((y,i)=>{
+    const gaps=[]; COLS.forEach(c=>c.pr.forEach(q=>{if(q.indexOf(i)>=0) gaps.push(c.x);}));
+    let x0=208; gaps.forEach(x=>{P.beam([[x0,y],[x-hw,y]],{w:1.4}); x0=x+hw;}); P.beam([[x0,y],[445,y]],{w:1.4});
+  });
+  COLS.forEach(c=>c.pr.forEach(q=>P.coupler(c.x,(YC[q[0]]+YC[q[1]])/2,{w:2*hw,g:15})));
+  [[232,0,.8],[232,2,.4],[288,0,.55],[288,2,.9],[348,1,.65],[408,0,.35],[408,2,.75]].forEach(t=>P.ps(t[0],YC[t[1]],{w:14,v:t[2]}));
+  // 검출 → TIA → 문턱(잡음 섞인 ±1) → ADC
+  YC.forEach((y,i)=>{P.pd(452,y,{v:[.8,.3,.6,.45][i]}); P.wire([[461,y],[480,y]],{arrow:false});});
+  P.box(500,Ym,40,118,'TIA',{id:'tia',s:10});
+  const amp=1+5*sg;
+  YC.forEach(y=>{let d='M520 '+y; for(let k=1;k<=6;k++) d+=' L'+(520+k*3.5)+' '+fmt(y+(k%2?-amp:amp),1); P.path(d+' L546 '+y,{c:'probe',w:1.1});});
+  P.box(570,Ym,48,118,'',{id:'eana'});
+  const kk=2+10*(1-sg); let sd='';
+  for(let k=0;k<=24;k++){const u=-1+k/12; sd+=(k?' L':'M')+fmt(570+18*u,1)+' '+fmt(Ym-4-16*(2/(1+Math.exp(-kk*u))-1),1);}
+  P.path(sd,{c:'probe',w:1.4}); P.text(570,Ym+34,'문턱',{a:'middle',c:'ink',s:10.5}); P.text(570,Ym-30,'±1',{a:'middle',c:'ink',s:10});
+  YC.forEach(y=>P.wire([[594,y],[614,y]],{arrow:false}));
+  P.box(636,Ym,40,118,'ADC',{id:'adc',s:10});
+  P.wire([[656,Ym],[686,Ym]]);
+  P.box(720,Ym,64,40,'FPGA',{id:'fpga',tone:'probe',sub:'표본 쌓기'});
+  // 되먹임: 뽑은 ±1 을 다음 바퀴 변조기에 — 이 반복이 곧 샘플링
+  P.wire([[752,Ym],[780,Ym],[780,206],[192,206],[192,172]]); P.lab(420,201,'다음 스핀 x — 반복 = 샘플링',{c:'probe',s:9.5});
+  P.legend(16,250,['LD','VOA','1×N','변조 x','MZI J','PD·TIA','문턱','ADC·FPGA']);
+  P.aux(470,222,402,142,'해의 분포 — 볼츠만과 겹쳐 보기');
+  P.raw(CYC.sub(474,236,394,124,'0 0 440 140',g));
+  $('f3').innerHTML=P.out();
   if(h){
     let best=cLo, hsum=0, mean=0;
     for(let c=0;c<=M;c++){if(h[c]>h[best])best=c; if(h[c]>0) hsum-=h[c]*Math.log2(h[c]); mean+=c*h[c];}

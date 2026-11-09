@@ -34,6 +34,9 @@ body[data-page="glossary"] aside.side{gap:16px}
 .gl-box{display:flex;flex-direction:column;gap:6px;padding:12px 14px;background:var(--panel);border:1px solid var(--rule);border-radius:8px}
 .gl-box .lb{font-size:11px;letter-spacing:0}
 .gl-x{margin:0;font-size:14px;line-height:1.8}
+.gl-insts{display:flex;flex-wrap:wrap;gap:5px}
+.gl-inst{font-size:12.5px;padding:2px 9px;border-radius:999px;border:1px solid var(--rule);color:var(--ui);text-decoration:none}
+.gl-inst:hover{border-color:var(--ui)}
 .gl-links{display:flex;flex-direction:column;gap:6px}
 .gl-go{display:flex;justify-content:space-between;gap:10px;padding:10px 12px;border:1px solid var(--rule);border-radius:8px;background:var(--panel);text-decoration:none;color:var(--ink);font-size:13.5px}
 .gl-go:hover{border-color:var(--beam);color:var(--ink)}

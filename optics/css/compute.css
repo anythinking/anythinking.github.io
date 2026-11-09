@@ -28,6 +28,9 @@ aside.cmp-side{padding:22px 28px 28px;gap:20px}
 .cmp-ovt{font-family:var(--serif);font-size:16px;font-weight:700;line-height:1.4;text-wrap:pretty}
 .cmp-ovn{font-family:var(--mono);font-size:11px;color:var(--muted);white-space:nowrap}
 .cmp-ovn.hl{color:var(--probe)}
+.cmp-ovinst{font-size:11px;line-height:18px;padding:0 8px;border-radius:999px;border:1px solid var(--rule);color:var(--ui);text-decoration:none;white-space:nowrap}
+.cmp-ovinst:hover{border-color:var(--ui)}
+.cmp-ovrow.cmp-ovhl{background:var(--probetint);margin:0 -12px;padding-left:12px;padding-right:12px;scroll-margin-top:72px}
 .cmp-ovd{font-size:12.5px;line-height:1.65;color:var(--muted);text-wrap:pretty}
 .cmp-ovtags{display:flex;gap:5px;flex-wrap:wrap;margin-top:2px}
 .cmp-sv,.cmp-cv{font-size:11px;padding:1px 8px;border-radius:999px;white-space:nowrap}
@@ -63,13 +66,14 @@ aside.cmp-side{padding:22px 28px 28px;gap:20px}
 .cmp-wallbox{font-size:13px!important;line-height:1.65!important;padding:8px 11px;border-radius:6px}
 
 /* 그림판: 모눈 종이. 그림 자체는 밝은 팔레트로 그려져 있어 다크 모드에선 밝은 판 위에 둔다 */
-.cmp-figbox{position:relative;flex:1;min-height:0;display:flex;flex-direction:column;justify-content:safe center;padding:64px 48px 28px;background-color:var(--panel);background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);background-size:32px 32px}
+.cmp-figbox{position:relative;flex:1 0 auto;display:flex;flex-direction:column;justify-content:safe center;padding:64px 48px 28px;background-color:var(--panel);background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);background-size:32px 32px}
 .cmp-figlabel{position:absolute;top:20px;left:24px;right:120px;font-family:var(--mono);font-size:11px;color:var(--muted);letter-spacing:.08em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .cmp-markbtn{position:absolute;top:14px;right:20px}
-.cmp-figwrap{
+/* 그림 자리: 가운데 정렬, 마커(.cmp-marks)의 기준 상자 */
+.cmp-figwrap{position:relative;width:100%;margin-inline:auto;
   --beam:#D62A1F;--probe:#2457E6;--warm:#D1A017;--wall:#6B5B4E;--panel:#FFFFFF;--ink:#16233A;--muted:#55657F;--faint:#8A97AD;--rule:#D5DCE8;--grid:#E9EEF5;--bg:#F8F9FB;--figbg:#FFFFFF}
 .cmp-figwrap > svg,.cmp-figwrap > canvas{width:100%;height:auto;display:block;overflow:visible;font-family:var(--mono)}
-@media (prefers-color-scheme:dark){.cmp-figwrap{--figbg:#FFFFFF;padding:10px}}
+@media (prefers-color-scheme:dark){.cmp-figwrap{--figbg:#FFFFFF;padding:10px}.cmp-figwrap > .cmp-marks{inset:10px}}
 /* 옛 그림의 클래스 → 색 (옛 장의 스타일시트를 대신한다) */
 .cmp-figwrap svg .wg{fill:none;stroke:var(--faint)}
 .cmp-figwrap svg .bm{fill:none;stroke:var(--beam);stroke-linecap:round}
@@ -163,7 +167,7 @@ aside.cmp-side{padding:22px 28px 28px;gap:20px}
 #cmp-dev .note{font-size:13px}
 
 /* 부품 선반(그림 아래) */
-#cmp-shelf{display:flex;flex-wrap:wrap;gap:6px;align-items:center;padding:10px 4px 4px}
+#cmp-shelf{display:flex;flex-wrap:wrap;gap:6px;align-items:center;padding:10px 12px 28px}
 #cmp-shelf:empty{display:none}
 #cmp-shelf .lb{font-size:10.5px;margin-right:4px;white-space:nowrap}
 .cmp-part{font:inherit;font-size:12.5px;line-height:1.4;padding:3px 9px;border-radius:999px;border:1px solid var(--rule);background:var(--panel);color:var(--muted);cursor:pointer;display:inline-flex;align-items:baseline;gap:5px;white-space:nowrap}
@@ -186,7 +190,8 @@ aside.cmp-side{padding:22px 28px 28px;gap:20px}
 .cmp-devgo:hover{text-decoration:underline}
 
 .cmp-foot{margin-top:auto;display:flex;flex-direction:column;gap:9px;padding-top:16px;border-top:1px solid var(--rule);font-size:13px;line-height:1.55}
-.cmp-foot > div:not(.cmp-note){display:grid;grid-template-columns:48px 1fr;gap:8px}
+.cmp-foot > div:not(.cmp-note):not(.papers){display:grid;grid-template-columns:48px 1fr;gap:8px}
+.cmp-foot .papers{display:flex;flex-direction:column;gap:10px;margin-top:6px}
 .cmp-foot .lb{font-size:11px;letter-spacing:0;padding-top:2px}
 .cmp-wall{color:var(--wall)}
 .cmp-note p.note,.cmp-note .note{margin:2px 0 0;font-size:13px;line-height:1.55;color:var(--muted)}
