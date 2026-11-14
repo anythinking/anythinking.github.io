@@ -1,0 +1,426 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>광 트랜지스터는 다음 단계인가 — Miller 2010 — Optical Computing Atlas</title>
+<meta name="description" content="Miller(2010) 논평을 읽고 정리한 글. 전광 디지털이 어떻게 해 왔고, 빛의 진짜 장점이 어디에 있고, 어떻게 나가야 하는지와, 앞으로 전광 디지털 논문을 읽을 때 쓰는 잣대 일곱 개.">
+<link rel="canonical" href="https://anythinking.github.io/optics/en/writing-review-miller-2010.html">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Optical Computing Atlas">
+<meta property="og:title" content="광 트랜지스터는 다음 단계인가 — Miller 2010 — Optical Computing Atlas">
+<meta property="og:url" content="https://anythinking.github.io/optics/en/writing-review-miller-2010.html">
+<meta property="og:image" content="https://anythinking.github.io/optics/img/og.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<meta property="og:description" content="Miller(2010) 논평을 읽고 정리한 글. 전광 디지털이 어떻게 해 왔고, 빛의 진짜 장점이 어디에 있고, 어떻게 나가야 하는지와, 앞으로 전광 디지털 논문을 읽을 때 쓰는 잣대 일곱 개.">
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="../css/base.css?v=25b88a60">
+<link rel="stylesheet" href="../css/writing.css?v=6e7bfd0d">
+</head>
+<body data-page="writing-review-miller-2010" data-root="../">
+<div class="app">
+  <header class="top">
+    <div class="ttl"><b>Optical Computing Atlas</b></div>
+    <div class="hd-r">
+      <nav class="g" aria-label="Maps"><div class="ng"><span class="ngl">Photonics basics</span><div class="ngt"><a href="optics.html">Optics</a><a href="layers.html">Layers</a><a href="glossary.html">Glossary</a></div></div>
+      <div class="ng"><span class="ngl">Optical computing</span><div class="ngt"><a href="compute.html">Kinds</a><a href="devices.html">Devices</a><a href="institutions.html">Institutions</a></div></div>
+      <div class="ng etc"><span class="ngl">&nbsp;</span><div class="ngt"><a href="writing.html" aria-current="page">Writing</a><a href="about.html">About</a></div></div></nav>
+      <div class="lang" role="group" aria-label="Language"><span class="lang-lb">Language</span><a href="../writing-review-miller-2010.html" hreflang="ko" lang="ko">한국어</a><span aria-current="true" lang="en">English</span></div>
+    </div>
+  </header>
+<p class="i18n-note" lang="en">The menu and headings are in English, but the content of this page is still in Korean. Translation is in progress.</p>
+<div class="ph"><h1>광 트랜지스터는 다음 단계인가</h1></div>
+<main class="one">
+<article class="doc">
+  <a class="back" href="writing.html">← 글 목록</a>
+  <p class="lede">빛으로 0과 1을 계산하는 전광 디지털 갈래를 공부하기 전에, 이 분야가 무엇으로 심판받아야 하는지부터 정해 두려고 읽은 글입니다. 3쪽짜리 논평이지만 이 분야가 어떻게 해 왔고, 빛의 장점이 실제로 어디에 있고, 앞으로 어떻게 나가야 하는지까지 문제를 한 번에 세워 줍니다. 앞으로 전광 디지털 논문을 읽을 때는 이 글의 잣대 일곱 개를 대 보는 것으로 시작합니다.</p>
+  <p class="meta">2026-11-13 · 논문 리뷰 › 전광 디지털 · D. A. B. Miller, <i>Nature Photonics</i> 4, 3–5 (2010)</p>
+
+  <div class="wr-body">
+
+  <h2 id="s1">1. 어떻게 해 왔나</h2>
+  <p>빛이 빛을 제어하는 투명한 컴퓨터라는 꿈은 새로운 광학 기술이 나올 때마다 되살아났습니다. 시도도 여러 갈래였습니다. <b>초기에는 공진기 안에서 비선형 광학 효과로 두 상태 사이를 오가는 광 쌍안정성이 중심</b>이었고, <b>이후 레이저 이득을 쓰는 방식, 단일 분자·양자점·원자로 빛을 스위칭하는 방식, 그리고 검출기와 변조기를 붙인 광전자 방식</b>이 나왔습니다. 이 분류는 지도의 전광 디지털 구조 카드를 나누는 기준으로도 그대로 쓸 수 있습니다.</p>
+  <p>그런데 Miller 교수님의 진단은 냉정합니다. 거의 모든 제안이 아래의 질적 기준 대부분에서 떨어졌고, 큰 논리 시스템을 실제로 지을 만큼 기준을 통과한 소자는 하나뿐이었습니다. 1989년 벨 연구소의 S-SEED이고, 1993년에 그것으로 시스템까지 시연됐습니다. 그래서 「광 트랜지스터」라는 주장은 일단 의심하고 보는 것이 맞다는 것이 출발점입니다.</p>
+  <figure class="wr-fig">
+    <svg class="wf" viewBox="0 0 640 320" role="img" aria-label="1980년부터 2026년까지 전광 디지털의 네 갈래를 시간축 위에 그린 흐름도. 비선형 광학의 광 쌍안정성은 1990년대에 저물고, 광전자 갈래의 S-SEED가 1989년에 유일하게 기준을 통과한다. 그 교훈이 광 연결 갈래로 이어지고, 2010년 Miller 교수님의 잣대를 지나 2019년 펨토패럿 O-E-O 하이브리드로 다시 나타난다.">
+      <defs>
+        <marker id="m-warm" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path class="mk-warm" d="M2 1L8 5L2 9"/></marker>
+        <marker id="m-beam" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path class="mk-beam" d="M2 1L8 5L2 9"/></marker>
+      </defs>
+      <text class="sm" x="10" y="70" dominant-baseline="central">비선형 광학</text>
+      <text class="sm" x="10" y="130" dominant-baseline="central">광전자</text>
+      <text class="sm" x="10" y="190" dominant-baseline="central">나노·양자</text>
+      <text class="sm" x="10" y="250" dominant-baseline="central">광 연결</text>
+      <line class="ln dim" x1="110" y1="70" x2="615" y2="70"/>
+      <line class="ln dim" x1="110" y1="130" x2="615" y2="130"/>
+      <line class="ln dim" x1="110" y1="190" x2="615" y2="190"/>
+      <line class="ln dim" x1="110" y1="250" x2="615" y2="250"/>
+      <line class="ln" x1="110" y1="290" x2="615" y2="290"/>
+      <text class="sm" x="110" y="308" text-anchor="middle">1980</text>
+      <text class="sm" x="219" y="308" text-anchor="middle">1990</text>
+      <text class="sm" x="327" y="308" text-anchor="middle">2000</text>
+      <text class="sm" x="436" y="308" text-anchor="middle">2010</text>
+      <text class="sm" x="544" y="308" text-anchor="middle">2020</text>
+
+      <line class="ln dim" x1="436" y1="38" x2="436" y2="290" stroke-dasharray="4 5"/>
+      <text x="436" y="26" text-anchor="middle">Miller 2010 · 잣대 7개</text>
+
+      <rect class="cell" x="110" y="61" width="163" height="18" rx="3"/>
+      <text class="sm" x="191" y="50" text-anchor="middle">광 쌍안정성 (Gibbs 1985)</text>
+      <text class="sm" x="281" y="70" dominant-baseline="central">기준 대부분 탈락</text>
+      <circle class="nd" cx="600" cy="70" r="6"/>
+      <text class="sm" x="612" y="50" text-anchor="end">폴라리톤 2026 · ⑤ ✕</text>
+
+      <rect class="cell hl" x="200" y="121" width="16" height="18" rx="3"/>
+      <text class="hlt" x="208" y="110" text-anchor="middle">S-SEED 1989 ✓</text>
+      <circle class="nd" cx="251" cy="130" r="6"/>
+      <text class="sm" x="262" y="150">시스템 시연 1993</text>
+      <rect class="cell hl" x="526" y="121" width="16" height="18" rx="3"/>
+      <text class="hlt" x="534" y="158" text-anchor="middle">펨토패럿 O-E-O 2019</text>
+      <path class="light hl" d="M440 112 Q485 100 522 124" marker-end="url(#m-warm)"/>
+      <text class="sm" x="478" y="96" text-anchor="middle">하이브리드 제안</text>
+
+      <rect class="cell" x="393" y="181" width="38" height="18" rx="3"/>
+      <text class="sm" x="412" y="215" text-anchor="middle">레이저 이득 · 양자점 · 단일 분자 (2006–09)</text>
+
+      <path class="light hl" d="M210 141 L238 240" marker-end="url(#m-warm)"/>
+      <text class="sm" x="214" y="205" text-anchor="end">교훈</text>
+      <line class="light" style="stroke-width:3" x1="245" y1="250" x2="608" y2="250" marker-end="url(#m-beam)"/>
+      <text class="sm" x="430" y="272" text-anchor="middle">광 인터커넥트: 장거리 통신 → 캐비닛 사이 → 칩</text>
+    </svg>
+    <figcaption>그림 1. 전광 디지털의 네 갈래. 비선형 광학으로 빛이 빛을 직접 제어하려던 시도는 기준 대부분에서 떨어졌고, 검출기와 변조기를 붙인 광전자 방식의 S-SEED만 통과했습니다. 거기서 얻은 교훈(빛은 연결에서 이긴다)이 광 인터커넥트로 이어졌고, 2010년 Miller 교수님이 그 교훈을 잣대로 정리하며 하이브리드를 제안한 방향이 2019년 펨토패럿 O-E-O로 다시 나타났습니다.</figcaption>
+  </figure>
+  <p class="wr-goto">구조 카드 › <a href="compute.html#d1">S-SEED</a> · <a href="compute.html#d2">전광 논리 게이트</a> · <a href="compute.html#d4">폴라리톤 논리</a></p>
+
+  <h2 id="s2">2. 무엇으로 심판하나 — 질적 기준 여섯 개</h2>
+  <p><b>트랜지스터가 복잡한 시스템을 만들 수 있는 이유</b>는 빠르거나 작아서가 아니라, <b>수천 단을 이어 붙여도 신호가 무너지지 않는 성질 몇 가지를 갖고 있어서</b>입니다. NOR나 NAND처럼 완전한 논리를 할 수 있다는 것은 전제이고, 그 위에 다음 여섯 가지를 봅니다. 앞의 넷은 반드시 있어야 하는 것입니다.</p>
+  <p>기준 이름을 누르면 그 기준이 무엇인지, 트랜지스터는 그것을 어떻게 해내는지(왼쪽), 빛에서는 왜 어려운지(오른쪽)가 그림으로 바뀝니다.</p>
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+    <defs>
+      <marker id="mv-warm" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M2 1L8 5L2 9" style="fill:none;stroke:var(--warm);stroke-width:1.5"/></marker>
+      <marker id="mv-beam" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M2 1L8 5L2 9" style="fill:none;stroke:var(--beam);stroke-width:1.5"/></marker>
+    </defs>
+  </svg>
+  <div class="wr-vt">
+    <div role="tablist" aria-label="질적 기준 여섯 개" aria-orientation="vertical">
+      <button type="button" role="tab" id="vt-1" aria-controls="vp-1">① 캐스케이드</button>
+      <button type="button" role="tab" id="vt-2" aria-controls="vp-2">② 팬아웃</button>
+      <button type="button" role="tab" id="vt-3" aria-controls="vp-3">③ 논리 레벨 복원</button>
+      <button type="button" role="tab" id="vt-4" aria-controls="vp-4">④ 입출력 분리</button>
+      <button type="button" role="tab" id="vt-5" aria-controls="vp-5">⑤ 임계 바이어스 없음</button>
+      <button type="button" role="tab" id="vt-6" aria-controls="vp-6">⑥ 손실과 무관한 레벨</button>
+    </div>
+
+    <div role="tabpanel" id="vp-1" aria-labelledby="vt-1">
+      <h3>① 캐스케이드</h3>
+      <p><b>한 단의 출력이 다음 단의 입력으로 손대지 않고 그대로 들어가야 합니다. </b>논리 회로는 게이트를 수천 단 이어 붙인 것이라, 단과 단 사이에 변환이 끼면 회로가 지어지지 않습니다.</p>
+      <figure class="wr-fig">
+        <svg class="wf" viewBox="0 0 640 210" role="img" aria-label="왼쪽: 게이트 출력 전압이 그대로 다음 게이트 입력이 된다. 오른쪽: 광 소자 출력의 파장과 빔 모양이 바뀌어 다음 소자가 받지 못한다.">
+          <text x="155" y="20" text-anchor="middle">전자 (트랜지스터)</text>
+          <text x="485" y="20" text-anchor="middle">빛</text>
+          <line class="ln dim" x1="320" y1="10" x2="320" y2="200"/>
+          <rect class="cell" x="30" y="80" width="70" height="50" rx="4"/><text x="65" y="105" text-anchor="middle" dominant-baseline="central">게이트</text>
+          <line class="wire" x1="100" y1="105" x2="210" y2="105"/>
+          <text class="sm" x="155" y="94" text-anchor="middle">전압 0 / 1</text>
+          <rect class="cell" x="210" y="80" width="70" height="50" rx="4"/><text x="245" y="105" text-anchor="middle" dominant-baseline="central">게이트</text>
+          <text class="sm" x="155" y="160" text-anchor="middle">나가는 것도 들어가는 것도 같은 전압</text>
+          <text class="sm" x="155" y="182" text-anchor="middle">✓ 그대로 이어 붙일 수 있음</text>
+          <rect class="cell" x="340" y="80" width="70" height="50" rx="4"/><text x="375" y="105" text-anchor="middle" dominant-baseline="central">소자 1</text>
+          <path class="light hl" d="M412 105 q10 -16 20 0 t20 0 t20 0 t20 0 t20 0 t20 0 t20 0"/>
+          <text class="sm" x="482" y="78" text-anchor="middle">λ₂ · 빔 모양·펄스 바뀜</text>
+          <rect class="cell" x="556" y="80" width="70" height="50" rx="4"/><text x="591" y="105" text-anchor="middle" dominant-baseline="central">소자 2</text>
+          <text class="sm" x="591" y="146" text-anchor="middle">λ₁만 받음</text>
+          <text class="sm" x="485" y="182" text-anchor="middle">✕ 출력 형태가 다음 입력과 달라 못 이어짐</text>
+        </svg>
+      </figure>
+      <p><b><b>빛에서는 세기만 맞으면 되는 게 아닙니다. 비선형 광학 소자는 흔히 입력과 다른 파장으로 내보내거나 빔 모양, 펄스 모양을 바꿔 놓기 때문에, 파장·빔·펄스 세 가지가 모두 다음 단 입력과 맞아야 합니다.</b></b></p>
+    </div>
+
+    <div role="tabpanel" id="vp-2" aria-labelledby="vt-2">
+      <h3>② 팬아웃</h3>
+      <p><b>출력 하나로 다음 단 두 개 이상을 움직일 수 있어야 합니다.</b> 그러려면 신호 이득이 2 이상이어야 합니다. 논리 회로에서 한 게이트의 결과는 거의 언제나 여러 곳으로 갈라져 쓰이기 때문입니다.</p>
+      <figure class="wr-fig">
+        <svg class="wf" viewBox="0 0 640 210" role="img" aria-label="왼쪽: 게이트가 전원에서 전류를 끌어와 다음 게이트 두 개를 구동한다. 오른쪽: 이득 없는 광 소자의 출력을 둘로 나누면 각각 절반으로 약해진다.">
+          <text x="155" y="20" text-anchor="middle">전자 (트랜지스터)</text>
+          <text x="485" y="20" text-anchor="middle">빛</text>
+          <line class="ln dim" x1="320" y1="10" x2="320" y2="200"/>
+          <text class="sm" x="75" y="44" text-anchor="middle">전원 V_DD</text>
+          <line class="wire" x1="75" y1="52" x2="75" y2="85"/>
+          <rect class="cell" x="40" y="85" width="70" height="50" rx="4"/><text x="75" y="110" text-anchor="middle" dominant-baseline="central">게이트</text>
+          <path class="br" d="M110 110 L165 110 L205 73 M165 110 L205 153"/>
+          <rect class="cell" x="205" y="55" width="70" height="36" rx="4"/><text x="240" y="73" text-anchor="middle" dominant-baseline="central">다음 1</text>
+          <rect class="cell" x="205" y="135" width="70" height="36" rx="4"/><text x="240" y="153" text-anchor="middle" dominant-baseline="central">다음 2</text>
+          <text class="sm" x="155" y="196" text-anchor="middle">✓ 전원에서 전류를 끌어와 출력 &gt; 입력</text>
+          <line class="light" style="stroke-width:3" x1="335" y1="110" x2="400" y2="110"/>
+          <text class="sm" x="367" y="98" text-anchor="middle">P</text>
+          <rect class="cell" x="400" y="85" width="60" height="50" rx="4"/><text x="430" y="110" text-anchor="middle" dominant-baseline="central">소자</text>
+          <path class="light" d="M460 110 L500 110 L585 70 M500 110 L585 150"/>
+          <text class="sm" x="592" y="70" dominant-baseline="central">P/2</text>
+          <text class="sm" x="592" y="150" dominant-baseline="central">P/2</text>
+          <text class="sm" x="485" y="196" text-anchor="middle">✕ 이득이 없으면 나눌수록 약해짐</text>
+        </svg>
+      </figure>
+      <p><b>꼭 레이저처럼 유도방출로 빛을 증폭할 필요는 없습니다.</b> <b>작은 입력 변화가 큰 출력 변화를 만들기만 하면 되고</b>, 그 큰 출력의 에너지는 따로 들어오는 전원 빛에서 가져오면 됩니다. <b>트랜지스터가 전원에서 전류를 끌어오는 것과 같은 구조</b>입니다. 폴라리톤 논리는 이 기준을 60배로 통과했습니다.</p>
+    </div>
+
+    <div role="tabpanel" id="vp-3" aria-labelledby="vt-3">
+      <h3>③ 논리 레벨 복원</h3>
+      <p><b>단마다 신호를 다시 깨끗하게 만들어야 합니다.</b> 잡음이나 손실로 조금 흐려진 0과 1이 다음 단에서 원래의 0과 1로 되돌아가야, 흐트러짐이 회로를 따라 쌓이지 않습니다.</p>
+      <figure class="wr-fig">
+        <svg class="wf" viewBox="0 0 640 215" role="img" aria-label="왼쪽: S자로 꺾이는 전달 특성이 흐린 0과 1을 깨끗한 0과 1로 되돌린다. 오른쪽: 복원이 없으면 펄스가 단을 지날수록 낮고 넓게 흐트러진다.">
+          <text x="155" y="20" text-anchor="middle">전자 (트랜지스터)</text>
+          <text x="485" y="20" text-anchor="middle">빛</text>
+          <line class="ln dim" x1="320" y1="10" x2="320" y2="205"/>
+          <line class="ln" x1="40" y1="185" x2="285" y2="185"/><line class="ln" x1="40" y1="185" x2="40" y2="38"/>
+          <text class="sm" x="285" y="203" text-anchor="end">입력 →</text>
+          <text class="sm" x="46" y="44">출력</text>
+          <path class="light hl" d="M40 172 C115 172 130 168 155 115 S195 55 280 55"/>
+          <text class="sm" x="95" y="158" text-anchor="middle">흐린 0 → 깨끗한 0</text>
+          <text class="sm" x="228" y="78" text-anchor="middle">흐린 1 → 깨끗한 1</text>
+          <path class="light" d="M340 170 L352 170 L354 85 L378 85 L380 170 L392 170"/>
+          <text class="sm" x="414" y="140" text-anchor="middle">→</text>
+          <path class="light" d="M432 170 C446 170 449 112 462 112 C475 112 478 170 492 170"/>
+          <text class="sm" x="512" y="140" text-anchor="middle">→</text>
+          <path class="light" d="M528 170 C550 170 552 138 568 138 C584 138 586 170 608 170"/>
+          <text class="sm" x="366" y="190" text-anchor="middle">1단</text>
+          <text class="sm" x="462" y="190" text-anchor="middle">2단</text>
+          <text class="sm" x="568" y="190" text-anchor="middle">3단</text>
+          <text class="sm" x="485" y="52" text-anchor="middle">✕ 복원이 없으면 흐트러짐이 쌓임</text>
+        </svg>
+      </figure>
+      <p><b>복원을 하려면 전달 특성이 S자로 꺾여야 하고, 그러려면 이득과 비선형이 함께 있어야 합니다. 빛에서는 신호 세기뿐 아니라 빔 품질과 펄스 모양까지 되살려야 해서 더 까다롭습니다. </b>광 AI의 선형 연산에서는 이 기준이 필요 없는데, 층 하나를 아날로그로 한 번 통과하고 끝나기 때문입니다.</p>
+    </div>
+
+    <div role="tabpanel" id="vp-4" aria-labelledby="vt-4">
+      <h3>④ 입출력 분리</h3>
+      <p><b>출력 쪽으로 되돌아온 신호가 입력처럼 행동하면 안 됩니다.</b> 그러면 뒤쪽 회로의 반사가 앞쪽 소자의 상태를 바꿔 버려서, 시스템을 설계하기가 매우 어려워집니다.</p>
+      <figure class="wr-fig">
+        <svg class="wf" viewBox="0 0 640 215" role="img" aria-label="왼쪽: 트랜지스터의 게이트는 절연돼 있어 출력 쪽으로 돌아온 신호가 입력에 영향을 주지 않는다. 오른쪽: 비선형 매질에서는 반사광이 같은 길로 들어와 입력처럼 작용한다.">
+          <text x="155" y="20" text-anchor="middle">전자 (트랜지스터)</text>
+          <text x="485" y="20" text-anchor="middle">빛</text>
+          <line class="ln dim" x1="320" y1="10" x2="320" y2="205"/>
+          <line class="wire" x1="40" y1="110" x2="118" y2="110"/>
+          <line class="br" style="stroke-width:3" x1="118" y1="82" x2="118" y2="138"/>
+          <line class="br" style="stroke-width:3" x1="132" y1="72" x2="132" y2="148"/>
+          <text class="sm" x="78" y="98" text-anchor="middle">입력(게이트)</text>
+          <line class="wire" x1="132" y1="78" x2="230" y2="78"/>
+          <text class="sm" x="236" y="78" dominant-baseline="central">출력</text>
+          <line class="wire" x1="132" y1="142" x2="132" y2="170"/>
+          <path class="light hl" d="M262 100 L150 100" marker-end="url(#mv-warm)"/>
+          <text class="sm" x="210" y="120" text-anchor="middle">되돌아온 신호</text>
+          <text class="sm" x="125" y="58" text-anchor="middle">절연막</text>
+          <text class="sm" x="155" y="196" text-anchor="middle">✓ 게이트가 절연돼 입력은 안 바뀜</text>
+          <line class="light" style="stroke-width:3" x1="335" y1="100" x2="418" y2="100" marker-end="url(#mv-beam)"/>
+          <text class="sm" x="376" y="88" text-anchor="middle">입력</text>
+          <rect class="cell" x="420" y="80" width="80" height="50" rx="4"/><text x="460" y="105" text-anchor="middle" dominant-baseline="central">비선형 매질</text>
+          <line class="light" style="stroke-width:3" x1="500" y1="100" x2="608" y2="100" marker-end="url(#mv-beam)"/>
+          <text class="sm" x="560" y="88" text-anchor="middle">출력</text>
+          <path class="light hl" d="M606 120 L504 120" marker-end="url(#mv-warm)"/>
+          <text class="sm" x="556" y="140" text-anchor="middle">반사광</text>
+          <text class="sm" x="485" y="170" text-anchor="middle">같은 길로 들어와 입력처럼 작용</text>
+          <text class="sm" x="485" y="196" text-anchor="middle">✕ 미시 물리 자체가 방향을 가리지 않음</text>
+        </svg>
+      </figure>
+      <p>트랜지스터는 게이트가 절연막으로 분리돼 있어, 출력 쪽에서 무슨 일이 생겨도 입력은 바뀌지 않습니다. <b>비선형 광학과 유도방출은 그 미시 물리 자체가 들어오는 빛과 되돌아오는 빛을 가리지 않습니다.</b> 그래서 해법은 소자 구조에서 나와야 하고, Miller 교수님이 제시한 이상형은 입력 빔과 출력 빔이 따로 있는 소자입니다. S-SEED가 깨끗한 전원 빔을 따로 받아 출력으로 내보낸 것이 바로 이 구조입니다.</p>
+    </div>
+
+    <div role="tabpanel" id="vp-5" aria-labelledby="vt-5">
+      <h3>⑤ 임계 바이어스 없음</h3>
+      <p><b>소자마다 동작점을 아주 정밀하게 맞춰 줘야 하는 소자는 쓸 수 없습니다.</b> 소자가 수천, 수백만 개로 늘어나면 하나하나 맞춰 줄 수 없기 때문입니다.</p>
+      <figure class="wr-fig">
+        <svg class="wf" viewBox="0 0 640 215" role="img" aria-label="왼쪽: 트랜지스터 인버터는 넓은 구간에서 동작해 동작점이 조금 어긋나도 된다. 오른쪽: 쌍안정 광 소자는 문턱 근처의 좁은 구간에 동작점을 정밀하게 맞춰야 한다.">
+          <text x="155" y="20" text-anchor="middle">전자 (트랜지스터)</text>
+          <text x="485" y="20" text-anchor="middle">빛</text>
+          <line class="ln dim" x1="320" y1="10" x2="320" y2="205"/>
+          <rect class="cell" x="108" y="48" width="104" height="137"/>
+          <line class="ln" x1="40" y1="185" x2="285" y2="185"/><line class="ln" x1="40" y1="185" x2="40" y2="38"/>
+          <path class="light hl" d="M40 172 C110 172 122 166 160 115 S210 58 280 58"/>
+          <text class="sm" x="160" y="40" text-anchor="middle">넓은 동작 구간</text>
+          <text class="sm" x="155" y="204" text-anchor="middle">✓ 동작점이 조금 어긋나도 괜찮음</text>
+          <rect class="cell hl" x="494" y="48" width="16" height="137"/>
+          <line class="ln" x1="345" y1="185" x2="620" y2="185"/><line class="ln" x1="345" y1="185" x2="345" y2="38"/>
+          <path class="light hl" d="M345 172 L496 166 L506 62 L615 58"/>
+          <text class="sm" x="502" y="40" text-anchor="middle">이 좁은 곳에 맞춰야 함</text>
+          <text class="sm" x="485" y="204" text-anchor="middle">✕ 폴라리톤: 문턱의 0.8배에 바이어스</text>
+        </svg>
+      </figure>
+      <p><b>문턱 근처에서 갑자기 꺾이는 소자는 이득도 있고 복원도 어느 정도 해 주지만, 그 꺾이는 구간이 바늘처럼 좁으면 바이어스를 바늘 위에 올려놓아야 합니다.</b> 간섭을 쓰는 소자는 여기에 하나가 더 붙습니다. 빛의 상대 위상을 붙잡으려면 경로 길이까지 파장보다 훨씬 작은 정밀도로 맞춰야 합니다. 간섭이 무기인 광 AI와 달리, 디지털에서는 간섭이 짐이 되는 이유입니다.</p>
+    </div>
+
+    <div role="tabpanel" id="vp-6" aria-labelledby="vt-6">
+      <h3>⑥ 손실과 무관한 논리 레벨</h3>
+      <p><b>신호가 어느 경로로 왔든 0과 1이 같은 기준으로 구분돼야 합니다. 시스템 안에서는 경로마다 손실이 다르기 때문입니다.</b></p>
+      <figure class="wr-fig">
+        <svg class="wf" viewBox="0 0 640 215" role="img" aria-label="왼쪽: 전선의 저항은 충전을 늦출 뿐, 다 차면 전압은 그대로 1 V다. 오른쪽: 손실이 다른 두 경로를 지난 빛은 세기가 0.5와 0.8로 달라져, 문턱 하나로는 0과 1을 가르지 못한다.">
+          <text x="155" y="20" text-anchor="middle">전자 (트랜지스터)</text>
+          <text x="485" y="20" text-anchor="middle">빛</text>
+          <line class="ln dim" x1="320" y1="10" x2="320" y2="205"/>
+          <line class="wire" x1="30" y1="100" x2="100" y2="100"/>
+          <path class="br" d="M100 100 l8 -10 l10 20 l10 -20 l10 20 l10 -20 l8 10"/>
+          <line class="wire" x1="156" y1="100" x2="225" y2="100"/>
+          <rect class="cell" x="225" y="80" width="60" height="40" rx="4"/><text x="255" y="100" text-anchor="middle" dominant-baseline="central">입력</text>
+          <text class="sm" x="60" y="86" text-anchor="middle">1 V</text>
+          <text class="sm" x="128" y="76" text-anchor="middle">저항</text>
+          <text class="sm" x="195" y="86" text-anchor="middle">1 V</text>
+          <text class="sm" x="155" y="150" text-anchor="middle">저항은 충전을 늦출 뿐</text>
+          <text class="sm" x="155" y="196" text-anchor="middle">✓ 다 차면 전압은 그대로 1</text>
+          <text class="sm" x="340" y="70" dominant-baseline="central">1</text>
+          <line class="light" style="stroke-width:4" x1="352" y1="70" x2="450" y2="70"/>
+          <rect class="cell" x="450" y="58" width="64" height="24" rx="3"/><text class="sm" x="482" y="70" text-anchor="middle" dominant-baseline="central">손실 큼</text>
+          <line class="light" style="stroke-width:2" x1="514" y1="70" x2="590" y2="70"/>
+          <text class="sm" x="596" y="70" dominant-baseline="central">0.5</text>
+          <text class="sm" x="340" y="130" dominant-baseline="central">1</text>
+          <line class="light" style="stroke-width:4" x1="352" y1="130" x2="450" y2="130"/>
+          <rect class="cell" x="450" y="118" width="64" height="24" rx="3"/><text class="sm" x="482" y="130" text-anchor="middle" dominant-baseline="central">손실 작음</text>
+          <line class="light" style="stroke-width:3.2" x1="514" y1="130" x2="590" y2="130"/>
+          <text class="sm" x="596" y="130" dominant-baseline="central">0.8</text>
+          <text class="sm" x="485" y="172" text-anchor="middle">같은 1인데 도착 세기가 다름</text>
+          <text class="sm" x="485" y="196" text-anchor="middle">✕ 문턱 0.6이면 위쪽 1이 0으로 읽힘</text>
+        </svg>
+      </figure>
+      <p>전선에서는 받는 쪽 커패시턴스가 선 저항을 통해 충전되기를 기다려야 할 뿐, 다 차고 나면 전압 값은 저항 손실과 상관없이 1입니다. 빛은 손실이 곧 세기를 깎습니다. 문턱을 0 가까이 내리면 해결되지만, 그러면 변조와 검출의 동적 범위가 엄청나게 커야 합니다. 해법은 두 빔의 비율이나 차이에 신호를 싣는 차동 방식입니다. 두 빔이 같은 길로 가면 손실을 같이 겪으니 비율은 그대로 남습니다. 이런 입력으로 동작하는 소자는 드문데, S-SEED가 두 다이오드의 비율로 상태를 정하는 그 예외입니다.</p>
+    </div>
+  </div>
+  <p><b>S-SEED가 유일하게 통과한 이유가 여기서 보입니다.</b> 입력 빔과 별개로 깨끗한 전원 빔을 받아 출력으로 내보내니 ④가 해결되고, 두 다이오드의 비율로 상태를 정하니 ⑥이 해결됩니다. 반대로 폴라리톤 논리는 팬아웃은 60배로 통과했지만, 문턱의 0.8배에 바이어스를 걸어야 해서 ⑤에서 걸립니다.</p>
+
+  <h2 id="s3">3. 양적 기준 — 전체 동작 에너지</h2>
+  <p>질적 기준을 다 넘어도 끝이 아닙니다. <b>오늘날 정보 처리를 묶는 지배적인 물리량은 에너지</b>입니다. 칩은 발열에, 휴대기기는 배터리에, 데이터센터는 전력과 냉각에 묶여 있습니다. 그러니 <b>실리콘 트랜지스터보다 에너지를 더 쓰는 광 논리는 주류 응용에 들어올 자리가 없습니다.</b></p>
+  <p>비교 대상의 크기는 이렇습니다. <b>2010년 CMOS의 논리 동작 하나에 드는 전체 에너지가 이미 펨토줄(fJ) </b>수준이고, 미래 소자의 목표는 수십 아토줄(aJ)입니다. 여기서 핵심은 「전체」입니다. <b>광 스위치 논문은 흔히 제어 펄스의 에너지만 내세우는데</b>, 비교해야 하는 것은 <b>전원 빛과 바이어스까지 다 더한 동작 한 번의 에너지</b>입니다.</p>
+  <p><b>속도는 이유가 되지 못합니다.</b> <b>CMOS 트랜지스터 내부는 이미 피코초로 움직</b>이고, <b>클럭을 붙잡는 것은 소자 속도가 아니라 발열</b>입니다. <b>전압을 낮추면 느려지지만 에너지도 같이 줄기 때문에, CMOS는 일부러 속도를 버리고 에너지를 택하고 있습니다.</b> 「통신 신호는 원래 빛이니 광-전 변환을 아끼자」는 주장도, 그 변환 비용이 물리 한계가 아니라 당시 상용 장비의 숫자에서 나온 경우가 많다는 점에서 조건부입니다.</p>
+
+  <h2 id="s4">4. 빛의 장점은 어디에 있나 — 논리가 아니라 연결</h2>
+  <p>그럼 왜 아직도 빛을 고민하나. <b>빛은 높은 데이터 속도에서 저손실로 보내는 일에서는 이미 구리선보다 낫다는 것이 증명</b>됐습니다. 그래서 빛에게는 실리콘 트랜지스터보다 <b>구리 전송선</b>과 경쟁하는 편이 훨씬 쉽고, Miller 교수님은 이것이 예전 광 논리 연구가 남긴 핵심 결과였다고 말합니다. 실패한 연구가 남긴 것이 「어디서 이길 수 있는가」라는 조건이었던 셈입니다.</p>
+  <p>그런데 「전선은 선 전체를 충전해야 한다」는 말은 선이 짧을 때만 맞습니다. 전선이 신호를 나르는 방식은 길이에 따라 둘로 갈리고, 갈림길은 <b>신호가 선 끝까지 가는 시간</b>과 <b>전압이 0에서 1로 오르는 시간(상승 시간)</b> 중 어느 쪽이 더 기냐입니다. 전압은 선을 따라 빛의 3분의 2쯤 되는 속도로 퍼지므로, 상승 시간이 0.1 ns라면 그동안 약 2 cm를 갑니다. 이보다 긴 선과 짧은 선은 전혀 다르게 행동합니다.</p>
+  <p><b>긴 선에서는 신호가 파동처럼 지나갑니다.</b> 보내는 쪽에서 전압을 올리면 그 전압 계단이 선을 따라 달려가고, 어느 순간이든 전압을 띠는 것은 계단이 지나간 구간뿐입니다. 30 cm 선이면 신호가 끝까지 가는 데 1.5 ns가 걸리니, 한 비트가 0.4 ns일 때 선 위에는 비트가 네 개쯤 줄지어 달립니다. 1 km 케이블이라면 수만 개입니다. 선 전체를 1 V로 채우는 일은 일어나지 않고, 비트 하나의 에너지는 길이가 아니라 선의 특성 임피던스(보통 50 Ω)로 정해집니다. 1 V를 50 Ω에 0.4 ns 동안 걸면 (1 V)²/50 Ω × 0.4 ns ≈ 8 pJ이고, 손실을 빼면 길이와 무관합니다. 긴 구리선이 빛에 지는 이유는 충전이 아니라 손실입니다. 구리는 주파수가 높을수록 신호를 많이 깎아 먹어서 중간중간 증폭기로 되살려야 하는데, 광섬유는 1 km에 0.2 dB 정도만 잃습니다.</p>
+  <p><b>짧은 선에서는 선 전체가 한 덩어리입니다.</b> 칩 안의 배선은 길어야 mm 수준이라 신호가 끝까지 가는 데 몇 피코초면 충분하고, 이는 상승 시간보다 훨씬 짧습니다. 전압이 다 오르기 전에 이미 선 구석구석이 같은 전압이 되니, 선은 사실상 커패시터 하나입니다. 받는 쪽 게이트가 확실히 바뀌려면 그 커패시터 전체가 논리 전압까지 올라가야 하고, 비트마다 C·V²의 에너지가 듭니다. C가 길이에 비례하니 에너지도 길이에 비례합니다. (칩 배선은 저항이 커서 실제로는 이보다 느리게 충전되지만, mm 이하에서 한 덩어리로 다룬다는 결론은 같습니다.)</p>
+  <figure class="wr-fig" id="m2">
+    <svg class="wf" viewBox="0 0 640 240" role="img" aria-label="두 줄의 선. 위의 긴 선에서는 전압이 높은 구간과 낮은 구간이 줄지어 왼쪽에서 오른쪽으로 흘러간다. 아래의 짧은 선에서는 선 전체가 한꺼번에 밝아졌다 어두워진다.">
+      <text class="sm" x="620" y="22" text-anchor="end" id="m2-t">t = 0.00 ns</text>
+      <text x="20" y="48" text-anchor="start">긴 선 · 30 cm</text>
+      <rect class="nd" x="20" y="56" width="44" height="28" rx="4"/>
+      <text class="sm" x="42" y="75" text-anchor="middle">보냄</text>
+      <g id="ml-cells"></g>
+      <rect class="ln" x="76" y="61" width="480" height="18"/>
+      <rect class="nd" x="568" y="56" width="52" height="28" rx="4"/>
+      <text class="sm" x="594" y="75" text-anchor="middle">받음</text>
+      <text class="sm" x="42" y="102" text-anchor="middle" id="ml-vs"></text>
+      <text class="sm" x="594" y="102" text-anchor="middle" id="ml-vr"></text>
+      <text class="sm" x="316" y="102" text-anchor="middle">신호가 끝까지 가는 데 1.5 ns, 한 비트는 0.4 ns → 선 위에 비트가 여러 개 동시에 있다</text>
+      <text x="20" y="168" text-anchor="start">짧은 선 · 1 mm</text>
+      <rect class="nd" x="20" y="176" width="44" height="28" rx="4"/>
+      <text class="sm" x="42" y="195" text-anchor="middle">보냄</text>
+      <g id="ms-cells"></g>
+      <rect class="ln" x="76" y="181" width="480" height="18"/>
+      <rect class="nd" x="568" y="176" width="52" height="28" rx="4"/>
+      <text class="sm" x="594" y="195" text-anchor="middle">받음</text>
+      <text class="sm" x="42" y="222" text-anchor="middle" id="ms-vs"></text>
+      <text class="sm" x="594" y="222" text-anchor="middle" id="ms-vr"></text>
+      <text class="sm" x="316" y="222" text-anchor="middle">끝까지 가는 데 약 0.007 ns ≪ 전압이 오르는 데 0.1 ns → 선 전체가 늘 같은 전압</text>
+    </svg>
+    <div class="wr-ctl"><button type="button" id="m2-play">멈추기</button><button type="button" id="m2-reset">처음부터</button><span>같은 비트열(1 0 1 1 0 1 0 0 반복)을 두 선에 똑같이 보냅니다. 칸이 진할수록 그 자리의 전압이 높습니다. 시간은 약 30억 배 느리게 돌립니다.</span></div>
+    <figcaption>그림 2. 같은 물리, 다른 길이. 두 선 모두 「보냄」 쪽 전압이 빛의 3분의 2 정도 속도로 퍼져 나가는 같은 식으로 계산했고, 다른 것은 길이뿐입니다. 긴 선에서는 전압 계단이 파동처럼 지나가며 어느 순간이든 선의 일부만 전압을 띱니다. 짧은 선에서는 퍼지는 시간이 전압이 오르는 시간보다 훨씬 짧아 선 전체가 한 덩어리로 오르내립니다. 그래서 짧은 선은 커패시터 하나로 보고, 비트마다 그 커패시터 전체를 충전합니다.</figcaption>
+  </figure>
+  <p>Miller 교수님이 겨냥한 것은 이 짧은 선, 곧 칩 안과 칩 사이의 연결입니다. 빛은 선을 충전하지 않습니다. 검출기는 광자 하나를 전자 하나로 바꾸므로, 받는 쪽의 작은 검출기를 논리 전압까지 올릴 만큼의 광자만 보내면 되고 그 양은 거리와 상관이 없습니다. Miller 교수님은 이 효과를 quantum impedance conversion이라고 부릅니다. 낮은 임피던스의 선을 구동하는 대신 광자가 높은 임피던스의 작은 소자에 전하를 바로 넣어 주는 셈입니다.</p>
+  <figure class="wr-fig" id="m3">
+    <svg class="wf" viewBox="0 0 640 266" role="img" aria-label="로그 눈금 그래프. 가로축은 선 길이 1 µm부터 1 cm, 세로축은 비트당 에너지 0.1 fJ부터 10 pJ. 전선은 길이에 비례해 0.2 fJ에서 2 pJ까지 오르고, 빛은 1 fJ, 10 fJ, 1 pJ 높이의 수평선 셋이다. 전선은 10 fJ 선과 약 50 µm에서, 1 pJ 선과 약 5 mm에서 만난다.">
+      <line class="ln" x1="90" y1="220" x2="560" y2="220"/><line class="ln" x1="90" y1="220" x2="90" y2="30"/>
+      <line class="ln dim" x1="90.0" y1="30" x2="90.0" y2="220"/>
+      <text class="sm" x="90.0" y="238" text-anchor="middle">1 µm</text>
+      <line class="ln dim" x1="207.5" y1="30" x2="207.5" y2="220"/>
+      <text class="sm" x="207.5" y="238" text-anchor="middle">10 µm</text>
+      <line class="ln dim" x1="325.0" y1="30" x2="325.0" y2="220"/>
+      <text class="sm" x="325.0" y="238" text-anchor="middle">100 µm</text>
+      <line class="ln dim" x1="442.5" y1="30" x2="442.5" y2="220"/>
+      <text class="sm" x="442.5" y="238" text-anchor="middle">1 mm</text>
+      <line class="ln dim" x1="560.0" y1="30" x2="560.0" y2="220"/>
+      <text class="sm" x="560.0" y="238" text-anchor="middle">1 cm</text>
+      <line class="ln dim" x1="90" y1="220" x2="560" y2="220"/>
+      <text class="sm" x="82" y="224" text-anchor="end">0.1 fJ</text>
+      <line class="ln dim" x1="90" y1="182" x2="560" y2="182"/>
+      <text class="sm" x="82" y="186" text-anchor="end">1 fJ</text>
+      <line class="ln dim" x1="90" y1="144" x2="560" y2="144"/>
+      <text class="sm" x="82" y="148" text-anchor="end">10 fJ</text>
+      <line class="ln dim" x1="90" y1="106" x2="560" y2="106"/>
+      <text class="sm" x="82" y="110" text-anchor="end">100 fJ</text>
+      <line class="ln dim" x1="90" y1="68" x2="560" y2="68"/>
+      <text class="sm" x="82" y="72" text-anchor="end">1 pJ</text>
+      <line class="ln dim" x1="90" y1="30" x2="560" y2="30"/>
+      <text class="sm" x="82" y="34" text-anchor="end">10 pJ</text>
+      <text class="sm" x="90" y="18" text-anchor="start">비트 하나를 보내는 에너지</text>
+      <text class="sm" x="325" y="258" text-anchor="middle">선 길이 (칩 안)</text>
+      <line class="ln hl" x1="90.0" y1="208.6" x2="560.0" y2="56.6"/>
+      <text class="hlt" x="430.75" y="120.36086016476871" text-anchor="start">전선 (0.2 fF/µm, 1 V)</text>
+      <line class="light" style="stroke-width:2.6" x1="90" y1="68" x2="560" y2="68"/>
+      <text class="sm" x="96" y="62" text-anchor="start">빛 — 지금의 광 링크 (레이저 포함, 대략)</text>
+      <line class="light" style="stroke-width:2.6" x1="90" y1="144" x2="560" y2="144"/>
+      <text class="sm" x="96" y="138" text-anchor="start">빛 — 목표 (Miller 2017)</text>
+      <line class="light" style="stroke-dasharray:5 4" x1="90" y1="182" x2="560" y2="182"/>
+      <text class="sm" x="554" y="176" text-anchor="end">빛 — 검출기 1 fF만 1 V로 충전</text>
+      <circle cx="289.6" cy="144" r="4" style="fill:var(--warm)"/>
+      <text class="hlt" x="297.6289755094822" y="160" text-anchor="start">≈ 50 µm</text>
+      <circle cx="524.6" cy="68" r="4" style="fill:var(--warm)"/>
+      <text class="hlt" x="532.6289755094822" y="84" text-anchor="start">≈ 5 mm</text>
+    </svg>
+    <figcaption>그림 3. 칩 안 짧은 선의 비트당 에너지를 숫자로. 칩 배선의 커패시턴스는 길이 1 µm에 약 0.2 fF이므로, 1 V로 한 번 충전하는 에너지는 1 mm에 약 200 fJ, 1 cm에 약 2 pJ로 길이에 정비례합니다(양 축이 로그라 직선). 빛은 받는 쪽 검출기만 충전하면 되므로 길이와 무관한 수평선이 됩니다. 검출기 1 fF를 1 V로 올리는 데 드는 약 1 fJ가 바닥이고, 레이저와 변조기 효율까지 넣은 목표가 약 10 fJ, 지금 쓰이는 광 링크는 수 pJ 수준입니다. 목표대로라면 50 µm만 넘어도 빛이 낫고, 지금 수준으로는 5 mm쯤부터 낫습니다. 수치는 대표값이고 이 논평에는 나오지 않습니다. 몇 cm보다 긴 선은 그림 2의 긴 선처럼 전송선이 되어 이 그래프의 계산이 맞지 않으므로 그리지 않았습니다.</figcaption>
+  </figure>
+  <p>이 차이가 중요해진 이유는 칩 안에서 연결에 쓰는 에너지가 이미 논리에 쓰는 에너지만큼 커졌기 때문입니다. 더 날카로운 지적도 있습니다. 게이트 하나 길이짜리 짧은 선의 커패시턴스조차 그 게이트 안 트랜지스터의 커패시턴스보다 큽니다. 게이트가 동작할 때 쓰는 에너지는 대부분 이 커패시턴스들을 충전하는 데 들어가니, <b>게이트와 게이트 사이에서도 이미 배선 에너지가 논리 에너지를 넘었다</b>는 뜻입니다. 그래서 광 트랜지스터의 장점은 계산 자체보다 정보를 연결하고 전달하는 능력에 있습니다.</p>
+
+  <h2 id="s5">5. 어떻게 나가야 하나 — 문제 설정</h2>
+  <p>여기서 이 분야의 문제가 숫자로 세워집니다. 미래 트랜지스터의 커패시턴스는 수십 아토패럿이고, 1 V로 동작하면 에너지는 수십 아토줄입니다. 이것은 <b>광자 수백 개</b>에 해당합니다. 그러니 광 소자는 광자 수백 개로 확실하게 동작해야 하고, 그 후보로 나노 공진기, 아주 작은 금속 안테나나 도파로, 100 nm 이하의 능동 반도체, 단일 양자점이 꼽힙니다.</p>
+  <p>두 가지 방향 지시가 따라옵니다. 첫째, 이 정도 광자 수에서는 결맞음(코히런스)이 필요하지도 바람직하지도 않고, 소자는 준고전적으로 동작하면 됩니다. 간섭은 디지털 논리에서는 위상을 붙잡아야 하는 짐이고(⑤), 이것은 간섭을 무기로 쓰는 광 AI와 정반대입니다. 둘째, <b>검출기와 변조기를 트랜지스터와 아주 촘촘하게 붙인 하이브리드 소자</b>가 기준을 모두 만족할 수 있습니다. 빛으로 받고, 작은 전자 회로로 이득과 복원을 얻고, 다시 빛으로 내보내는 구조입니다. 지도의 펨토패럿 O-E-O(2019)가 정확히 이 방향이고, 1989년 S-SEED와 30년 간격으로 같은 답이 나온 셈입니다.</p>
+  <p>단일 광자 트랜지스터는 진짜 양자 연산으로 이어질 수 있지만, 결맞음과 가역성이 만드는 공학 문제가 남아 있어 아직 추측의 영역입니다. 결론의 태도는 한 줄로 요약됩니다. 기준을 다 만족하는 명확한 개념은 아직 없으니, 현실적이되 창의적이어야 하고, 실리콘과 호환되는 하이브리드로 두 세계의 장점을 함께 쓰자는 것입니다.</p>
+  <p class="wr-goto">구조 카드 › <a href="compute.html#d3">펨토패럿 O-E-O</a> · <a href="compute.html#d1">S-SEED</a></p>
+
+  <h2 id="s6">6. 앞으로 쓰는 잣대 — 채점 카드</h2>
+  <p>전광 디지털 논문을 한 편 읽을 때마다 아래 일곱 칸을 채웁니다. 앞의 여섯은 이 글의 질적 기준이고, 일곱 번째가 양적 기준입니다. 칸을 채우지 못하면 그 자체가 「논문이 말하지 않은 것」이라는 기록이 됩니다.</p>
+  <table class="wr-tbl">
+    <thead><tr><th>칸</th><th>확인할 것</th></tr></thead>
+    <tbody>
+      <tr><td>① 캐스케이드</td><td>출력 파장·빔·펄스가 입력과 같나. 실제로 두 단 이상 이어 붙였나</td></tr>
+      <tr><td>② 팬아웃</td><td>신호 이득이 몇 배인가 (≥ 2)</td></tr>
+      <tr><td>③ 복원</td><td>전달 특성이 S자로 꺾이나. 꺾이는 구간이 넓은가</td></tr>
+      <tr><td>④ 입출력 분리</td><td>입력 빔과 출력 빔이 따로 있나. 반사광에 반응하나</td></tr>
+      <tr><td>⑤ 바이어스</td><td>동작점을 문턱 몇 배에 얼마나 정밀하게 맞춰야 하나</td></tr>
+      <tr><td>⑥ 손실 무관</td><td>절대 세기로 판정하나, 비율로 판정하나</td></tr>
+      <tr><td>⑦ 전체 에너지</td><td>전원 빛·바이어스까지 더한 동작당 에너지. CMOS fJ, 미래 aJ(광자 수백 개)와 비교</td></tr>
+    </tbody>
+  </table>
+  <p>지금까지 매긴 점수는 이렇습니다. 나머지는 Minzioni 등(2019) 로드맵에서 소자 데이터를 보며 채웁니다.</p>
+  <table class="wr-tbl">
+    <thead><tr><th>갈래</th><th>①</th><th>②</th><th>③</th><th>④</th><th>⑤</th><th>⑥</th><th>⑦</th></tr></thead>
+    <tbody>
+      <tr><td><a href="compute.html#d1">S-SEED</a></td><td>○</td><td>○</td><td>○</td><td>○</td><td>○</td><td>○</td><td>?</td></tr>
+      <tr><td><a href="compute.html#d4">폴라리톤 논리</a></td><td>?</td><td>○ 60배</td><td>?</td><td>?</td><td>✕ 문턱 0.8배</td><td>?</td><td>?</td></tr>
+      <tr><td><a href="compute.html#d3">펨토패럿 O-E-O</a></td><td colspan="7">미채점 · Miller 교수님이 기준을 다 만족할 수 있다고 본 하이브리드 방향</td></tr>
+      <tr><td><a href="compute.html#d2">전광 논리 게이트</a></td><td colspan="7">미채점</td></tr>
+      <tr><td><a href="compute.html#d5">2D 소재 비선형</a></td><td colspan="7">미채점</td></tr>
+      <tr><td><a href="compute.html#d6">자기 스위칭</a></td><td colspan="7">미채점</td></tr>
+    </tbody>
+  </table>
+  <p>○는 통과, ✕는 탈락, ?는 아직 확인하지 못한 칸입니다.</p>
+
+  </div>
+
+  <div class="wr-src">
+    <p>출처</p>
+    <ul>
+      <li>D. A. B. Miller, “Are optical transistors the logical next step?” <i>Nature Photonics</i> 4, 3–5 (2010).</li>
+      <li>S-SEED: A. L. Lentine et al., <i>IEEE J. Quantum Electron.</i> 25, 1928 (1989) · 시스템 시연 F. B. McCormick et al., <i>Appl. Opt.</i> 32, 5153 (1993).</li>
+      <li>후속으로 읽을 것: D. A. B. Miller, “Attojoule optoelectronics for low-energy information processing and communications,” <i>J. Lightwave Technol.</i> 35, 346 (2017).</li>
+    </ul>
+  </div>
+</article>
+</main>
+
+<script type="application/json" id="i18n-tx">{"트랜시버":"Transceiver","광 AI 가속기":"Optical AI accelerator","파운드리":"Foundry","광양자 산업":"Photonic quantum industry","직무":"Jobs","아날로그 MVM 가속기":"Analog MVM accelerator","in-memory 컴퓨팅":"In-memory computing","뉴로모픽 포토닉스":"Neuromorphic photonics","포토닉 리저버 컴퓨팅":"Photonic reservoir computing","O-E-O 논리":"O-E-O logic","광 인터커넥트·데이터센터":"Optical interconnect · data center","코히런트 이징 머신":"Coherent Ising machine","MZI 메시":"MZI mesh","마이크로링 가중치 뱅크":"Microring weight bank","PCM 크로스바":"PCM crossbar","E-O-E 링크":"E-O-E link","드라이버·TIA":"Driver · TIA","광 스위치·OCS":"Optical switch · OCS","도파관":"Waveguide","위상 천이기":"Phase shifter","커플러":"Coupler","링 공진기":"Ring resonator","광검출기":"Photodetector","레이저":"Laser","증폭기":"Amplifier","아이솔레이터":"Isolator","편광 소자":"Polarization device","그레이팅 커플러":"Grating coupler","서브파장 격자":"Subwavelength grating","포토닉 결정·나노포토닉스":"Photonic crystals · nanophotonics","박막 리튬나이오베이트":"Thin-film lithium niobate","유기 EO 재료":"Organic EO material","상변화물질":"Phase-change material","이종집적":"Heterogeneous integration","포켈스 효과":"Pockels effect","커 효과":"Kerr effect","열광학 효과":"Thermo-optic effect","캐리어 플라즈마 분산":"Carrier plasma dispersion","전계흡수":"Electroabsorption","상변화":"Phase change","음향광학":"Acousto-optics","자기광학":"Magneto-optics","밴드간 이득·흡수":"Interband gain · absorption","진폭":"Amplitude","위상":"Phase","파장":"Wavelength","편광":"Polarization","공간 모드":"Spatial mode","코히런스":"Coherence","큰 반송 주파수 ω":"High carrier frequency ω","광자끼리 상호작용 없음":"No photon–photon interaction","대역폭 ⭐":"Bandwidth ⭐","공간 병렬성 ⭐":"Spatial parallelism ⭐","무손실 동역학 ⭐":"Lossless dynamics ⭐","저손실 전송":"Low-loss transmission","교차 가능":"Crossable","빔 조향":"Beam steering","팬인·팬아웃":"Fan-in · fan-out","단방향 전파":"Unidirectional propagation","최소작용 원리":"Principle of least action","실온 양자성":"Room-temperature quantumness","파동 물리":"Wave physics","대역폭 ⭐←ω":"Bandwidth ⭐←ω","공간 병렬성 ⭐←ω(짧은 λ)":"Spatial parallelism ⭐←ω (short λ)","무손실 동역학 ⭐←무상호작용":"Lossless dynamics ⭐←no interaction","저손실 전송←무상호작용":"Low-loss transmission←no interaction","교차 가능←무상호작용":"Crossable←no interaction","빔 조향←파동(회절)":"Beam steering←waves (diffraction)","팬인·팬아웃←무상호작용":"Fan-in · fan-out←no interaction","단방향 전파←파동(k 보존)":"Unidirectional propagation←waves (k conserved)","최소작용 원리←광 고유 아님":"Principle of least action←not unique to light","실온 양자성←ħω≫kT":"Room-temperature quantumness←ħω≫kT","파동 물리←ω + 무상호작용":"Wave physics←ω + no interaction","←ω(짧은 λ)":"←ω (short λ)","←무상호작용":"←no interaction","←파동(회절)":"←waves (diffraction)","←파동(k 보존)":"←waves (k conserved)","←광 고유 아님":"←not unique to light","←ω + 무상호작용":"←ω + no interaction","비교":"vs electronics","실리콘 집적 포토닉스·뉴럴 인터페이스":"Silicon integrated photonics · neural interfaces","집적포토닉스·수신기":"Integrated photonics · receivers","멤리스티브 포토닉스":"Memristive photonics","Si 위 양자점 레이저":"Quantum-dot lasers on Si","광 합성곱 가속기":"Optical convolution accelerator","어븀 도프 실리콘 나노포토닉스":"Erbium-doped silicon nanophotonics","화합물반도체":"Compound semiconductors","광 RAM·전광 스위칭":"Optical RAM · all-optical switching","광전융합 디바이스":"Optoelectronic fusion devices","III-V/Si 변조기·CPO":"III-V/Si modulators · CPO","SiPh MPW 파운드리":"SiPh MPW foundry","프로그래머블 광 프로세서":"Programmable photonic processor","광IO·패키징":"Optical IO · packaging","전사인쇄 이종집적":"Transfer-printing heterogeneous integration","PZT·BTO 변조기":"PZT · BTO modulators","플라즈모닉 EO":"Plasmonic EO","도파관 증폭기(EDWA)":"Waveguide amplifier (EDWA)","InP 파운드리·MPW":"InP foundry · MPW","SiPh 위 CMOS 집적":"CMOS integration on SiPh","TFLN 파운드리":"TFLN foundry","UTC-PD 검출기":"UTC-PD detector","300mm SiPh 공정":"300 mm SiPh process","박사 펠로십":"PhD fellowship","국가 나노팹":"National nanofab","SiPh 파운드리·CPO":"SiPh foundry · CPO","전자-광 적층(CPO)":"Electronic-photonic stacking (CPO)","비휘발 프로그래머블 마이크로링":"Non-volatile programmable microrings","포토닉 신경망":"Photonic neural network","InP 스위칭·뉴로모픽":"InP switching · neuromorphic","CPO 메모리 인터페이스":"CPO memory interface","광전자 국가연구소":"National optoelectronics institute","프로그래머블 PIC 이론":"Programmable PIC theory","프로그래머블 광 유니터리·ONN":"Programmable optical unitaries · ONN","고Q 공진기·온칩 광원":"High-Q resonators · on-chip sources","광 시뮬레이션 가속":"Accelerating optical simulation","CPO 광 칩렛":"CPO optical chiplet","플라즈모닉 변조기 상용화":"Commercializing plasmonic modulators","비선형 실리콘 포토닉스":"Nonlinear silicon photonics","BTO 포켈스 변조기":"BTO Pockels modulator","민간 SiPh 파운드리":"Private SiPh foundry","화합물반도체 팹":"Compound semiconductor fab","집적포토닉스·광통신":"Integrated photonics · optical communications","마이크로파 포토닉스":"Microwave photonics","InP MPW·폴리머 EO":"InP MPW · polymer EO","CMOS 호환 EO 소자":"CMOS-compatible EO devices","집적 양자광학·GBS":"Integrated quantum optics · GBS","멤리스터 in-memory":"Memristor in-memory","광컴 인재 양성망":"Optical computing training network","화합물반도체 클러스터":"Compound semiconductor cluster","분산 양자 신경망":"Distributed quantum neural networks","고주파 광전자":"High-frequency optoelectronics","광섬유 통신·비선형":"Fiber communications · nonlinearity","응용광학·정밀공학":"Applied optics · precision engineering","집적 양자 포토닉스":"Integrated quantum photonics","광원·계측":"Light sources · metrology","과제 목록":"Project list","회절 광신경망 D²NN":"Diffractive optical neural network D²NN","포토닉 역설계":"Photonic inverse design","물리 기반 연산":"Physics-based computing","LNOI 이종집적·광 AI 가속기":"LNOI heterogeneous integration · optical AI accelerator","칩간 광 연결·시스템":"Chip-to-chip optical links · systems","칼코게나이드 광메모리":"Chalcogenide optical memory","위상 포토닉스":"Topological photonics","대규모 전자-광자 회로":"Large-scale electronic-photonic circuits","단일칩 광 신경망":"Single-chip optical neural network","MEMS 포토닉스·광 신경망":"MEMS photonics · optical neural networks","광 신경망 이론·역설계":"Optical neural network theory · inverse design","프로그래머블 광 신경망":"Programmable optical neural network","프로그래머블 광 학습":"Programmable optical training","비선형·양자 광파 AI":"Nonlinear · quantum lightwave AI","이종집적 광컴 엔진":"Heterogeneously integrated optical compute engine","광 뉴로모픽 소자":"Optical neuromorphic devices","실리콘 포토닉스 소자":"Silicon photonics devices","비선형 광학·마이크로콤":"Nonlinear optics · microcombs","메타광학 신경망":"Meta-optical neural networks","집적 광컴·역설계":"Integrated optical computing · inverse design","포토닉 텐서코어":"Photonic tensor core","OEO 리저버 컴퓨팅":"OEO reservoir computing","전자-광 공동설계":"Electronic-photonic co-design","실리콘 변조기":"Silicon modulator","그룹IV 포토닉스·플랫폼":"Group IV photonics · platforms","실리콘 포토닉스·파운드리":"Silicon photonics · foundry","중공코어 광섬유":"Hollow-core fiber","광섬유 증폭기(EDFA)":"Fiber amplifier (EDFA)","시스템 PIC·광컴퓨팅":"System PICs · optical computing","광 네트워크·시스템":"Optical networks · systems","그래핀·2D 포토닉스":"Graphene · 2D photonics","PCM 광메모리":"PCM optical memory","자유공간 광 신경망":"Free-space optical neural network","PCM 광연산":"PCM optical computing","BTO 극저온 EO":"BTO cryogenic EO","집적 광양자":"Integrated photonic quantum","나노가공 시설":"Nanofabrication facility","에피택시·반도체 광원":"Epitaxy · semiconductor light sources","InP 레이저·변조기":"InP lasers · modulators","양자증폭기·나노광학":"Quantum amplifiers · nano-optics","집적포토닉스·유기EO":"Integrated photonics · organic EO","뉴로모픽·PCM":"Neuromorphic · PCM","그룹IV 레이저":"Group IV lasers","Ge/GeSn 검출기":"Ge/GeSn detectors","TFLN 광 가속기":"TFLN optical accelerator","광연산 이론":"Theory of optical computing","양자통신·계산 포토닉스":"Quantum communications · computational photonics","커스텀 나노가공":"Custom nanofabrication","모놀리식 CMOS 포토닉스":"Monolithic CMOS photonics","전자-광 집적":"Electronic-photonic integration","모놀리식 선형대수 가속기":"Monolithic linear-algebra accelerator","TFLN 웨이퍼 집적":"TFLN wafer integration","TFLN 나노광학":"TFLN nano-optics","광 텐서코어·PCM":"Photonic tensor core · PCM","이종집적 레이저":"Heterogeneously integrated lasers","공용 MPW 파운드리":"Shared MPW foundry","수출통제":"Export controls","광 리저버·공간광 신경망":"Optical reservoir · free-space optical neural networks","BTO·플라즈모닉 변조기":"BTO · plasmonic modulators","마이크로콤":"Microcomb","프로그래머블 PIC":"Programmable PIC","광양자 회로":"Photonic quantum circuits","폴라리톤·초고체 빛":"Polaritons · supersolid light","보손샘플링":"Boson sampling","양자 포토닉스·클린룸":"Quantum photonics · cleanroom","해당 PI 없음":"No matching PI","유니터리 행렬":"Unitary matrix","Reck 분해":"Reck decomposition","Clements 분해":"Clements decomposition","SVD 분해":"SVD decomposition","자유도":"Degrees of freedom","로렌츠 선형":"Lorentzian lineshape","디튜닝":"Detuning","광전류 합산":"Photocurrent summation","프레넬 전파":"Fresnel propagation","위상 마스크":"Phase mask","4f 광학계":"4f system","푸리에 면":"Fourier plane","정합 필터":"Matched filter","상관 봉우리":"Correlation peak","결정화·비정질화":"Crystallization · amorphization","쓰기 내구성":"Write endurance","직접검출":"Direct detection","국부발진기":"Local oscillator","호모다인 검출":"Homodyne detection","시간다중":"Time multiplexing","지연 대 처리량":"Latency vs throughput","공간광변조기":"Spatial light modulator","병렬도":"Parallelism","리저버 컴퓨팅":"Reservoir computing","저수지":"Reservoir","읽기층":"Readout layer","스펙트럴 반경":"Spectral radius","누설률":"Leak rate","릿지 회귀":"Ridge regression","적분발화":"Integrate-and-fire","역치":"Threshold","불응기":"Refractory period","공명터널다이오드":"Resonant tunneling diode","곱셈누적":"Multiply-accumulate","파장 다중":"Wavelength multiplexing","상변화 재료":"Phase-change material","χ² 비선형":"χ² nonlinearity","되먹임 이득":"Feedback gain","되먹임 지연":"Feedback delay","이징 모형":"Ising model","결합 행렬 J":"Coupling matrix J","축퇴 OPO":"Degenerate OPO","펌프 램프":"Pump ramp","포화 이득":"Saturating gain","최소 이득 논증":"Minimum-gain argument","연속 완화":"Continuous relaxation","진폭 비균일":"Amplitude heterogeneity","국부 최적":"Local optimum","측정-피드백":"Measurement-feedback","측정-되먹임 지연":"Measurement-feedback delay","라운드트립":"Round trip","슬롯":"Slot","Mattis 결합":"Mattis coupling","담금질":"Annealing","글라우버 동역학":"Glauber dynamics","볼츠만 분포":"Boltzmann distribution","이득":"Gain","팬아웃":"Fan-out","소광비":"Extinction ratio","캐스케이드":"Cascading","래치":"Latch","QCSE (양자구속 슈타르크 효과)":"QCSE (quantum-confined Stark effect)","SOA (반도체 광증폭기)":"SOA (semiconductor optical amplifier)","이득포화":"Gain saturation","XGM (교차이득변조)":"XGM (cross-gain modulation)","O-E-O (광–전–광 변환)":"O-E-O (optical–electrical–optical conversion)","스위칭 에너지":"Switching energy","RC 시정수":"RC time constant","펨토패럿 (fF)":"Femtofarad (fF)","폴라리톤":"Polariton","강결합":"Strong coupling","χ⁽³⁾ (3차 비선형 감수율)":"χ⁽³⁾ (third-order nonlinear susceptibility)","FOM (비선형 품질지수)":"FOM (nonlinear figure of merit)","쌍안정":"Bistability","히스테리시스":"Hysteresis","임계 세기":"Threshold intensity","Q값":"Q factor","모드 부피":"Mode volume","PhC 나노캐비티 (광결정)":"PhC nanocavity (photonic crystal)","감응도":"Responsivity","회절 인코더":"Diffractive encoder","아날로그 전자 분류기":"Analog electronic classifier","압축률":"Compression ratio","각 스펙트럼":"Angular spectrum","전달함수":"Transfer function","공간 미분 필터":"Spatial differentiation filter","커널 고정":"Fixed kernel","수동 소자":"Passive device","광 전처리":"Optical preprocessing","저역통과 필터":"Low-pass filter","유효 비트 수":"Effective number of bits","electro-optical 하이브리드":"Electro-optical hybrid","선형광학 양자컴 (LOQC)":"Linear-optical quantum computing (LOQC)","HOM 간섭":"HOM interference","구별 불가능성":"Indistinguishability","퍼머넌트":"Permanent","단일광자 검출기 (SNSPD)":"Single-photon detector (SNSPD)","투과율 η":"Transmission η","지수 붕괴 η^(mn)":"Exponential decay η^(mn)","탭 지연선":"Tapped delay line","FIR 필터":"FIR filter","자유 스펙트럼 범위 (FSR)":"Free spectral range (FSR)","광 미분기":"Optical differentiator","광 적분기":"Optical integrator","주파수 빗 (광 콤)":"Frequency comb (optical comb)","빗살 간격 (반복률)":"Line spacing (repetition rate)","위상잡음 20·log N":"Phase noise 20·log N","고Q 공진기":"High-Q resonator","커 비선형":"Kerr nonlinearity","2광자 흡수 (TPA)":"Two-photon absorption (TPA)","질화실리콘 (SiN)":"Silicon nitride (SiN)","삽입손실":"Insertion loss","유효 굴절률":"Effective refractive index","에바네센트 장":"Evanescent field","클래딩":"Cladding","히터 위상천이기":"Heater phase shifter","본딩 패드":"Bond pad","와이어 본딩":"Wire bonding","파이버 어레이":"Fiber array","결합손":"Coupling loss","테이프아웃":"Tape-out","실측 정밀도":"Measured precision","주파수 천이기":"Frequency shifter","EO 변조기":"EO modulator","EO 주파수 변환기":"EO frequency converter","주파수 빔 분할기":"Frequency beam splitter","밴드갭":"Bandgap","엑시톤":"Exciton","양자우물":"Quantum well","PIN 다이오드 변조기":"PIN diode modulator"}</script>
+<script type="application/json" id="i18n-dict">{"MZI 메시":"MZI mesh","마이크로링 가중치 뱅크":"Microring weight bank","링 가중치 뱅크":"Ring weight bank","회절 신경망 D²NN":"Diffractive neural network D²NN","회절 신경망 (D²NN)":"Diffractive neural network (D²NN)","회절 신경망":"Diffractive network","4f 상관기":"4f correlator","4f 상관기 · 정합 필터":"4f correlator · matched filter","PCM 크로스바":"PCM crossbar","호모다인 MVM":"Homodyne MVM","호모다인 · 코히런트 MVM":"Homodyne · coherent MVM","호모다인":"Homodyne","시간다중 MVM":"Time-multiplexed MVM","시간다중":"Time-multiplexed","SLM 자유공간":"SLM free-space","SLM 자유공간 MVM":"SLM free-space MVM","여덟을 겹쳐 보면":"All eight side by side","넷을 겹쳐 보면":"All four side by side","셋을 겹쳐 보면":"All three side by side","여섯을 겹쳐 보면":"All six side by side","겹쳐 보면":"Side by side","리저버 컴퓨팅":"Reservoir computing","스파이킹 광 뉴런":"Spiking photonic neuron","포토닉 텐서코어":"Photonic tensor core","전광 RNN":"All-optical RNN","코히런트 이징 머신":"Coherent Ising machine","코히런트 이징 머신 (OPO 네트워크)":"Coherent Ising machine (OPO network)","공간광 이징 머신":"Spatial-light Ising machine","공간광 이징 머신 (SPIM)":"Spatial-light Ising machine (SPIM)","이징 샘플러":"Ising sampler","포토닉 리커런트 이징 샘플러":"Photonic recurrent Ising sampler","리커런트 샘플러":"Recurrent sampler","S-SEED · 대칭 자기전기광학 소자":"S-SEED · symmetric self-electro-optic effect device","전광 논리 게이트":"All-optical logic gate","전광 논리 게이트 · XGM / XPM / FWM":"All-optical logic gate · XGM / XPM / FWM","펨토패럿 O-E-O":"Femtofarad O-E-O","폴라리톤 논리":"Polariton logic","2D 소재 비선형":"2D-material nonlinearity","자기 스위칭":"Self-switching","자기 스위칭 (PhC·SWG)":"Self-switching (PhC·SWG)","자기 스위칭 · PhC / SWG 비선형 공진기":"Self-switching · PhC / SWG nonlinear resonators","In-sensor":"In-sensor","회절 인코더":"Diffractive encoder","회절 인코더 + 아날로그 전자":"Diffractive encoder + analog electronics","회절 인코더 + 아날로그 전자 (ACCEL)":"Diffractive encoder + analog electronics (ACCEL)","메타표면 연산":"Metasurface computing","메타표면 아날로그 연산":"Metasurface analog computing","메타표면 미분":"Metasurface differentiation","광 전처리기":"Optical preprocessor","보손샘플링":"Boson sampling","선형광학 양자컴":"Linear-optical QC","선형광학 양자컴 · 보손샘플링":"Linear-optical quantum computing · boson sampling","마이크로파 포토닉스":"Microwave photonics","마이크로파 포토닉 프로세서":"Microwave photonic processor","주파수 콤":"Frequency comb","주파수 콤 병렬 처리":"Frequency-comb parallel processing","4×4 메시 실물":"4×4 mesh, real device","위상":"phase","파장":"wavelength","공간":"space","재료":"material","전자":"electronic","동역학":"dynamics","휘발":"volatile","비휘발":"non-volatile","해당없음":"n/a","만든다":"Generate","나눈다·합친다":"Split · combine","바꾼다 (손잡이)":"Modulate (the knobs)","저장한다":"Store","섞는다 (비선형)":"Mix (nonlinear)","자유공간":"Free space","읽는다":"Read","잇는다":"Connect","전자 쪽":"Electronic side","A 행렬곱":"A Matrix multiply","B 신경망":"B Neural networks","C 최적화":"C Optimization","D 논리":"D Logic","E 변환앞":"E Front-end transforms","F 양자·신호":"F Quantum · signal","메시":"Mesh","광 펄스 쓰기":"optical pulse writing","균형 검출":"balanced detection","뉴로모픽":"neuromorphic","링":"ring","마이크로콤":"microcomb","메모리":"memory","비간섭":"incoherent","위상형":"phase type","흡수형":"absorption type","히터":"heater"}</script>
+</div>
+<script src="../js/core.js?v=64cbab95"></script>
+<script src="../js/writing-toc.js?v=56a80c1f"></script>
+<script src="../js/writing-review-miller-2010.js?v=f09821c3"></script>
+<script data-goatcounter="https://anythinking.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+</body>
+</html>
