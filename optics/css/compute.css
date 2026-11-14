@@ -20,6 +20,11 @@ aside.cmp-side{padding:22px 28px 28px;gap:20px}
 
 /* 목차 */
 .cmp-ov{flex:1;padding:8px 32px 40px;background:var(--panel)}
+/* 첫 화면 소개: 누가 · 왜 · 어디부터 */
+.cmp-who{display:flex;flex-direction:column;gap:8px;padding:14px 0 16px;border-bottom:1px solid var(--rule)}
+.cmp-who p{margin:0;max-width:84ch;font-size:14.5px;line-height:1.7;color:var(--ink);text-wrap:pretty}
+.cmp-wholinks{display:flex;flex-wrap:wrap;gap:6px 18px;font-size:13.5px}
+.cmp-wholinks a{color:var(--probe);text-decoration:underline;text-underline-offset:3px}
 /* 종류 목차: 오른쪽 칸 없이 전체 폭 */
 .cmp-main:has(> .side[hidden]){grid-template-columns:minmax(0,1fr)}
 .cmp-ovrow{display:grid;grid-template-columns:minmax(150px,220px) minmax(0,1fr);gap:22px;padding:18px 0;border-bottom:1px solid var(--rule)}

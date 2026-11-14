@@ -77,8 +77,8 @@
         P.raw(CYC.sub(474, 236, 394, 124, '0 0 440 150', `<path class="wg" stroke-width="1.4" opacity=".55" d="M40 40 C70 40 70 75 100 75 H150 C180 75 180 40 210 40 H250 C280 40 280 75 310 75"/>
             <path class="wg" stroke-width="1.4" opacity=".55" d="M40 110 C70 110 70 75 100 75 H150 C180 75 180 110 210 110 H250 C280 110 280 75 310 75"/>
             <path class="bm" stroke-width="5" opacity=".9" d="M14 40 H40"/>
-            <rect class="ht" x="155" y="34" width="50" height="6" rx="2" opacity=".9"/>
-            <text class="m" x="180" y="28" font-size="11" text-anchor="middle">θ = ${th}°</text>
+            <rect class="ht" x="212" y="37" width="36" height="6" rx="2" opacity=".9"/>
+            <text class="m" x="230" y="28" font-size="11" text-anchor="middle">θ = ${th}°</text>
             <path class="bm" stroke-width="${(1 + 5 * s).toFixed(2)}" opacity="${(0.15 + 0.85 * s).toFixed(2)}" d="M310 75 C340 75 340 40 370 40 H400"/>
             <path class="bm" stroke-width="${(1 + 5 * (1 - s)).toFixed(2)}" opacity="${(0.15 + 0.85 * (1 - s)).toFixed(2)}" d="M310 75 C340 75 340 110 370 110 H400"/>
             <text class="i" x="406" y="44" font-size="12">${fmt(s)}</text>
@@ -150,21 +150,38 @@
       render(S) {
         let re = new Float64Array(N3), im = new Float64Array(N3);
         for (let n = 0; n < N3; n++) { const u = (n - N3 / 2) / 18; re[n] = Math.exp(-u * u); }
-        mask(re, im, S.fa, S.ta); let [r, i] = prop(re, im, 1);
-        mask(r, i, S.fb, S.tb); [r, i] = prop(r, i, 1);
+        mask(re, im, S.fa, S.ta); const A1 = [re.slice(), im.slice()]; let [r, i] = prop(re, im, 1);
+        mask(r, i, S.fb, S.tb); const A2 = [r.slice(), i.slice()]; [r, i] = prop(r, i, 1);
         const I = [...r].map((v, n) => v * v + i[n] * i[n]), mx = Math.max(...I, 1e-9), bins = [0, 0, 0, 0];
         for (let n = 0; n < N3; n++) bins[clamp(Math.floor(n / (N3 / 4)), 0, 3)] += I[n];
         const best = bins.indexOf(Math.max(...bins)), tot = bins.reduce((a, b) => a + b, 0);
         return {
           draw(cx, W, H) {
             cx.clearRect(0, 0, W, H);
+            // 전파 띠 — 마스크 뒤 거리 z 에서의 세기 |E(x,z)|² 를 14단계로 실제 전파해 칠한다. 초점·기울기를 바꾸면 띠가 모이고 휜다
+            const strip = (x0, x1, [r0, i0]) => {
+              const K = 14, w = (x1 - x0) / K;
+              for (let k = 1; k <= K; k++) {
+                const [pr, pi] = prop(r0, i0, k / K); let m = 1e-9; const J = new Float64Array(N3);
+                for (let n = 0; n < N3; n++) { J[n] = pr[n] * pr[n] + pi[n] * pi[n]; if (J[n] > m) m = J[n]; }
+                for (let n = 0; n < N3; n += 2) { const a = Math.min(1, (J[n] + J[n + 1]) / (2 * m)); if (a < .05) continue; cx.globalAlpha = .1 + .75 * a; cx.fillStyle = col('--beam'); cx.fillRect(x0 + (k - 1) * w, 50 + n / N3 * 200, w + .6, 200 / N3 * 2 + .6); }
+              }
+              cx.globalAlpha = 1;
+            };
+            // 입사: 가우시안 빔이 마스크 1 로
+            for (let n = 0; n < N3; n += 2) { const u = (n - N3 / 2) / 18, a = Math.exp(-u * u); if (a < .05) continue; cx.globalAlpha = .08 + .5 * a; cx.fillStyle = col('--beam'); cx.fillRect(30, 50 + n / N3 * 200, 104, 200 / N3 * 2 + .6); }
+            cx.globalAlpha = 1;
+            strip(150, 392, A1); strip(410, 652, A2);
+            // 마스크 선 — 기울기 슬라이더만큼 기운다(선형 위상 = 빔 조향), 초점은 라벨로
+            const tiltLine = (x, t) => { const dx = Math.tan(t / 60 * 9 * D2R) * 110; cx.beginPath(); cx.moveTo(x - dx, 30); cx.lineTo(x + dx, 250); cx.stroke(); };
             cx.strokeStyle = col('--rule'); cx.lineWidth = 2;
-            [140, 400, 660].forEach(x => { cx.beginPath(); cx.moveTo(x, 30); cx.lineTo(x, 250); cx.stroke(); });
+            cx.strokeStyle = col('--warm'); cx.lineWidth = 3; tiltLine(140, S.ta); tiltLine(400, S.tb);
+            cx.strokeStyle = col('--rule'); cx.lineWidth = 2; cx.beginPath(); cx.moveTo(660, 30); cx.lineTo(660, 250); cx.stroke();
             cx.fillStyle = col('--muted'); cx.font = '13px IBM Plex Mono, monospace';
             cx.fillText('마스크 1', 110, 270); cx.fillText('마스크 2', 370, 270); cx.fillText('출력면', 640, 270);
-            cx.strokeStyle = col('--beam'); cx.globalAlpha = .25; cx.lineWidth = 1;
-            for (let k = 0; k < 9; k++) { const y = 60 + k * 17; cx.beginPath(); cx.moveTo(30, 140); cx.lineTo(140, y); cx.lineTo(400, 280 - y); cx.lineTo(660, y); cx.stroke(); }
-            cx.globalAlpha = 1;
+            cx.font = '10.5px IBM Plex Mono, monospace';
+            cx.fillText(`초점 ${S.fa} · 기울기 ${S.ta}`, 86, 286); cx.fillText(`초점 ${S.fb} · 기울기 ${S.tb}`, 346, 286);
+            cx.fillText('|E|² — 거리별 실제 전파', 150, 42);
             cx.strokeStyle = col('--beam'); cx.lineWidth = 2; cx.beginPath();
             for (let n = 0; n < N3; n++) { const y = 250 - (I[n] / mx) * 200, x = 680 + n * 1.5; n ? cx.lineTo(x, y) : cx.moveTo(x, y); } cx.stroke();
             for (let b = 0; b < 4; b++) {
@@ -324,7 +341,7 @@
     {
       id: 'a7', num: '07', tab: '시간다중', title: '시간다중 MVM', fig: { type: 'svg', w: 880, h: 370 }, label: '펄스 → 변조기 하나 → 누적 고리 → 검출 → FPGA 가 다음 가중치',
       idea: [['소자 하나를 시간으로 재사용한다. '], ['공간 대신 시간', 1], ['으로 행렬을 펼치니 면적은 줄고 지연은 늘어난다.']],
-      note: 'N×N 행렬 하나에 N 사이클이 든다. 소자는 하나로 줄지만 계산 시간이 N배다.',
+      note: 'N = 벡터 길이 = 한 행이 차지하는 시간 슬롯 수. 입력 펄스 N개가 변조기 하나를 차례로 지나고, 고리가 N바퀴 누적한 뒤 PD 가 y_i 하나를 읽는다. N×N 행렬이면 이걸 N번(행마다) 반복한다.',
       init: () => ({ t: 0 }),
       controls: [
         { type: 'range', k: 'N', label: '채널 N', min: 4, max: 64, step: 4, def: 16 },
@@ -350,19 +367,22 @@
         P.laser(38, Y, { id: 'src-pulse' });
         P.beam([[61, Y], [124, Y]]);
         for (let k = 0; k < 4; k++) P.path(`M${72 + k * 12} ${Y - 9} v-8`, { c: 'beam', w: 2, op: k === 3 - (k0 % 4) ? 1 : .3 });
+        P.lab(92, Y - 24, `x₁…x_N — 슬롯 N=${N}`, { a: 'middle', s: 9.5 });
         P.mod(144, Y, { lab: 'xₖwₖ', red: true, w: 44 });
         P.beam([[166, Y], [236, Y]], { w: 2 });
         // 고리: 결합기로 들어가 한 바퀴 돌며 직전 슬롯과 더해진다
         P.path(`M236 ${Y} C250 ${Y} 252 ${Y - 8} 266 ${Y - 8} H430 Q450 ${Y - 8} 450 ${Y - 28} V${Y - 58} Q450 ${Y - 78} 430 ${Y - 78} H286 Q266 ${Y - 78} 266 ${Y - 58} V${Y - 28}`, { c: 'beam', w: 1.6, op: .35 + .65 * acc });
         P.coupler(258, Y - 4, { w: 30, g: 5, id: false });
         P.coil(350, Y - 78, { r: 11, lab: '' }); P.lab(350, Y - 98, '지연 = 한 슬롯', { a: 'middle', s: 9.5 });
+        P.lab(340, Y - 40, `N=${N} 바퀴 누적 = 행 하나`, { a: 'middle', s: 9.5, c: 'beam' });
         P.amp(450, Y - 44, { lab: '' }); P.lab(470, Y - 40, '증폭', { s: 9.5 });
         P.beam([[430, Y - 8], [470, Y - 8], [482, Y], [520, Y]], { w: 1.6 });
         P.pd(528, Y, { v: acc }); P.wire([[538, Y], [566, Y]]);
+        P.lab(528, Y + 30, `N슬롯 뒤 y_i 읽음`, { a: 'middle', s: 9.5 });
         P.box(592, Y, 48, 28, 'TIA', { id: 'tia' }); P.wire([[616, Y], [642, Y]]);
         P.box(666, Y, 44, 28, 'ADC', { id: 'adc' }); P.wire([[688, Y], [716, Y]]);
         P.box(748, Y, 60, 34, 'FPGA', { id: 'fpga', tone: 'probe' });
-        P.wire([[748, Y + 17], [748, 190], [144, 190], [144, Y + 12]]); P.lab(380, 185, '다음 슬롯의 wₖ', { s: 9.5, c: 'probe' });
+        P.wire([[748, Y + 17], [748, 190], [144, 190], [144, Y + 12]]); P.lab(380, 185, `FPGA 가 w_i1…w_iN 을 슬롯마다 하나씩 변조기에`, { s: 9.5, c: 'probe' });
         P.legend(16, 250, ['펄스', '변조 xₖwₖ', '누적 고리', '검출', 'ADC', 'FPGA']);
         P.aux(470, 222, 402, 142, '소자 하나가 사이클마다 다른 w');
         P.raw(CYC.sub(474, 236, 394, 124, '0 34 440 116', g));

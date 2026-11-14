@@ -278,7 +278,15 @@
       h('p', h('b', A.t('가중치를 어디에 두느냐가 설계를 가른다.', 'Where you put the weights decides the design.')), A.t(' 위상에 두면 임의 행렬이 되지만 소자가 N²로 늘고 히터를 계속 켜둬야 한다. 파장에 두면 합산이 공짜가 되지만 온도에 묶인다. 공간에 두면 전파가 연산을 대신 해주지만 바꾸려면 다시 찍어야 한다. 재료의 상태에 두면 꺼도 남지만 쓰기가 느리다.', ' In phase, you get an arbitrary matrix, but devices grow as N² and the heaters must stay on. In wavelength, summation comes for free, but you are tied to temperature. In space, propagation does the computing for you, but changing it means fabricating again. In the state of a material, the values survive power-off, but writing is slow.')),
       h('p', h('b', A.t('끄면 남는 건 여섯 개뿐이다(◆).', 'Only six survive power-off (◆).')), A.t(` ${n}개 중 전원을 끊어도 값이 남는 건 여섯 개뿐이고, 그중 넷은 바꾸려면 다시 찍어야 하는 쪽이다. 쓰기가 되는 비휘발은 사실상 PCM 계열 둘이다. 리뷰들이 다음 승부처로 가중치 저장·업데이트를 꼽는 이유가 이 숫자에 있다.`, ` Of the ${n}, only six keep their values when the power is cut, and four of those can only be changed by fabricating again. Rewritable non-volatile weights are in practice the two PCM designs. This number is why reviews name weight storage and updating as the next battleground.`)),
       h('p', h('b', A.t('그리고 절반은 연산이 아니라 읽기에서 갈린다.', 'And half the battle is decided in readout, not computation.')), A.t(' 검출기는 세기만 읽으니 부호가 사라지고, 되찾으려면 기준 빛을 같이 때려야 한다. 아무리 좋은 행렬곱도 읽는 방식이 음수를 버리면 쓸 수 없다.', ' A detector reads only intensity, so the sign is lost; getting it back means mixing in a reference beam. However good the matrix multiply, it is useless if the readout throws away negative values.')));
-    mount(stage, h('div.cmp-ov', rows, read));
+    // 첫 화면에서 「누가 · 왜 · 어디부터」 — 이 목차가 사이트의 대문이다
+    const who = h('div.cmp-who',
+      h('p', A.t(`신영철(Youngchel Shin)이 만드는 지도입니다. 시드니대학교에서 전기전자공학(전공 Computer Engineering)을 공부하고 전광 논리 게이트로 졸업논문을 썼으며, 지금은 초전도 응용 분야 기업의 연구원입니다. 광 연산 분야의 대학원 진학을 준비하며, 논문에서 읽은 광 연산 구조를 직접 움직여 볼 수 있는 모형으로 다시 만들면서 공부하고 있습니다.`,
+        `A map by Youngchel Shin. I studied electrical engineering (major in Computer Engineering) at the University of Sydney, wrote my honours thesis on all-optical logic gates, and now work as a researcher at a company in applied superconductivity. While preparing for graduate study in optical computing, I study by rebuilding the structures I read about in papers as small models you can move by hand.`)),
+      h('p.cmp-wholinks',
+        h('a', { href: 'about.html' }, A.t('만든 사람', 'About the author')),
+        h('a', { href: '#a5' }, A.t('먼저 볼 구조 — PCM 크로스바', 'Start here — PCM crossbar')),
+        h('a', { href: 'writing-matrix-crossbar.html' }, A.t('먼저 읽을 글 — 신경망이 어떻게 크로스바로 표현될까?', 'Read first — How can a neural network be expressed as a crossbar?'))));
+    mount(stage, h('div.cmp-ov', who, rows, read));
   }
   // ── 그림 크기: 남은 높이에 맞춘 폭 (넓은 화면). 좁은 화면은 칸 폭 그대로 ──
   function fitW(fw, fh) {

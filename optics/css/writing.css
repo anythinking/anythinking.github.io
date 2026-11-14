@@ -50,6 +50,8 @@
 .wr-toc{display:none}
 @media (min-width:1240px){
   .wr-toc{display:flex;flex-direction:column;gap:2px;position:fixed;top:140px;left:max(var(--gutter),calc(50% - 392px - 220px));width:200px;max-height:calc(100vh - 200px);overflow:auto;font-size:13px;line-height:1.45}
+  .wr-toc{transition:opacity .15s}
+  .wr-toc.hide{opacity:0;pointer-events:none}
   .wr-toc a{color:var(--muted);text-decoration:none;padding:4px 10px;border-left:2px solid var(--rule)}
   .wr-toc a:hover{color:var(--ink)}
   .wr-toc a.on{color:var(--ink);border-left-color:var(--ui)}
@@ -84,3 +86,21 @@
 .wr-ctl button{font:inherit;color:var(--ink);background:var(--bg);border:1px solid var(--rule);border-radius:6px;padding:4px 10px;cursor:pointer}
 .wr-ctl button:hover{border-color:var(--ui)}
 .wr-ctl button[aria-pressed="true"]{border-color:var(--ui);background:var(--probetint);color:var(--probefg)}
+
+/* 세로 탭: 왼쪽 이름 목록을 누르면 오른쪽 내용이 바뀐다. 좁은 화면에선 위쪽 가로 줄로 */
+.wr-vt{display:grid;grid-template-columns:170px minmax(0,1fr);gap:20px;margin:8px 0 22px;
+  width:min(960px,calc(100vw - 2 * var(--gutter) - 16px));margin-left:50%;transform:translateX(-50%)}
+.wr-vt .wr-fig{width:auto;margin-left:0;transform:none}
+.wr-vt [role=tablist]{display:flex;flex-direction:column;gap:2px;border-right:1px solid var(--rule);align-self:start}
+.wr-vt [role=tab]{font:inherit;font-size:14px;text-align:left;color:var(--muted);background:none;border:0;border-right:2px solid transparent;margin-right:-1px;padding:8px 10px;cursor:pointer;border-radius:4px 0 0 4px}
+.wr-vt [role=tab]:hover{color:var(--ink)}
+.wr-vt [role=tab][aria-selected="true"]{color:var(--ink);font-weight:600;border-right-color:var(--ui);background:var(--panel)}
+.wr-vt [role=tab]:focus-visible{outline:2px solid var(--ui);outline-offset:-2px}
+.wr-vt [role=tabpanel] h3{margin:2px 0 8px;font-size:17px}
+.wr-vt [role=tabpanel] .wr-fig{margin-bottom:14px}
+@media (max-width:640px){
+  .wr-vt{grid-template-columns:minmax(0,1fr);gap:12px}
+  .wr-vt [role=tablist]{flex-direction:row;overflow-x:auto;border-right:0;border-bottom:1px solid var(--rule)}
+  .wr-vt [role=tab]{white-space:nowrap;border-right:0;border-bottom:2px solid transparent;margin:0 0 -1px;border-radius:4px 4px 0 0}
+  .wr-vt [role=tab][aria-selected="true"]{border-bottom-color:var(--ui)}
+}

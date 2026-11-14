@@ -25,7 +25,16 @@
     let cur = 0;
     hs.forEach((h, i) => { if (h.getBoundingClientRect().top <= top) cur = i; });
     links.forEach((a, i) => a.classList.toggle('on', i === cur));
+    // 넓게 튀어나오는 그림·세로 탭이 차례 자리를 지나가는 동안에는 차례를 잠시 숨긴다
+    const tr = toc.getBoundingClientRect();
+    const hit = tr.width > 0 && wides.some(el => {
+      const r = el.getBoundingClientRect();
+      return r.left < tr.right && r.top < tr.bottom && r.bottom > tr.top;
+    });
+    toc.classList.toggle('hide', hit);
   }
+  const wides = Array.from(doc.querySelectorAll('.wr-fig, .wr-vt')).filter(el => !el.closest('.wr-vt') || el.classList.contains('wr-vt'));
+  window.addEventListener('resize', () => { if (!raf) raf = requestAnimationFrame(mark); });
   (main === document.scrollingElement ? window : main).addEventListener('scroll', () => { if (!raf) raf = requestAnimationFrame(mark); }, { passive: true });
   mark();
 })();
