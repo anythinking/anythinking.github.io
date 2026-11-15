@@ -48,7 +48,7 @@
   width:min(960px,calc(100vw - 2 * var(--gutter) - 16px));margin-left:50%;transform:translateX(-50%)}
 /* 차례 — 넓은 화면의 왼쪽 여백에만(본문 칼럼 왼쪽에 자리가 남을 때) */
 .wr-toc{display:none}
-@media (min-width:1240px){
+@media (min-width:1290px){
   .wr-toc{display:flex;flex-direction:column;gap:2px;position:fixed;top:140px;left:max(var(--gutter),calc(50% - 392px - 220px));width:200px;max-height:calc(100vh - 200px);overflow:auto;font-size:13px;line-height:1.45}
   .wr-toc{transition:opacity .15s}
   .wr-toc.hide{opacity:0;pointer-events:none}

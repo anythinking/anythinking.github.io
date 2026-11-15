@@ -18,8 +18,9 @@
   /* ---------- 그림 1 ---------- */
   if ($('fd1')) {
     const L = $('fd1-l'), R = $('fd1-r'), sh = $('fd1-h');
-    const X0 = 0.7, F = Math.sin, D = Math.cos(X0);
+    const X0 = 1.2, F = Math.sin, D = Math.cos(X0);
     const XA = -0.5, XB = 2.4, YA = -0.7, YB = 1.25;
+    const YL = k => 200 + 16 * k;
     const lx = x => 40 + (x - XA) / (XB - XA) * 260, ly = y => 250 - (y - YA) / (YB - YA) * 215;
     const fwd = h => (F(X0 + h) - F(X0)) / h, cen = h => (F(X0 + h) - F(X0 - h)) / (2 * h);
     // 오른쪽: log10 h ∈ [-6, 0], log10 err ∈ [-16, 0]
@@ -44,15 +45,23 @@
       let p = '';
       for (let i = 0; i <= 200; i++) { const x = XA + (XB - XA) * i / 200; p += (i ? 'L' : 'M') + f(lx(x)) + ' ' + f(ly(F(x))); }
       c += `<g clip-path="url(#fd1-c)"><path class="br" d="${p}"/>`;
-      c += line(X0, F(X0), D, 'mk-ink');
-      c += line(X0, F(X0), fwd(h), 'mk-beam');
-      c += line(X0 - h, F(X0 - h), cen(h), 'mk-warm') + '</g>';
-      [[X0 - h, 'var(--warm)'], [X0 + h, 'var(--beam)']].forEach(([x, col]) => {
-        if (x > XA && x < XB) c += `<circle cx="${f(lx(x))}" cy="${f(ly(F(x)))}" r="4" fill="${col}"/>`;
+      // 연장선은 옅게, 실제로 쓴 두 점 사이 구간(할선)은 굵게
+      c += line(X0, F(X0), D, 'mk-ink').replace('/>', ' style="stroke-dasharray:5 4"/>');
+      c += line(X0, F(X0), fwd(h), 'mk-beam').replace('/>', ' opacity=".35"/>');
+      c += line(X0 - h, F(X0 - h), cen(h), 'mk-warm').replace('/>', ' opacity=".35"/>');
+      const seg = (xa, xb, col, dy) => `<line x1="${f(lx(xa))}" y1="${f(ly(F(xa)) + dy)}" x2="${f(lx(xb))}" y2="${f(ly(F(xb)) + dy)}" style="stroke:${col};stroke-width:3.5;stroke-linecap:round"/>`;
+      c += seg(X0, X0 + h, 'var(--beam)', 0) + seg(X0 - h, X0 + h, 'var(--warm)', 0) + '</g>';
+      c += `<circle cx="${f(lx(X0))}" cy="${f(ly(F(X0)))}" r="5" fill="var(--ink)"/>`;
+      [[X0 - h, 'var(--warm)', 'x₀−h'], [X0 + h, 'var(--beam)', 'x₀+h']].forEach(([x, col, t]) => {
+        if (x > XA && x < XB) {
+          c += `<circle cx="${f(lx(x))}" cy="${f(ly(F(x)))}" r="5" fill="${col}"/>`;
+          if (h > 0.12) c += `<text class="sm" x="${f(lx(x))}" y="${f(ly(F(x)) + 20)}" text-anchor="middle">${t}</text>`;
+        }
       });
-      c += `<circle cx="${f(lx(X0))}" cy="${f(ly(F(X0)))}" r="4.5" fill="var(--ink)"/>`;
       c += `<text class="sm" x="${f(lx(X0))}" y="${f(ly(F(X0)) + 20)}" text-anchor="middle">x₀</text>`;
-      c += `<text class="sm" x="60" y="52" fill="var(--muted)">— 접선(진짜)</text><text class="sm" x="60" y="68" style="fill:var(--beam)">— 전진 차분</text><text class="sm" x="60" y="84" style="fill:var(--warm)">— 중앙 차분</text>`;
+      c += `<line x1="150" y1="${YL(0)}" x2="170" y2="${YL(0)}" class="mk-ink" style="stroke-dasharray:5 4"/><text class="sm" x="176" y="${YL(0) + 4}">접선 = 진짜 기울기</text>`;
+      c += `<line x1="150" y1="${YL(1)}" x2="170" y2="${YL(1)}" style="stroke:var(--beam);stroke-width:3.5"/><text class="sm" x="176" y="${YL(1) + 4}">전진: x₀ → x₀+h</text>`;
+      c += `<line x1="150" y1="${YL(2)}" x2="170" y2="${YL(2)}" style="stroke:var(--warm);stroke-width:3.5"/><text class="sm" x="176" y="${YL(2) + 4}">중앙: x₀−h → x₀+h</text>`;
       L.innerHTML = c;
 
       let r = axes(370, 615, 250, 30, '', '오차(로그)') + `<text class="sm" x="615" y="286" text-anchor="end">간격 h (로그) →</text>`;
@@ -65,7 +74,7 @@
       const ef = Math.abs(fwd(h) - D), ec = Math.abs(cen(h) - D);
       r += `<circle cx="${f(rx(s))}" cy="${f(ry(ef))}" r="4" fill="var(--beam)"/><circle cx="${f(rx(s))}" cy="${f(ry(ec))}" r="4" fill="var(--warm)"/>`;
       R.innerHTML = r;
-      $('fd1-read').textContent = `전진 차분 오차 ${ex(ef)} · 중앙 차분 오차 ${ex(ec)}`;
+      $('fd1-read').textContent = `기울기 — 진짜 ${f(D, 3)} · 전진 ${f(fwd(h), 3)} · 중앙 ${f(cen(h), 3)}  |  오차 — 전진 ${ex(ef)} · 중앙 ${ex(ec)}`;
     }
     sh.addEventListener('input', draw);
     draw();
@@ -74,16 +83,17 @@
   /* ---------- 그림 2 ---------- */
   if ($('fd2-m')) {
     let m = '';
-    const x0 = 418, y0 = 48, c = 28;
+    const x0 = 418, y0 = 62, c = 28;
+    for (let k = 0; k < 5; k++) m += `<text class="sm" x="${x0 + k * c + c / 2}" y="${y0 - 8}" text-anchor="middle">T${'₁₂₃₄₅'[k]}</text>`;
     for (let r = 0; r < 5; r++) {
-      m += `<text class="sm" x="${x0 - 8}" y="${y0 + r * c + 18}" text-anchor="end">점${r + 1}</text>`;
+      m += `<text class="sm" x="${x0 - 8}" y="${y0 + r * c + 18}" text-anchor="end">점 ${r + 1} 식</text>`;
       for (let k = 0; k < 5; k++) {
         const v = r === k ? '−2' : Math.abs(r - k) === 1 ? '1' : '0';
         const on = v !== '0', hl = r === 2 && on;
         m += `<rect x="${x0 + k * c}" y="${y0 + r * c}" width="${c}" height="${c}" ${on ? `class="cell${hl ? ' hl' : ''}"` : 'fill="none" stroke="var(--rule)"'}/>`;
         m += `<text ${hl ? 'class="hlt"' : on ? '' : 'class="sm" opacity=".45"'} x="${x0 + k * c + c / 2}" y="${y0 + r * c + 18}" text-anchor="middle">${v}</text>`;
       }
-      m += `<text class="sm" x="${x0 + 5 * c + 12}" y="${y0 + r * c + 18}">T${'₁₂₃₄₅'[r]}</text>`;
+      m += `<text class="sm" x="${x0 + 5 * c + 8}" y="${y0 + r * c + 18}">= −h²q/k</text>`;
     }
     $('fd2-m').innerHTML = m;
   }
