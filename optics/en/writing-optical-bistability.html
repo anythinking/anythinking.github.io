@@ -1,0 +1,185 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>광 쌍안정은 어떻게 생길까? — Optical Computing Atlas</title>
+<meta name="description" content="같은 세기의 빛을 넣었는데 출력이 두 가지로 갈리는 광 쌍안정. 공진기와 커 효과가 만드는 되먹임, 직선과 봉우리의 교점으로 푸는 법, 문턱이 V/Q²로 가는 이유, 그리고 Miller의 잣대로 매긴 점수까지.">
+<link rel="canonical" href="https://anythinking.github.io/optics/en/writing-optical-bistability.html">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Optical Computing Atlas">
+<meta property="og:title" content="광 쌍안정은 어떻게 생길까? — Optical Computing Atlas">
+<meta property="og:url" content="https://anythinking.github.io/optics/en/writing-optical-bistability.html">
+<meta property="og:image" content="https://anythinking.github.io/optics/img/og.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<meta property="og:description" content="같은 세기의 빛을 넣었는데 출력이 두 가지로 갈리는 광 쌍안정. 공진기와 커 효과가 만드는 되먹임, 직선과 봉우리의 교점으로 푸는 법, 문턱이 V/Q²로 가는 이유, 그리고 Miller의 잣대로 매긴 점수까지.">
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="../css/base.css?v=25b88a60">
+<link rel="stylesheet" href="../css/writing.css?v=6e7bfd0d">
+</head>
+<body data-page="writing-optical-bistability" data-root="../">
+<div class="app">
+  <header class="top">
+    <div class="ttl"><b>Optical Computing Atlas</b></div>
+    <div class="hd-r">
+      <nav class="g" aria-label="Maps"><div class="ng"><span class="ngl">Photonics basics</span><div class="ngt"><a href="optics.html">Optics</a><a href="layers.html">Layers</a><a href="glossary.html">Glossary</a></div></div>
+      <div class="ng"><span class="ngl">Optical computing</span><div class="ngt"><a href="compute.html">Kinds</a><a href="devices.html">Devices</a><a href="institutions.html">Institutions</a></div></div>
+      <div class="ng etc"><span class="ngl">&nbsp;</span><div class="ngt"><a href="writing.html" aria-current="page">Writing</a><a href="about.html">About</a></div></div></nav>
+      <div class="lang" role="group" aria-label="Language"><span class="lang-lb">Language</span><a href="../writing-optical-bistability.html" hreflang="ko" lang="ko">한국어</a><span aria-current="true" lang="en">English</span></div>
+    </div>
+  </header>
+<p class="i18n-note" lang="en">The menu and headings are in English, but the content of this page is still in Korean. Translation is in progress.</p>
+<div class="ph"><h1>광 쌍안정은 어떻게 생길까?</h1></div>
+<main class="one">
+<article class="doc">
+  <a class="back" href="writing.html">← 글 목록</a>
+  <p class="lede">Miller(2010) 논평을 읽으면 전광 디지털의 첫 시대를 이끈 것이 광 쌍안정이었다는 말이 나옵니다. 그런데 정작 같은 빛을 넣었는데 왜 출력이 두 가지가 되는지는 설명하지 않습니다. 이 글은 그 한 가지를 풉니다. 공진기와 비선형 매질이 만드는 되먹임에서 출발해, 직선과 봉우리가 만나는 그림 하나로 쌍안정을 풀고, 그 그림에서 문턱 세기와 이 갈래가 기준에서 떨어진 이유까지 읽어 냅니다.</p>
+  <p class="meta">2026-11-14 · 기초 › 전광 디지털 ① · 구조 › 자기 스위칭</p>
+
+  <div class="wr-body">
+
+  <h2 id="s1">1. 같은 입력, 두 가지 출력</h2>
+  <p>보통의 소자는 입력이 정해지면 출력이 하나로 정해집니다. 쌍안정 소자는 그렇지 않습니다. <b>어떤 입력 구간에서는 안정한 출력이 두 개 있고, 지금 어느 쪽에 있는지는 입력을 어느 방향에서 가져왔는지가 정합니다.</b> 입력을 낮은 쪽에서 올려 오면 낮은 출력에 머물다가 어떤 문턱에서 높은 출력으로 뛰어오르고, 높은 쪽에서 내려오면 그보다 낮은 다른 문턱까지 높은 출력을 붙잡고 있다가 떨어집니다. 올라가는 길과 내려가는 길이 달라서 그래프에는 고리가 생기고, 이것을 히스테리시스라고 합니다.</p>
+  <p>전자회로에서는 이미 익숙한 모양입니다. 슈미트 트리거가 이 고리를 써서 잡음 섞인 신호를 깨끗한 0과 1로 바꾸고, SR 래치는 두 안정 상태 중 하나에 머무는 것으로 1비트를 기억합니다. <b>디지털이 쌍안정을 원하는 이유는 두 가지입니다. 고리 안쪽 구간에서는 입력을 그대로 두어도 상태가 유지되니 기억이 되고, 문턱에서 출력이 계단처럼 뛰니 흐려진 신호를 다시 세우는 복원이 됩니다.</b> 빛으로 이 둘을 얻으면 광 메모리와 광 논리를 한꺼번에 얻을 수 있다는 것이 1970~80년대의 기대였습니다.</p>
+  <figure class="wr-fig">
+    <svg class="wf" viewBox="0 0 640 250" role="img" aria-label="히스테리시스 고리. 입력을 올리면 아래 가지를 따라가다 오른쪽 문턱에서 위로 뛰고, 내리면 위 가지를 따라가다 왼쪽 문턱에서 아래로 떨어진다. 두 문턱 사이가 기억 구간이다.">
+      <defs>
+        <marker id="b1-warm" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path class="mk-warm" d="M2 1L8 5L2 9"/></marker>
+        <marker id="b1-beam" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path class="mk-beam" d="M2 1L8 5L2 9"/></marker>
+      </defs>
+      <rect class="cell" x="250" y="40" width="160" height="170"/>
+      <text class="sm" x="330" y="32" text-anchor="middle">기억 구간 — 출력이 둘</text>
+      <line class="ln" x1="90" y1="210" x2="560" y2="210"/><line class="ln" x1="90" y1="210" x2="90" y2="30"/>
+      <text class="sm" x="560" y="230" text-anchor="end">입력 세기 →</text>
+      <text class="sm" x="96" y="38">출력</text>
+      <path class="light" style="stroke-width:2.4" d="M95 196 C180 192 300 186 410 176" marker-end="url(#b1-beam)"/>
+      <path class="light hl" d="M410 172 L410 78" marker-end="url(#b1-warm)"/>
+      <path class="light" style="stroke-width:2.4" d="M410 70 C460 64 510 58 555 54"/>
+      <path class="light" style="stroke-width:2.4" d="M555 62 C470 70 330 80 252 88" marker-end="url(#b1-beam)"/>
+      <path class="light hl" d="M250 92 L250 182" marker-end="url(#b1-warm)"/>
+      <text class="hlt" x="418" y="128">올릴 때 문턱</text>
+      <text class="hlt" x="242" y="140" text-anchor="end">내릴 때 문턱</text>
+      <text class="sm" x="170" y="182" text-anchor="middle">올리는 길</text>
+      <text class="sm" x="470" y="90" text-anchor="middle">내리는 길</text>
+    </svg>
+    <figcaption>그림 1. 히스테리시스 고리. 두 문턱 사이(파란 구간)에서는 같은 입력에 출력이 둘이고, 어느 쪽인지는 입력이 어느 방향에서 왔는지가 정합니다. 입력을 이 구간 한가운데 두면 상태가 유지되므로 1비트를 기억하고, 문턱을 넘는 순간 출력이 계단처럼 뜁니다.</figcaption>
+  </figure>
+
+  <h2 id="s2">2. 재료 둘 — 공진기와 커 효과</h2>
+  <p>빛으로 이 고리를 만들려면 두 가지가 필요합니다. 하나는 빛이 자기 자신에게 영향을 주는 성질, 곧 비선형이고, 다른 하나는 그 영향을 출력으로 되돌리는 되먹임입니다.</p>
+  <p><b>비선형은 커 효과에서 옵니다.</b> 많은 물질은 빛이 셀수록 굴절률이 조금씩 커지고, 이것을 <math><mi>n</mi><mo>=</mo><msub><mi>n</mi><mn>0</mn></msub><mo>+</mo><msub><mi>n</mi><mn>2</mn></msub><mi>I</mi></math>로 씁니다. 문제는 <math><msub><mi>n</mi><mn>2</mn></msub></math>가 아주 작다는 것입니다. 실리콘은 통신 파장에서 약 4.5×10⁻¹⁸ m²/W라서, 1 µm² 단면에 1 W를 몰아넣어도(10¹² W/m²) 굴절률은 소수점 아래 다섯째 자리에서야 바뀝니다. 빛이 한 번 지나가는 것만으로는 위상이 거의 움직이지 않습니다.</p>
+  <p><b>그래서 공진기가 들어갑니다.</b> 거울 두 장 사이(파브리-페로)나 고리 모양 도파로(마이크로링) 안에서 빛은 수천 바퀴를 돌다 나옵니다. 그러면 두 가지 일이 동시에 일어납니다. 공진 파장에서는 안쪽 빛이 바깥보다 훨씬 세게 쌓이고, 같은 굴절률 변화도 바퀴 수만큼 위상으로 누적됩니다. 대신 공진기는 좁은 파장 폭 안에서만 빛을 받아들입니다. 레이저 파장이 공진에서 조금만 벗어나도 안쪽 빛은 급격히 줄어듭니다.</p>
+  <p>이제 되먹임이 닫힙니다. 굴절률이 커지면 공진기 한 바퀴의 광학적 길이가 길어지므로 공진 파장이 긴 쪽으로 밀립니다. 그래서 레이저를 처음부터 공진보다 <b>조금 긴 파장</b>에 맞춰 두면, 안쪽 빛이 셀수록 공진이 레이저 쪽으로 다가오고, 다가올수록 빛이 더 많이 들어가고, 그러면 굴절률이 더 커집니다. 양의 되먹임입니다. 입력이 어느 세기를 넘으면 이 고리가 스스로 굴러서 공진기가 「꺼진」 상태에서 「켜진」 상태로 뛰어오릅니다.</p>
+  <figure class="wr-fig">
+    <svg class="wf" viewBox="0 0 640 270" role="img" aria-label="되먹임 고리. 안쪽 빛이 세지면 커 효과로 굴절률이 커지고, 공진 파장이 레이저 쪽으로 다가오고, 그래서 빛이 더 많이 들어가 안쪽 빛이 더 세진다. 오른쪽에는 공진 봉우리가 레이저 파장 쪽으로 이동하는 스펙트럼.">
+      <defs>
+        <marker id="b2-warm" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path class="mk-warm" d="M2 1L8 5L2 9"/></marker>
+        <marker id="b2-ink" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path class="mk-ink" d="M2 1L8 5L2 9"/></marker>
+      </defs>
+      <rect class="cell" x="110" y="24" width="150" height="40" rx="6"/><text x="185" y="44" text-anchor="middle" dominant-baseline="central">안쪽 빛 ↑</text>
+      <rect class="cell" x="230" y="112" width="130" height="40" rx="6"/><text x="295" y="132" text-anchor="middle" dominant-baseline="central">굴절률 ↑ (커)</text>
+      <rect class="cell" x="110" y="200" width="150" height="40" rx="6"/><text x="185" y="220" text-anchor="middle" dominant-baseline="central">공진이 레이저 쪽으로</text>
+      <rect class="cell hl" x="10" y="112" width="130" height="40" rx="6"/><text x="75" y="132" text-anchor="middle" dominant-baseline="central">더 많이 들어감</text>
+      <path class="light hl" d="M262 52 Q300 70 300 108" marker-end="url(#b2-warm)"/>
+      <path class="light hl" d="M300 156 Q300 196 264 212" marker-end="url(#b2-warm)"/>
+      <path class="light hl" d="M108 212 Q75 196 75 156" marker-end="url(#b2-warm)"/>
+      <path class="light hl" d="M75 108 Q75 70 108 52" marker-end="url(#b2-warm)"/>
+      <text class="hlt" x="185" y="136" text-anchor="middle">양의 되먹임</text>
+
+      <line class="ln dim" x1="390" y1="10" x2="390" y2="260"/>
+      <line class="ln" x1="410" y1="220" x2="625" y2="220"/>
+      <text class="sm" x="625" y="240" text-anchor="end">파장 →</text>
+      <text class="sm" x="412" y="30">공진기가 받아들이는 정도</text>
+      <path class="ln" style="stroke-dasharray:4 4" d="M410 218 C455 216 465 212 475 180 C482 150 486 70 490 70 C494 70 498 150 505 180 C515 212 525 216 570 218"/>
+      <path class="light" style="stroke-width:2.4" d="M440 218 C490 216 500 212 510 180 C517 150 521 70 525 70 C529 70 533 150 540 180 C550 212 560 216 610 218"/>
+      <text class="sm" x="482" y="66" text-anchor="end">처음</text>
+      <text class="sm" x="531" y="56" text-anchor="start">빛이 세진 뒤</text>
+      <path class="ln" d="M494 86 L516 86" marker-end="url(#b2-ink)"/>
+      <line class="ln hl" style="stroke-width:2" x1="560" y1="60" x2="560" y2="220"/>
+      <text class="hlt" x="566" y="74">레이저</text>
+      <text class="sm" x="566" y="92">공진보다</text>
+      <text class="sm" x="566" y="108">조금 긴 파장</text>
+    </svg>
+    <figcaption>그림 2. 쌍안정을 만드는 되먹임. 왼쪽 고리의 네 단계가 서로를 키웁니다. 오른쪽은 같은 일을 스펙트럼으로 본 것입니다. 빛이 세지면 굴절률이 커져 공진 봉우리(점선 → 실선)가 긴 파장 쪽으로 밀리고, 처음부터 그쪽에 맞춰 둔 레이저(노란 선)와 점점 겹칩니다. 레이저를 공진의 짧은 파장 쪽에 두면 빛이 셀수록 오히려 멀어지므로 고리가 닫히지 않습니다.</figcaption>
+  </figure>
+
+  <h2 id="s3">3. 그래프로 풀기 — 직선과 봉우리</h2>
+  <p>이 되먹임을 식 하나로 쓸 수 있습니다. 공진기 안에 쌓인 빛의 세기를 <math><mi>Y</mi></math>, 들어가는 빛의 세기를 <math><mi>X</mi></math>, 레이저가 공진에서 떨어진 정도(디튜닝)를 <math><mi>Δ</mi></math>라고 합시다. 디튜닝은 공진 선폭의 절반을 1로 잡고, 세기 둘은 그에 맞춘 단위로 재면 다음 두 사실이 성립합니다.</p>
+  <p>첫째, 공진기는 디튜닝이 작을수록 빛을 많이 받아들이고, 그 모양은 로런츠 봉우리입니다. 둘째, 커 효과 때문에 안쪽 빛이 <math><mi>Y</mi></math>만큼 쌓이면 공진이 그만큼 레이저 쪽으로 밀려서 실제 디튜닝은 <math><mi>Δ</mi><mo>−</mo><mi>Y</mi></math>가 됩니다. 둘을 합치면 안쪽 빛이 자기 자신을 정하는 식이 나옵니다.</p>
+  <div class="wr-math"><math display="block"><mi>Y</mi><mo>=</mo><mi>X</mi><mo>·</mo><mfrac><mn>1</mn><mrow><mn>1</mn><mo>+</mo><msup><mrow><mo stretchy="false">(</mo><mi>Δ</mi><mo>−</mo><mi>Y</mi><mo stretchy="false">)</mo></mrow><mn>2</mn></msup></mrow></mfrac></math></div>
+  <p><math><mi>Y</mi></math>가 양변에 다 있어서 바로 풀리지 않습니다. 정리하면 <math><mi>Y</mi></math>의 3차식이고(지도의 자기 스위칭 카드가 푸는 식과 같습니다), 3차식이니 해가 하나일 때도 셋일 때도 있습니다. 해가 셋인 구간이 바로 쌍안정 구간입니다.</p>
+  <p>이 식은 대수보다 그림으로 푸는 편이 훨씬 잘 보입니다. 양변을 <math><mi>X</mi></math>로 나누면 왼쪽은 <math><mi>Y</mi><mo>/</mo><mi>X</mi></math>, 곧 원점을 지나고 기울기가 <math><mn>1</mn><mo>/</mo><mi>X</mi></math>인 직선이고, 오른쪽은 <math><mi>Y</mi><mo>=</mo><mi>Δ</mi></math>에 꼭대기가 있는 봉우리입니다. 두 그래프가 만나는 점이 해입니다. <b>입력을 키우면 직선이 원점을 축으로 눕습니다.</b> 처음에는 봉우리의 왼쪽 기슭에서 한 번만 만나다가, 어느 순간 봉우리 오른쪽 비탈에 닿으면서 교점이 셋이 되고, 더 누우면 왼쪽 교점이 사라져 오른쪽 하나만 남습니다.</p>
+  <figure class="wr-fig" id="b3">
+    <svg class="wf" viewBox="0 0 640 300" role="img" aria-label="왼쪽: 원점을 지나는 직선과 로런츠 봉우리. 입력을 키우면 직선이 눕고 교점이 하나에서 셋으로, 다시 하나로 바뀐다. 오른쪽: 입력 세기에 대한 안쪽 빛 세기의 S자 곡선. 가운데 가지는 점선으로 그린 불안정한 해이고, 지금 상태가 점으로 표시된다.">
+      <g id="b3-l"></g>
+      <g id="b3-r"></g>
+    </svg>
+    <div class="wr-ctl">
+      <label for="b3-x">입력 X</label><input type="range" id="b3-x" min="0" max="10" step="0.05" value="1"><output id="b3-xo"></output>
+    </div>
+    <div class="wr-ctl">
+      <label for="b3-d">디튜닝 Δ</label><input type="range" id="b3-d" min="0" max="5" step="0.1" value="3"><output id="b3-do"></output>
+    </div>
+    <div class="wr-ctl"><button type="button" id="b3-up">천천히 올리기</button><button type="button" id="b3-dn">천천히 내리기</button><span id="b3-read"></span></div>
+    <figcaption>그림 3. 쌍안정을 그래프로 풀기. 왼쪽에서 직선(입력)과 봉우리(공진기)가 만나는 점이 가능한 상태이고, 오른쪽은 그 교점들을 입력 세기마다 모아 그린 것입니다. 노란 점이 지금 상태입니다. 「천천히 올리기」와 「천천히 내리기」를 차례로 눌러 보면 같은 입력에서도 노란 점이 다른 가지에 있고, 뛰는 자리가 다릅니다. 디튜닝을 √3 ≈ 1.73 아래로 내리면 고리가 닫히고 곡선이 한 번 휘기만 합니다.</figcaption>
+  </figure>
+
+  <h2 id="s4">4. 가운데 교점은 왜 버티지 못하나</h2>
+  <p>교점이 셋이면 상태도 셋일 것 같지만 실제로 머무는 것은 양쪽 둘뿐입니다. 가운데 교점은 수학적으로는 해이지만 조금만 흔들려도 무너집니다. 이유는 그림 3 왼쪽의 기울기로 읽힙니다.</p>
+  <p>어떤 교점에서 안쪽 빛이 우연히 조금 늘었다고 해 봅시다. 그러면 직선이 말하는 「지금 쌓인 양」도 늘고, 봉우리가 말하는 「이 디튜닝에서 받아들일 양」도 바뀝니다. <b>봉우리가 직선보다 완만하게 오르는 자리라면, 받아들이는 양이 쌓인 양을 따라가지 못하니 늘어난 빛이 다시 빠져나가 원래 자리로 돌아옵니다.</b> 왼쪽과 오른쪽 교점이 이렇습니다. <b>가운데 교점에서는 봉우리가 직선보다 가파르게 오릅니다.</b> 빛이 조금 늘면 공진이 다가와 그보다 더 많이 받아들이고, 그러면 더 늘어서 오른쪽 교점까지 굴러갑니다. 반대로 조금 줄면 왼쪽 교점까지 굴러떨어집니다. 그래서 그림 3 오른쪽에서는 가운데 가지를 점선으로 그렸습니다.</p>
+  <p>문턱이 생기는 이유도 같은 그림에 있습니다. 입력을 올리다 보면 직선이 봉우리 왼쪽 기슭에 <b>접하는</b> 순간이 옵니다. 거기서 왼쪽 교점과 가운데 교점이 하나로 합쳐졌다가 사라지고, 상태는 갈 곳이 오른쪽 교점밖에 없으니 뜁니다. 내릴 때는 직선이 봉우리 오른쪽 비탈에 접하는 순간 오른쪽 교점이 사라지면서 떨어집니다. 두 접점이 서로 다른 입력에서 생기니 문턱도 둘입니다.</p>
+
+  <h2 id="s5">5. 문턱은 어디서 정해지나</h2>
+  <p><b>첫째 조건은 디튜닝입니다.</b> 직선이 봉우리와 세 번 만나려면 봉우리가 원점에서 충분히 멀리 있어야 합니다. 위의 3차식에서 두 접점이 실제로 생기는 조건을 풀면 <math><mi>Δ</mi><mo>&gt;</mo><msqrt><mn>3</mn></msqrt></math>이 나옵니다. 레이저를 공진 선폭 절반의 1.73배보다 멀리 떼어 놓아야 한다는 뜻이고, 그보다 가까우면 곡선은 휘기만 하고 고리가 열리지 않습니다. 그림 3에서 디튜닝을 줄여 보면 이 경계에서 고리가 닫히는 것이 보입니다.</p>
+  <p><b>둘째는 그 문턱에 실제로 몇 와트가 드느냐입니다.</b> 이것은 공진기의 품질 계수 Q와 모드 부피 V로 정해지고, 답은 <math><msub><mi>P</mi><mtext>문턱</mtext></msub><mo>∝</mo><mi>V</mi><mo>/</mo><mo stretchy="false">(</mo><msup><mi>Q</mi><mn>2</mn></msup><msub><mi>n</mi><mn>2</mn></msub><mo stretchy="false">)</mo></math>입니다. Q가 두 번 들어가는 이유를 나눠 보면 이렇습니다. 공진을 선폭 몇 개만큼 밀어야 하는데, Q가 높을수록 선폭이 좁으니 밀어야 할 굴절률 변화가 1/Q로 줄어듭니다. 그리고 같은 입력에서 안쪽에 쌓이는 세기는 빛이 오래 머물수록(Q), 좁은 곳에 몰릴수록(1/V) 커집니다. 필요한 변화는 1/Q로 줄고 쌓이는 세기는 Q/V로 느니, 문턱은 둘을 나눈 V/Q²입니다.</p>
+  <p>그래서 이 갈래의 역사는 공진기를 작고 날카롭게 만든 역사입니다. 1976년 Gibbs·McCall·Venkatesan이 나트륨 증기를 채운 파브리-페로 간섭계에서 처음 쌍안정을 관측했을 때는 탁상 크기의 장치에 연속파 색소 레이저를 썼습니다. 그로부터 36년 뒤인 2012년, NTT의 Nozaki 등은 광자결정에 파장 크기의 나노공진기를 만들어 소비 전력 30 nW로 계속 동작하는 광 RAM을 보였고, 이후 같은 그룹이 공진기를 다듬어 최소 바이어스를 2.3 nW까지 내렸습니다.</p>
+  <p>한 가지 덧붙이면, 실제 칩에서 굴절률을 바꾸는 것은 커 효과만이 아닙니다. 빛이 흡수되며 생긴 열(열광학 효과)이나 자유 전하(캐리어 분산)가 같은 일을 하고, 효과가 훨씬 커서 오히려 이쪽이 주인공인 경우가 많습니다. NTT의 나노공진기 메모리도 커 효과가 아니라 캐리어가 굴절률을 바꾸는 방식입니다. 부호가 반대면 레이저를 공진의 짧은 파장 쪽에 두고, 효과가 느리면 스위칭이 느려질 뿐, 직선과 봉우리의 그림은 그대로입니다.</p>
+  <p class="wr-goto">구조 카드 › <a href="compute.html#d6">자기 스위칭</a> — 같은 식에 Q와 모드 부피 손잡이를 붙여 문턱이 V/Q²로 내려가는 것을 돌려 볼 수 있습니다.</p>
+
+  <h2 id="s6">6. Miller 잣대로 채점하면</h2>
+  <p>쌍안정은 기억과 복원을 한 소자에서 준다는 점에서 매력적이었지만, <a href="writing-review-miller-2010.html">Miller 논평</a>의 기준을 대 보면 이 갈래가 왜 기준 대부분에서 떨어졌는지가 위의 그림에서 그대로 읽힙니다.</p>
+  <table class="wr-tbl">
+    <thead><tr><th>칸</th><th>공진기 쌍안정</th></tr></thead>
+    <tbody>
+      <tr><td>① 캐스케이드</td><td>△ 출력이 입력과 같은 파장이라 형태는 이어지지만, 다음 단의 문턱에 맞는 세기로 나온다는 보장이 없습니다</td></tr>
+      <tr><td>② 팬아웃</td><td>△ 문턱 바로 아래에 바이어스를 걸면 작은 신호가 큰 출력 변화를 만듭니다(1976년 논문 제목의 「차동 이득」). 단 ⑤를 대가로 얻습니다</td></tr>
+      <tr><td>③ 복원</td><td>○ 문턱에서 계단처럼 뛰므로 S자 특성이 있습니다</td></tr>
+      <tr><td>④ 입출력 분리</td><td>✕ 입력과 출력이 같은 빔이고, 뒤에서 돌아온 반사광도 공진기 안에 쌓여 상태를 바꿉니다</td></tr>
+      <tr><td>⑤ 바이어스</td><td>✕ 기억하려면 유지 빔을 두 문턱 사이에 놓아야 하고, 그 구간의 폭과 위치가 디튜닝으로 정해집니다. 온도가 공진을 조금만 밀어도 구간이 통째로 움직입니다</td></tr>
+      <tr><td>⑥ 손실 무관</td><td>✕ 절대 세기를 문턱과 비교하므로, 경로 손실이 다르면 같은 1이 문턱을 넘기도 못 넘기도 합니다</td></tr>
+      <tr><td>⑦ 전체 에너지</td><td>? 나노공진기 메모리는 상태 유지에 nW 단위의 빛을 계속 씁니다. 스위칭 한 번의 전체 에너지는 아직 정리하지 못했습니다</td></tr>
+    </tbody>
+  </table>
+  <p><b>⑤와 ⑥이 이 갈래의 핵심 약점입니다.</b> 쌍안정은 같은 입력에서 출력이 둘이라는 성질이지, 출력이 크다는 성질이 아닙니다. 그래서 이득을 얻으려면 바이어스를 문턱 근처의 좁은 자리에 올려놓아야 하고, 판정은 절대 세기로 할 수밖에 없습니다. <a href="compute.html#d1">S-SEED</a>도 사실 쌍안정 소자인데 기준을 통과한 이유는, 상태를 두 빔의 <b>비율</b>로 정하고 출력 세기는 따로 들어오는 전원 빔이 만들도록 구조를 바꿨기 때문입니다. 같은 쌍안정이라도 무엇을 문턱과 비교하느냐가 승부를 갈랐습니다.</p>
+
+  <h2 id="s7">7. 광 AI에서는 — 같은 손잡이, 두 쓰임</h2>
+  <p>그림 3의 디튜닝 손잡이를 다시 보면 광 AI 쪽에서 흥미로운 점이 하나 보입니다. <b>Δ가 √3보다 크면 고리가 열려 기억 소자가 되고, √3보다 작으면 고리 없이 매끄럽게 한 번 꺾이는 곡선이 됩니다.</b> 이 꺾인 곡선은 신경망의 활성화 함수와 같은 모양입니다. 약한 입력은 거의 통과시키지 못하고, 어느 세기를 넘으면 급격히 많이 통과시킵니다.</p>
+  <p>광 신경망에서 비선형이 어려운 이유도, 그것을 공진기로 얻으려는 연구가 많은 이유도 여기서 이어집니다. 같은 마이크로링이 디튜닝 하나로 활성화 함수도 되고 메모리도 됩니다. 다만 활성화 함수로 쓸 때는 고리가 열리면 안 됩니다. 같은 입력에 출력이 둘이면 신경망의 계산 결과가 입력의 이력에 따라 달라지기 때문입니다. 디지털에서는 쌍안정이 목적이었다면, 아날로그 연산에서는 피해야 할 경계가 됩니다.</p>
+
+  </div>
+
+  <div class="wr-src">
+    <p>출처</p>
+    <ul>
+      <li>H. M. Gibbs, S. L. McCall, T. N. C. Venkatesan, “Differential gain and bistability using a sodium-filled Fabry-Perot interferometer,” <i>Phys. Rev. Lett.</i> 36, 1135 (1976).</li>
+      <li>H. M. Gibbs, <i>Optical Bistability: Controlling Light with Light</i> (Academic Press, 1985).</li>
+      <li>K. Nozaki et al., “Ultralow-power all-optical RAM based on nanocavities,” <i>Nature Photonics</i> 6, 248–252 (2012).</li>
+      <li>2.3 nW 최소 바이어스: NTT 후속 연구(조율한 L3 나노공진기), doi:10.1063/1.4936372.</li>
+      <li>D. A. B. Miller, “Are optical transistors the logical next step?” <i>Nature Photonics</i> 4, 3–5 (2010).</li>
+    </ul>
+  </div>
+</article>
+</main>
+
+<script type="application/json" id="i18n-tx">{"트랜시버":"Transceiver","광 AI 가속기":"Optical AI accelerator","파운드리":"Foundry","광양자 산업":"Photonic quantum industry","직무":"Jobs","아날로그 MVM 가속기":"Analog MVM accelerator","in-memory 컴퓨팅":"In-memory computing","뉴로모픽 포토닉스":"Neuromorphic photonics","포토닉 리저버 컴퓨팅":"Photonic reservoir computing","O-E-O 논리":"O-E-O logic","광 인터커넥트·데이터센터":"Optical interconnect · data center","코히런트 이징 머신":"Coherent Ising machine","MZI 메시":"MZI mesh","마이크로링 가중치 뱅크":"Microring weight bank","PCM 크로스바":"PCM crossbar","E-O-E 링크":"E-O-E link","드라이버·TIA":"Driver · TIA","광 스위치·OCS":"Optical switch · OCS","도파관":"Waveguide","위상 천이기":"Phase shifter","커플러":"Coupler","링 공진기":"Ring resonator","광검출기":"Photodetector","레이저":"Laser","증폭기":"Amplifier","아이솔레이터":"Isolator","편광 소자":"Polarization device","그레이팅 커플러":"Grating coupler","서브파장 격자":"Subwavelength grating","포토닉 결정·나노포토닉스":"Photonic crystals · nanophotonics","박막 리튬나이오베이트":"Thin-film lithium niobate","유기 EO 재료":"Organic EO material","상변화물질":"Phase-change material","이종집적":"Heterogeneous integration","포켈스 효과":"Pockels effect","커 효과":"Kerr effect","열광학 효과":"Thermo-optic effect","캐리어 플라즈마 분산":"Carrier plasma dispersion","전계흡수":"Electroabsorption","상변화":"Phase change","음향광학":"Acousto-optics","자기광학":"Magneto-optics","밴드간 이득·흡수":"Interband gain · absorption","진폭":"Amplitude","위상":"Phase","파장":"Wavelength","편광":"Polarization","공간 모드":"Spatial mode","코히런스":"Coherence","큰 반송 주파수 ω":"High carrier frequency ω","광자끼리 상호작용 없음":"No photon–photon interaction","대역폭 ⭐":"Bandwidth ⭐","공간 병렬성 ⭐":"Spatial parallelism ⭐","무손실 동역학 ⭐":"Lossless dynamics ⭐","저손실 전송":"Low-loss transmission","교차 가능":"Crossable","빔 조향":"Beam steering","팬인·팬아웃":"Fan-in · fan-out","단방향 전파":"Unidirectional propagation","최소작용 원리":"Principle of least action","실온 양자성":"Room-temperature quantumness","파동 물리":"Wave physics","대역폭 ⭐←ω":"Bandwidth ⭐←ω","공간 병렬성 ⭐←ω(짧은 λ)":"Spatial parallelism ⭐←ω (short λ)","무손실 동역학 ⭐←무상호작용":"Lossless dynamics ⭐←no interaction","저손실 전송←무상호작용":"Low-loss transmission←no interaction","교차 가능←무상호작용":"Crossable←no interaction","빔 조향←파동(회절)":"Beam steering←waves (diffraction)","팬인·팬아웃←무상호작용":"Fan-in · fan-out←no interaction","단방향 전파←파동(k 보존)":"Unidirectional propagation←waves (k conserved)","최소작용 원리←광 고유 아님":"Principle of least action←not unique to light","실온 양자성←ħω≫kT":"Room-temperature quantumness←ħω≫kT","파동 물리←ω + 무상호작용":"Wave physics←ω + no interaction","←ω(짧은 λ)":"←ω (short λ)","←무상호작용":"←no interaction","←파동(회절)":"←waves (diffraction)","←파동(k 보존)":"←waves (k conserved)","←광 고유 아님":"←not unique to light","←ω + 무상호작용":"←ω + no interaction","비교":"vs electronics","실리콘 집적 포토닉스·뉴럴 인터페이스":"Silicon integrated photonics · neural interfaces","집적포토닉스·수신기":"Integrated photonics · receivers","멤리스티브 포토닉스":"Memristive photonics","Si 위 양자점 레이저":"Quantum-dot lasers on Si","광 합성곱 가속기":"Optical convolution accelerator","어븀 도프 실리콘 나노포토닉스":"Erbium-doped silicon nanophotonics","화합물반도체":"Compound semiconductors","광 RAM·전광 스위칭":"Optical RAM · all-optical switching","광전융합 디바이스":"Optoelectronic fusion devices","III-V/Si 변조기·CPO":"III-V/Si modulators · CPO","SiPh MPW 파운드리":"SiPh MPW foundry","프로그래머블 광 프로세서":"Programmable photonic processor","광IO·패키징":"Optical IO · packaging","전사인쇄 이종집적":"Transfer-printing heterogeneous integration","PZT·BTO 변조기":"PZT · BTO modulators","플라즈모닉 EO":"Plasmonic EO","도파관 증폭기(EDWA)":"Waveguide amplifier (EDWA)","InP 파운드리·MPW":"InP foundry · MPW","SiPh 위 CMOS 집적":"CMOS integration on SiPh","TFLN 파운드리":"TFLN foundry","UTC-PD 검출기":"UTC-PD detector","300mm SiPh 공정":"300 mm SiPh process","박사 펠로십":"PhD fellowship","국가 나노팹":"National nanofab","SiPh 파운드리·CPO":"SiPh foundry · CPO","전자-광 적층(CPO)":"Electronic-photonic stacking (CPO)","비휘발 프로그래머블 마이크로링":"Non-volatile programmable microrings","포토닉 신경망":"Photonic neural network","InP 스위칭·뉴로모픽":"InP switching · neuromorphic","CPO 메모리 인터페이스":"CPO memory interface","광전자 국가연구소":"National optoelectronics institute","프로그래머블 PIC 이론":"Programmable PIC theory","프로그래머블 광 유니터리·ONN":"Programmable optical unitaries · ONN","고Q 공진기·온칩 광원":"High-Q resonators · on-chip sources","광 시뮬레이션 가속":"Accelerating optical simulation","CPO 광 칩렛":"CPO optical chiplet","플라즈모닉 변조기 상용화":"Commercializing plasmonic modulators","비선형 실리콘 포토닉스":"Nonlinear silicon photonics","BTO 포켈스 변조기":"BTO Pockels modulator","민간 SiPh 파운드리":"Private SiPh foundry","화합물반도체 팹":"Compound semiconductor fab","집적포토닉스·광통신":"Integrated photonics · optical communications","마이크로파 포토닉스":"Microwave photonics","InP MPW·폴리머 EO":"InP MPW · polymer EO","CMOS 호환 EO 소자":"CMOS-compatible EO devices","집적 양자광학·GBS":"Integrated quantum optics · GBS","멤리스터 in-memory":"Memristor in-memory","광컴 인재 양성망":"Optical computing training network","화합물반도체 클러스터":"Compound semiconductor cluster","분산 양자 신경망":"Distributed quantum neural networks","고주파 광전자":"High-frequency optoelectronics","광섬유 통신·비선형":"Fiber communications · nonlinearity","응용광학·정밀공학":"Applied optics · precision engineering","집적 양자 포토닉스":"Integrated quantum photonics","광원·계측":"Light sources · metrology","과제 목록":"Project list","회절 광신경망 D²NN":"Diffractive optical neural network D²NN","포토닉 역설계":"Photonic inverse design","물리 기반 연산":"Physics-based computing","LNOI 이종집적·광 AI 가속기":"LNOI heterogeneous integration · optical AI accelerator","칩간 광 연결·시스템":"Chip-to-chip optical links · systems","칼코게나이드 광메모리":"Chalcogenide optical memory","위상 포토닉스":"Topological photonics","대규모 전자-광자 회로":"Large-scale electronic-photonic circuits","단일칩 광 신경망":"Single-chip optical neural network","MEMS 포토닉스·광 신경망":"MEMS photonics · optical neural networks","광 신경망 이론·역설계":"Optical neural network theory · inverse design","프로그래머블 광 신경망":"Programmable optical neural network","프로그래머블 광 학습":"Programmable optical training","비선형·양자 광파 AI":"Nonlinear · quantum lightwave AI","이종집적 광컴 엔진":"Heterogeneously integrated optical compute engine","광 뉴로모픽 소자":"Optical neuromorphic devices","실리콘 포토닉스 소자":"Silicon photonics devices","비선형 광학·마이크로콤":"Nonlinear optics · microcombs","메타광학 신경망":"Meta-optical neural networks","집적 광컴·역설계":"Integrated optical computing · inverse design","포토닉 텐서코어":"Photonic tensor core","OEO 리저버 컴퓨팅":"OEO reservoir computing","전자-광 공동설계":"Electronic-photonic co-design","실리콘 변조기":"Silicon modulator","그룹IV 포토닉스·플랫폼":"Group IV photonics · platforms","실리콘 포토닉스·파운드리":"Silicon photonics · foundry","중공코어 광섬유":"Hollow-core fiber","광섬유 증폭기(EDFA)":"Fiber amplifier (EDFA)","시스템 PIC·광컴퓨팅":"System PICs · optical computing","광 네트워크·시스템":"Optical networks · systems","그래핀·2D 포토닉스":"Graphene · 2D photonics","PCM 광메모리":"PCM optical memory","자유공간 광 신경망":"Free-space optical neural network","PCM 광연산":"PCM optical computing","BTO 극저온 EO":"BTO cryogenic EO","집적 광양자":"Integrated photonic quantum","나노가공 시설":"Nanofabrication facility","에피택시·반도체 광원":"Epitaxy · semiconductor light sources","InP 레이저·변조기":"InP lasers · modulators","양자증폭기·나노광학":"Quantum amplifiers · nano-optics","집적포토닉스·유기EO":"Integrated photonics · organic EO","뉴로모픽·PCM":"Neuromorphic · PCM","그룹IV 레이저":"Group IV lasers","Ge/GeSn 검출기":"Ge/GeSn detectors","TFLN 광 가속기":"TFLN optical accelerator","광연산 이론":"Theory of optical computing","양자통신·계산 포토닉스":"Quantum communications · computational photonics","커스텀 나노가공":"Custom nanofabrication","모놀리식 CMOS 포토닉스":"Monolithic CMOS photonics","전자-광 집적":"Electronic-photonic integration","모놀리식 선형대수 가속기":"Monolithic linear-algebra accelerator","TFLN 웨이퍼 집적":"TFLN wafer integration","TFLN 나노광학":"TFLN nano-optics","광 텐서코어·PCM":"Photonic tensor core · PCM","이종집적 레이저":"Heterogeneously integrated lasers","공용 MPW 파운드리":"Shared MPW foundry","수출통제":"Export controls","광 리저버·공간광 신경망":"Optical reservoir · free-space optical neural networks","BTO·플라즈모닉 변조기":"BTO · plasmonic modulators","마이크로콤":"Microcomb","프로그래머블 PIC":"Programmable PIC","광양자 회로":"Photonic quantum circuits","폴라리톤·초고체 빛":"Polaritons · supersolid light","보손샘플링":"Boson sampling","양자 포토닉스·클린룸":"Quantum photonics · cleanroom","해당 PI 없음":"No matching PI","유니터리 행렬":"Unitary matrix","Reck 분해":"Reck decomposition","Clements 분해":"Clements decomposition","SVD 분해":"SVD decomposition","자유도":"Degrees of freedom","로렌츠 선형":"Lorentzian lineshape","디튜닝":"Detuning","광전류 합산":"Photocurrent summation","프레넬 전파":"Fresnel propagation","위상 마스크":"Phase mask","4f 광학계":"4f system","푸리에 면":"Fourier plane","정합 필터":"Matched filter","상관 봉우리":"Correlation peak","결정화·비정질화":"Crystallization · amorphization","쓰기 내구성":"Write endurance","직접검출":"Direct detection","국부발진기":"Local oscillator","호모다인 검출":"Homodyne detection","시간다중":"Time multiplexing","지연 대 처리량":"Latency vs throughput","공간광변조기":"Spatial light modulator","병렬도":"Parallelism","리저버 컴퓨팅":"Reservoir computing","저수지":"Reservoir","읽기층":"Readout layer","스펙트럴 반경":"Spectral radius","누설률":"Leak rate","릿지 회귀":"Ridge regression","적분발화":"Integrate-and-fire","역치":"Threshold","불응기":"Refractory period","공명터널다이오드":"Resonant tunneling diode","곱셈누적":"Multiply-accumulate","파장 다중":"Wavelength multiplexing","상변화 재료":"Phase-change material","χ² 비선형":"χ² nonlinearity","되먹임 이득":"Feedback gain","되먹임 지연":"Feedback delay","이징 모형":"Ising model","결합 행렬 J":"Coupling matrix J","축퇴 OPO":"Degenerate OPO","펌프 램프":"Pump ramp","포화 이득":"Saturating gain","최소 이득 논증":"Minimum-gain argument","연속 완화":"Continuous relaxation","진폭 비균일":"Amplitude heterogeneity","국부 최적":"Local optimum","측정-피드백":"Measurement-feedback","측정-되먹임 지연":"Measurement-feedback delay","라운드트립":"Round trip","슬롯":"Slot","Mattis 결합":"Mattis coupling","담금질":"Annealing","글라우버 동역학":"Glauber dynamics","볼츠만 분포":"Boltzmann distribution","이득":"Gain","팬아웃":"Fan-out","소광비":"Extinction ratio","캐스케이드":"Cascading","래치":"Latch","QCSE (양자구속 슈타르크 효과)":"QCSE (quantum-confined Stark effect)","SOA (반도체 광증폭기)":"SOA (semiconductor optical amplifier)","이득포화":"Gain saturation","XGM (교차이득변조)":"XGM (cross-gain modulation)","O-E-O (광–전–광 변환)":"O-E-O (optical–electrical–optical conversion)","스위칭 에너지":"Switching energy","RC 시정수":"RC time constant","펨토패럿 (fF)":"Femtofarad (fF)","폴라리톤":"Polariton","강결합":"Strong coupling","χ⁽³⁾ (3차 비선형 감수율)":"χ⁽³⁾ (third-order nonlinear susceptibility)","FOM (비선형 품질지수)":"FOM (nonlinear figure of merit)","쌍안정":"Bistability","히스테리시스":"Hysteresis","임계 세기":"Threshold intensity","Q값":"Q factor","모드 부피":"Mode volume","PhC 나노캐비티 (광결정)":"PhC nanocavity (photonic crystal)","감응도":"Responsivity","회절 인코더":"Diffractive encoder","아날로그 전자 분류기":"Analog electronic classifier","압축률":"Compression ratio","각 스펙트럼":"Angular spectrum","전달함수":"Transfer function","공간 미분 필터":"Spatial differentiation filter","커널 고정":"Fixed kernel","수동 소자":"Passive device","광 전처리":"Optical preprocessing","저역통과 필터":"Low-pass filter","유효 비트 수":"Effective number of bits","electro-optical 하이브리드":"Electro-optical hybrid","선형광학 양자컴 (LOQC)":"Linear-optical quantum computing (LOQC)","HOM 간섭":"HOM interference","구별 불가능성":"Indistinguishability","퍼머넌트":"Permanent","단일광자 검출기 (SNSPD)":"Single-photon detector (SNSPD)","투과율 η":"Transmission η","지수 붕괴 η^(mn)":"Exponential decay η^(mn)","탭 지연선":"Tapped delay line","FIR 필터":"FIR filter","자유 스펙트럼 범위 (FSR)":"Free spectral range (FSR)","광 미분기":"Optical differentiator","광 적분기":"Optical integrator","주파수 빗 (광 콤)":"Frequency comb (optical comb)","빗살 간격 (반복률)":"Line spacing (repetition rate)","위상잡음 20·log N":"Phase noise 20·log N","고Q 공진기":"High-Q resonator","커 비선형":"Kerr nonlinearity","2광자 흡수 (TPA)":"Two-photon absorption (TPA)","질화실리콘 (SiN)":"Silicon nitride (SiN)","삽입손실":"Insertion loss","유효 굴절률":"Effective refractive index","에바네센트 장":"Evanescent field","클래딩":"Cladding","히터 위상천이기":"Heater phase shifter","본딩 패드":"Bond pad","와이어 본딩":"Wire bonding","파이버 어레이":"Fiber array","결합손":"Coupling loss","테이프아웃":"Tape-out","실측 정밀도":"Measured precision","주파수 천이기":"Frequency shifter","EO 변조기":"EO modulator","EO 주파수 변환기":"EO frequency converter","주파수 빔 분할기":"Frequency beam splitter","밴드갭":"Bandgap","엑시톤":"Exciton","양자우물":"Quantum well","PIN 다이오드 변조기":"PIN diode modulator"}</script>
+<script type="application/json" id="i18n-dict">{"MZI 메시":"MZI mesh","마이크로링 가중치 뱅크":"Microring weight bank","링 가중치 뱅크":"Ring weight bank","회절 신경망 D²NN":"Diffractive neural network D²NN","회절 신경망 (D²NN)":"Diffractive neural network (D²NN)","회절 신경망":"Diffractive network","4f 상관기":"4f correlator","4f 상관기 · 정합 필터":"4f correlator · matched filter","PCM 크로스바":"PCM crossbar","호모다인 MVM":"Homodyne MVM","호모다인 · 코히런트 MVM":"Homodyne · coherent MVM","호모다인":"Homodyne","시간다중 MVM":"Time-multiplexed MVM","시간다중":"Time-multiplexed","SLM 자유공간":"SLM free-space","SLM 자유공간 MVM":"SLM free-space MVM","아홉을 겹쳐 보면":"All nine side by side","넷을 겹쳐 보면":"All four side by side","셋을 겹쳐 보면":"All three side by side","여섯을 겹쳐 보면":"All six side by side","겹쳐 보면":"Side by side","리저버 컴퓨팅":"Reservoir computing","스파이킹 광 뉴런":"Spiking photonic neuron","포토닉 텐서코어":"Photonic tensor core","전광 RNN":"All-optical RNN","코히런트 이징 머신":"Coherent Ising machine","코히런트 이징 머신 (OPO 네트워크)":"Coherent Ising machine (OPO network)","공간광 이징 머신":"Spatial-light Ising machine","공간광 이징 머신 (SPIM)":"Spatial-light Ising machine (SPIM)","이징 샘플러":"Ising sampler","포토닉 리커런트 이징 샘플러":"Photonic recurrent Ising sampler","리커런트 샘플러":"Recurrent sampler","S-SEED · 대칭 자기전기광학 소자":"S-SEED · symmetric self-electro-optic effect device","전광 논리 게이트":"All-optical logic gate","전광 논리 게이트 · XGM / XPM / FWM":"All-optical logic gate · XGM / XPM / FWM","펨토패럿 O-E-O":"Femtofarad O-E-O","폴라리톤 논리":"Polariton logic","2D 소재 비선형":"2D-material nonlinearity","자기 스위칭":"Self-switching","자기 스위칭 (PhC·SWG)":"Self-switching (PhC·SWG)","자기 스위칭 · PhC / SWG 비선형 공진기":"Self-switching · PhC / SWG nonlinear resonators","In-sensor":"In-sensor","회절 인코더":"Diffractive encoder","회절 인코더 + 아날로그 전자":"Diffractive encoder + analog electronics","회절 인코더 + 아날로그 전자 (ACCEL)":"Diffractive encoder + analog electronics (ACCEL)","메타표면 연산":"Metasurface computing","메타표면 아날로그 연산":"Metasurface analog computing","메타표면 미분":"Metasurface differentiation","광 전처리기":"Optical preprocessor","보손샘플링":"Boson sampling","선형광학 양자컴":"Linear-optical QC","선형광학 양자컴 · 보손샘플링":"Linear-optical quantum computing · boson sampling","마이크로파 포토닉스":"Microwave photonics","마이크로파 포토닉 프로세서":"Microwave photonic processor","주파수 콤":"Frequency comb","주파수 콤 병렬 처리":"Frequency-comb parallel processing","4×4 메시 실물":"4×4 mesh, real device","위상":"phase","파장":"wavelength","공간":"space","재료":"material","전자":"electronic","동역학":"dynamics","휘발":"volatile","비휘발":"non-volatile","해당없음":"n/a","만든다":"Generate","나눈다·합친다":"Split · combine","바꾼다 (손잡이)":"Modulate (the knobs)","저장한다":"Store","섞는다 (비선형)":"Mix (nonlinear)","자유공간":"Free space","읽는다":"Read","잇는다":"Connect","전자 쪽":"Electronic side","A 행렬곱":"A Matrix multiply","B 신경망":"B Neural networks","C 최적화":"C Optimization","D 논리":"D Logic","E 변환앞":"E Front-end transforms","F 양자·신호":"F Quantum · signal","메시":"Mesh","광 펄스 쓰기":"optical pulse writing","균형 검출":"balanced detection","뉴로모픽":"neuromorphic","링":"ring","마이크로콤":"microcomb","메모리":"memory","비간섭":"incoherent","위상형":"phase type","흡수형":"absorption type","히터":"heater"}</script>
+</div>
+<script src="../js/core.js?v=64cbab95"></script>
+<script src="../js/writing-toc.js?v=56a80c1f"></script>
+<script src="../js/writing-optical-bistability.js?v=114b99bf"></script>
+<script data-goatcounter="https://anythinking.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+</body>
+</html>

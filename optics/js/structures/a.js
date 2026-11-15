@@ -5,6 +5,9 @@
   const col = k => PAL[k.replace(/^--/, '')] || '#000';
   const D2R = Math.PI / 180, clamp = (v, a, b) => Math.max(a, Math.min(b, v)), fmt = (v, n) => v.toFixed(n == null ? 2 : n);
 
+  /* 재현 가능한 난수 — 10 텐서코어의 가중치·입력 */
+  function rng10(seed) { let s = seed >>> 0; return () => { s = (s + 0x6D2B79F5) >>> 0; let t = s; t = Math.imul(t ^ (t >>> 15), t | 1); t ^= t + Math.imul(t ^ (t >>> 7), t | 61); return ((t ^ (t >>> 14)) >>> 0) / 4294967296; }; }
+
   /* 03 D²NN */
   const N3 = 128;
   function prop(re, im, d) {
@@ -421,9 +424,101 @@
       }
     },
     {
-      id: 'a9', num: '', tab: '겹쳐 보면', title: '여덟을 겹쳐 보면', text: true,
+      id: 'a10', num: '10', tab: '포토닉 텐서코어', title: '포토닉 텐서코어', fig: { type: 'svg', w: 880, h: 370 }, label: 'WDM이 얹힌 PCM 크로스바',
+      idea: [['05의 PCM 크로스바에 '], ['파장 다중을 얹는다.', 1], [' 셀은 그대로인데 파장 N개가 동시에 지나가니 한 번의 통과로 행렬곱 N벌이 나온다 — 면적을 안 늘리고 처리량만 N배로 미는 방식.']],
+      note: 'M×M 가중치를 비트수대로 양자화해 N벌의 행렬-벡터 곱을 실제로 계산하고, 양자화 안 한 참값과의 RMS 오차를 잰다. TOPS는 코어만 센 상한이다. 파장 수를 늘려도 TOPS/W는 꿈쩍 안 한다 — 변환 한 번에 곱셈을 몇 번 했나(=M)만 효율을 정하기 때문이다. 파장은 처리량을 늘릴 뿐 효율은 못 늘린다.',
+      init: () => ({ seed: 3 }),
+      controls: [
+        { type: 'range', k: 'N', label: '파장 수 N', min: 1, max: 64, step: 1, def: 16 },
+        { type: 'range', k: 'M', label: '행렬 한 변 M', min: 2, max: 32, step: 1, def: 4, fmt: v => v + '×' + v },
+        { type: 'range', k: 'B', label: '셀 비트수', min: 1, max: 8, step: 1, def: 4, fmt: v => v + ' bit' },
+        { type: 'range', k: 'F', label: '변조 속도', min: 1, max: 50, step: 1, def: 10, fmt: v => v + ' GHz' },
+        { type: 'btn', label: () => '가중치·입력 다시 뽑기', act: (S, set) => set({ seed: (S.seed * 41 + 7) % 9973 }) }],
+      render(S) {
+        const N = S.N, M = S.M, B = S.B, F = S.F;
+        const rnd = rng10(S.seed * 48271 + 11), lv = (1 << B) - 1;
+        // 가중치는 0~1 (PCM 투과율은 음수가 안 된다 — 음수는 차동 쌍이 필요하다)
+        const Wt = [], Wq = [];
+        for (let i = 0; i < M; i++) {
+          const a = new Float64Array(M), b = new Float64Array(M);
+          for (let j = 0; j < M; j++) { a[j] = rnd(); b[j] = lv > 0 ? Math.round(a[j] * lv) / lv : 0; }
+          Wt.push(a); Wq.push(b);
+        }
+        // 파장 N개가 각자 입력 벡터 하나를 싣고 동시에 통과
+        let se = 0, sy = 0, cnt = 0, first = null;
+        for (let k = 0; k < N; k++) {
+          const x = new Float64Array(M); for (let j = 0; j < M; j++) x[j] = rnd();
+          const ye = new Float64Array(M), yq = new Float64Array(M);
+          for (let i = 0; i < M; i++) { let s = 0, q = 0; for (let j = 0; j < M; j++) { s += Wt[i][j] * x[j]; q += Wq[i][j] * x[j]; } ye[i] = s; yq[i] = q; }
+          for (let i = 0; i < M; i++) { se += (yq[i] - ye[i]) ** 2; sy += ye[i] * ye[i]; cnt++; }
+          if (k === 0) first = [ye, yq];
+        }
+        const rms = Math.sqrt(se / cnt) / Math.sqrt(sy / cnt) * 100;
+        const macs = N * M * M;                 // 한 사이클당 곱셈누적
+        const tops = 2 * macs * F * 1e9 / 1e12; // 코어만 — 2 OP/MAC
+        const adcs = N * M * F * 1e9;           // 출력마다 변환 한 번
+        const padc = adcs * 1e-12;              // 가정: 1 pJ/변환 → W
+        const effCore = tops / Math.max(padc, 1e-12);
+
+        // 사이클: 콤 → 파장 분리 → 파장마다 1×M 분배 + 변조기 한 벌(입력 벡터) → 행마다 파장 합침 → PCM 크로스바(가중치) → 행 PD → TIA → ADC → FPGA
+        //   쓰기 경로: FPGA 가 셀을 되읽고 펄스 레이저로 다시 쓴다(추론 경로와 따로)
+        const P = CYC.pen(), YL = [82, 130, 178], RY = [94, 118, 142, 166], OFF = [-9, -3, 3, 9];
+        P.laser(36, 130, { id: 'src-comb' });
+        P.beam([[59, 130], [73, 130]], { w: 2.4 });
+        P.wdm(84, 130, 116, { w: 22 });
+        YL.forEach((y, k) => {
+          P.beam([[95, y], [106, y]], { w: 1.6 });
+          P.split(106, y, OFF.map(o => y + o), { L: 22, w: 1.1, id: k ? false : 'ysplit' });
+          const bank = () => { P.rect(130, y - 14, 36, 28, { c: 'ink', w: 1.2 }); OFF.forEach(o => { P.path('M130 ' + (y + o) + ' H166', { c: 'beam', w: 1, op: .5 }); P.path('M135 ' + (y + o - 2.2) + ' H161', { c: 'probe', w: 2 }); }); };
+          if (k) bank(); else P.part('eom', [130, y - 14, 36, 28], bank);
+          P.lab(148, y - 18, k === 2 ? 'λN · 벡터 N' : 'λ' + (k + 1) + ' · 벡터 ' + (k + 1), { a: 'middle', s: 9.5 });
+          OFF.forEach((o, j) => { const ya = y + o, yb = RY[j] + (k - 1) * 6; P.path('M166 ' + ya + ' C200 ' + ya + ' 206 ' + yb + ' 239 ' + yb, { c: 'beam', w: 1, op: .55 }); });
+        });
+        P.lab(148, 212, '입력 벡터 ×N', { a: 'middle' });
+        RY.forEach(y => { P.wdm(246, y, 22, { w: 14, flip: true, id: false }); P.beam([[253, y], [278, y]], { w: 1.8 }); });
+        P.at2('wdm', [253, RY[0] - 11]);
+        RY.forEach(y => P.path('M278 ' + y + ' H394', { c: 'faint', w: 1, op: .6 }));
+        P.grid(280, 82, 112, 96, 4, 4, { id: 'pcm', vals: (i, j) => .12 + .88 * Wq[i % M][j % M], lab: 'PCM 가중치 W' });
+        RY.forEach((y, i) => {
+          const fv = first ? clamp(first[1][i % M] / Math.max(M * 0.7, 1e-9), 0, 1) : 0;
+          P.beam([[394, y], [406, y]], { w: 1 + 1.6 * fv, op: .4 + .6 * fv });
+          P.pd(414, y, { v: fv, id: i ? false : 'pd' });
+          P.wire([[423, y], [456, y]], { arrow: false });
+        });
+        P.lab(414, 194, '행 PD', { a: 'middle' });
+        P.box(478, 130, 40, 100, 'TIA', { id: 'tia' }); P.wire([[498, 130], [518, 130]]);
+        P.box(540, 130, 40, 100, 'ADC', { id: 'adc' }); P.wire([[560, 130], [588, 130]]);
+        P.box(620, 130, 60, 40, 'FPGA', { id: 'fpga', tone: 'probe' });
+        P.text(660, 126, 'y = Wx', { s: 10.5 }); P.text(660, 142, 'N벌 동시', { s: 9.5 });
+        P.laser(336, 38, { id: 'src-pulse', lab: '' }); P.lab(306, 42, '쓰기 펄스', { a: 'end', s: 9.5 });
+        P.beam([[336, 52], [336, 78]], { dash: [4, 3], arrow: true, w: 1.6 });
+        P.wire([[620, 110], [620, 38], [361, 38]]); P.lab(490, 32, '되읽고 다시 쓰기', { a: 'middle', s: 9.5, c: 'probe' });
+        P.legend(16, 252, ['콤', '파장 분리', '변조 x', 'PCM 가중치', 'PD', 'ADC·FPGA']);
+        // 보조 패널: 파장 수 N 을 늘리면 — 처리량은 N배, ADC 로 나눈 효율은 그대로
+        P.aux(470, 222, 402, 142, '파장 수 N → 처리량 · 효율');
+        const ax0 = 500, ax1 = 858, ay0 = 340, ay1 = 252, NX = n => ax0 + (n - 1) / 63 * (ax1 - ax0);
+        P.path('M' + ax0 + ' ' + ay1 + ' V' + ay0 + ' H' + ax1, { c: 'rule', w: 1 });
+        P.path('M' + NX(1) + ' ' + ay0 + ' L' + NX(64) + ' ' + ay1, { c: 'beam', w: 1.8 });
+        P.path('M' + ax0 + ' ' + (ay0 - 30) + ' H' + ax1, { c: 'probe', w: 1.6, dash: [5, 3] });
+        const ny = ay0 - (N - 1) / 63 * (ay0 - ay1);
+        P.circ(NX(N), ny, 3.5, { c: 'none', f: 'beam' }); P.circ(NX(N), ay0 - 30, 3.2, { c: 'none', f: 'probe' });
+        P.text(ax0 + 8, ay1 + 10, '처리량 ' + fmt(tops, 1) + ' TOPS (N=' + N + ')', { s: 10, c: 'beam' });
+        P.text(ax1, ay0 - 36, 'TOPS/W (ADC) ' + fmt(effCore, 0) + ' — 그대로', { s: 9.5, c: 'probe', a: 'end' });
+        P.text(ax0, ay0 + 14, 'N=1', { s: 9.5 }); P.text(ax1, ay0 + 14, '64', { s: 9.5, a: 'end' });
+        return {
+          svg: P.out(),
+          stats: [{ l: '코어 처리량', v: fmt(tops, 2) + ' TOPS', c: PAL.beam }, { l: '양자화 오차', v: fmt(rms, 2) + ' %', c: PAL.warm }],
+          read: '<div>한 사이클 MAC <b>' + macs.toLocaleString() + '</b>개 · 코어만 <b>' + fmt(tops, 2) + ' TOPS</b></div>' +
+            '<div>양자화 오차 RMS <b>' + fmt(rms, 2) + '%</b> (' + B + '비트 = ' + (lv + 1) + '단계)</div>' +
+            '<div>ADC만 세면 <b>' + fmt(padc, 2) + ' W</b> (초당 ' + (adcs / 1e9).toFixed(1) + 'G 변환 × 1 pJ 가정)</div>' +
+            '<div>→ ADC 전력으로 나눈 효율 <b>' + fmt(effCore, 2) + ' TOPS/W</b> <span style="color:var(--wall)">— 레이저·구동·메모리 아직 안 뺐다</span></div>'
+        };
+      }
+    },
+    {
+      id: 'a9', num: '', tab: '겹쳐 보면', title: '아홉을 겹쳐 보면', text: true,
       body: [
-        '<b>가중치를 어디에 두느냐가 전부를 가른다.</b> 위상에 두면(01) 임의 행렬이 되지만 소자가 N²로 늘고 계속 전기를 먹는다. 파장에 두면(02) 합산이 공짜가 되지만 온도에 묶인다. 마스크에 두면(03·04) 전파가 연산을 대신 해주지만 바꾸려면 다시 찍어야 한다. 재료의 결정 상태에 두면(05) 꺼도 남지만 쓰기가 느리다.',
+        '<b>가중치를 어디에 두느냐가 전부를 가른다.</b> 위상에 두면(01) 임의 행렬이 되지만 소자가 N²로 늘고 계속 전기를 먹는다. 파장에 두면(02) 합산이 공짜가 되지만 온도에 묶인다. 마스크에 두면(03·04) 전파가 연산을 대신 해주지만 바꾸려면 다시 찍어야 한다. 재료의 결정 상태에 두면(05) 꺼도 남지만 쓰기가 느리다. 거기에 파장을 얹으면(10) 처리량은 N배가 되지만 변환 한 번에 하는 곱셈 수는 그대로라 효율은 안 오른다.',
         '<b>그리고 검출이 절반이다.</b> 06이 보여주는 건 연산을 아무리 잘해도 <span style="color:#D62A1F;font-weight:700">읽는 방식이 부호를 버리면 음수 가중치를 못 쓴다</span>는 것이다. 광 가속기 논문에서 호모다인이 자꾸 나오는 이유가 여기 있다.',
         '<b>07과 08은 같은 축의 양 끝이다.</b> 시간으로 펼치면 소자가 하나로 줄고 지연이 N배, 공간으로 펼치면 병렬도가 N²이고 갱신이 밀리초다. 실제 설계는 둘 사이 어딘가에 선다.'
       ]

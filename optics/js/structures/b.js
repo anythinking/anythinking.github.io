@@ -4,7 +4,7 @@
    run 의 document 는 그 트리를 찾는 좁은 창이다: getElementById · querySelector(All) 만. */
 (window.CMP = window.CMP || { groups: {} }).groups.b = {
   id: 'b', name: "B · 신경망",
-  html: "<section id=\"sec-b\" hidden>\n  <p class=\"lede\" style=\"margin-bottom:4px\">A군이 「행렬곱을 어떻게 광으로 하나」였다면 여기는 「신경망의 어느 부분을 광에 맡기나」다. 넷 다 학습이나 비선형을 광 쪽으로 밀어내려는 시도이고, 밀어낸 만큼 다른 데서 비용을 치른다.</p>\n<div class=\"tabs\" id=\"b-tabs\" role=\"tablist\">\n  <button type=\"button\" data-s=\"1\" aria-pressed=\"true\"><span class=\"n\">01</span>리저버 컴퓨팅</button>\n  <button type=\"button\" data-s=\"2\" aria-pressed=\"false\"><span class=\"n\">02</span>스파이킹 광 뉴런</button>\n  <button type=\"button\" data-s=\"3\" aria-pressed=\"false\"><span class=\"n\">03</span>포토닉 텐서코어</button>\n  <button type=\"button\" data-s=\"4\" aria-pressed=\"false\"><span class=\"n\">04</span>전광 RNN</button>\n  <button type=\"button\" data-s=\"5\" aria-pressed=\"false\">겹쳐 보면</button>\n</div>\n\n<div class=\"card sec\" id=\"b-s1\">\n  <div class=\"head\">\n    <div><div class=\"num\">01</div><h2>리저버 컴퓨팅</h2></div>\n    \n  </div>\n  <p class=\"idea\">저수지 내부는 <span class=\"k\">아무렇게나 두고 건드리지 않는다.</span> 학습은 출력 한 층만 — 선형 회귀 한 번이면 끝이라 역전파 회로가 칩에 필요 없다. 광으로 만들기 쉬운 게 바로 「고정된 랜덤 결합」이라서 궁합이 맞는다.</p>\n  <div class=\"split\">\n    <div class=\"fig\"><canvas class=\"f\" id=\"b-f1\" width=\"880\" height=\"360\"></canvas></div>\n    <div>\n      <div class=\"btns\" style=\"margin-bottom:8px\">\n        <span class=\"chip\">과제</span>\n        <button type=\"button\" data-g=\"task\" data-v=\"narma\" aria-pressed=\"true\">NARMA10</button>\n        <button type=\"button\" data-g=\"task\" data-v=\"sine\" aria-pressed=\"false\">사인파 5스텝 앞</button>\n      </div>\n      <div class=\"ctl\">\n        <div class=\"row\"><label for=\"b-c1n\">노드 수 N</label><input type=\"range\" id=\"b-c1n\" min=\"10\" max=\"60\" step=\"2\" value=\"30\"><output id=\"b-o1n\"></output></div>\n        <div class=\"row\"><label for=\"b-c1r\">스펙트럴 반경</label><input type=\"range\" id=\"b-c1r\" min=\"5\" max=\"150\" step=\"1\" value=\"90\"><output id=\"b-o1r\"></output></div>\n        <div class=\"row\"><label for=\"b-c1l\">누설률</label><input type=\"range\" id=\"b-c1l\" min=\"5\" max=\"100\" step=\"1\" value=\"80\"><output id=\"b-o1l\"></output></div>\n        <div class=\"row\"><label for=\"b-c1i\">입력 세기</label><input type=\"range\" id=\"b-c1i\" min=\"5\" max=\"200\" step=\"5\" value=\"60\"><output id=\"b-o1i\"></output></div>\n      </div>\n      <div class=\"btns\" style=\"margin-top:8px\">\n        <button type=\"button\" id=\"b-b1s\">저수지 다시 뽑기</button>\n        <button type=\"button\" id=\"b-b1f\" aria-pressed=\"true\">읽기층 학습 ON</button>\n      </div>\n      <div class=\"read\" id=\"b-r1\"></div>\n      <p class=\"note\">저수지 30노드를 실제로 돌리고(tanh 포화), 읽기층은 릿지 회귀(λ=1e-6)를 가우스 소거로 직접 푼다. <span class=\"k\">다시 뽑기</span>를 눌러도 NRMSE가 비슷하게 돌아오는 것 — 그게 「내부를 안 건드려도 된다」는 주장의 실물이다.</p>\n    </div>\n  </div>\n</div>\n\n<div class=\"card sec\" id=\"b-s2\">\n  <div class=\"head\">\n    <div><div class=\"num\">02</div><h2>스파이킹 광 뉴런</h2></div>\n    \n  </div>\n  <p class=\"idea\">세기를 계속 흘리는 대신 <span class=\"k\">역치를 넘을 때만 한 발씩</span> 쏜다. 공명터널다이오드(RTD)의 음성미분저항이 적분·발화·불응을 전자 쪽에서 만들고 레이저가 그걸 광 펄스로 내보낸다.</p>\n  <div class=\"split\">\n    <div class=\"fig\"><canvas class=\"f\" id=\"b-f2\" width=\"880\" height=\"360\"></canvas></div>\n    <div>\n      <div class=\"ctl\">\n        <div class=\"row\"><label for=\"b-c2i\">입력 세기</label><input type=\"range\" id=\"b-c2i\" min=\"0\" max=\"300\" step=\"2\" value=\"150\"><output id=\"b-o2i\"></output></div>\n        <div class=\"row\"><label for=\"b-c2th\">역치</label><input type=\"range\" id=\"b-c2th\" min=\"20\" max=\"150\" step=\"1\" value=\"70\"><output id=\"b-o2th\"></output></div>\n        <div class=\"row\"><label for=\"b-c2rf\">불응기</label><input type=\"range\" id=\"b-c2rf\" min=\"0\" max=\"400\" step=\"5\" value=\"100\"><output id=\"b-o2rf\"></output></div>\n        <div class=\"row\"><label for=\"b-c2ta\">막 시정수 τ</label><input type=\"range\" id=\"b-c2ta\" min=\"20\" max=\"400\" step=\"5\" value=\"120\"><output id=\"b-o2ta\"></output></div>\n        <div class=\"row\"><label for=\"b-c2nz\">잡음</label><input type=\"range\" id=\"b-c2nz\" min=\"0\" max=\"60\" step=\"1\" value=\"8\"><output id=\"b-o2nz\"></output></div>\n      </div>\n      <div class=\"btns\" style=\"margin-top:8px\">\n        <span class=\"chip\">입력 모양</span>\n        <button type=\"button\" data-g=\"drv\" data-v=\"dc\" aria-pressed=\"true\">일정</button>\n        <button type=\"button\" data-g=\"drv\" data-v=\"step\" aria-pressed=\"false\">계단</button>\n        <button type=\"button\" data-g=\"drv\" data-v=\"burst\" aria-pressed=\"false\">펄스열</button>\n      </div>\n      <div class=\"read\" id=\"b-r2\"></div>\n      <p class=\"note\">적분발화식 <span class=\"k\">τ dV/dt = −V + I(t)</span>를 전진 오일러(Δt = 1 ps, 2000스텝 = 2 ns)로 적분한다. 잰 간격이 해석해 <span class=\"k\">t<sub>ref</sub> − τ·ln(1 − θ/I)</span> 와 맞는지 같이 띄운다. 숫자 단위는 RTD 뉴런의 보고된 시간 규모(수백 ps~ns)에 맞춰 붙인 것이고 특정 소자의 측정값이 아니다 — <span class=\"w\">모델이지 소자 시뮬레이터가 아니다</span>.</p>\n    </div>\n  </div>\n</div>\n\n<div class=\"card sec\" id=\"b-s3\">\n  <div class=\"head\">\n    <div><div class=\"num\">03</div><h2>포토닉 텐서코어</h2></div>\n    \n  </div>\n  <p class=\"idea\">A군 05의 PCM 크로스바에 <span class=\"k\">파장 다중을 얹는다.</span> 셀은 그대로인데 파장 N개가 동시에 지나가니 한 번의 통과로 행렬곱 N벌이 나온다 — 면적을 안 늘리고 처리량만 N배로 미는 방식.</p>\n  <div class=\"split\">\n    <div class=\"fig\"><svg class=\"f\" id=\"b-f3\" viewBox=\"0 0 880 370\" role=\"img\" aria-label=\"WDM이 얹힌 PCM 크로스바\"></svg></div>\n    <div>\n      <div class=\"ctl\">\n        <div class=\"row\"><label for=\"b-c3n\">파장 수 N</label><input type=\"range\" id=\"b-c3n\" min=\"1\" max=\"64\" step=\"1\" value=\"16\"><output id=\"b-o3n\"></output></div>\n        <div class=\"row\"><label for=\"b-c3m\">행렬 한 변 M</label><input type=\"range\" id=\"b-c3m\" min=\"2\" max=\"32\" step=\"1\" value=\"4\"><output id=\"b-o3m\"></output></div>\n        <div class=\"row\"><label for=\"b-c3b\">셀 비트수</label><input type=\"range\" id=\"b-c3b\" min=\"1\" max=\"8\" step=\"1\" value=\"4\"><output id=\"b-o3b\"></output></div>\n        <div class=\"row\"><label for=\"b-c3f\">변조 속도</label><input type=\"range\" id=\"b-c3f\" min=\"1\" max=\"50\" step=\"1\" value=\"10\"><output id=\"b-o3f\"></output></div>\n      </div>\n      <div class=\"btns\" style=\"margin-top:8px\"><button type=\"button\" id=\"b-b3r\">가중치·입력 다시 뽑기</button></div>\n      <div class=\"read\" id=\"b-r3\"></div>\n      <p class=\"note\">M×M 가중치를 비트수대로 양자화해 <span class=\"k\">N벌의 행렬-벡터 곱을 실제로 계산</span>하고, 양자화 안 한 참값과의 RMS 오차를 잰다. 아래 TOPS는 코어만 센 상한이다. <span class=\"k\">파장 수를 늘려도 TOPS/W는 꿈쩍 안 한다</span> — 변환 한 번에 곱셈을 몇 번 했나(=M)만 효율을 정하기 때문이다. 파장은 처리량을 늘릴 뿐 효율은 못 늘린다.</p>\n    </div>\n  </div>\n</div>\n\n<div class=\"card sec\" id=\"b-s4\">\n  <div class=\"head\">\n    <div><div class=\"num\">04</div><h2>전광 RNN</h2></div>\n    \n  </div>\n  <p class=\"idea\">되먹임 고리를 전기로 안 내리고 <span class=\"k\">광에서 그대로 돌린다.</span> χ² 비선형(광파라메트릭 증폭)이 활성화 함수 노릇을 하고, 고리 한 바퀴가 곧 한 타임스텝이다. 이득이 <span class=\"k\">음수</span>인 건 고리 한 바퀴의 위상이 π라는 뜻 — 돌아온 빛이 입력을 상쇄하는 쪽으로 붙는다.</p>\n  <div class=\"split\">\n    <div class=\"fig\"><canvas class=\"f\" id=\"b-f4\" width=\"880\" height=\"350\"></canvas></div>\n    <div>\n      <div class=\"ctl\">\n        <div class=\"row\"><label for=\"b-c4g\">고리 이득 g</label><input type=\"range\" id=\"b-c4g\" min=\"-300\" max=\"300\" step=\"2\" value=\"-200\"><output id=\"b-o4g\"></output></div>\n        <div class=\"row\"><label for=\"b-c4d\">지연 D</label><input type=\"range\" id=\"b-c4d\" min=\"1\" max=\"24\" step=\"1\" value=\"3\"><output id=\"b-o4d\"></output></div>\n        <div class=\"row\"><label for=\"b-c4u\">입력 구동</label><input type=\"range\" id=\"b-c4u\" min=\"-100\" max=\"100\" step=\"2\" value=\"20\"><output id=\"b-o4u\"></output></div>\n        <div class=\"row\"><label for=\"b-c4L\">고리 길이</label><input type=\"range\" id=\"b-c4L\" min=\"1\" max=\"100\" step=\"1\" value=\"30\"><output id=\"b-o4L\"></output></div>\n      </div>\n      <div class=\"btns\" style=\"margin-top:8px\">\n        <button type=\"button\" id=\"b-b4n\" aria-pressed=\"true\">χ² 비선형 ON</button>\n      </div>\n      <div class=\"read\" id=\"b-r4\"></div>\n      <p class=\"note\"><span class=\"w\">정직하게 적을 것</span> — Marandi 그룹이 보인 100 GHz급 전광 되먹임의 비선형 소자는 <span class=\"k\">벌크 RPE-PPLN 결정</span>이지 TFLN 칩이 아니다. 칩 위 χ²는 별개의 숙제다. 아래 「고리 길이 → 타임스텝」 환산은 n<sub>g</sub>=2.2 가정으로 계산한 값이다. 손잡이로 <span class=\"k\">g를 −1 위아래로 넘겨보면</span> 수렴과 진동의 경계가 보인다.</p>\n    </div>\n  </div>\n</div>\n\n<div class=\"card sec close\" id=\"b-s5\">\n  <h2 style=\"font-size:16px\">넷을 겹쳐 보면</h2>\n  <p style=\"margin-top:8px\"><b>전부 「학습을 어디로 치우나」의 변주다.</b> 리저버(01)는 학습을 출력 한 층으로 몰아 칩에서 아예 빼버린다. 텐서코어(03)는 학습된 가중치를 받아 추론만 빠르게 하겠다는 쪽이라 학습을 밖에 둔다. 스파이킹(02)과 전광 RNN(04)은 반대로 <span class=\"k\">비선형과 상태를 광 안에 두려는</span> 시도인데, 그 대가로 둘 다 「그래서 학습은 어떻게 하나」가 미해결로 남는다.</p>\n  <p><b>그리고 넷 다 같은 자리에서 막힌다 — 상태를 어디에 담아두나.</b> 리저버의 저수지 상태, 스파이킹 뉴런의 막전위, RNN의 고리 안 진폭은 전부 <span class=\"k\">빛이 지나가는 동안만</span> 존재한다. 빛은 멈추지 않으니 상태를 붙잡으려면 고리를 돌리거나(04) 전자로 내려야 한다(01·02). 광 메모리가 승부처라는 말이 여기서도 똑같이 나온다.</p>\n  <p><b>03만 성격이 다르다.</b> PCM 셀에 가중치가 꺼도 남으니 상태 문제의 절반은 푼 셈인데, 대신 쓰기가 느려서 <span class=\"k\">추론 전용</span>이 된다. 학습 중에 가중치가 매 스텝 바뀌는 워크로드에는 들어갈 자리가 없다.</p>\n  <p><b>숫자를 볼 때 조심할 것.</b> 이 네 구조의 논문 수치는 거의 전부 코어만 센 것이다 — 03 탭에서 ADC 전력을 켜고 끄며 보면 같은 설계에서 자릿수가 어떻게 달라지는지 보인다. 시스템급 실측으로 GPU를 넘긴 플랫폼은 아직 없다.</p>\n</div>\n</section>",
+  html: "<section id=\"sec-b\" hidden>\n  <p class=\"lede\" style=\"margin-bottom:4px\">A군이 「행렬곱을 어떻게 광으로 하나」였다면 여기는 「신경망의 어느 부분을 광에 맡기나」다. 셋 다 학습이나 비선형을 광 쪽으로 밀어내려는 시도이고, 밀어낸 만큼 다른 데서 비용을 치른다.</p>\n<div class=\"tabs\" id=\"b-tabs\" role=\"tablist\">\n  <button type=\"button\" data-s=\"1\" aria-pressed=\"true\"><span class=\"n\">01</span>리저버 컴퓨팅</button>\n  <button type=\"button\" data-s=\"2\" aria-pressed=\"false\"><span class=\"n\">02</span>스파이킹 광 뉴런</button>\n  <button type=\"button\" data-s=\"3\" aria-pressed=\"false\"><span class=\"n\">04</span>전광 RNN</button>\n  <button type=\"button\" data-s=\"4\" aria-pressed=\"false\">겹쳐 보면</button>\n</div>\n\n<div class=\"card sec\" id=\"b-s1\">\n  <div class=\"head\">\n    <div><div class=\"num\">01</div><h2>리저버 컴퓨팅</h2></div>\n    \n  </div>\n  <p class=\"idea\">저수지 내부는 <span class=\"k\">아무렇게나 두고 건드리지 않는다.</span> 학습은 출력 한 층만 — 선형 회귀 한 번이면 끝이라 역전파 회로가 칩에 필요 없다. 광으로 만들기 쉬운 게 바로 「고정된 랜덤 결합」이라서 궁합이 맞는다.</p>\n  <div class=\"split\">\n    <div class=\"fig\"><canvas class=\"f\" id=\"b-f1\" width=\"880\" height=\"360\"></canvas></div>\n    <div>\n      <div class=\"btns\" style=\"margin-bottom:8px\">\n        <span class=\"chip\">과제</span>\n        <button type=\"button\" data-g=\"task\" data-v=\"narma\" aria-pressed=\"true\">NARMA10</button>\n        <button type=\"button\" data-g=\"task\" data-v=\"sine\" aria-pressed=\"false\">사인파 5스텝 앞</button>\n      </div>\n      <div class=\"ctl\">\n        <div class=\"row\"><label for=\"b-c1n\">노드 수 N</label><input type=\"range\" id=\"b-c1n\" min=\"10\" max=\"60\" step=\"2\" value=\"30\"><output id=\"b-o1n\"></output></div>\n        <div class=\"row\"><label for=\"b-c1r\">스펙트럴 반경</label><input type=\"range\" id=\"b-c1r\" min=\"5\" max=\"150\" step=\"1\" value=\"90\"><output id=\"b-o1r\"></output></div>\n        <div class=\"row\"><label for=\"b-c1l\">누설률</label><input type=\"range\" id=\"b-c1l\" min=\"5\" max=\"100\" step=\"1\" value=\"80\"><output id=\"b-o1l\"></output></div>\n        <div class=\"row\"><label for=\"b-c1i\">입력 세기</label><input type=\"range\" id=\"b-c1i\" min=\"5\" max=\"200\" step=\"5\" value=\"60\"><output id=\"b-o1i\"></output></div>\n      </div>\n      <div class=\"btns\" style=\"margin-top:8px\">\n        <button type=\"button\" id=\"b-b1s\">저수지 다시 뽑기</button>\n        <button type=\"button\" id=\"b-b1f\" aria-pressed=\"true\">읽기층 학습 ON</button>\n      </div>\n      <div class=\"read\" id=\"b-r1\"></div>\n      <p class=\"note\">저수지 30노드를 실제로 돌리고(tanh 포화), 읽기층은 릿지 회귀(λ=1e-6)를 가우스 소거로 직접 푼다. <span class=\"k\">다시 뽑기</span>를 눌러도 NRMSE가 비슷하게 돌아오는 것 — 그게 「내부를 안 건드려도 된다」는 주장의 실물이다.</p>\n    </div>\n  </div>\n</div>\n\n<div class=\"card sec\" id=\"b-s2\">\n  <div class=\"head\">\n    <div><div class=\"num\">02</div><h2>스파이킹 광 뉴런</h2></div>\n    \n  </div>\n  <p class=\"idea\">세기를 계속 흘리는 대신 <span class=\"k\">역치를 넘을 때만 한 발씩</span> 쏜다. 공명터널다이오드(RTD)의 음성미분저항이 적분·발화·불응을 전자 쪽에서 만들고 레이저가 그걸 광 펄스로 내보낸다.</p>\n  <div class=\"split\">\n    <div class=\"fig\"><canvas class=\"f\" id=\"b-f2\" width=\"880\" height=\"360\"></canvas></div>\n    <div>\n      <div class=\"ctl\">\n        <div class=\"row\"><label for=\"b-c2i\">입력 세기</label><input type=\"range\" id=\"b-c2i\" min=\"0\" max=\"300\" step=\"2\" value=\"150\"><output id=\"b-o2i\"></output></div>\n        <div class=\"row\"><label for=\"b-c2th\">역치</label><input type=\"range\" id=\"b-c2th\" min=\"20\" max=\"150\" step=\"1\" value=\"70\"><output id=\"b-o2th\"></output></div>\n        <div class=\"row\"><label for=\"b-c2rf\">불응기</label><input type=\"range\" id=\"b-c2rf\" min=\"0\" max=\"400\" step=\"5\" value=\"100\"><output id=\"b-o2rf\"></output></div>\n        <div class=\"row\"><label for=\"b-c2ta\">막 시정수 τ</label><input type=\"range\" id=\"b-c2ta\" min=\"20\" max=\"400\" step=\"5\" value=\"120\"><output id=\"b-o2ta\"></output></div>\n        <div class=\"row\"><label for=\"b-c2nz\">잡음</label><input type=\"range\" id=\"b-c2nz\" min=\"0\" max=\"60\" step=\"1\" value=\"8\"><output id=\"b-o2nz\"></output></div>\n      </div>\n      <div class=\"btns\" style=\"margin-top:8px\">\n        <span class=\"chip\">입력 모양</span>\n        <button type=\"button\" data-g=\"drv\" data-v=\"dc\" aria-pressed=\"true\">일정</button>\n        <button type=\"button\" data-g=\"drv\" data-v=\"step\" aria-pressed=\"false\">계단</button>\n        <button type=\"button\" data-g=\"drv\" data-v=\"burst\" aria-pressed=\"false\">펄스열</button>\n      </div>\n      <div class=\"read\" id=\"b-r2\"></div>\n      <p class=\"note\">적분발화식 <span class=\"k\">τ dV/dt = −V + I(t)</span>를 전진 오일러(Δt = 1 ps, 2000스텝 = 2 ns)로 적분한다. 잰 간격이 해석해 <span class=\"k\">t<sub>ref</sub> − τ·ln(1 − θ/I)</span> 와 맞는지 같이 띄운다. 숫자 단위는 RTD 뉴런의 보고된 시간 규모(수백 ps~ns)에 맞춰 붙인 것이고 특정 소자의 측정값이 아니다 — <span class=\"w\">모델이지 소자 시뮬레이터가 아니다</span>.</p>\n    </div>\n  </div>\n</div>\n\n<div class=\"card sec\" id=\"b-s4\">\n  <div class=\"head\">\n    <div><div class=\"num\">04</div><h2>전광 RNN</h2></div>\n    \n  </div>\n  <p class=\"idea\">되먹임 고리를 전기로 안 내리고 <span class=\"k\">광에서 그대로 돌린다.</span> χ² 비선형(광파라메트릭 증폭)이 활성화 함수 노릇을 하고, 고리 한 바퀴가 곧 한 타임스텝이다. 이득이 <span class=\"k\">음수</span>인 건 고리 한 바퀴의 위상이 π라는 뜻 — 돌아온 빛이 입력을 상쇄하는 쪽으로 붙는다.</p>\n  <div class=\"split\">\n    <div class=\"fig\"><canvas class=\"f\" id=\"b-f4\" width=\"880\" height=\"350\"></canvas></div>\n    <div>\n      <div class=\"ctl\">\n        <div class=\"row\"><label for=\"b-c4g\">고리 이득 g</label><input type=\"range\" id=\"b-c4g\" min=\"-300\" max=\"300\" step=\"2\" value=\"-200\"><output id=\"b-o4g\"></output></div>\n        <div class=\"row\"><label for=\"b-c4d\">지연 D</label><input type=\"range\" id=\"b-c4d\" min=\"1\" max=\"24\" step=\"1\" value=\"3\"><output id=\"b-o4d\"></output></div>\n        <div class=\"row\"><label for=\"b-c4u\">입력 구동</label><input type=\"range\" id=\"b-c4u\" min=\"-100\" max=\"100\" step=\"2\" value=\"20\"><output id=\"b-o4u\"></output></div>\n        <div class=\"row\"><label for=\"b-c4L\">고리 길이</label><input type=\"range\" id=\"b-c4L\" min=\"1\" max=\"100\" step=\"1\" value=\"30\"><output id=\"b-o4L\"></output></div>\n      </div>\n      <div class=\"btns\" style=\"margin-top:8px\">\n        <button type=\"button\" id=\"b-b4n\" aria-pressed=\"true\">χ² 비선형 ON</button>\n      </div>\n      <div class=\"read\" id=\"b-r4\"></div>\n      <p class=\"note\"><span class=\"w\">정직하게 적을 것</span> — Marandi 그룹이 보인 100 GHz급 전광 되먹임의 비선형 소자는 <span class=\"k\">벌크 RPE-PPLN 결정</span>이지 TFLN 칩이 아니다. 칩 위 χ²는 별개의 숙제다. 아래 「고리 길이 → 타임스텝」 환산은 n<sub>g</sub>=2.2 가정으로 계산한 값이다. 손잡이로 <span class=\"k\">g를 −1 위아래로 넘겨보면</span> 수렴과 진동의 경계가 보인다.</p>\n    </div>\n  </div>\n</div>\n\n<div class=\"card sec close\" id=\"b-s5\">\n  <h2 style=\"font-size:16px\">셋을 겹쳐 보면</h2>\n  <p style=\"margin-top:8px\"><b>전부 「학습을 어디로 치우나」의 변주다.</b> 리저버(01)는 학습을 출력 한 층으로 몰아 칩에서 아예 빼버린다. 스파이킹(02)과 전광 RNN(04)은 반대로 <span class=\"k\">비선형과 상태를 광 안에 두려는</span> 시도인데, 그 대가로 둘 다 「그래서 학습은 어떻게 하나」가 미해결로 남는다.</p>\n  <p><b>그리고 셋 다 같은 자리에서 막힌다 — 상태를 어디에 담아두나.</b> 리저버의 저수지 상태, 스파이킹 뉴런의 막전위, RNN의 고리 안 진폭은 전부 <span class=\"k\">빛이 지나가는 동안만</span> 존재한다. 빛은 멈추지 않으니 상태를 붙잡으려면 고리를 돌리거나(04) 전자로 내려야 한다(01·02). 광 메모리가 승부처라는 말이 여기서도 똑같이 나온다. 가중치를 꺼도 남는 PCM 셀에 담아 이 문제의 절반을 푼 포토닉 텐서코어는 행렬곱 쪽이라 A군 10으로 옮겼다.</p>\n  <p><b>숫자를 볼 때 조심할 것.</b> 이 구조들의 논문 수치는 거의 전부 코어만 센 것이다. 시스템급 실측으로 GPU를 넘긴 플랫폼은 아직 없다.</p>\n</div>\n</section>",
   run: function (document, getComputedStyle, MOD) {
 
 
@@ -301,95 +301,6 @@
         : '불응기 상한 <b>'+fmt(fmax,2)+' GHz</b> · 해석해 간격 <b>'+(I0>th?fmt(tref-tau*Math.log(1-th/I0),0)+' ps':'—')+'</b>')+'</div>';
   }
 
-  /* ── 03 포토닉 텐서코어 ─────────────────────────── */
-  let seed3=3;
-  function r3(){
-    const N=+$('c3n').value, M=+$('c3m').value, B=+$('c3b').value, F=+$('c3f').value;
-    $('o3n').textContent=N; $('o3m').textContent=M+'×'+M;
-    $('o3b').textContent=B+' bit'; $('o3f').textContent=F+' GHz';
-    const rnd=rng(seed3*48271+11);
-    const lv=(1<<B)-1;
-    // 가중치는 0~1 (PCM 투과율은 음수가 안 된다 — 음수는 차동 쌍이 필요하다)
-    const Wt=[], Wq=[];
-    for(let i=0;i<M;i++){
-      const a=new Float64Array(M), b=new Float64Array(M);
-      for(let j=0;j<M;j++){a[j]=rnd();b[j]=lv>0?Math.round(a[j]*lv)/lv:0;}
-      Wt.push(a); Wq.push(b);
-    }
-    // 파장 N개가 각자 입력 벡터 하나를 싣고 동시에 통과
-    let se=0, sy=0, cnt=0, first=null;
-    for(let k=0;k<N;k++){
-      const x=new Float64Array(M); for(let j=0;j<M;j++) x[j]=rnd();
-      const ye=new Float64Array(M), yq=new Float64Array(M);
-      for(let i=0;i<M;i++){let s=0,q=0;for(let j=0;j<M;j++){s+=Wt[i][j]*x[j];q+=Wq[i][j]*x[j];}ye[i]=s;yq[i]=q;}
-      for(let i=0;i<M;i++){se+=(yq[i]-ye[i])*(yq[i]-ye[i]);sy+=ye[i]*ye[i];cnt++;}
-      if(k===0) first=[ye,yq];
-    }
-    const rms=Math.sqrt(se/cnt)/Math.sqrt(sy/cnt)*100;
-    const macs=N*M*M;                       // 한 사이클당 곱셈누적
-    const tops=2*macs*F*1e9/1e12;           // 코어만 — 2 OP/MAC
-    const adcs=N*M*F*1e9;                   // 출력마다 변환 한 번
-    const eadc=1e-12;                       // 가정: 1 pJ/변환
-    const padc=adcs*eadc;                   // W
-    const effCore=tops/Math.max(padc,1e-12);
-
-    // ── 사이클: 콤 → 파장 분리 → 파장마다 1×M 분배 + 변조기 한 벌(입력 벡터) → 행마다 파장 합침 → PCM 크로스바(가중치) → 행 PD → TIA → ADC → FPGA ─
-    //    쓰기 경로: FPGA 가 셀을 되읽고 펄스 레이저로 다시 쓴다(추론 경로와 따로)
-    const P=CYC.pen(), YL=[82,130,178], RY=[94,118,142,166], OFF=[-9,-3,3,9];
-    P.laser(36,130,{id:'src-comb'});
-    P.beam([[59,130],[73,130]],{w:2.4});
-    P.wdm(84,130,116,{w:22});
-    YL.forEach((y,k)=>{
-      P.beam([[95,y],[106,y]],{w:1.6});
-      P.split(106,y,OFF.map(o=>y+o),{L:22,w:1.1,id:k?false:'ysplit'});
-      const bank=()=>{ P.rect(130,y-14,36,28,{c:'ink',w:1.2}); OFF.forEach(o=>{ P.path('M130 '+(y+o)+' H166',{c:'beam',w:1,op:.5}); P.path('M135 '+(y+o-2.2)+' H161',{c:'probe',w:2}); }); };
-      if(k) bank(); else P.part('eom',[130,y-14,36,28],bank);
-      P.lab(148,y-18,k===2?'λN · 벡터 N':'λ'+(k+1)+' · 벡터 '+(k+1),{a:'middle',s:9.5});
-      // 변조기 j 번째 출력 → 크로스바 j 행의 파장 합침기
-      OFF.forEach((o,j)=>{ const ya=y+o, yb=RY[j]+(k-1)*6;
-        P.path('M166 '+ya+' C200 '+ya+' 206 '+yb+' 239 '+yb,{c:'beam',w:1,op:.55}); });
-    });
-    P.lab(148,212,'입력 벡터 ×N',{a:'middle'});
-    RY.forEach((y,j)=>{ P.wdm(246,y,22,{w:14,flip:true,id:false}); P.beam([[253,y],[278,y]],{w:1.8}); });
-    P.at2('wdm',[253,RY[0]-11]);
-    RY.forEach(y=>P.path('M278 '+y+' H394',{c:'faint',w:1,op:.6}));
-    P.grid(280,82,112,96,4,4,{id:'pcm',vals:(i,j)=>.12+.88*Wq[i%M][j%M],lab:'PCM 가중치 W'});
-    RY.forEach((y,i)=>{
-      const fv=first?clamp(first[1][i%M]/Math.max(M*0.7,1e-9),0,1):0;
-      P.beam([[394,y],[406,y]],{w:1+1.6*fv,op:.4+.6*fv});
-      P.pd(414,y,{v:fv,id:i?false:'pd'});
-      P.wire([[423,y],[456,y]],{arrow:false});
-    });
-    P.lab(414,194,'행 PD',{a:'middle'});
-    P.box(478,130,40,100,'TIA',{id:'tia'}); P.wire([[498,130],[518,130]]);
-    P.box(540,130,40,100,'ADC',{id:'adc'}); P.wire([[560,130],[588,130]]);
-    P.box(620,130,60,40,'FPGA',{id:'fpga',tone:'probe'});
-    P.text(660,126,'y = Wx',{s:10.5}); P.text(660,142,'N벌 동시',{s:9.5});
-    // 쓰기 경로 — 셀을 녹였다 굳혀 가중치를 쓴다
-    P.laser(336,38,{id:'src-pulse',lab:''}); P.lab(306,42,'쓰기 펄스',{a:'end',s:9.5});
-    P.beam([[336,52],[336,78]],{dash:[4,3],arrow:true,w:1.6});
-    P.wire([[620,110],[620,38],[361,38]]); P.lab(490,32,'되읽고 다시 쓰기',{a:'middle',s:9.5,c:'probe'});
-    P.legend(16,252,['콤','파장 분리','변조 x','PCM 가중치','PD','ADC·FPGA']);
-    // ── 보조 패널: 파장 수 N 을 늘리면 — 처리량은 N배, ADC 로 나눈 효율은 그대로 ──
-    P.aux(470,222,402,142,'파장 수 N → 처리량 · 효율');
-    const ax0=500, ax1=858, ay0=340, ay1=252, NX=n=>ax0+(n-1)/63*(ax1-ax0);
-    P.path('M'+ax0+' '+ay1+' V'+ay0+' H'+ax1,{c:'rule',w:1});
-    P.path('M'+NX(1)+' '+ay0+' L'+NX(64)+' '+ay1,{c:'beam',w:1.8});
-    P.path('M'+ax0+' '+(ay0-30)+' H'+ax1,{c:'probe',w:1.6,dash:[5,3]});
-    const ny=ay0-(N-1)/63*(ay0-ay1);
-    P.circ(NX(N),ny,3.5,{c:'none',f:'beam'}); P.circ(NX(N),ay0-30,3.2,{c:'none',f:'probe'});
-    P.text(ax0+8,ay1+10,'처리량 '+fmt(tops,1)+' TOPS (N='+N+')',{s:10,c:'beam'});
-    P.text(ax1,ay0-36,'TOPS/W (ADC) '+fmt(effCore,0)+' — 그대로',{s:9.5,c:'probe',a:'end'});
-    P.text(ax0,ay0+14,'N=1',{s:9.5}); P.text(ax1,ay0+14,'64',{s:9.5,a:'end'});
-    $('f3').innerHTML=P.out();
-
-    $('r3').innerHTML=
-      '<div>한 사이클 MAC <b>'+macs.toLocaleString()+'</b>개 · 코어만 <b>'+fmt(tops,2)+' TOPS</b></div>'+
-      '<div>양자화 오차 RMS <b>'+fmt(rms,2)+'%</b> ('+B+'비트 = '+(lv+1)+'단계)</div>'+
-      '<div>ADC만 세면 <b>'+fmt(padc,2)+' W</b> (초당 '+(adcs/1e9).toFixed(1)+'G 변환 × 1 pJ 가정)</div>'+
-      '<div>→ ADC 전력으로 나눈 효율 <b>'+fmt(effCore,2)+' TOPS/W</b> <span style="color:var(--wall)">— 레이저·구동·메모리 아직 안 뺐다</span></div>';
-  }
-
   /* ── 04 전광 RNN ────────────────────────────────── */
   let nl4=true;
   function r4(){
@@ -500,8 +411,6 @@
       $('b1s').addEventListener('click',()=>{seed1=(seed1*31+17)%9973;r1();});
       $('b1f').addEventListener('click',()=>{train1=!train1;$('b1f').setAttribute('aria-pressed',String(train1));$('b1f').textContent='읽기층 학습 '+(train1?'ON':'OFF');r1();});
       ['c2i','c2th','c2rf','c2ta','c2nz'].forEach(id=>$(id).addEventListener('input',r2));
-      ['c3n','c3m','c3b','c3f'].forEach(id=>$(id).addEventListener('input',r3));
-      $('b3r').addEventListener('click',()=>{seed3=(seed3*41+7)%9973;r3();});
       ['c4g','c4d','c4u','c4L'].forEach(id=>$(id).addEventListener('input',r4));
       $('b4n').addEventListener('click',()=>{nl4=!nl4;$('b4n').setAttribute('aria-pressed',String(nl4));$('b4n').textContent='χ² 비선형 '+(nl4?'ON':'OFF');r4();});
       ROOT.querySelectorAll('[data-g]').forEach(b=>b.addEventListener('click',()=>{
@@ -511,7 +420,8 @@
       }));
 
       function showSec(n){
-        for(let i=1;i<=5;i++) $('s'+i).hidden=(i!==n);
+        const SEC=[1,2,4,5];   // 03(포토닉 텐서코어)은 A군 10으로 옮겼다 — 단추 data-s 는 순서, 카드 번호는 그대로
+        SEC.forEach((k,i)=>{$('s'+k).hidden=(i+1!==n);});
         ROOT.querySelectorAll('#b-tabs button').forEach(b=>b.setAttribute('aria-pressed',String(+b.dataset.s===n)));
       }
       ROOT.querySelectorAll('#b-tabs button').forEach(b=>b.addEventListener('click',()=>{
@@ -519,7 +429,7 @@
         ROOT.scrollIntoView({block:'start',behavior:'smooth'});
       }));
       showSec(1);
-      r1();r2();r3();r4();
+      r1();r2();r4();
     }};
 })();
 
