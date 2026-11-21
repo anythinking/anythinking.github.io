@@ -272,5 +272,17 @@
         p.preset && open ? h('a', { href: open(p.preset) }, t('실험실에서 열기', 'Open in the lab')) : null))));
   }
 
+  // 화면이 고정 틀(.app)이고 본문 칸(.stage)만 스크롤되는 쪽에서, 머리·필터 줄처럼 스크롤 안 되는 곳 위에서 굴려도 본문이 내려가게 넘겨 준다
+  document.addEventListener('wheel', e => {
+    if (e.ctrlKey || e.metaKey || getComputedStyle(document.body).overflowY !== 'hidden') return;
+    for (let el = e.target; el && el !== document.body; el = el.parentElement) {
+      if (el.classList && el.classList.contains('leaflet-container')) return;
+      const oy = getComputedStyle(el).overflowY;
+      if (/auto|scroll/.test(oy) && el.scrollHeight > el.clientHeight + 1) return;
+    }
+    const st = [...document.querySelectorAll('main .stage')].find(el => el.scrollHeight > el.clientHeight + 1);
+    if (st) st.scrollBy({ top: e.deltaMode === 1 ? e.deltaY * 16 : e.deltaY });
+  }, { passive: true });
+
   window.A = { lang, root, site, t, tr, tx, data, hasPrivate, merge, route, $, $$, h, esc, pill, mount, fail, narrow, stars, papers };
 })();
