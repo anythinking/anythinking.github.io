@@ -1,0 +1,327 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>빛은 어떻게 물질의 굴절률을 바꿀까? — 광 연산 아틀라스</title>
+<meta name="description" content="센 빛이 물질의 굴절률과 흡수를 바꾸는 원리 다섯 가지 — 커 효과, 열광학, 캐리어 분산, 포화 흡수, 광역학 — 를 물질 안에서 무엇이 일어나는지부터 그리고, 방향·속도·크기·대가로 나란히 비교한다.">
+<link rel="canonical" href="https://anythinking.github.io/optics/writing-light-index.html">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="광 연산 아틀라스">
+<meta property="og:title" content="빛은 어떻게 물질의 굴절률을 바꿀까? — 광 연산 아틀라스">
+<meta property="og:url" content="https://anythinking.github.io/optics/writing-light-index.html">
+<meta property="og:image" content="https://anythinking.github.io/optics/img/og.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<meta property="og:description" content="센 빛이 물질의 굴절률과 흡수를 바꾸는 원리 다섯 가지 — 커 효과, 열광학, 캐리어 분산, 포화 흡수, 광역학 — 를 물질 안에서 무엇이 일어나는지부터 그리고, 방향·속도·크기·대가로 나란히 비교한다.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="css/base.css?v=25b88a60">
+<link rel="stylesheet" href="css/writing.css?v=1416eda6">
+</head>
+<body data-page="writing-light-index" data-root="">
+<div class="app">
+  <header class="top">
+    <div class="ttl"><b>광 연산 아틀라스</b></div>
+    <div class="hd-r">
+      <nav class="g" aria-label="지도"><div class="ng"><span class="ngl">포토닉스 기초</span><div class="ngt"><a href="optics.html">광학</a><a href="layers.html">층</a><a href="glossary.html">용어</a></div></div>
+      <div class="ng"><span class="ngl">광 연산</span><div class="ngt"><a href="compute.html">종류</a><a href="devices.html">소자</a><a href="institutions.html">기관</a></div></div>
+      <div class="ng etc"><span class="ngl">&nbsp;</span><div class="ngt"><a href="writing.html" aria-current="page">글</a><a href="about.html">소개</a></div></div></nav>
+      <div class="lang" role="group" aria-label="Language"><span class="lang-lb">Language</span><span aria-current="true" lang="ko">한국어</span><a href="en/writing-light-index.html" hreflang="en" lang="en">English</a></div>
+    </div>
+  </header>
+<div class="ph"><h1>빛은 어떻게 물질의 굴절률을 바꿀까?</h1></div>
+<main class="one">
+<article class="doc">
+  <a class="back" href="writing.html">← 글 목록</a>
+  <p class="lede"><span>광 쌍안정</span> 글에서는 무엇이 굴절률을 바꾸든 공진기 입장에서는 「공진이 어느 쪽으로, 얼마나, 얼마나 빨리 밀리느냐」만 들어온다고 했습니다. 이 글은 그 숫자 뒤에서 물질 안에 실제로 무슨 일이 일어나는지를 봅니다. 빛의 전기장이 전자구름을 찌그러뜨리는 것, 흡수된 빛이 격자를 데우는 것, 광자가 전하를 만드는 것, 흡수할 자리가 차는 것, 빛이 거울을 미는 것. 다섯 가지를 차례로 그린 뒤 마지막에 한 표로 나란히 놓습니다.</p>
+  <p class="meta">2026-11-19 · 기초 › 광 비선형 ① · 이어지는 글 › 광 쌍안정</p>
+
+  <div class="wr-body">
+
+  <h2 id="s1">1. 굴절률이 바뀐다는 것</h2>
+  <p>굴절률은 빛이 물질 안에서 진공보다 얼마나 느리게 나아가느냐를 나타내는 수입니다. 그런데 빛이 왜 느려지는지를 따라가 보면 굴절률은 사실 <b>물질 속 전하가 빛의 전기장에 얼마나 따라 흔들리느냐</b>로 정해집니다. 빛이 원자를 지나가면 그 전기장이 원자핵에 묶인 전자구름을 이리저리 끌어당기고, 흔들리는 전자는 작은 안테나처럼 자기 빛을 다시 내보냅니다. 이렇게 다시 나온 빛은 원래 빛보다 위상이 조금 늦습니다. 그래서 둘이 더해지면 원래 빛보다 마루가 조금 뒤처진 파동이 됩니다. 원자마다 이 지연이 쌓이니 물질 속 파동은 진공에서보다 느리게 나아가는 것처럼 보입니다. 굴절률은 바로 이 느려진 정도입니다.</p>
+  <p>물질 전체로 보면 이 흔들림이 분극 <math><mi>P</mi></math>이고 약한 빛에서는 분극이 전기장에 정확히 비례합니다(<math><mi>P</mi><mo>=</mo><msub><mi>ε</mi><mn>0</mn></msub><mi>χ</mi><mi>E</mi></math>). 비례 계수 <math><mi>χ</mi></math>가 고정이면 굴절률 <math><mi>n</mi><mo>=</mo><msqrt><mrow><mn>1</mn><mo>+</mo><mi>χ</mi></mrow></msqrt></math>도 고정입니다. 그래서 보통의 광학에서는 굴절률을 물질의 상수로 다룹니다.</p>
+  <figure class="wr-fig" id="li1">
+    <svg class="wf" viewBox="0 0 640 230" role="img" aria-label="빛의 전기장이 원자의 전자구름을 위아래로 흔들고, 흔들린 전자가 늦은 위상의 빛을 다시 내보내 물질을 지난 빛이 진공에서보다 뒤처지는 모습.">
+      <g id="li1-g"></g>
+    </svg>
+    <div class="wr-ctl"><button type="button" id="li1-p" aria-pressed="false">멈추기</button></div>
+    <figcaption>그림 1. 빛이 원자를 흔드는 모습. 빨간 화살표는 원자가 있는 바로 그 자리의 전기장이라, 화살표 끝이 늘 들어오는 파동(빨간 선) 위에 놓입니다. 이 전기장이 전자구름(파란 타원)을 위아래로 끌고, 전자는 음전하라 전기장과 반대쪽으로 밀립니다. 흔들린 전자가 다시 내보낸 빛이 원래 빛에 더해져서, 오른쪽으로 나간 파동(노란 실선)은 물질이 없었을 때의 파동(점선)보다 마루가 조금 왼쪽에, 곧 조금 늦게 옵니다. 점선은 빨간 파동이 원자를 지나지 않고 그대로 이어졌을 때라 빨간 선과 박자가 맞고, 노란 선이 거기서 어긋나는 것은 일부러 그린 것입니다. 이 늦음이 굴절률이고, 그림에서는 보이게 하려고 실제보다 크게 그렸습니다.</figcaption>
+  </figure>
+  <p><b>빛이 세지면 이 「고정」이 두 가지 방식으로 깨집니다.</b> 하나는 전자의 흔들림 자체가 전기장에 비례하지 않게 되는 것입니다. 전자구름을 너무 세게 잡아당기면 용수철이 늘어나듯 반응이 휘고, 그만큼 굴절률이 빛의 세기를 따라갑니다. 이 현상을 <b>커 효과</b>라고 부릅니다. 커 효과는 빛이 지나가는 그 순간에만 일어납니다. <b>다른 하나는 빛이 물질 자체를 바꿔 놓는 것</b>입니다. 흡수된 빛이 물질을 데우거나, 전하를 새로 만들거나, 흡수할 수 있는 자리를 채우거나, 공진기의 모양을 밀어서 바꾸면, 바뀐 물질은 원래와 다른 굴절률이나 흡수를 갖습니다. 이쪽은 빛이 만든 변화가 물질 안에 쌓였다가 천천히 빠지므로 빛이 꺼진 뒤에도 잠시 남습니다.</p>
+  <p>다섯 가지를 비교하는 잣대는 넷으로 정해 둡니다. <b>부호</b>는 굴절률이 커지는지 작아지는지, 또는 굴절률보다 흡수가 바뀌는지입니다. 공진이 어느 쪽 파장으로 밀리느냐가 여기서 정해집니다. <b>속도</b>는 빛을 넣고 뺐을 때 변화가 생기고 사라지는 시간입니다. <b>크기</b>는 같은 빛으로 굴절률이 얼마나 바뀌느냐이고, <b>대가</b>는 그 변화를 얻으려고 잃는 것, 곧 흡수 손실이나 발열이나 잡음입니다. 미리 말해 두자면 다섯 가지를 나란히 놓았을 때 크기와 속도가 서로를 맞바꾸는 모습이 뚜렷하게 보입니다.</p>
+  <figure class="wr-fig">
+    <svg class="wf" viewBox="0 0 640 250" role="img" aria-label="센 빛이 물질을 바꾸는 다섯 갈래. 전자구름 변형은 즉시, 열·전하·채워진 자리·밀린 거울은 물질에 쌓이는 변화이고, 모두 굴절률 또는 흡수를 바꾼다.">
+      <defs>
+        <marker id="li0-ink" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path class="mk-ink" d="M2 1L8 5L2 9"/></marker>
+        <marker id="li0-warm" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path class="mk-warm" d="M2 1L8 5L2 9"/></marker>
+      </defs>
+      <rect class="cell hl" x="16" y="104" width="100" height="44" rx="6"/><text x="66" y="126" text-anchor="middle" dominant-baseline="central">센 빛</text>
+      <text class="sm" x="290" y="18" text-anchor="middle">물질 안에서 일어나는 일</text>
+      <rect class="cell" x="200" y="28" width="180" height="34" rx="6"/><text x="290" y="45" text-anchor="middle" dominant-baseline="central">전자구름이 찌그러진다</text>
+      <rect class="cell" x="200" y="72" width="180" height="34" rx="6"/><text x="290" y="89" text-anchor="middle" dominant-baseline="central">흡수된 빛이 데운다</text>
+      <rect class="cell" x="200" y="116" width="180" height="34" rx="6"/><text x="290" y="133" text-anchor="middle" dominant-baseline="central">광자가 전하를 만든다</text>
+      <rect class="cell" x="200" y="160" width="180" height="34" rx="6"/><text x="290" y="177" text-anchor="middle" dominant-baseline="central">흡수할 자리가 찬다</text>
+      <rect class="cell" x="200" y="204" width="180" height="34" rx="6"/><text x="290" y="221" text-anchor="middle" dominant-baseline="central">빛이 벽을 민다</text>
+      <path class="ln" d="M118 120 C160 110 160 50 196 45" marker-end="url(#li0-ink)"/>
+      <path class="ln" d="M118 122 C160 116 160 92 196 89" marker-end="url(#li0-ink)"/>
+      <path class="ln" d="M118 126 L196 133" marker-end="url(#li0-ink)"/>
+      <path class="ln" d="M118 130 C160 136 160 172 196 177" marker-end="url(#li0-ink)"/>
+      <path class="ln" d="M118 134 C160 142 160 216 196 221" marker-end="url(#li0-ink)"/>
+      <text class="sm" x="400" y="18">생기고 빠지는 시간</text>
+      <text class="sm" x="530" y="18">결과 (실리콘 기준)</text>
+      <text class="sm" x="400" y="49">즉시 — fs</text>
+      <text class="sm" x="400" y="93">쌓였다 빠짐 — µs</text>
+      <text class="sm" x="400" y="137">쌓였다 빠짐 — ns</text>
+      <text class="sm" x="400" y="181">쌓였다 빠짐 — 재료마다</text>
+      <text class="sm" x="400" y="225">기계 진동 주기</text>
+      <text class="hlt" x="530" y="49">굴절률 ↑</text>
+      <text class="hlt" x="530" y="93">굴절률 ↑</text>
+      <text class="hlt" x="530" y="137">굴절률 ↓ · 흡수 ↑</text>
+      <text class="hlt" x="530" y="181">흡수 ↓</text>
+      <text class="hlt" x="530" y="225">공진기 길이 ↑</text>
+      <line class="ln dim" x1="392" y1="62" x2="625" y2="62"/>
+    </svg>
+    <figcaption>그림 2. 이 글이 다루는 다섯 갈래. 가운데 칸은 물질 안에서 일어나는 일이고, 오른쪽 두 칸은 그 변화가 얼마나 빨리 생기고 빠지는지와, 그 결과 굴절률·흡수·길이 중 무엇이 어느 쪽으로 바뀌는지입니다. 맨 위 커 효과만 빛이 지나가는 순간에 일어나고, 아래 넷은 빛이 물질의 상태(온도, 전하 수, 채워진 자리, 모양)를 바꿔 놓은 결과입니다. 2~6절이 위에서부터 한 칸씩 다룹니다.</figcaption>
+  </figure>
+  <h2 id="s2">2. 커 효과 — 전자구름이 찌그러진다</h2>
+  <p>전자구름을 원자핵에 매달린 용수철 끝의 추로 생각해 봅시다. 조금 당기면 당긴 만큼 늘어나고(훅의 법칙), 이때는 분극이 전기장에 비례해 굴절률이 상수입니다. 세게 당기면 용수철이 더 이상 정확히 비례해서 늘어나지 않습니다. 원자가 만드는 퍼텐셜은 바닥 근처에서만 포물선이고 멀리 가면 모양이 달라지기 때문입니다. 그러면 분극에 전기장의 제곱과 세제곱에 비례하는 항이 덧붙습니다(<math><mi>P</mi><mo>=</mo><msub><mi>ε</mi><mn>0</mn></msub><mo stretchy="false">(</mo><msup><mi>χ</mi><mrow><mo stretchy="false">(</mo><mn>1</mn><mo stretchy="false">)</mo></mrow></msup><mi>E</mi><mo>+</mo><msup><mi>χ</mi><mrow><mo stretchy="false">(</mo><mn>2</mn><mo stretchy="false">)</mo></mrow></msup><msup><mi>E</mi><mn>2</mn></msup><mo>+</mo><msup><mi>χ</mi><mrow><mo stretchy="false">(</mo><mn>3</mn><mo stretchy="false">)</mo></mrow></msup><msup><mi>E</mi><mn>3</mn></msup><mo stretchy="false">)</mo></math>). 하지만 실리콘이나 유리처럼 원자 배열이 뒤집어도 똑같은(반전 대칭이 있는) 물질에서는 제곱 항이 사라집니다. 전기장을 위로 걸든 아래로 걸든 전자가 똑같이 밀려야 하는데, 제곱 항은 방향을 바꿔도 부호가 그대로라 그 대칭을 깨기 때문입니다. 그래서 이런 물질에서 남는 첫 비선형은 세제곱 항이고, <b>커 효과가 바로 이 세제곱 항이 만드는 효과</b>입니다. 이 항을 굴절률에 넣어 정리하면 굴절률이 빛의 세기 <math><mi>I</mi></math>에 비례해 바뀝니다. 세기는 전기장 진폭의 제곱에 비례하니(<math><mi>I</mi><mo>∝</mo><msup><mi>E</mi><mn>2</mn></msup></math>), 세제곱 항이 만든 굴절률 변화가 세기에 비례하는 것입니다.</p>
+  <div class="wr-math"><math display="block"><mi>n</mi><mo>=</mo><msub><mi>n</mi><mn>0</mn></msub><mo>+</mo><msub><mi>n</mi><mn>2</mn></msub><mi>I</mi></math></div>
+  <figure class="wr-fig">
+    <svg class="wf" viewBox="0 0 640 240" role="img" aria-label="빛이 없을 때 둥근 전자구름, 약한 빛에서 조금 밀린 구름, 센 빛에서 많이 밀리고 길게 늘어난 구름. 오른쪽은 분극과 전기장의 관계가 약할 때는 직선이고 셀 때는 위로 휘는 그래프.">
+      <defs>
+        <marker id="li2-beam" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path class="mk-beam" d="M2 1L8 5L2 9"/></marker>
+      </defs>
+      <text class="sm" x="70" y="22" text-anchor="middle">빛 없음</text>
+      <ellipse cx="70" cy="120" rx="34" ry="34" style="fill:var(--ui);opacity:.22"/>
+      <circle cx="70" cy="120" r="4" style="fill:var(--ink)"/>
+      <text class="sm" x="70" y="200" text-anchor="middle">대칭 — 분극 0</text>
+
+      <text class="sm" x="185" y="22" text-anchor="middle">약한 빛</text>
+      <path class="light" d="M150 160 L150 92" marker-end="url(#li2-beam)"/>
+      <ellipse cx="185" cy="128" rx="34" ry="35" style="fill:var(--ui);opacity:.22"/>
+      <circle cx="185" cy="120" r="4" style="fill:var(--ink)"/>
+      <text class="sm" x="185" y="200" text-anchor="middle">조금 밀림</text>
+      <text class="sm" x="185" y="216" text-anchor="middle">전기장에 비례</text>
+
+      <text class="sm" x="300" y="22" text-anchor="middle">센 빛</text>
+      <path class="light hl" d="M262 170 L262 70" marker-end="url(#li2-beam)"/>
+      <ellipse cx="300" cy="142" rx="30" ry="46" style="fill:var(--ui);opacity:.26"/>
+      <circle cx="300" cy="120" r="4" style="fill:var(--ink)"/>
+      <text class="sm" x="300" y="200" text-anchor="middle">더 밀리고 늘어남</text>
+      <text class="hlt" x="300" y="216" text-anchor="middle">비례가 깨짐</text>
+
+      <line class="ln" x1="400" y1="200" x2="620" y2="200"/><line class="ln" x1="400" y1="200" x2="400" y2="30"/>
+      <text class="sm" x="620" y="220" text-anchor="end">전기장 E →</text>
+      <text class="sm" x="406" y="38">분극 P (흔들린 정도)</text>
+      <line class="ln" style="stroke-dasharray:5 4" x1="400" y1="200" x2="610" y2="88"/>
+      <path class="light hl" d="M400 200 C470 163 530 128 560 104 C580 88 596 66 606 46"/>
+      <text class="sm" x="612" y="134" text-anchor="end">약한 빛의 비례 (점선)</text>
+      <text class="hlt" x="560" y="60" text-anchor="end">실제 (E³ 항)</text>
+    </svg>
+    <figcaption>그림 3. 커 효과를 전자구름으로 본 그림. 빛의 전기장(빨간 화살표, 위쪽)이 세질수록 음전하인 전자구름(파란 타원)은 아래로 더 밀립니다. 약할 때는 밀린 양이 전기장에 비례하지만(가운데), 셀 때는 구름이 모양까지 바뀌며 비례보다 더 밀립니다(오른쪽). 오른쪽 그래프의 실선이 점선에서 벗어나는 만큼이 굴절률 변화입니다. 실제로는 이 벗어남이 그림보다 훨씬 작습니다.</figcaption>
+  </figure>
+  <p><b>속도는 다섯 가지 중 가장 빠릅니다.</b> 가벼운 전자구름은 빛의 한 주기 안에서 따라 움직이므로 굴절률은 펨토초 단위로 빛의 세기를 그대로 따라갑니다. 공진기에서 쓰면 오히려 공진기 쪽의 반응이 더 늦어서 빛이 고리 안에 머무는 시간(수십 ps)이 속도를 정합니다.</p>
+  <p><b>대신 크기가 아주 작습니다.</b> 실리콘의 <math><msub><mi>n</mi><mn>2</mn></msub></math>는 통신 파장(1.55 µm)에서 약 4.5×10⁻¹⁸ m²/W이고, 광섬유의 재료인 실리카(SiO₂, 유리 — 반도체인 실리콘과는 다른 물질)는 약 2.6×10⁻²⁰ m²/W로 실리콘보다 170배쯤 더 작습니다. 1 W를 1 µm² 단면에 몰아넣어 세기를 10¹² W/m²로 만들어도 실리콘의 굴절률은 4.5×10⁻⁶, 곧 소수점 아래 여섯째 자리에서야 바뀝니다. 그래서 커 효과를 쓰는 소자는 빛을 공진기에 가두어 세기를 쌓거나, 광섬유처럼 수 km를 지나게 해서 작은 변화를 길이로 누적합니다. 커 효과가 왜 이렇게 작은지는 8절 앞머리에서 원자의 전기장과 견주어 봅니다.</p>
+  <p><b>대가는 그 큰 세기를 만드는 데 드는 빛 자체입니다.</b> 게다가 실리콘에서는 그만큼 센 빛을 넣으면 4절의 두 광자 흡수가 같이 일어나서 커 효과만 깨끗하게 얻기가 어렵습니다. 두 광자 흡수가 일어나느냐는 광자 둘의 에너지를 합친 1.60 eV가 재료의 밴드갭을 넘느냐로 정해집니다(그림 4). 실리콘은 밴드갭이 1.12 eV라 넘고, 질화실리콘(약 5 eV)과 실리카(8 eV 이상)는 한참 못 미칩니다. 그래서 커 효과만으로 동작하는 소자를 원할 때는 밴드갭이 넓은 질화실리콘이나 실리카를 씁니다. 다만 밴드갭이 넓다는 것은 전자가 원자에 더 단단히 묶여 있다는 뜻이기도 해서 n₂도 작아지고, 크기가 작다는 한계는 그대로 남습니다. 질화실리콘 링에서 커 효과만으로 쌍안정 메모리를 만들려면 약 1.8 W가 든다는 계산이 있습니다(Yoshiki·Tanabe 2014).</p>
+  <figure class="wr-fig">
+    <svg class="wf" viewBox="0 0 640 270" role="img" aria-label="재료 넷의 밴드갭과 1.55 µm 광자 둘의 에너지 1.60 eV 비교. 실리콘은 밴드갭 1.12 eV라 광자 둘이 넘고, AlGaAs는 1.6 eV보다 조금 위, 질화실리콘 약 5 eV, 실리카 8 eV 이상은 못 넘는다.">
+      <line class="ln" style="stroke-dasharray:4 4" x1="20" y1="164.8" x2="625" y2="164.8"/><text class="hlt" x="625" y="158.8" text-anchor="end">광자 둘 = 1.60 eV</text><text class="sm" x="20" y="16">위: 전도대 · 아래: 가전자대 · 노란 화살표 둘 = 1.55 µm 광자 둘 (세로는 에너지, 1 eV = 22 px)</text><rect x="50" y="200" width="90" height="18" style="fill:var(--muted);opacity:.3"/><rect x="50" y="157.4" width="90" height="18" style="fill:var(--probetint)"/><text class="sm" x="123" y="191.7" text-anchor="middle">1.12 eV</text><line class="light hl" x1="81" y1="200" x2="81" y2="182.4"/><line class="light hl" x1="81" y1="182.4" x2="81" y2="164.8"/><circle cx="81" cy="182.4" r="2.2" style="fill:var(--warm)"/><text x="95" y="242" text-anchor="middle">실리콘 Si</text><text class="hlt" x="95" y="258" text-anchor="middle">두 광자 흡수 있음</text><rect x="205" y="200" width="90" height="18" style="fill:var(--muted);opacity:.3"/><rect x="205" y="143.5" width="90" height="18" style="fill:var(--probetint)"/><text class="sm" x="278" y="184.8" text-anchor="middle">1.6 eV 위</text><line class="light hl" x1="236" y1="200" x2="236" y2="182.4"/><line class="light hl" x1="236" y1="182.4" x2="236" y2="164.8"/><circle cx="236" cy="182.4" r="2.2" style="fill:var(--warm)"/><text x="250" y="242" text-anchor="middle">AlGaAs</text><text class="sm" x="250" y="258" text-anchor="middle">두 광자 흡수 없음</text><rect x="360" y="200" width="90" height="18" style="fill:var(--muted);opacity:.3"/><rect x="360" y="72.0" width="90" height="18" style="fill:var(--probetint)"/><text class="sm" x="433" y="149.0" text-anchor="middle">약 5 eV</text><line class="light hl" x1="391" y1="200" x2="391" y2="182.4"/><line class="light hl" x1="391" y1="182.4" x2="391" y2="164.8"/><circle cx="391" cy="182.4" r="2.2" style="fill:var(--warm)"/><text x="405" y="242" text-anchor="middle">질화실리콘</text><text class="sm" x="405" y="258" text-anchor="middle">두 광자 흡수 없음</text><rect x="515" y="200" width="90" height="18" style="fill:var(--muted);opacity:.3"/><rect x="515" y="6.0" width="90" height="18" style="fill:var(--probetint)"/><text class="sm" x="588" y="116.0" text-anchor="middle">8 eV 이상</text><line class="light hl" x1="546" y1="200" x2="546" y2="182.4"/><line class="light hl" x1="546" y1="182.4" x2="546" y2="164.8"/><circle cx="546" cy="182.4" r="2.2" style="fill:var(--warm)"/><text x="560" y="242" text-anchor="middle">실리카 SiO₂</text><text class="sm" x="560" y="258" text-anchor="middle">두 광자 흡수 없음</text>
+    </svg>
+    <figcaption>그림 4. 밴드갭과 두 광자 흡수. 통신 파장(1.55 µm) 광자 하나는 0.80 eV이고, 둘을 합치면 1.60 eV(점선)입니다. 밴드갭이 점선보다 낮은 실리콘에서는 광자 둘이 전자를 전도대까지 올려 두 광자 흡수가 일어나고, 밴드갭이 점선보다 높은 재료에서는 광자 둘을 합쳐도 닿지 않아 일어나지 않습니다. AlGaAs는 알루미늄 비율로 밴드갭을 점선 바로 위에 맞춘 경우입니다. 높이는 에너지에 비례하게 그렸습니다.</figcaption>
+  </figure>
+  <p><b>그러면 처음부터 분극이 잘 되는 재료를 쓰면 되지 않을까요?</b> 길은 두 갈래입니다. 하나는 커 효과(세제곱 항)가 아닌, 앞에서 사라진 제곱 항을 살리는 것입니다. 갈륨과 비소처럼 서로 다른 두 원자가 번갈아 놓인 결정에서는 두 원자의 전기음성도가 달라 결합 속 전자가 한쪽으로 쏠리고, 원자 배열을 뒤집으면 모양이 달라져 반전 대칭이 깨집니다. 그래서 GaAs나 니오브산리튬(LiNbO₃) 같은 결정에는 제곱 항이 남습니다. 다만 제곱 항은 빛 한 줄기의 굴절률을 그 빛 자신의 세기로 바꾸는 데는 바로 쓰이지 않습니다. 대신 바깥에서 건 전압이 굴절률을 바꾸는 포켈스 효과(니오브산리튬 광변조기)나, 빛의 주파수를 두 배로 바꾸는 2차 조화파 발생에 쓰입니다.</p>
+  <p>다른 하나는 커 효과 자체, 곧 세제곱 항이 큰 재료를 고르는 것입니다. n₂는 밴드갭이 좁을수록, 곧 전자가 덜 단단히 묶일수록 커지는 경향이 있습니다. 그런데 밴드갭이 너무 좁으면 이번에는 두 광자 흡수가 따라옵니다. 그래서 GaAs에 알루미늄을 섞어 밴드갭을 광자 둘의 에너지(1.60 eV)보다 살짝 위로 올린 AlGaAs가, 두 광자 흡수 없이 큰 커 효과를 얻는 플랫폼으로 연구됩니다(Pu 등 2016). 다만 어느 쪽도 효과를 키울 뿐, 8절 앞머리에서 볼 원자 전기장과의 큰 격차를 뒤집지는 못합니다.</p>
+
+  <h2 id="s3">3. 열광학 — 빛이 흡수되어 데운다</h2>
+  <p>투명해 보이는 도파로도 빛을 아주 조금씩 흡수합니다. 표면의 거친 자리, 결함, 그리고 4절에서 볼 자유 전하가 빛을 먹고, 먹힌 빛의 에너지는 결국 원자들의 진동, 곧 열이 됩니다. 온도가 오르면 굴절률이 바뀝니다. 격자가 팽창하고 전자의 에너지 준위가 조금씩 움직이기 때문입니다. 그 결과를 한데 묶은 계수가 열광학 계수 <math><mi>d</mi><mi>n</mi><mo>/</mo><mi>d</mi><mi>T</mi></math>입니다. 실리콘은 상온, 1.55 µm에서 약 1.8×10⁻⁴ /K로 양수입니다. 데워지면 굴절률이 커지므로 공진은 커 효과와 같은 긴 파장 쪽으로 밀립니다.</p>
+  <p>이 숫자가 얼마나 큰지는 커 효과와 견주면 보입니다. 온도가 1 K만 올라도 굴절률이 1.8×10⁻⁴ 바뀌는데, 커 효과로 같은 변화를 얻으려면 세기가 4×10¹³ W/m², 곧 1 µm² 단면에 40 W가 필요합니다. 그래서 실리콘 마이크로링에 빛을 넣으면 커 효과는 열에 묻혀 거의 보이지 않습니다. 쌍안정 글 7절에서 본 2004년 Almeida·Lipson의 첫 실리콘 칩 쌍안정도 열 때문이었습니다.</p>
+  <p><b>그럼 같은 빛을 넣었을 때 링은 얼마나 데워질까요?</b> 이것을 정하는 것이 열이 빠져나가는 길입니다. 링이 일정한 온도에 이르면 들어오는 열과 빠져나가는 열이 같아지므로, 온도 상승은 흡수된 빛의 세기에 열저항(열이 빠지기 어려운 정도)을 곱한 값이 됩니다. 열이 잘 빠지는 구조에서는 링이 조금만 데워지고, 열이 갇히는 구조에서는 같은 빛으로 훨씬 많이 데워집니다. 그림 5가 이 두 경우를 나란히 놓고 같은 빛을 켰다 껐다 합니다.</p>
+  <figure class="wr-fig" id="li3">
+    <svg class="wf" viewBox="0 0 640 300" role="img" aria-label="실리콘 링의 단면 두 개. 왼쪽은 산화막 위에 놓인 링, 오른쪽은 밑의 산화막을 파내 공기 위에 띄운 링. 빛이 켜지면 링의 두 단면에서 열이 생겨 퍼지고, 왼쪽은 열이 산화막을 지나 기판으로 빠지지만 오른쪽은 갇혀 훨씬 뜨거워진다.">
+      <g id="li3-g"></g>
+    </svg>
+    <div class="wr-ctl"><button type="button" id="li3-p" aria-pressed="false">멈추기</button><button type="button" id="li3-l" aria-pressed="false">빛 켜고 끄기 — 자동</button><span id="li3-read" aria-live="polite"></span></div>
+    <figcaption>그림 5. 같은 빛을 넣어도 열이 빠지는 길에 따라 링이 데워지는 정도가 달라집니다. 두 그림은 마이크로링을 가로로 자른 단면이고, 링은 고리라서 자르면 단면이 두 개(작은 사각형) 나옵니다. 빛이 켜지면 링이 히터처럼 열을 내고, 노란색이 진할수록 뜨겁습니다. 왼쪽은 산화막 위에 놓인 보통 링으로, 열이 산화막을 지나 실리콘 기판(아래쪽, 열이 빠지는 곳)으로 새어 나가 곧 낮은 온도에서 멈춥니다. 오른쪽은 밑의 산화막을 파내 공기 위에 띄운 링으로, 열이 빠질 길이 좁아 같은 빛에 훨씬 뜨거워집니다. 아래 그래프를 보면 그 대가도 보입니다. 띄운 링(노란 선)은 더 높이 올라가는 대신 빛을 끈 뒤 식는 데도 훨씬 오래 걸립니다. 열전도율의 상대 크기(실리콘 ≫ 산화막 ≫ 공기)만 반영한 개념도이고, 실제 구조와 치수는 다릅니다.</figcaption>
+  </figure>
+  <p><b>열을 가두면 문턱이 내려갑니다.</b> 쌍안정을 만들려면 공진을 선폭 몇 개만큼 밀어야 하고, 그러려면 링이 어느 온도까지 데워져야 합니다. 열이 갇힌 링은 그 온도에 더 적은 빛으로 닿습니다. 2010년 Sun·Reano가 바로 그림 5의 오른쪽처럼 링 밑의 산화막을 파내 공기층으로 기판과 떼어 놓았고, 80 µW에서 히스테리시스를 얻었습니다. 떼어 놓지 않은 같은 모양의 링은 같은 조건에서 2 mW 아래로는 쌍안정이 나오지 않았습니다.</p>
+  <p><b>대신 느려집니다.</b> 열은 원래 크지만 느립니다. 굴절률을 바꾸려면 링이 실제로 데워져야 하고 다시 원래로 돌아가려면 그 열이 빠져나가야 하는데, 열이 퍼지는 속도는 빛이나 전자에 비해 아주 느립니다. 그래서 실리콘 마이크로링의 열 응답은 마이크로초 단위이고, Almeida·Lipson의 소자도 변조 대역폭이 500 kHz에 그쳤습니다. 열을 가두면 식는 데도 더 오래 걸리니, 문턱을 낮춘 만큼 더 느려집니다. 크기와 속도가 여기서도 맞바뀝니다.</p>
+  <p><b>대가는 느림 말고도 둘 있습니다.</b> 주변 온도가 조금만 바뀌어도 공진이 같은 방식으로 밀리니 소자를 쓰려면 온도를 붙잡아야 합니다. 또 한 소자의 열이 이웃 소자로 번져 서로 간섭합니다. 실리콘 포토닉스는 이 성질을 거꾸로 이용하기도 합니다. 링 옆에 작은 전기 히터를 붙여 일부러 데워 공진을 원하는 파장에 맞추는 것이 실리콘 링을 조율하는 가장 흔한 방법입니다.</p>
+
+  <h2 id="s4">4. 캐리어 분산 — 빛이 전하를 만든다</h2>
+  <p>반도체가 빛을 흡수하려면 광자 하나의 에너지가 밴드갭보다 커야 합니다. 광자가 가전자대의 전자를 전도대로 들어 올리고 전자가 떠난 자리에는 정공이 남습니다. 실리콘의 밴드갭은 1.12 eV이고 통신 파장 1.55 µm의 광자는 0.80 eV라서 광자 하나로는 전자를 전도대까지 올리지 못합니다. 그래서 실리콘 도파로는 통신 파장에서 투명합니다. 이 절에서 다루는 것은 모두 칩 위 실리콘(Si) 도파로 안의 일입니다. 광섬유의 재료인 실리카(SiO₂)는 밴드갭이 8 eV 이상이라(그림 4) 이런 일이 거의 일어나지 않습니다.</p>
+  <p>그런데 빛이 아주 세면 <b>광자 두 개가 한꺼번에 흡수되는</b> 일이 생깁니다. 두 광자의 에너지를 합치면 1.60 eV라 밴드갭을 넘고 전자 하나와 정공 하나가 생깁니다. 이 흡수는 광자 둘이 같은 자리에 동시에 있어야 일어납니다. 여기서 빛의 세기는 1초에 단위 면적을 지나는 광자 수에 광자 하나의 에너지를 곱한 값입니다. 광자 하나의 에너지는 파장이 정하므로(1.55 µm면 0.80 eV), 같은 파장에서 세기가 두 배라는 것은 광자가 두 배 많다는 뜻입니다. 파동으로 보면 전기장 진폭이 √2배가 된 것이고(세기 ∝ 진폭²), 입자로 보면 광자가 두 배가 된 것입니다. 광자가 두 배면 두 광자가 같은 자리에서 만날 확률은 네 배가 되니, 이 흡수는 세기의 제곱에 비례합니다. 그래서 약한 빛에서는 거의 없다가 센 빛에서 급격히 늘어납니다. 실리콘의 두 광자 흡수 계수는 1.55 µm에서 약 0.8 cm/GW입니다.</p>
+  <p><b>남는 에너지는 열이 됩니다.</b> 두 광자의 에너지 1.60 eV 중 밴드갭을 넘는 데 드는 것은 1.12 eV이고, 나머지 0.48 eV는 전자를 전도대 바닥보다 높은 곳으로 올리는 데, 곧 전자의 운동 에너지로 갑니다. 이렇게 뜨거워진 전자는 피코초 안에 격자와 여러 번 부딪치며 그 에너지를 격자 진동, 곧 열로 내주고 전도대 바닥으로 내려옵니다(그림 6에서 전자가 위쪽에서 생겨 아래로 가라앉는 모습). 그러니 두 광자 흡수는 전하만 만드는 것이 아니라 3절의 열도 함께 만듭니다.</p>
+  <figure class="wr-fig" id="li4">
+    <svg class="wf" viewBox="0 0 640 300" role="img" aria-label="실리콘의 밴드 그림. 0.80 eV 광자 하나는 1.12 eV 밴드갭을 넘지 못하지만 광자 둘이 함께 흡수되면 전자가 전도대로 올라가고 가전자대에 정공이 남는다. 오른쪽 막대는 자유 전하가 늘수록 굴절률은 줄고 흡수는 느는 모습.">
+      <g id="li4-g"></g>
+    </svg>
+    <div class="wr-ctl"><label for="li4-i">빛 세기</label><input type="range" id="li4-i" min="0" max="1" step="0.01" value="0.6"><output id="li4-io"></output><button type="button" id="li4-d" aria-pressed="false">p-i-n 역바이어스로 전하 빼기</button><button type="button" id="li4-p" aria-pressed="false">멈추기</button></div>
+    <figcaption>그림 6. 실리콘 도파로 안에서 두 광자 흡수가 자유 전하를 만드는 모습. 왼쪽 위 점선 화살표처럼 광자 하나(0.80 eV)는 밴드갭(1.12 eV)의 중간에서 멈추지만, 광자 둘이 함께 흡수되면(노란 화살표 두 개를 이은 것) 전자가 전도대로 올라가고(점) 가전자대에 정공(빈 동그라미)이 남습니다. 전자는 남는 에너지만큼 전도대 위쪽에서 생겼다가, 그 에너지를 열로 내주며(작은 물결) 바닥으로 가라앉습니다. 세기를 두 배로 올리면 생기는 빈도는 네 배가 됩니다. 생긴 전하는 수명 동안 남아 있다가 사라집니다. 「p-i-n」 단추를 누르면 전기장이 전자는 오른쪽, 정공은 왼쪽으로 쓸어 내 훨씬 빨리 빠집니다. 오른쪽 막대는 그 순간의 전하 수와, 그에 따라 굴절률이 얼마나 줄고 흡수가 얼마나 느는지를 상대 크기로 보입니다.</figcaption>
+  </figure>
+  <p><b>생긴 전하가 굴절률을 바꿉니다.</b> 원자에 묶이지 않은 자유 전자와 정공은 빛의 전기장에 묶인 전자와 반대 위상으로 흔들려서 물질 전체의 분극을 줄이고 굴절률을 <b>낮춥니다</b>. 묶인 전자는 원자핵이 당기는 용수철이 있어 전기장과 반대쪽으로 밀렸지만, 자유 전자는 되돌리는 용수철 없이 관성만으로 흔들려 전기장과 같은 쪽으로 움직이기 때문입니다(그림 7). 부호가 커 효과나 열과 반대라서 공진은 짧은 파장 쪽으로 밀립니다. 동시에 자유 전하는 빛을 직접 먹기도 해서(자유 전하 흡수) 흡수가 늘어납니다. Soref·Bennett(1987)가 실리콘 측정값으로 맞춘 식에 따르면, 1.55 µm에서 전자와 정공이 각각 10¹⁸ cm⁻³씩 생기면 굴절률은 약 3×10⁻³ 줄고 흡수는 약 15 cm⁻¹ 늘어납니다. 흡수 계수 α의 단위가 cm⁻¹인 것은, 빛이 거리 z를 가는 동안 세기가 <math><mi>I</mi><mo>=</mo><msub><mi>I</mi><mn>0</mn></msub><msup><mi>e</mi><mrow><mo>−</mo><mi>α</mi><mi>z</mi></mrow></msup></math>로 줄어든다고 정의하기 때문입니다. α가 15 cm⁻¹이면 1 cm 갈 때 세기가 e⁻¹⁵배가 된다는 뜻입니다. 소자 쪽에서 쓰는 dB/cm로 바꾸려면 4.34(= 10/ln 10)를 곱하면 되고, 약 15 cm⁻¹는 약 63 dB/cm, 곧 1 mm만 가도 세기의 4분의 3쯤을 잃는 크기입니다. 굴절률 변화로는 열로 십수 K를 데운 것과 비슷한 크기이고 커 효과보다는 몇 자리 큽니다.</p>
+  <div class="wr-eq">Δn = −(8.8×10⁻²² ΔN + 8.5×10⁻¹⁸ ΔP^0.8)      Δα = 8.5×10⁻¹⁸ ΔN + 6.0×10⁻¹⁸ ΔP   [cm⁻¹]
+ΔN, ΔP: 전자·정공 농도 [cm⁻³]  ·  실리콘, 1.55 µm (Soref·Bennett 1987)</div>
+  <figure class="wr-fig" id="li1b">
+    <svg class="wf" viewBox="0 0 640 230" role="img" aria-label="자유 전자가 빛의 전기장과 같은 쪽으로 흔들리고, 다시 내보낸 빛이 원래 빛을 앞당겨 물질을 지난 파동이 진공에서보다 조금 앞서는 모습.">
+      <g id="li1b-g"></g>
+    </svg>
+    <div class="wr-ctl"><button type="button" id="li1b-p" aria-pressed="false">멈추기</button></div>
+    <figcaption>그림 7. 자유 전자가 빛에 흔들리는 모습. 그림 1과 같은 그리기입니다. 그림 1의 묶인 전자는 전기장(빨간 화살표)과 반대쪽으로 밀렸지만, 원자에 묶이지 않은 전자(파란 점)는 되돌리는 힘이 없어 관성만으로 흔들리고, 그 결과 전기장과 같은 쪽으로 움직입니다. 반대 위상으로 흔들리니 다시 내보낸 빛도 원래 빛을 늦추는 대신 앞당겨서, 오른쪽 파동(노란 실선)의 마루가 점선보다 조금 오른쪽, 곧 조금 일찍 옵니다. 이 앞당김이 굴절률을 낮춥니다. 실제 실리콘에는 묶인 전자가 훨씬 많아 굴절률은 여전히 1보다 크고, 자유 전하가 생긴 만큼만 조금 내려갑니다.</figcaption>
+  </figure>
+  <p><b>왜 용수철이 있고 없음이 방향을 뒤집을까요?</b> 그네를 생각하면 됩니다. 그네를 제 박자(고유 진동수)보다 아주 천천히 밀면 그네는 미는 대로 따라가서, 미는 쪽으로 움직입니다. 반대로 제 박자보다 훨씬 빠르게 앞뒤로 흔들면 그네는 무거워서 따라오지 못하고, 미는 힘과 정반대 박자로 움직입니다. 원자에 묶인 전자는 용수철의 고유 진동수가 자외선 쪽에 있어서, 그보다 훨씬 느린 통신 파장 빛은 「천천히 미는」 쪽입니다. 그래서 전자는 받는 힘을 그대로 따라가고, 음전하라 힘은 전기장과 반대쪽이니 전기장과 반대로 움직입니다. 자유 전자는 용수철이 없어 고유 진동수가 0이니 어떤 빛이든 「너무 빠르게 미는」 쪽이고, 힘과 정반대, 곧 전기장과 같은 쪽으로 움직입니다. 식으로는 변위가 <math><mi>x</mi><mo>∝</mo><mo>−</mo><mi>E</mi><mo>/</mo><mo stretchy="false">(</mo><msubsup><mi>ω</mi><mn>0</mn><mn>2</mn></msubsup><mo>−</mo><msup><mi>ω</mi><mn>2</mn></msup><mo stretchy="false">)</mo></math>이고, 묶인 전자(ω₀ &gt; ω)와 자유 전자(ω₀ = 0)에서 분모의 부호가 바뀝니다.</p>
+  <p><b>속도는 전하의 수명이 정합니다.</b> 전하는 생기는 순간 굴절률을 바꾸지만 빛을 끈 뒤에도 전자와 정공이 다시 만나 사라질 때까지 남아 있습니다. 보통 실리콘 립 도파로에서 이 수명은 수십 ns입니다. 열보다는 천 배쯤 빠르지만 쌍안정 글에서 본 Xu·Lipson의 실리콘 링 논리 소자도 속도가 이 수명에 묶여 있었습니다. 수명을 줄이는 방법은 전하를 기다리지 않고 빼내는 것입니다. 도파로 양옆에 p형과 n형 영역을 만들고 역바이어스를 걸면(p-i-n 다이오드), 그 전기장이 전자와 정공을 양쪽 전극으로 쓸어 냅니다. 2005년 Rong 등은 실리콘 라만 레이저에서 이 방법으로 25 V 역바이어스에서 실효 수명을 약 1 ns까지 줄였습니다. 이 레이저에서 노린 것은 속도보다 손실이었습니다. 두 광자 흡수로 생긴 전하가 빛을 먹어 레이저가 켜지지 않았는데, 전하를 빼내 이 문제를 해결했습니다.</p>
+  <p><b>정리하면 장점은 크기와 속도의 중간 자리입니다.</b> 같은 굴절률 변화를 커 효과보다 훨씬 적은 빛으로 얻고, 열보다 천 배쯤 빠르며, 부호가 반대라 열과 섞여 있어도 구분됩니다.</p>
+  <p><b>대가는 흡수이고, 이것은 전압으로도 지울 수 없습니다.</b> 굴절률을 낮추는 일과 빛을 먹는 일을 같은 전하가 하기 때문입니다. 위 식에서 보듯 Δn과 Δα는 둘 다 전하 농도를 따라 함께 커지고 함께 줄어듭니다. p-i-n으로 전하를 빼내면 수명이 짧아져 흡수가 줄지만, 쌓여 있는 전하가 줄어든 만큼 굴절률 변화도 같이 줄어듭니다. 그러니 역바이어스는 흡수를 없애는 장치가 아니라, 굴절률 변화와 흡수를 한꺼번에 줄여 속도를 사는 손잡이입니다. Rong 등의 라만 레이저에서 이 방법이 통한 것은 그 레이저에 전하가 만드는 굴절률 변화가 애초에 필요 없었기 때문입니다. 반대로 전하로 굴절률을 바꾸려는 소자는 그 전하가 먹는 빛을 늘 함께 치러야 하고, 전하를 만든 두 광자 흡수도 그 자체로 빛을 잃는 과정입니다.</p>
+  <p>같은 원리를 전기로 돌리면 익숙한 소자가 됩니다. 실리콘 광변조기는 전압으로 전하를 넣거나 빼서 굴절률을 바꿉니다. 빛이 전하를 만드는 대신 회로가 전하를 공급할 뿐, 굴절률이 바뀌는 물리도 흡수가 따라오는 사정도 같습니다.</p>  <p>모든 재료가 실리콘처럼 광자 둘이 필요한 것은 아닙니다. InP 위에 기르는 InGaAsP는 조성을 바꿔 밴드갭을 통신 파장 근처로 맞출 수 있어서 신호 파장 가까이에서 광자 하나를 흡수해 전하를 만들 수 있습니다. 쌍안정 글에서 본 NTT의 나노공진기 광 RAM(Nozaki 등 2012)이 InP 광자결정 안에 InGaAsP를 아주 작게 묻은 구조입니다. 이렇게 만든 전하의 캐리어 플라즈마 굴절률 변화로 두 안정 상태가 생기고 이 둘을 0과 1로 씁니다. 전하와 빛을 함께 좁은 곳에 가두니 적은 빛으로 많은 전하 농도를 얻을 수 있었고 그래서 약 30 nW라는 낮은 전력이 가능했습니다.</p>
+
+  <h2 id="s5">5. 포화 흡수 · 밴드 채움 — 흡수할 자리가 찬다</h2>
+  <p>앞의 셋은 굴절률을 바꾸는 이야기였고 이번에는 <b>흡수가 바뀌는</b> 쪽입니다. 빛이 흡수되려면 두 가지가 필요합니다. 아래 준위에 전자가 있어야 하고 위 준위에 그 전자가 올라갈 빈자리가 있어야 합니다. 약한 빛에서는 위 준위가 거의 비어 있으니 빛은 들어오는 족족 흡수됩니다. 그런데 빛이 세면 전자가 올라가는 속도가 내려오는 속도보다 빨라져서 위 준위가 차기 시작하고, 찬 자리만큼은 더 이상 흡수할 수 없습니다. 이렇게 흡수할 자리가 모자라 빛이 그냥 지나가는 현상을 포화 흡수라고 합니다. 그림 8은 이 과정을 원자 하나의 보어 궤도로 그린 것입니다.</p>
+  <figure class="wr-fig">
+    <svg class="wf" viewBox="0 0 640 236" role="img" aria-label="보어 궤도로 그린 포화 흡수. 광자를 흡수한 전자가 바깥 궤도로 올라가고, 바깥에 머무는 동안에는 안쪽이 비어 다음 광자가 그냥 지나가며, 수명 τ 뒤 전자가 내려오면 다시 흡수할 수 있다.">
+      <defs><marker id="li8-ink" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path class="mk-ink" d="M2 1L8 5L2 9"/></marker><marker id="li8-ui" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M2 1L8 5L2 9" style="fill:none;stroke:var(--ui);stroke-width:1.5"/></marker><marker id="li8-beam" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path class="mk-beam" d="M2 1L8 5L2 9"/></marker><marker id="li8-warm" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path class="mk-warm" d="M2 1L8 5L2 9"/></marker></defs>
+      <text x="110" y="22" text-anchor="middle">① 광자가 오면</text><circle cx="110" cy="118" r="34" style="fill:none;stroke:var(--muted)"/><circle cx="110" cy="118" r="68" style="fill:none;stroke:var(--muted);stroke-dasharray:4 4"/><circle cx="110" cy="118" r="6" style="fill:var(--ink)"/><circle cx="110" cy="84" r="6" style="fill:none;stroke:var(--ui);stroke-dasharray:2 2"/><circle cx="110" cy="50" r="6.5" style="fill:var(--ui)"/><path class="light hl" d="M18.0 84.0 L19.0 86.4 L20.0 87.8 L21.0 87.8 L22.0 86.4 L23.0 84.0 L24.0 81.6 L25.0 80.2 L26.0 80.2 L27.0 81.6 L28.0 84.0 L29.0 86.4 L30.0 87.8 L31.0 87.8 L32.0 86.4 L33.0 84.0 L34.0 81.6 L35.0 80.2 L36.0 80.2 L37.0 81.6 L38.0 84.0 L39.0 86.4 L40.0 87.8 L41.0 87.8 L42.0 86.4 L43.0 84.0 L44.0 81.6 L45.0 80.2 L46.0 80.2 L47.0 81.6 L48.0 84.0 L49.0 86.4 L50.0 87.8 L51.0 87.8 L52.0 86.4 L53.0 84.0 L54.0 81.6 L55.0 80.2 L56.0 80.2 L57.0 81.6 L58.0 84.0 L59.0 86.4 L60.0 87.8 L61.0 87.8 L62.0 86.4 L63.0 84.0 L64.0 81.6 L65.0 80.2 L66.0 80.2 L67.0 81.6 L68.0 84.0 L69.0 86.4 L70.0 87.8 L71.0 87.8 L72.0 86.4 L73.0 84.0 L74.0 81.6 L75.0 80.2 L76.0 80.2 L77.0 81.6 L78.0 84.0 L79.0 86.4 L80.0 87.8 L81.0 87.8 L82.0 86.4 L83.0 84.0 L84.0 81.6 L85.0 80.2 L86.0 80.2 L87.0 81.6 L88.0 84.0 L89.0 86.4 L90.0 87.8 L91.0 87.8 L92.0 86.4 L93.0 84.0 L94.0 81.6 L95.0 80.2 L96.0 80.2 L97.0 81.6 L98.0 84.0 L99.0 86.4 L100.0 87.8"/><path class="ln" style="stroke:var(--ui);stroke-width:1.6" d="M122 80 Q140 67 122 56" marker-end="url(#li8-ui)"/><text class="sm" x="110" y="208" text-anchor="middle">흡수해 바깥 궤도로 올라감</text><text x="320" y="22" text-anchor="middle">② 바깥에 머무는 동안 (τ)</text><circle cx="320" cy="118" r="34" style="fill:none;stroke:var(--muted)"/><circle cx="320" cy="118" r="68" style="fill:none;stroke:var(--muted);stroke-dasharray:4 4"/><circle cx="320" cy="118" r="6" style="fill:var(--ink)"/><circle cx="320" cy="84" r="6" style="fill:none;stroke:var(--ui);stroke-dasharray:2 2"/><circle cx="320" cy="50" r="6.5" style="fill:var(--ui)"/><path class="light hl" d="M232.0 134.0 L233.0 136.4 L234.0 137.8 L235.0 137.8 L236.0 136.4 L237.0 134.0 L238.0 131.6 L239.0 130.2 L240.0 130.2 L241.0 131.6 L242.0 134.0 L243.0 136.4 L244.0 137.8 L245.0 137.8 L246.0 136.4 L247.0 134.0 L248.0 131.6 L249.0 130.2 L250.0 130.2 L251.0 131.6 L252.0 134.0 L253.0 136.4 L254.0 137.8 L255.0 137.8 L256.0 136.4 L257.0 134.0 L258.0 131.6 L259.0 130.2 L260.0 130.2 L261.0 131.6 L262.0 134.0 L263.0 136.4 L264.0 137.8 L265.0 137.8 L266.0 136.4 L267.0 134.0 L268.0 131.6 L269.0 130.2 L270.0 130.2 L271.0 131.6 L272.0 134.0 L273.0 136.4 L274.0 137.8 L275.0 137.8 L276.0 136.4 L277.0 134.0 L278.0 131.6 L279.0 130.2 L280.0 130.2 L281.0 131.6 L282.0 134.0 L283.0 136.4 L284.0 137.8 L285.0 137.8 L286.0 136.4 L287.0 134.0 L288.0 131.6 L289.0 130.2 L290.0 130.2 L291.0 131.6 L292.0 134.0 L293.0 136.4 L294.0 137.8 L295.0 137.8 L296.0 136.4 L297.0 134.0 L298.0 131.6 L299.0 130.2 L300.0 130.2 L301.0 131.6 L302.0 134.0 L303.0 136.4 L304.0 137.8 L305.0 137.8 L306.0 136.4 L307.0 134.0 L308.0 131.6 L309.0 130.2 L310.0 130.2 L311.0 131.6 L312.0 134.0 L313.0 136.4 L314.0 137.8 L315.0 137.8 L316.0 136.4 L317.0 134.0 L318.0 131.6 L319.0 130.2 L320.0 130.2 L321.0 131.6 L322.0 134.0 L323.0 136.4 L324.0 137.8 L325.0 137.8 L326.0 136.4 L327.0 134.0 L328.0 131.6 L329.0 130.2 L330.0 130.2 L331.0 131.6 L332.0 134.0 L333.0 136.4 L334.0 137.8 L335.0 137.8 L336.0 136.4 L337.0 134.0 L338.0 131.6 L339.0 130.2 L340.0 130.2 L341.0 131.6 L342.0 134.0 L343.0 136.4 L344.0 137.8 L345.0 137.8 L346.0 136.4 L347.0 134.0 L348.0 131.6 L349.0 130.2 L350.0 130.2 L351.0 131.6 L352.0 134.0 L353.0 136.4 L354.0 137.8 L355.0 137.8 L356.0 136.4 L357.0 134.0 L358.0 131.6 L359.0 130.2 L360.0 130.2 L361.0 131.6 L362.0 134.0 L363.0 136.4 L364.0 137.8 L365.0 137.8 L366.0 136.4 L367.0 134.0 L368.0 131.6 L369.0 130.2 L370.0 130.2 L371.0 131.6 L372.0 134.0 L373.0 136.4 L374.0 137.8 L375.0 137.8 L376.0 136.4 L377.0 134.0 L378.0 131.6 L379.0 130.2 L380.0 130.2 L381.0 131.6 L382.0 134.0 L383.0 136.4 L384.0 137.8 L385.0 137.8 L386.0 136.4 L387.0 134.0 L388.0 131.6 L389.0 130.2 L390.0 130.2 L391.0 131.6 L392.0 134.0 L393.0 136.4 L394.0 137.8 L395.0 137.8 L396.0 136.4 L397.0 134.0 L398.0 131.6 L399.0 130.2 L400.0 130.2 L401.0 131.6 L402.0 134.0 L403.0 136.4 L404.0 137.8 L405.0 137.8 L406.0 136.4 L407.0 134.0 L408.0 131.6 L412.0 134.0 L420.0 134.0" marker-end="url(#li8-warm)"/><text class="sm" x="320" y="208" text-anchor="middle">안쪽이 비어 받을 전자가 없다</text><text class="hlt" x="320" y="224" text-anchor="middle">빛이 그냥 지나간다 = 포화</text><text x="530" y="22" text-anchor="middle">③ τ 뒤 내려오면</text><circle cx="530" cy="118" r="34" style="fill:none;stroke:var(--muted)"/><circle cx="530" cy="118" r="68" style="fill:none;stroke:var(--muted);stroke-dasharray:4 4"/><circle cx="530" cy="118" r="6" style="fill:var(--ink)"/><circle cx="530" cy="50" r="6" style="fill:none;stroke:var(--ui);stroke-dasharray:2 2"/><circle cx="530" cy="84" r="6.5" style="fill:var(--ui)"/><path class="ln" style="stroke:var(--ui);stroke-width:1.6" d="M542 54 Q560 67 542 78" marker-end="url(#li8-ui)"/><path class="light" d="M540.0 84.0 L541.0 86.4 L542.0 87.8 L543.0 87.8 L544.0 86.4 L545.0 84.0 L546.0 81.6 L547.0 80.2 L548.0 80.2 L549.0 81.6 L550.0 84.0 L551.0 86.4 L552.0 87.8 L553.0 87.8 L554.0 86.4 L555.0 84.0 L556.0 81.6 L557.0 80.2 L558.0 80.2 L559.0 81.6 L560.0 84.0 L561.0 86.4 L562.0 87.8 L563.0 87.8 L564.0 86.4 L565.0 84.0 L566.0 81.6 L567.0 80.2 L568.0 80.2 L569.0 81.6 L570.0 84.0 L571.0 86.4 L572.0 87.8 L573.0 87.8 L574.0 86.4 L575.0 84.0 L576.0 81.6 L577.0 80.2 L578.0 80.2 L579.0 81.6 L580.0 84.0 L581.0 86.4 L582.0 87.8 L583.0 87.8 L584.0 86.4 L585.0 84.0 L586.0 81.6 L587.0 80.2 L588.0 80.2 L589.0 81.6 L590.0 84.0 L591.0 86.4 L592.0 87.8 L593.0 87.8 L594.0 86.4 L595.0 84.0 L596.0 81.6 L597.0 80.2 L598.0 80.2 L599.0 81.6 L600.0 84.0 L601.0 86.4 L602.0 87.8 L603.0 87.8 L604.0 86.4 L605.0 84.0 L606.0 81.6 L607.0 80.2 L608.0 80.2 L609.0 81.6 L610.0 84.0 L611.0 86.4 L612.0 87.8 L613.0 87.8 L614.0 86.4 L615.0 84.0 L616.0 81.6 L617.0 80.2 L618.0 80.2 L619.0 81.6 L620.0 84.0 L621.0 86.4 L622.0 87.8 L623.0 87.8 L624.0 86.4 L628.0 84.0 L636.0 84.0" marker-end="url(#li8-beam)"/><text class="sm" x="530" y="208" text-anchor="middle">빛을 내놓고 다시 받을 수 있다</text>
+    </svg>
+    <figcaption>그림 8. 원자 하나를 보어 궤도로 단순화한 포화 흡수. 안쪽 실선 궤도가 아래 준위, 바깥 점선 궤도가 위 준위입니다. ① 광자(노란 물결)를 흡수한 전자(파란 점)가 바깥 궤도로 올라갑니다. ② 전자가 바깥에 머무는 수명 τ 동안 이 원자는 아래 준위가 비어 있어 같은 빛을 더 흡수하지 못하고, 다음 광자는 그냥 지나갑니다. ③ τ가 지나 전자가 빛을 내놓으며 내려오면 다시 흡수할 수 있습니다. 빛이 셀수록 ②에 있는 원자의 비율이 커지고, 그만큼 물질 전체의 흡수가 줄어듭니다. 실제 원자와 반도체의 준위는 양자역학의 상태이지만, 자리를 세는 이야기로는 이 그림이 같은 내용을 담습니다.</figcaption>
+  </figure>
+  <p>올라간 전자가 위 준위에 머무는 시간을 <math><mi>τ</mi></math>, 원자 하나가 광자를 붙잡는 단면적을 <math><mi>σ</mi></math>라 하면, 흡수가 절반으로 줄어드는 세기(포화 세기)는 <math><msub><mi>I</mi><mtext>sat</mtext></msub><mo>=</mo><mi>h</mi><mi>ν</mi><mo>/</mo><mo stretchy="false">(</mo><mi>σ</mi><mi>τ</mi><mo stretchy="false">)</mo></math>이고 흡수 계수는 세기에 따라 이렇게 줄어듭니다.</p>
+  <div class="wr-math"><math display="block"><mi>α</mi><mo>=</mo><mfrac><msub><mi>α</mi><mn>0</mn></msub><mrow><mn>1</mn><mo>+</mo><mi>I</mi><mo>/</mo><msub><mi>I</mi><mtext>sat</mtext></msub></mrow></mfrac></math></div>
+  <p>식의 모양이 그대로 이야기를 합니다. 오래 머무는(τ가 큰) 재료일수록 자리가 쉽게 차서 포화 세기가 낮고, 대신 빛을 끈 뒤 자리가 비는 데도 그만큼 오래 걸립니다. 여기서도 문턱의 낮음과 속도가 같은 τ 하나로 맞바뀝니다.</p>
+  <figure class="wr-fig" id="li5">
+    <svg class="wf" viewBox="0 0 640 270" role="img" aria-label="흡수할 자리 24개. 약한 빛에서는 대부분 비어 있어 빛을 흡수하고, 센 빛에서는 자리가 차서 빛이 그냥 지나간다. 오른쪽은 흡수 계수가 세기에 따라 1/(1+I/Isat)로 줄어드는 그래프.">
+      <g id="li5-g"></g>
+    </svg>
+    <div class="wr-ctl"><label for="li5-i">빛 세기 I / I<sub>sat</sub></label><input type="range" id="li5-i" min="0" max="8" step="0.05" value="0.3"><output id="li5-io"></output><button type="button" id="li5-p" aria-pressed="false">멈추기</button></div>
+    <figcaption>그림 9. 흡수할 자리가 차는 모습. 그림 8의 원자를 여럿 모아 바깥 궤도의 자리만 상자로 그렸습니다. 왼쪽 상자 하나가 위 준위의 자리 하나이고, 빈 상자(테두리만)는 광자를 받을 수 있고 찬 상자(노란색)는 받을 수 없습니다. 찬 자리는 수명 τ 동안 머물다 비워집니다. 세기를 올리면 찬 자리가 늘어 흡수가 줄고, 오른쪽으로 나가는 빛이 굵어집니다. 오른쪽 그래프는 같은 일을 식 α/α₀ = 1/(1+I/I<sub>sat</sub>)로 그린 것이고, 노란 점이 지금 세기입니다. 왼쪽 상자의 찬 비율은 무작위로 흔들리지만 평균은 그래프를 따라갑니다.</figcaption>
+  </figure>
+  <p><b>반도체에서는 이것을 밴드 채움이라고 부릅니다.</b> 빛이 전자를 전도대 바닥으로 올리면 전도대 아래쪽 상태부터 찹니다. 전자는 같은 상태에 둘이 들어갈 수 없으니(파울리 배타 원리) 밴드갭 바로 위 파장의 흡수가 줄어듭니다. 흡수가 줄어드는 파장 근처에서는 굴절률도 같이 바뀝니다. 흡수와 굴절률은 서로 독립이 아니라서 어느 파장의 흡수가 바뀌면 그 근처 파장의 굴절률이 반드시 따라 바뀌기 때문입니다(크라머스-크로니히 관계).</p>
+  <p>그래서 역사가 조금 엇갈립니다. 공진기 안에 포화 흡수체를 넣어 흡수 자체로 쌍안정을 만드는 방안은 1969년 Szöke 등이 먼저 제안했습니다. 그런데 1976년 Gibbs 등이 나트륨 증기로, 1979년 GaAs 에탈론으로 실제 관측한 쌍안정은 주로 <b>굴절률</b> 쪽이었습니다. 공명 근처에서 전이가 포화되면서 생긴 굴절률 변화가 공진을 밀었고 GaAs에서는 밴드 채움이 그 주된 원인이었습니다. 같은 「자리가 찬다」는 물리가 흡수형 쌍안정도 굴절형 쌍안정도 만들 수 있습니다. 어느 쪽이 되느냐는 레이저를 공명에서 얼마나 떨어진 파장에 두느냐에 달렸습니다.</p>
+  <p><b>광 AI에서는 활성화 함수 후보로 쓰입니다.</b> 포화 흡수체는 약한 빛은 많이 흡수하고 센 빛은 잘 통과시키므로 투과율이 세기에 따라 올라가는 꺾인 곡선을 만듭니다. 신경망의 활성화 함수와 닮은 모양입니다. 2017년 Shen 등은 MZI 광 신경망을 제안하면서 층 사이 비선형으로 포화 흡수체를 넣은 시뮬레이션을 보였습니다. 레이저 쪽에서는 이미 오래된 부품입니다. 레이저 공진기 안에 넣으면 센 펄스만 살아남게 해서 짧은 펄스를 만드는 데(모드 잠금) 씁니다. <b>대가는 이름 그대로 흡수입니다.</b> 약한 빛일수록 많이 먹으니 신호가 약한 구간에서는 손실이 크고, 먹힌 빛은 열이 됩니다.</p>
+
+  <h2 id="s6">6. 광역학 — 빛이 공진기를 민다</h2>
+  <p>마지막 갈래는 물질의 성질이 아니라 <b>모양</b>을 바꿉니다. 광자는 질량이 없지만 운동량 <math><mi>h</mi><mo>/</mo><mi>λ</mi></math>를 갖고 있어서 거울에 부딪쳐 되튀면 그 두 배의 운동량을 거울에 남깁니다. 여기에 1초에 부딪치는 광자 수를 곱하면 힘이 되는데 이 힘을 복사압이라고 합니다. 세기 P의 빛이 완전히 반사될 때 거울이 받는 힘은 <math><mi>F</mi><mo>=</mo><mn>2</mn><mi>P</mi><mo>/</mo><mi>c</mi></math>입니다. 1 W를 반사해도 약 6.7 nN이니 손으로는 느낄 수 없는 크기입니다.</p>
+  <p>공진기가 이 작은 힘을 키웁니다. 공진기 안에서는 빛이 수천 번 왕복하므로 안쪽에 쌓인 세기가 들어온 빛의 수천 배가 되고, 거울은 그 쌓인 빛 전체에 밀립니다. 한쪽 거울이 용수철에 매달려 있으면 밀린 만큼 물러나 공진기가 길어집니다. 길어진 공진기는 공진 파장이 긴 쪽으로 밀립니다. 굴절률은 그대로인데 길이가 바뀌어 공진이 움직이는 것이고, 방향은 커 효과나 열과 같습니다. 그러니 쌍안정 글의 되먹임이 그대로 닫힙니다. Dorsel 등은 1983년 한쪽 거울을 움직일 수 있게 만든 파브리-페로 공진기에서 복사압만으로 생긴 쌍안정을 관측했습니다.</p>
+  <figure class="wr-fig">
+    <svg class="wf" viewBox="0 0 640 230" role="img" aria-label="파브리-페로 공진기. 왼쪽 거울은 고정, 오른쪽 거울은 용수철에 매달려 있다. 안에 쌓인 빛이 오른쪽 거울을 밀어 공진기가 길어지고, 그래서 공진 파장이 긴 쪽으로 밀린다.">
+      <defs>
+        <marker id="li6-warm" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path class="mk-warm" d="M2 1L8 5L2 9"/></marker>
+        <marker id="li6-beam" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path class="mk-beam" d="M2 1L8 5L2 9"/></marker>
+      </defs>
+      <path class="light" style="stroke-width:2.4" d="M20 110 L92 110" marker-end="url(#li6-beam)"/>
+      <text class="sm" x="20" y="98">입력</text>
+      <rect x="96" y="50" width="10" height="120" style="fill:var(--muted);opacity:.6"/>
+      <text class="sm" x="101" y="190" text-anchor="middle">고정 거울</text>
+      <path class="light" style="opacity:.55" d="M108 70 L338 80 L108 90 L338 100 L108 110 L338 120 L108 130 L338 140 L108 150"/>
+      <text class="sm" x="222" y="44" text-anchor="middle">안에 쌓인 빛 (수천 번 왕복)</text>
+      <rect x="350" y="50" width="10" height="120" style="fill:var(--muted);opacity:.25;stroke:var(--muted);stroke-dasharray:3 3"/>
+      <rect x="362" y="50" width="10" height="120" style="fill:var(--warm)"/>
+      <path class="ln" d="M372 110 L382 110 L386 100 L394 120 L402 100 L410 120 L418 100 L426 120 L430 110 L444 110"/>
+      <rect x="444" y="80" width="8" height="60" style="fill:var(--muted);opacity:.6"/>
+      <text class="sm" x="408" y="94" text-anchor="middle">용수철</text>
+      <path class="light hl" d="M320 186 L380 186" marker-end="url(#li6-warm)"/>
+      <text class="hlt" x="350" y="208" text-anchor="middle">복사압 F = 2P/c</text>
+      <text class="sm" x="356" y="40" text-anchor="middle">밀린 만큼 길어짐</text>
+
+      <line class="ln" x1="480" y1="180" x2="625" y2="180"/>
+      <text class="sm" x="625" y="198" text-anchor="end">파장 →</text>
+      <text class="sm" x="482" y="40">공진</text>
+      <path class="ln" style="stroke-dasharray:4 4" d="M480 178 C510 176 518 172 524 150 C529 120 531 70 534 70 C537 70 539 120 544 150 C550 172 558 176 588 178"/>
+      <path class="light" style="stroke-width:2.4" d="M500 178 C530 176 538 172 544 150 C549 120 551 70 554 70 C557 70 559 120 564 150 C570 172 578 176 608 178"/>
+      <text class="sm" x="528" y="64" text-anchor="end">처음</text>
+      <text class="sm" x="560" y="62">밀린 뒤</text>
+    </svg>
+    <figcaption>그림 10. 복사압으로 움직이는 공진기. 안에 쌓인 빛이 오른쪽 거울을 밀어 점선 자리에서 노란 자리로 물러나게 하고, 공진기가 길어진 만큼 공진 파장이 긴 쪽으로 밀립니다(오른쪽). 바뀌는 것은 길이지만 공진기 입장에서는 커 효과와 같은 방향의 이동입니다.</figcaption>
+  </figure>
+  <p><b>속도는 기계가 움직이는 시간입니다.</b> 거울이나 고리 벽이 실제로 움직여야 하므로 반응 시간은 그 구조물의 기계적 진동 주기로 정해지고 구조가 작을수록 빨라집니다. 칩 위에서는 거울 대신 가는 도파로나 고리 자체가 움직입니다. 2008년 Li 등은 실리콘 도파로를 공기 중에 띄우고 그 도파로가 안을 지나는 빛의 힘(도파로 옆으로 새어 나온 빛이 기판 쪽으로 당기는 기울기 힘)으로 휘는 것을 보였습니다. <b>대가는 잡음과 흔들림입니다.</b> 가볍고 잘 움직이는 구조일수록 열에 의한 무작위 떨림(브라운 운동)도 크고, 한 번 밀린 구조물은 바로 멈추지 않고 진동합니다. 이 분야에서는 이것을 거꾸로 이용해 빛으로 기계 진동을 식히거나 재는 연구가 큰 갈래를 이루지만(Aspelmeyer 등 2014), 연산용 스위치로는 다섯 가지 중 가장 덜 쓰입니다.</p>
+
+  <h2 id="s7">7. 옆 갈래 — 빛을 전기로 바꿔 되돌리기</h2>
+  <p>지금까지 다섯 가지는 모두 물질이 스스로 빛에 반응하기를 기다렸습니다. 전혀 다른 길도 있습니다. 빛을 검출기로 받아 전류로 바꾸고, 그 전류로 축전기를 충전해 전압을 만들고, 그 전압으로 변조기의 흡수나 굴절률을 바꾸는 것입니다. 빛 → 전기 → 빛(O-E-O)으로 한 바퀴 도는 이 방식을 광전자 혼성이라고 부릅니다. 변조기 안의 물리는 4절의 전하나 양자우물의 흡수 변화(양자 가둠 슈타르크 효과)이지만, 그것을 움직이는 것이 빛이 직접 만든 변화가 아니라 회로라는 점이 다릅니다.</p>
+  <figure class="wr-fig">
+    <svg class="wf" viewBox="0 0 640 210" role="img" aria-label="광전자 혼성 고리. 입력 빛이 검출기에서 전류가 되고, 축전기를 충전해 전압이 되고, 그 전압이 변조기를 움직여 따로 들어오는 전원 빛을 출력으로 바꾼다. 출력 세기를 만드는 에너지는 전원 빛과 전기 전원에서 온다.">
+      <defs>
+        <marker id="li7-beam" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path class="mk-beam" d="M2 1L8 5L2 9"/></marker>
+        <marker id="li7-ink" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path class="mk-ink" d="M2 1L8 5L2 9"/></marker>
+        <marker id="li7-warm" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path class="mk-warm" d="M2 1L8 5L2 9"/></marker>
+      </defs>
+      <path class="light" style="stroke-width:2" d="M16 100 L84 100" marker-end="url(#li7-beam)"/>
+      <text class="sm" x="16" y="88">약한 입력 빛</text>
+      <rect class="cell" x="88" y="78" width="100" height="44" rx="6"/><text x="138" y="100" text-anchor="middle" dominant-baseline="central">검출기</text>
+      <path class="ln" d="M190 100 L236 100" marker-end="url(#li7-ink)"/>
+      <text class="sm" x="213" y="90" text-anchor="middle">전류</text>
+      <rect class="cell" x="240" y="78" width="120" height="44" rx="6"/><text x="300" y="100" text-anchor="middle" dominant-baseline="central">축전기 C → 전압</text>
+      <path class="ln" d="M362 100 L408 100" marker-end="url(#li7-ink)"/>
+      <text class="sm" x="385" y="90" text-anchor="middle">전압</text>
+      <rect class="cell hl" x="412" y="78" width="100" height="44" rx="6"/><text x="462" y="100" text-anchor="middle" dominant-baseline="central">변조기</text>
+      <path class="light" style="stroke-width:2.6" d="M462 24 L462 74" marker-end="url(#li7-beam)"/>
+      <text class="sm" x="470" y="34">전원 빛 (연속)</text>
+      <path class="light hl" d="M514 100 L620 100" marker-end="url(#li7-warm)"/>
+      <text class="hlt" x="620" y="88" text-anchor="end">센 출력 빛</text>
+      <path class="ln" d="M300 176 L300 126" marker-end="url(#li7-ink)"/>
+      <text class="sm" x="300" y="194" text-anchor="middle">전기 전원 (바이어스)</text>
+      <text class="sm" x="138" y="150" text-anchor="middle">빛 → 전기</text>
+      <text class="sm" x="462" y="150" text-anchor="middle">전기 → 빛</text>
+      <text class="sm" x="300" y="150" text-anchor="middle">필요한 에너지 ≈ C·V²</text>
+    </svg>
+    <figcaption>그림 11. 광전자 혼성 고리. 입력 빛은 변조기를 직접 바꾸지 않고 검출기와 축전기를 거쳐 만든 전압으로 바꿉니다. 출력 빛의 세기는 따로 들어오는 전원 빛이 대므로 약한 입력이 센 출력을 움직이는 이득이 생깁니다. 축전기가 작을수록 같은 전압을 만드는 데 드는 입력 빛이 줄어듭니다.</figcaption>
+  </figure>
+  <p><b>이렇게 하면 물질의 비선형이 약하다는 한계를 피합니다.</b> 출력 빛은 따로 들어오는 전원 빛이 만들고 입력 빛은 그 문을 여닫는 역할만 합니다. 그래서 약한 입력이 센 출력을 움직이는 이득이 회로에서 생깁니다. 전자 트랜지스터에서 작은 게이트 전압이 전원에서 흘러드는 큰 드레인 전류를 여닫는 것과 같은 구조이고, 여기서는 약한 입력 빛이 게이트, 전원 빛이 드레인 전류 자리에 섭니다. <a href="writing-review-miller-2010.html">Miller 논평</a>이 광 논리 소자에 요구한 것도 결국 이런 「광 트랜지스터」의 성질이었습니다. 입력과 출력이 다른 빔이라 서로 섞이지도 않고 회로를 어떻게 짜느냐에 따라 출력이 입력을 따라가게도 거스르게도 만들 수 있습니다. <a href="compute.html#d1">S-SEED</a>(Lentine·Miller 등 1989)가 이 방식의 고전입니다. 양자우물 p-i-n 다이오드 둘을 직렬로 이어 두 빔의 비율로 상태를 정했습니다. 쌍안정 글 8절에서 공진기 쌍안정이 놓친 Miller의 기준들을 S-SEED가 통과한 것도 바로 이 구조 덕분입니다.</p>
+  <p><b>대가는 축전기를 충전하는 에너지</b>이고, 그 크기는 대략 <math><mi>C</mi><msup><mi>V</mi><mn>2</mn></msup></math>입니다. 그래서 이 갈래의 과제는 검출기·배선·변조기를 합친 전기 용량을 얼마나 작게 만드느냐입니다. 2019년 NTT의 Nozaki 등은 광자결정 위에 검출기와 변조기를 붙여 전체 용량을 약 2 fF까지 줄였습니다. 그리고 광 이득이 있는 O-E-O 트랜지스터로 광 스위치, 파장 변환기, 이어 붙일 수 있는 광 중계기를 비트당 펨토줄 수준의 에너지로 보였습니다. 셈을 해 보면 2 fF에 1 V를 걸 때 C·V²는 2 fJ입니다. 이 갈래는 비선형을 회로에서 얻으므로 엄밀히는 위 다섯과 같은 줄에 서지 않습니다. 하지만 「빛으로 빛을 바꾼다」는 같은 목표로 경쟁하는 길이라 함께 둡니다.</p>
+
+  <h2 id="s8">8. 한 표로 보면</h2>
+  <p>표를 보기 전에 <b>왜 빛으로 빛을 바꾸기가 이렇게 어려운지</b>, 특히 커 효과가 왜 이렇게 작은지부터 짚어 둡니다. 빛과 빛은 진공에서 서로를 그냥 통과하므로 빛이 빛에 영향을 주려면 반드시 물질을 거쳐야 합니다. 그런데 전자를 원자에 붙잡아 두는 전기장은 약 5×10¹¹ V/m입니다. 실리콘 도파로의 1 µm² 단면에 1 W를 몰아넣으면 그 속 빛의 전기장은 약 1.5×10⁷ V/m로 그 3만분의 1쯤입니다(전기장 크기는 <math><mi>I</mi><mo>=</mo><mfrac><mn>1</mn><mn>2</mn></mfrac><mi>c</mi><msub><mi>ε</mi><mn>0</mn></msub><mi>n</mi><msup><mi>E</mi><mn>2</mn></msup></math>로 셈). 빛이 전자구름을 당기는 힘이 원자가 전자를 붙잡는 힘에 비해 이렇게 작으니 용수철은 거의 늘어나지 않고, 커 효과는 이 비의 제곱만큼 작아집니다. 열·캐리어·포화 흡수가 커 효과보다 훨씬 큰 이유도 여기서 나옵니다. 열이나 전하는 빛이 비추는 동안 계속 쌓이므로 순간의 전기장이 약해도 시간을 들여 큰 변화를 모을 수 있습니다. 크기를 시간으로 사는 셈입니다.</p>
+
+  <p>다섯 갈래와 옆 갈래를 1절의 네 잣대로 나란히 놓으면 다음과 같습니다. 숫자는 이 글에서 출처로 확인한 것만 넣었습니다. 「크기」 칸은 원리마다 재는 단위가 달라서 같은 줄에서 바로 비교할 수 없습니다. 비교가 필요하면 본문에서 한 것처럼 「같은 굴절률 변화를 얻으려면 무엇이 얼마나 필요한가」로 바꿔 읽으면 됩니다.</p>
+  <table class="wr-tbl">
+    <thead><tr><th>원리</th><th>부호 (실리콘 기준)</th><th>반응 시간</th><th>크기</th><th>대가</th><th>대표 소자·실험</th></tr></thead>
+    <tbody>
+      <tr><td>커 효과</td><td>굴절률 ↑ · 공진 긴 쪽</td><td>fs (공진기에선 광자 수명 수십 ps)</td><td>n₂ ≈ 4.5×10⁻¹⁸ m²/W (실리카 2.6×10⁻²⁰)</td><td>아주 센 빛이 필요 · 실리콘에선 두 광자 흡수가 따라옴</td><td>질화실리콘 링 커 메모리 계산 ≈ 1.8 W</td></tr>
+      <tr><td>열광학</td><td>굴절률 ↑ · 공진 긴 쪽</td><td>µs</td><td>dn/dT ≈ 1.8×10⁻⁴ /K</td><td>느림 · 주변 온도에 민감 · 이웃 소자로 번짐</td><td>Almeida·Lipson 2004 · 띄운 링 80 µW (Sun·Reano 2010)</td></tr>
+      <tr><td>캐리어 분산</td><td>굴절률 ↓ · 공진 짧은 쪽</td><td>ns (립 도파로 수십 ns, p-i-n으로 ≈ 1 ns)</td><td>10¹⁸ cm⁻³ 에서 Δn ≈ −3×10⁻³</td><td>자유 전하 흡수 · 두 광자 흡수 손실</td><td>Xu·Lipson 2006 · NTT 나노공진기 RAM 30 nW</td></tr>
+      <tr><td>포화 흡수 · 밴드 채움</td><td>흡수 ↓ (근처 파장의 굴절률도 같이 바뀜)</td><td>위 준위 수명 τ (재료마다)</td><td>I<sub>sat</sub> = hν/(στ)</td><td>약한 빛일수록 크게 흡수 · 먹힌 빛은 열</td><td>나트륨 1976 · GaAs 1979 · 광 신경망 활성화 제안 (Shen 2017)</td></tr>
+      <tr><td>광역학</td><td>길이 ↑ · 공진 긴 쪽</td><td>기계 진동 주기</td><td>F = 2P/c (1 W에 6.7 nN)</td><td>열 떨림 잡음 · 진동</td><td>Dorsel 등 1983 · 칩 위 광력 (Li 등 2008)</td></tr>
+      <tr><td>광전자 혼성</td><td>회로가 정함</td><td>회로 충전 시간</td><td>에너지 ≈ C·V² (2 fF·1 V면 2 fJ)</td><td>전기 전원 · 검출기와 변조기를 붙이는 제작</td><td>S-SEED 1989 · 펨토패럿 O-E-O (NTT 2019)</td></tr>
+    </tbody>
+  </table>
+  <p>표를 세로로 읽으면 1절에서 미리 말한 맞바꿈이 보입니다. 커 효과 → 캐리어 → 열 순으로 반응이 느려지는 만큼 같은 빛으로 얻는 굴절률 변화가 커집니다. 변화를 물질 안에 쌓아 두는 시간이 길수록 순간의 약한 전기장으로도 큰 변화를 모을 수 있기 때문입니다. 그리고 그 쌓이는 변화를 만드는 과정은 거의 언제나 흡수여서 크기를 얻은 방식일수록 손실과 열을 같이 떠안습니다. 커 효과만이 흡수 없이 즉시 동작하지만 너무 작습니다. 그 작음을 공진기로 메우면 이번에는 공진기의 선폭과 광자 수명이 속도와 대역을 묶습니다. 광전자 혼성은 비선형을 물질에 맡기지 않고 회로의 이득에서 얻어 이 맞바꿈을 벗어나며, 그 대가로 전기를 다시 들여옵니다.</p>
+  <p>광 신경망의 비선형을 어디서 얻을지 고르는 일도 결국 이 표에서 한 줄을 고르는 일입니다. 신경망 한 층이 나노초 안에 끝나기를 바라면 열은 빠지고, 손실을 견딜 수 없으면 포화 흡수와 캐리어가 부담스럽고, 낮은 세기에서 동작해야 하면 커 효과가 빠집니다. 어느 줄도 모든 칸을 채우지 못하기 때문에 광 비선형은 아직 열린 문제로 남아 있습니다.</p>
+
+  </div>
+
+  <div class="wr-src">
+    <p>참고 문헌</p>
+    <ol>
+      <li>R. W. Boyd, <i>Nonlinear Optics</i>, 3rd ed. (Academic Press, 2008) — 원자 전기장 ≈ 5×10¹¹ V/m, 커 효과와 포화 흡수의 기본식.</li>
+      <li>B. E. A. Saleh, M. C. Teich, <i>Fundamentals of Photonics</i> (Wiley) — 포화 세기 I<sub>sat</sub> = hν/(στ)와 α = α₀/(1+I/I<sub>sat</sub>).</li>
+      <li>M. Dinu, F. Quochi, H. Garcia, “Third-order nonlinearities in silicon at telecom wavelengths,” <i>Appl. Phys. Lett.</i> 82, 2954 (2003) — 실리콘 n₂와 두 광자 흡수 계수.</li>
+      <li>G. P. Agrawal, <i>Nonlinear Fiber Optics</i> (Academic Press) — 실리카 n₂ ≈ 2.6×10⁻²⁰ m²/W.</li>
+      <li>T. Yoshiki, T. Tanabe, <i>Jpn. J. Appl. Phys.</i> 53, 122202 (2014) — 질화실리콘 링 커 쌍안정 메모리에 드는 전력 계산.</li>
+      <li>J. Komma, C. Schwarz, G. Hofmann, D. Heinert, R. Nawrodt, “Thermo-optic coefficient of silicon at 1550 nm and cryogenic temperatures,” <i>Appl. Phys. Lett.</i> 101, 041905 (2012) — 300 K에서 dn/dT = 1.8×10⁻⁴ /K.</li>
+      <li>V. R. Almeida, M. Lipson, “Optical bistability on a silicon chip,” <i>Opt. Lett.</i> 29, 2387 (2004).</li>
+      <li>P. Sun, R. M. Reano, “Low-power optical bistability in a free-standing silicon ring resonator,” <i>Opt. Lett.</i> 35, 1124 (2010).</li>
+      <li>R. A. Soref, B. R. Bennett, “Electrooptical effects in silicon,” <i>IEEE J. Quantum Electron.</i> 23, 123 (1987) — 자유 전하에 의한 Δn·Δα 식.</li>
+      <li>H. Rong et al., “A continuous-wave Raman silicon laser,” <i>Nature</i> 433, 725 (2005) — p-i-n 역바이어스로 실효 수명 ≈ 1 ns.</li>
+      <li>Q. Xu, M. Lipson, “Carrier-induced optical bistability in silicon ring resonators,” <i>Opt. Lett.</i> (2006); “All-optical logic based on silicon micro-ring resonators,” <i>Opt. Express</i> 15, 924 (2007).</li>
+      <li>K. Nozaki et al., “Ultralow-power all-optical RAM based on nanocavities,” <i>Nature Photonics</i> 6, 248 (2012).</li>
+      <li>B. R. Bennett, R. A. Soref, J. A. del Alamo, “Carrier-induced change in refractive index of InP, GaAs, and InGaAsP,” <i>IEEE J. Quantum Electron.</i> 26, 113 (1990) — 밴드 채움에 의한 굴절률 변화.</li>
+      <li>A. Szöke, V. Daneu, J. Goldhar, N. A. Kurnit, “Bistable optical element and its applications,” <i>Appl. Phys. Lett.</i> 15, 376 (1969).</li>
+      <li>H. M. Gibbs, S. L. McCall, T. N. C. Venkatesan, “Differential gain and bistability using a sodium-filled Fabry-Perot interferometer,” <i>Phys. Rev. Lett.</i> 36, 1135 (1976).</li>
+      <li>H. M. Gibbs et al., “Optical bistability in semiconductors,” <i>Appl. Phys. Lett.</i> 35, 451 (1979).</li>
+      <li>Y. Shen et al., “Deep learning with coherent nanophotonic circuits,” <i>Nature Photonics</i> 11, 441 (2017).</li>
+      <li>A. Dorsel, J. D. McCullen, P. Meystre, E. Vignes, H. Walther, “Optical bistability and mirror confinement induced by radiation pressure,” <i>Phys. Rev. Lett.</i> 51, 1550 (1983).</li>
+      <li>M. Li et al., “Harnessing optical forces in integrated photonic circuits,” <i>Nature</i> 456, 480 (2008).</li>
+      <li>M. Aspelmeyer, T. J. Kippenberg, F. Marquardt, “Cavity optomechanics,” <i>Rev. Mod. Phys.</i> 86, 1391 (2014).</li>
+      <li>A. L. Lentine, D. A. B. Miller et al., “Symmetric self-electrooptic effect device: optical set-reset latch, differential logic gate, and differential modulator/detector,” <i>IEEE J. Quantum Electron.</i> 25, 1928 (1989).</li>
+      <li>K. Nozaki et al., “Femtofarad optoelectronic integration demonstrating energy-saving signal conversion and nonlinear functions,” <i>Nature Photonics</i> 13, 454 (2019).</li>
+    </ol>
+  </div>
+</article>
+</main>
+
+</div>
+<script src="js/core.js?v=90afa448"></script>
+<script src="js/writing-toc.js?v=a8d95c4d"></script>
+<script src="js/writing-light-index.js?v=091b0961"></script>
+<script data-goatcounter="https://anythinking.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+</body>
+</html>
