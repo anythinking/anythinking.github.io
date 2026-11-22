@@ -13,6 +13,9 @@
 <meta property="og:image" content="https://anythinking.github.io/optics/img/og.jpg">
 <meta name="twitter:card" content="summary_large_image">
 <meta property="og:description" content="유한차분법의 원리. 미분의 정의에서 극한만 빼는 데서 출발해, 양옆 점을 쓰면 정확도가 왜 한 단계 오르는지, 미분방정식이 어떻게 연립방정식이 되는지, 시간 간격에 왜 상한이 있는지, Yee 격자가 왜 반 칸씩 엇갈려 있는지, 그리고 안정성과 수치 분산을 따져 시간 간격을 고르는 법까지.">
+<link rel="alternate" hreflang="ko" href="https://anythinking.github.io/optics/writing-finite-difference.html">
+<link rel="alternate" hreflang="en" href="https://anythinking.github.io/optics/en/writing-finite-difference.html">
+<link rel="alternate" hreflang="x-default" href="https://anythinking.github.io/optics/writing-finite-difference.html">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
@@ -34,7 +37,7 @@
 <main class="one">
 <article class="doc">
   <a class="back" href="writing.html">← 글 목록</a>
-  <p class="lede">같이 일하는 서울대학교 연구원에게 제가 만든 시뮬레이션 프로그램을 보여주다가 이런 얘기를 들었습니다. "<a href="writing-fdtd-designer.html">FDTD</a>가 뭐죠? 유한 차분법으로 계산하는 거군요. 우리 연구실은 주로 FEM(유한 요소법)을 쓰는데, 신기하네요." 그 말을 듣고 '유한 차분과 유한 요소의 차이는 무엇이지? 차분과 요소는 각각 어떤 의미를 갖는 거지?'라는 근본적인 질문이 생겨 공부를 시작했습니다. 찾아보면 둘의 차이는 흔히 한 줄로 정리됩니다. 「유한 차분은 방정식을 근사하고, 유한 요소는 해를 근사한다」. 깔끔한 표어지만 그 말만으로는 컴퓨터 안에서 실제로 무슨 일이 일어나는지 그려지지 않았습니다. 이 글은 그중 유한 차분 쪽을 끝까지 따라갑니다. 미분의 정의에서 극한 하나만 빼는 데서 출발합니다. 그 작은 선택이 정확도·연립방정식·시간 간격의 상한으로 이어지고 마지막에는 FDTD의 Yee 격자가 왜 반 칸씩 엇갈려 있는지, 시간 간격을 실제로 얼마로 잡는지까지 닿습니다. 유한 요소·유한 체적과의 비교는 다음 글에서 따로 다룹니다.</p>
+  <p class="lede">같이 일하는 서울대학교 연구원에게 제가 만든 시뮬레이션 프로그램을 보여주다가 이런 얘기를 들었습니다. "FDTD가 뭐죠? 유한 차분법으로 계산하는 거군요. 우리 연구실은 주로 FEM(유한 요소법)을 쓰는데, 신기하네요." 그 말을 듣고 '유한 차분과 유한 요소의 차이는 무엇이지? 차분과 요소는 각각 어떤 의미를 갖는 거지?'라는 근본적인 질문이 생겨 공부를 시작했습니다. 찾아보면 둘의 차이는 흔히 한 줄로 정리됩니다. 「유한 차분은 방정식을 근사하고, 유한 요소는 해를 근사한다」. 깔끔한 표어지만 그 말만으로는 컴퓨터 안에서 실제로 무슨 일이 일어나는지 그려지지 않았습니다. 이 글은 그중 유한 차분 쪽을 끝까지 따라갑니다. 미분의 정의에서 극한 하나만 빼는 데서 출발합니다. 그 작은 선택이 정확도·연립방정식·시간 간격의 상한으로 이어지고 마지막에는 <a href="writing-fdtd-designer.html">FDTD</a>의 Yee 격자가 왜 반 칸씩 엇갈려 있는지, 시간 간격을 실제로 얼마로 잡는지까지 닿습니다. 유한 요소·유한 체적과의 비교는 다음 글에서 따로 다룹니다.</p>
   <p class="meta">2026-11-15 · 시뮬레이션 › 원리 ① · 다음 글 › FDTD 설계 창 만들기</p>
 
   <div class="wr-body">
