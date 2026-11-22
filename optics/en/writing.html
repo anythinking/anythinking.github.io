@@ -36,7 +36,7 @@
 <div class="ph"><h1>Writing</h1><p>The maps show what is where, but not always why it looks that way. Here I collect essays that work through the points where I got stuck while reading papers.</p></div>
 <main class="one">
 <div class="doc">
-  <p class="meta">3 essays</p>
+  <p class="meta">4 essays</p>
   <div class="wr-tabs" role="tablist"><button type="button" role="tab" id="tab-basics" aria-controls="basics" data-tab="basics">Basics<span class="n"></span></button><button type="button" role="tab" id="tab-sim" aria-controls="sim" data-tab="sim">Simulation<span class="n"></span></button><button type="button" role="tab" id="tab-review" aria-controls="review" data-tab="review">Paper reviews<span class="n"></span></button><button type="button" role="tab" id="tab-compendium" aria-controls="compendium" data-tab="compendium">Compendium<span class="n"></span></button></div>
   <section class="wr-tab" id="basics" aria-labelledby="tab-basics">
   <p class="wr-cat-d">Principles to know before reading the papers, in reading order.</p>
@@ -57,6 +57,11 @@
   <section class="wr-tab" id="sim" aria-labelledby="tab-sim">
   <p class="wr-cat-d">Calculation tools built from scratch, and the checks on whether their results can be trusted.</p>
   <ul class="wr-list">
+    <li data-page="writing-finite-difference"><a href="writing-finite-difference.html">
+      <h2>What is FDTD?</h2>
+      <p>The principle of the finite-difference method. Starting from dropping the limit in the definition of a derivative: why using the points on both sides raises accuracy by a step, how a differential equation becomes a system of linear equations, the upper limit on the time step (CFL), why the Yee grid is staggered by half a cell, and how to choose the time step from stability and numerical dispersion.</p>
+      <p class="meta">2026-11-15 · Simulation › Principles ①</p>
+    </a></li>
     <li data-page="writing-fdtd-designer"><a href="writing-fdtd-designer.html">
       <h2>Building an FDTD design window</h2>
       <p>With no commercial simulator after graduation, building a window for drawing and designing on top of MIT's open-source FDTD (MEEP). What it can do, and how to trust a calculation without an answer key.</p>

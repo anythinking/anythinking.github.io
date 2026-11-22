@@ -1,0 +1,322 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>FDTD란 무엇일까? — 광 연산 아틀라스</title>
+<meta name="description" content="유한차분법의 원리. 미분의 정의에서 극한만 빼는 데서 출발해, 양옆 점을 쓰면 정확도가 왜 한 단계 오르는지, 미분방정식이 어떻게 연립방정식이 되는지, 시간 간격에 왜 상한이 있는지, Yee 격자가 왜 반 칸씩 엇갈려 있는지, 그리고 안정성과 수치 분산을 따져 시간 간격을 고르는 법까지.">
+<link rel="canonical" href="https://anythinking.github.io/optics/writing-finite-difference.html">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="광 연산 아틀라스">
+<meta property="og:title" content="FDTD란 무엇일까? — 광 연산 아틀라스">
+<meta property="og:url" content="https://anythinking.github.io/optics/writing-finite-difference.html">
+<meta property="og:image" content="https://anythinking.github.io/optics/img/og.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<meta property="og:description" content="유한차분법의 원리. 미분의 정의에서 극한만 빼는 데서 출발해, 양옆 점을 쓰면 정확도가 왜 한 단계 오르는지, 미분방정식이 어떻게 연립방정식이 되는지, 시간 간격에 왜 상한이 있는지, Yee 격자가 왜 반 칸씩 엇갈려 있는지, 그리고 안정성과 수치 분산을 따져 시간 간격을 고르는 법까지.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="css/base.css?v=25b88a60">
+<link rel="stylesheet" href="css/writing.css?v=1416eda6">
+</head>
+<body data-page="writing-finite-difference" data-root="">
+<div class="app">
+  <header class="top">
+    <div class="ttl"><b>광 연산 아틀라스</b></div>
+    <div class="hd-r">
+      <nav class="g" aria-label="지도"><div class="ng"><span class="ngl">포토닉스 기초</span><div class="ngt"><a href="optics.html">광학</a><a href="layers.html">층</a><a href="glossary.html">용어</a></div></div>
+      <div class="ng"><span class="ngl">광 연산</span><div class="ngt"><a href="compute.html">종류</a><a href="devices.html">소자</a><a href="institutions.html">기관</a></div></div>
+      <div class="ng etc"><span class="ngl">&nbsp;</span><div class="ngt"><a href="writing.html" aria-current="page">글</a><a href="about.html">소개</a></div></div></nav>
+      <div class="lang" role="group" aria-label="Language"><span class="lang-lb">Language</span><span aria-current="true" lang="ko">한국어</span><a href="en/writing-finite-difference.html" hreflang="en" lang="en">English</a></div>
+    </div>
+  </header>
+<div class="ph"><h1>FDTD란 무엇일까?</h1></div>
+<main class="one">
+<article class="doc">
+  <a class="back" href="writing.html">← 글 목록</a>
+  <p class="lede">같이 일하는 서울대학교 연구원에게 제가 만든 시뮬레이션 프로그램을 보여주다가 이런 얘기를 들었습니다. "<a href="writing-fdtd-designer.html">FDTD</a>가 뭐죠? 유한 차분법으로 계산하는 거군요. 우리 연구실은 주로 FEM(유한 요소법)을 쓰는데, 신기하네요." 그 말을 듣고 '유한 차분과 유한 요소의 차이는 무엇이지? 차분과 요소는 각각 어떤 의미를 갖는 거지?'라는 근본적인 질문이 생겨 공부를 시작했습니다. 찾아보면 둘의 차이는 흔히 한 줄로 정리됩니다. 「유한 차분은 방정식을 근사하고, 유한 요소는 해를 근사한다」. 깔끔한 표어지만 그 말만으로는 컴퓨터 안에서 실제로 무슨 일이 일어나는지 그려지지 않았습니다. 이 글은 그중 유한 차분 쪽을 끝까지 따라갑니다. 미분의 정의에서 극한 하나만 빼는 데서 출발합니다. 그 작은 선택이 정확도·연립방정식·시간 간격의 상한으로 이어지고 마지막에는 FDTD의 Yee 격자가 왜 반 칸씩 엇갈려 있는지, 시간 간격을 실제로 얼마로 잡는지까지 닿습니다. 유한 요소·유한 체적과의 비교는 다음 글에서 따로 다룹니다.</p>
+  <p class="meta">2026-11-15 · 시뮬레이션 › 원리 ① · 다음 글 › FDTD 설계 창 만들기</p>
+
+  <div class="wr-body">
+
+  <h2 id="s1">1. '차분'이란?</h2>
+  <p>미분은 고등학교에서 이렇게 배웁니다. 점 x에서 조금 떨어진 x+h를 잡고 두 점을 잇는 직선의 기울기를 구한 다음 h를 0으로 보냅니다.</p>
+  <div class="wr-math"><math display="block"><msup><mi>f</mi><mo>′</mo></msup><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo><mo>=</mo><munder><mo movablelimits="true">lim</mo><mrow><mi>h</mi><mo>→</mo><mn>0</mn></mrow></munder><mfrac><mrow><mi>f</mi><mo stretchy="false">(</mo><mi>x</mi><mo>+</mo><mi>h</mi><mo stretchy="false">)</mo><mo>−</mo><mi>f</mi><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo></mrow><mi>h</mi></mfrac></math></div>
+  <p>컴퓨터가 못 하는 것은 마지막 단계, h를 0으로 보내는 일뿐입니다. 컴퓨터는 함수를 통째로 갖고 있지 않고 띄엄띄엄 놓인 점의 값만 갖고 있습니다. 그래서 <b>유한 차분은 극한을 취하지 않고 h를 격자 간격만큼의 작은 값에서 멈춥니다.</b> h가 0이 아니라 유한한 크기로 남는다는 데서 「유한」이라는 말이 붙었습니다.</p>
+  <p><b>그러면 미분 기호는 사라지고 그 자리에 「옆 점 값 빼기 지금 점 값, 나누기 간격」이라는 뺄셈과 나눗셈만 남습니다.</b> 식으로 쓰면 위의 정의에서 극한 기호를 떼고 등호를 「거의 같다(≈)」로 바꾼 것뿐입니다.</p>
+  <div class="wr-math"><math display="block"><msup><mi>f</mi><mo>′</mo></msup><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo><mo>≈</mo><mfrac><mrow><mi>f</mi><mo stretchy="false">(</mo><mi>x</mi><mo>+</mo><mi>h</mi><mo stretchy="false">)</mo><mo>−</mo><mi>f</mi><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo></mrow><mi>h</mi></mfrac></math></div>
+  <p>격자 위에서는 점마다 번호를 붙여 x₀, x₁, x₂, …로 부르고 점 i의 값을 fᵢ로 씁니다. 그러면 같은 식이 이웃한 두 번호의 값만으로 적힙니다.</p>
+  <div class="wr-math"><math display="block"><msup><mi>f</mi><mo>′</mo></msup><mo stretchy="false">(</mo><msub><mi>x</mi><mi>i</mi></msub><mo stretchy="false">)</mo><mo>≈</mo><mfrac><mrow><msub><mi>f</mi><mrow><mi>i</mi><mo>+</mo><mn>1</mn></mrow></msub><mo>−</mo><msub><mi>f</mi><mi>i</mi></msub></mrow><mi>h</mi></mfrac></math></div>
+  <p><b>미분방정식에 들어 있는 미분을 전부 이렇게 바꿔치기하면 방정식은 격자점 값들 사이의 대수식이 됩니다.</b> 가장 간단한 예로, 빛이 흡수하는 물질을 지나갈 때 세기가 일정한 비율로 줄어드는 현상(비어–람베르트 법칙)을 봅시다. 세기 f가 줄어드는 속도는 지금 세기에 비례하고, 비례 상수가 흡수 계수 α입니다. 왼쪽의 미분을 위의 차분으로 바꾸고 정리하면 이렇게 됩니다.</p>
+  <div class="wr-math"><math display="block"><mfrac><mrow><mi>d</mi><mi>f</mi></mrow><mrow><mi>d</mi><mi>x</mi></mrow></mfrac><mo>=</mo><mo>−</mo><mi>α</mi><mi>f</mi><mspace width="1em"/><mo stretchy="false">⟶</mo><mspace width="1em"/><mfrac><mrow><msub><mi>f</mi><mrow><mi>i</mi><mo>+</mo><mn>1</mn></mrow></msub><mo>−</mo><msub><mi>f</mi><mi>i</mi></msub></mrow><mi>h</mi></mfrac><mo>=</mo><mo>−</mo><mi>α</mi><msub><mi>f</mi><mi>i</mi></msub><mspace width="1em"/><mo stretchy="false">⟶</mo><mspace width="1em"/><msub><mi>f</mi><mrow><mi>i</mi><mo>+</mo><mn>1</mn></mrow></msub><mo>=</mo><mo stretchy="false">(</mo><mn>1</mn><mo>−</mo><mi>α</mi><mi>h</mi><mo stretchy="false">)</mo><msub><mi>f</mi><mi>i</mi></msub></math></div>
+  <p>미분은 사라지고 「다음 점의 세기는 지금 세기에 (1 − αh)를 곱한 것」이라는 곱셈 하나만 남았습니다. 입구의 세기 f₀만 알면 f₁, f₂, …를 차례로 계산할 수 있습니다. 진짜 답은 지수함수 e<sup>−αx</sup>인데 h를 작게 할수록 (1 − αh)를 거듭 곱한 값이 이 지수함수에 가까워집니다. 처음에 설명한 「방정식을 근사한다」는 이런 뜻입니다. 해가 지수함수일 거라는 가정은 어디에도 없었고 식 안의 미분만 손봤습니다.</p>
+  <p><b>다만 h가 0이 아니니 이 기울기는 진짜 미분과 조금 다릅니다.</b> 얼마나 다른지와 그 차이를 줄이는 방법은 다음 절에서 다룹니다.</p>
+
+  <h2 id="s2">2. 어느 점을 쓰느냐가 정확도를 가른다</h2>
+  <p>기울기를 구하는 방법은 하나가 아닙니다. 위처럼 앞쪽 점 하나를 쓰면 <b>전진 차분</b>이고, 양옆 점 둘을 써서 x−h와 x+h를 잇는 직선의 기울기를 구하면 <b>중앙 차분</b>입니다. 같은 수의 뺄셈이 들어가는데도 정확도는 크게 다릅니다.</p>
+  <div class="wr-math"><math display="block"><mtable columnalign="right left" rowspacing="0.9em"><mtr><mtd><mtext>전진 차분&#x2003;</mtext></mtd><mtd><mstyle displaystyle="true"><msup><mi>f</mi><mo>′</mo></msup><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo><mo>≈</mo><mfrac><mrow><mi>f</mi><mo stretchy="false">(</mo><mi>x</mi><mo>+</mo><mi>h</mi><mo stretchy="false">)</mo><mo>−</mo><mi>f</mi><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo></mrow><mi>h</mi></mfrac></mstyle></mtd></mtr><mtr><mtd><mtext>중앙 차분&#x2003;</mtext></mtd><mtd><mstyle displaystyle="true"><msup><mi>f</mi><mo>′</mo></msup><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo><mo>≈</mo><mfrac><mrow><mi>f</mi><mo stretchy="false">(</mo><mi>x</mi><mo>+</mo><mi>h</mi><mo stretchy="false">)</mo><mo>−</mo><mi>f</mi><mo stretchy="false">(</mo><mi>x</mi><mo>−</mo><mi>h</mi><mo stretchy="false">)</mo></mrow><mrow><mn>2</mn><mi>h</mi></mrow></mfrac></mstyle></mtd></mtr></mtable></math></div>
+  <p>전진 차분은 x에서 x+h까지, 폭 h를 건너는 기울기입니다. 중앙 차분은 x를 가운데 두고 x−h에서 x+h까지, 폭 2h를 건너는 기울기라서 분모가 2h입니다.</p>
+  <h3 class="wr-sub">2.1 전진 차분</h3>
+  <p>정확도 차이가 어디서 오는지는 테일러 전개로 보입니다. 매끄러운 함수는 한 점 근처에서 다항식으로 펼칠 수 있습니다.</p>
+  <div class="wr-math"><math display="block"><mi>f</mi><mo stretchy="false">(</mo><mi>x</mi><mo>±</mo><mi>h</mi><mo stretchy="false">)</mo><mo>=</mo><mi>f</mi><mo>±</mo><mi>h</mi><msup><mi>f</mi><mo>′</mo></msup><mo>+</mo><mfrac><msup><mi>h</mi><mn>2</mn></msup><mn>2</mn></mfrac><msup><mi>f</mi><mo>″</mo></msup><mo>±</mo><mfrac><msup><mi>h</mi><mn>3</mn></msup><mn>6</mn></mfrac><msup><mi>f</mi><mo>‴</mo></msup><mo>+</mo><mo>⋯</mo></math></div>
+  <p>여기서 f, f′, f″은 모두 점 x에서의 값이고 ±는 위 부호끼리(x+h) 또는 아래 부호끼리(x−h) 읽습니다. 이것을 전진 차분 식에 넣어 봅니다. 먼저 분자 f(x+h) − f(x)는, + 쪽 전개에서 맨 앞의 f가 f(x)와 지워져서 이렇게 됩니다.</p>
+  <div class="wr-math"><math display="block"><mi>f</mi><mo stretchy="false">(</mo><mi>x</mi><mo>+</mo><mi>h</mi><mo stretchy="false">)</mo><mo>−</mo><mi>f</mi><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo><mo>=</mo><mi>h</mi><msup><mi>f</mi><mo>′</mo></msup><mo>+</mo><mfrac><msup><mi>h</mi><mn>2</mn></msup><mn>2</mn></mfrac><msup><mi>f</mi><mo>″</mo></msup><mo>+</mo><mfrac><msup><mi>h</mi><mn>3</mn></msup><mn>6</mn></mfrac><msup><mi>f</mi><mo>‴</mo></msup><mo>+</mo><mo>⋯</mo></math></div>
+  <p>이것을 h로 나누면 전진 차분이 됩니다.</p>
+  <div class="wr-math"><math display="block"><mfrac><mrow><mi>f</mi><mo stretchy="false">(</mo><mi>x</mi><mo>+</mo><mi>h</mi><mo stretchy="false">)</mo><mo>−</mo><mi>f</mi><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo></mrow><mi>h</mi></mfrac><mo>=</mo><munder><munder><msup><mi>f</mi><mo>′</mo></msup><mo>⏟</mo></munder><mtext>진짜 미분</mtext></munder><mo>+</mo><munder><munder><mstyle displaystyle="true"><mrow><mfrac><mi>h</mi><mn>2</mn></mfrac><msup><mi>f</mi><mo>″</mo></msup><mo>+</mo><mfrac><msup><mi>h</mi><mn>2</mn></msup><mn>6</mn></mfrac><msup><mi>f</mi><mo>‴</mo></msup><mo>+</mo><mo>⋯</mo></mrow></mstyle><mo>⏟</mo></munder><mtext>오차</mtext></munder></math></div>
+  <p>진짜 미분 f′ 뒤에 꼬리가 붙습니다. h가 작으면 h² 이후의 항은 훨씬 더 작으니, 오차는 사실상 첫 항 h/2·f″이고 <b>h에 비례합니다.</b> 곡선이 휘어 있으면(f″≠0) 앞쪽만 본 기울기가 한쪽으로 치우친 탓입니다.</p>
+  <h3 class="wr-sub">2.2 중앙 차분</h3>
+  <p>중앙 차분은 f(x+h)에서 f(x−h)를 뺍니다. 두 전개를 나란히 놓으면 짝수 차수 항(f, h²f″)은 부호가 같아서 뺄 때 서로 지워지고, 홀수 차수 항(hf′, h³f‴)은 부호가 반대라 두 배로 남습니다.</p>
+  <div class="wr-math"><math display="block"><mi>f</mi><mo stretchy="false">(</mo><mi>x</mi><mo>+</mo><mi>h</mi><mo stretchy="false">)</mo><mo>−</mo><mi>f</mi><mo stretchy="false">(</mo><mi>x</mi><mo>−</mo><mi>h</mi><mo stretchy="false">)</mo><mo>=</mo><mn>2</mn><mi>h</mi><msup><mi>f</mi><mo>′</mo></msup><mo>+</mo><mfrac><msup><mi>h</mi><mn>3</mn></msup><mn>3</mn></mfrac><msup><mi>f</mi><mo>‴</mo></msup><mo>+</mo><mo>⋯</mo></math></div>
+  <p>2h로 나누면 중앙 차분이 됩니다.</p>
+  <div class="wr-math"><math display="block"><mfrac><mrow><mi>f</mi><mo stretchy="false">(</mo><mi>x</mi><mo>+</mo><mi>h</mi><mo stretchy="false">)</mo><mo>−</mo><mi>f</mi><mo stretchy="false">(</mo><mi>x</mi><mo>−</mo><mi>h</mi><mo stretchy="false">)</mo></mrow><mrow><mn>2</mn><mi>h</mi></mrow></mfrac><mo>=</mo><munder><munder><msup><mi>f</mi><mo>′</mo></msup><mo>⏟</mo></munder><mtext>진짜 미분</mtext></munder><mo>+</mo><munder><munder><mstyle displaystyle="true"><mrow><mfrac><msup><mi>h</mi><mn>2</mn></msup><mn>6</mn></mfrac><msup><mi>f</mi><mo>‴</mo></msup><mo>+</mo><mo>⋯</mo></mrow></mstyle><mo>⏟</mo></munder><mtext>오차</mtext></munder></math></div>
+  <p>전진 차분에 있던 h/2·f″ 항이 통째로 사라졌습니다. <b>앞쪽으로 치우친 오차와 뒤쪽으로 치우친 오차가 정확히 상쇄되어 남은 오차가 h²에 비례합니다.</b></p>
+  <p>이 차이는 간격을 줄일 때 드러납니다. 격자를 두 배 촘촘하게 하면 전진 차분의 오차는 절반이 되지만 중앙 차분의 오차는 4분의 1이 됩니다. 열 배 촘촘하게 하면 각각 10분의 1과 100분의 1입니다. 거꾸로 말하면, 같은 정확도를 얻는 데 중앙 차분은 점 사이 간격을 훨씬 넓게 둬도 됩니다. 기울기를 10⁻⁴ 정도의 오차로 구하고 싶다면 전진 차분은 h를 10⁻⁴ 근처까지 줄여야 하지만 중앙 차분은 h ≈ 10⁻²이면 충분합니다. 길이 1인 구간에 점을 만 개 찍느냐 백 개 찍느냐의 차이입니다. 3차원이면 이 차이가 세제곱으로 커져서 점 10¹²개 대 10⁶개, 백만 배가 됩니다. 점이 듬성듬성해도 되는 쪽, 곧 중앙 차분이 계산량에서 압도적으로 유리합니다.</p>
+  <figure class="wr-fig" id="fd1">
+    <svg class="wf" viewBox="0 0 640 300" role="img" aria-label="왼쪽: 사인 곡선 위의 한 점에서 그은 접선(진짜 미분)과, 간격 h로 그은 전진 차분 할선과 중앙 차분 할선. h를 줄이면 두 할선이 접선에 다가가는데 중앙 차분이 훨씬 빨리 붙는다. 오른쪽: 로그 축에 그린 간격 h에 대한 오차. 전진 차분은 기울기 1, 중앙 차분은 기울기 2로 내려가다가, h가 아주 작아지면 반올림 오차 때문에 다시 올라간다.">
+      <g id="fd1-l"></g>
+      <g id="fd1-r"></g>
+    </svg>
+    <div class="wr-ctl">
+      <label for="fd1-h">간격 h</label><input type="range" id="fd1-h" min="-6" max="0" step="0.05" value="-0.1"><output id="fd1-ho"></output>
+    </div>
+    <div class="wr-ctl"><span id="fd1-read"></span></div>
+    <figcaption>그림 1. 같은 점 x₀에서 기울기를 구하는 두 방법. 왼쪽에서 x₀에 붙은 짧은 검은 선이 진짜 접선, 빨간 굵은 선이 x₀와 x₀+h를 이은 전진 차분, 노란 굵은 선이 x₀−h와 x₀+h를 이은 중앙 차분입니다(옅은 선은 그 기울기를 연장한 것). 노란 선은 x₀를 지나지 않지만 기울기는 검은 선과 거의 나란하고, 빨간 선은 곡선이 휜 만큼 한쪽으로 치우칩니다. 슬라이더로 h를 줄이면 두 선이 모두 접선에 다가가는데, 노란 선이 훨씬 먼저 붙습니다. 오른쪽은 h에 따른 오차를 로그 축에 그린 것으로, h가 10배 줄 때 전진 차분은 한 칸, 중앙 차분은 두 칸씩 내려갑니다. h를 10⁻⁵ 아래로 내리면 오차가 오히려 다시 커지는데, 거의 같은 두 수를 빼면서 컴퓨터의 유효숫자(약 16자리)가 깎여 나가기 때문입니다. 간격은 무작정 줄인다고 좋은 것이 아닙니다.</figcaption>
+  </figure>
+  <h3 class="wr-sub">2.3 2계 차분 — 1, −2, 1</h3>
+  <p>같은 방법으로 2계 미분도 만들 수 있습니다. 2계 미분을 「기울기의 기울기」로 읽으면 식이 바로 나옵니다. 이웃한 세 점의 값은 왼쪽부터 f(x₀−h), f(x₀), f(x₀+h)입니다. 줄여서 f₋, f₀, f₊라 하면 오른쪽 두 점 사이의 기울기는 (f₊ − f₀)/h이고 왼쪽 두 점 사이의 기울기는 (f₀ − f₋)/h입니다. 기울기가 한 칸 h를 가는 동안 얼마나 변했는지를 다시 h로 나누면 2계 미분입니다.</p>
+<div class="wr-math"><math display="block"><mstyle displaystyle="true"><msup><mi>f</mi><mo>″</mo></msup><mo>≈</mo><mfrac><mrow><munder><munder><mfrac><mrow><msub><mi>f</mi><mo>+</mo></msub><mo>−</mo><msub><mi>f</mi><mn>0</mn></msub></mrow><mrow><mi>h</mi></mrow></mfrac><mo>⏟</mo></munder><mtext>오른쪽 기울기</mtext></munder><mo>−</mo><munder><munder><mfrac><mrow><msub><mi>f</mi><mn>0</mn></msub><mo>−</mo><msub><mi>f</mi><mo>−</mo></msub></mrow><mrow><mi>h</mi></mrow></mfrac><mo>⏟</mo></munder><mtext>왼쪽 기울기</mtext></munder></mrow><mrow><mi>h</mi></mrow></mfrac><mo>=</mo><mfrac><mrow><msub><mi>f</mi><mo>+</mo></msub><mo>−</mo><mn>2</mn><msub><mi>f</mi><mn>0</mn></msub><mo>+</mo><msub><mi>f</mi><mo>−</mo></msub></mrow><mrow><msup><mi>h</mi><mn>2</mn></msup></mrow></mfrac></mstyle></math></div>
+  <p><b>가운데 점 f₀은 오른쪽 기울기에서 한 번, 왼쪽 기울기를 빼면서 또 한 번, 모두 두 번 빠집니다. 그래서 −2입니다.</b> 양옆 점은 각자 한 기울기에만 한 번 들어가니 1입니다. 세 계수를 더하면 0인데 이것도 우연이 아닙니다. 세 점이 일직선 위에 있으면 두 기울기가 같아 2계 미분이 0이어야 하고 세 값이 모두 같을 때도 마찬가지입니다. 열이 퍼지는 방정식이든 파동 방정식이든 빛의 헬름홀츠 방정식이든 2계 미분이 들어가는 곳이면 어디서나 이 세 숫자가 나옵니다.</p>
+  <figure class="wr-fig">
+    <svg class="wf big" viewBox="0 0 340 285" style="max-width:420px;display:block;margin:0 auto" role="img" aria-label="아래로 볼록한 곡선 위의 세 점 f₋, f₀, f₊. 왼쪽 두 점을 잇는 선의 기울기와 오른쪽 두 점을 잇는 선의 기울기가 다르고, 그 차이를 h로 나눈 것이 2계 차분이다.">
+      <text x="170" y="20" text-anchor="middle">기울기의 기울기</text>
+      <path class="br" d="M40 26.8 L50 49.6 L60 70.6 L70 90.0 L80 107.6 L90 123.6 L100 137.8 L110 150.4 L120 161.2 L130 170.4 L140 177.8 L150 183.6 L160 187.7 L170 190.0 L180 190.7 L190 189.6 L200 186.8 L210 182.4 L220 176.2 L230 168.4 L240 158.8 L250 147.6 L260 134.6 L270 120.0 L280 103.6 L290 85.6 L300 65.8"/>
+      <line x1="70" y1="90" x2="170" y2="190" style="stroke:var(--probe);stroke-width:3;stroke-linecap:round"/>
+      <line x1="170" y1="190" x2="270" y2="120" style="stroke:var(--beam);stroke-width:3;stroke-linecap:round"/>
+      <text class="sm" x="96" y="160" text-anchor="end" style="fill:var(--probe)">왼쪽 기울기</text>
+      <text class="sm" x="96" y="176" text-anchor="end" style="fill:var(--probe)">(f₀ − f₋)/h</text>
+      <text class="sm" x="236" y="182" style="fill:var(--beam)">오른쪽 기울기</text>
+      <text class="sm" x="236" y="198" style="fill:var(--beam)">(f₊ − f₀)/h</text>
+      <circle cx="70" cy="90" r="5" class="nd"/><circle cx="170" cy="190" r="6" fill="var(--warm)"/><circle cx="270" cy="120" r="5" class="nd"/>
+      <text class="sm" x="62" y="80" text-anchor="end">f(x₀−h)</text><text class="sm" x="170" y="214" text-anchor="middle">f(x₀)</text><text class="sm" x="278" y="110">f(x₀+h)</text>
+      <text class="sm" x="170" y="246" text-anchor="middle">f₀은 두 기울기에 한 번씩 → 합쳐서 −2</text>
+      <line class="ln" x1="70" y1="262" x2="170" y2="262"/><line class="ln" x1="70" y1="257" x2="70" y2="267"/><line class="ln" x1="170" y1="257" x2="170" y2="267"/>
+      <text class="sm" x="120" y="278" text-anchor="middle">h</text>
+    </svg>
+    <figcaption>그림 2. 2계 차분은 기울기의 기울기. 2계 미분은 기울기가 얼마나 변하나이므로, 오른쪽 기울기에서 왼쪽 기울기를 빼고 h로 나눕니다. 가운데 점 f₀은 오른쪽 기울기 안에서 한 번 빠지고, 왼쪽 기울기를 통째로 빼면서 그 안의 f₀이 또 한 번 빠져서 계수가 −2입니다.</figcaption>
+  </figure>
+  <p>앞에서 쓴 두 테일러 전개를 이번에는 더해도 같은 식이 나옵니다. 홀수 차수가 서로 지워지고 f″가 남습니다. 이 길로 오면 오차가 h²에 비례한다는 것까지 함께 알 수 있습니다.</p>
+  <div class="wr-math"><math display="block"><msup><mi>f</mi><mo>″</mo></msup><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo><mo>≈</mo><mfrac><mrow><mi>f</mi><mo stretchy="false">(</mo><mi>x</mi><mo>+</mo><mi>h</mi><mo stretchy="false">)</mo><mo>−</mo><mn>2</mn><mi>f</mi><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo><mo>+</mo><mi>f</mi><mo stretchy="false">(</mo><mi>x</mi><mo>−</mo><mi>h</mi><mo stretchy="false">)</mo></mrow><msup><mi>h</mi><mn>2</mn></msup></mfrac><mspace width="1em"/><mtext>(오차 </mtext><mfrac><msup><mi>h</mi><mn>2</mn></msup><mn>12</mn></mfrac><msup><mi>f</mi><mrow><mo stretchy="false">(</mo><mn>4</mn><mo stretchy="false">)</mo></mrow></msup><mtext>)</mtext></math></div>
+
+  <h2 id="s3">3. 미분방정식이 연립방정식이 된다</h2>
+  <p>실제 문제 하나에 써 봅니다. 길이 L인 막대에 전류를 흘리고 양 끝은 얼음물에 담가 0 °C로 붙잡아 둔 상황입니다(그림 3). <b>전류가 흐르면 줄열이 막대 어느 한 곳이 아니라 모든 곳에서 똑같이 생깁니다. 길이당 발열 q가 막대 전체에서 같은, 「고른 발열」입니다.</b> 이렇게 생긴 열은 양 끝 얼음물로만 빠져나갈 수 있습니다.</p>
+  <p>여기서 구하려는 것은 <b>정상 상태</b>입니다. 처음 전류를 켜면 막대가 점점 데워지다가 충분히 지나면 온도가 더 이상 변하지 않습니다. 그렇다고 열의 흐름이 멈춘 것은 아닙니다. 열은 계속 만들어지고 계속 양 끝으로 빠져나갑니다. 다만 모든 점에서 들어오는 양과 나가는 양이 맞아서 온도만 고정됩니다. 흐름 자체가 0인 열평형과는 다릅니다. 전류를 끄면 열이 다 빠져나가 막대 전체가 0 °C가 되는데 그것이 열평형입니다. 정상 상태의 온도 T(x)는 다음 식을 따릅니다. 발열 q가 만드는 열이 전도로 빠져나가는 균형입니다.</p>
+  <div class="wr-math"><math display="block"><mo>−</mo><mi>k</mi><mfrac><mrow><msup><mi>d</mi><mn>2</mn></msup><mi>T</mi></mrow><mrow><mi>d</mi><msup><mi>x</mi><mn>2</mn></msup></mrow></mfrac><mo>=</mo><mi>q</mi><mo>,</mo><mspace width="1em"/><mi>T</mi><mo stretchy="false">(</mo><mn>0</mn><mo stretchy="false">)</mo><mo>=</mo><mi>T</mi><mo stretchy="false">(</mo><mi>L</mi><mo stretchy="false">)</mo><mo>=</mo><mn>0</mn></math></div>
+  <figure class="wr-fig">
+    <svg class="wf" viewBox="0 0 640 260" role="img" aria-label="왼쪽: 양 끝을 0 °C 얼음물에 담근 막대에 전류를 흘려 고르게 발열시키는 상황. 막대 위에 그린 온도 곡선은 가운데가 가장 높고 양 끝에서 0인 위로 볼록한 모양이다. 막대 가운데보다 오른쪽에 얇은 토막 하나가 표시되어 있다. 오른쪽: 그 토막을 확대한 그림. 왼쪽 면으로 열 φ(x)가 들어오고, 안에서 열 qΔx가 만들어지고, 오른쪽 면으로 더 큰 열 φ(x+Δx)가 나간다.">
+      <text x="165" y="20" text-anchor="middle">막대와 온도</text>
+      <line class="ln dim" x1="40" y1="150" x2="290" y2="150" style="stroke-dasharray:4 4"/>
+      <text class="sm" x="36" y="154" text-anchor="end">0 °C</text>
+      <rect x="215" y="72" width="14" height="112" fill="var(--warm)" opacity=".18"/>
+      <path class="br" d="M40 150.0 L45 142.2 L50 134.6 L55 127.4 L60 120.6 L65 114.0 L70 107.8 L75 101.8 L80 96.2 L85 91.0 L90 86.0 L95 81.4 L100 77.0 L105 73.0 L110 69.4 L115 66.0 L120 63.0 L125 60.2 L130 57.8 L135 55.8 L140 54.0 L145 52.6 L150 51.4 L155 50.6 L160 50.2 L165 50.0 L170 50.2 L175 50.6 L180 51.4 L185 52.6 L190 54.0 L195 55.8 L200 57.8 L205 60.2 L210 63.0 L215 66.0 L220 69.4 L225 73.0 L230 77.0 L235 81.4 L240 86.0 L245 91.0 L250 96.2 L255 101.8 L260 107.8 L265 114.0 L270 120.6 L275 127.4 L280 134.6 L285 142.2 L290 150.0" style="stroke-width:2"/>
+      <text class="sm" x="165" y="40" text-anchor="middle">온도 T(x): 가운데가 가장 뜨겁다</text>
+      <rect x="40" y="170" width="250" height="14" rx="3" fill="var(--beam)" opacity=".28" stroke="var(--beam)"/><path d="M60 168 q-3 -4 0 -8 q3 -4 0 -8" style="fill:none;stroke:var(--beam);stroke-width:1.6;stroke-linecap:round"/><path d="M90 168 q-3 -4 0 -8 q3 -4 0 -8" style="fill:none;stroke:var(--beam);stroke-width:1.6;stroke-linecap:round"/><path d="M120 168 q-3 -4 0 -8 q3 -4 0 -8" style="fill:none;stroke:var(--beam);stroke-width:1.6;stroke-linecap:round"/><path d="M150 168 q-3 -4 0 -8 q3 -4 0 -8" style="fill:none;stroke:var(--beam);stroke-width:1.6;stroke-linecap:round"/><path d="M180 168 q-3 -4 0 -8 q3 -4 0 -8" style="fill:none;stroke:var(--beam);stroke-width:1.6;stroke-linecap:round"/><path d="M240 168 q-3 -4 0 -8 q3 -4 0 -8" style="fill:none;stroke:var(--beam);stroke-width:1.6;stroke-linecap:round"/><path d="M270 168 q-3 -4 0 -8 q3 -4 0 -8" style="fill:none;stroke:var(--beam);stroke-width:1.6;stroke-linecap:round"/>
+      <rect x="215" y="170" width="14" height="14" fill="var(--warm)"/>
+      <rect x="16" y="160" width="28" height="36" rx="2" fill="var(--probetint)" stroke="var(--probe)"/>
+      <rect x="286" y="160" width="28" height="36" rx="2" fill="var(--probetint)" stroke="var(--probe)"/>
+      <text class="sm" x="30" y="214" text-anchor="middle">얼음물</text><text class="sm" x="300" y="214" text-anchor="middle">얼음물</text>
+      <text class="sm" x="30" y="229" text-anchor="middle">0 °C</text><text class="sm" x="300" y="229" text-anchor="middle">0 °C</text>
+      <line class="ln" x1="110" y1="204" x2="220" y2="204"/><polygon points="220,200 228,204 220,208" fill="var(--muted)"/>
+      <text class="sm" x="165" y="222" text-anchor="middle" style="fill:var(--beam)">전류 → 막대 전체가 고르게 발열(q)</text>
+      <text class="sm" x="222" y="198" text-anchor="middle">Δx</text>
+      <line class="ln dim" x1="229" y1="170" x2="440" y2="90" style="stroke-dasharray:3 3"/>
+      <line class="ln dim" x1="229" y1="184" x2="440" y2="170" style="stroke-dasharray:3 3"/>
+
+      <text x="490" y="20" text-anchor="middle">얇은 토막 하나</text>
+      <rect x="440" y="90" width="100" height="80" rx="3" class="cell"/>
+      <rect x="440" y="90" width="100" height="80" rx="3" fill="var(--beam)" opacity=".15"/>
+      <text class="hlt" x="490" y="128" text-anchor="middle" style="fill:var(--beam)">q·Δx</text>
+      <text class="sm" x="490" y="146" text-anchor="middle">안에서 만든 열</text>
+      <line x1="372" y1="130" x2="428" y2="130" style="stroke:var(--beam);stroke-width:2"/><polygon points="428,125 438,130 428,135" fill="var(--beam)"/>
+      <line x1="544" y1="130" x2="614" y2="130" style="stroke:var(--beam);stroke-width:5"/><polygon points="612,122 626,130 612,138" fill="var(--beam)"/>
+      <text class="sm" x="402" y="104" text-anchor="middle">들어오는 열</text><text class="sm" x="402" y="119" text-anchor="middle">φ(x)</text>
+      <text class="sm" x="584" y="104" text-anchor="middle">나가는 열</text><text class="sm" x="584" y="119" text-anchor="middle">φ(x+Δx)</text>
+      <text class="sm" x="440" y="188" text-anchor="middle">x</text><text class="sm" x="540" y="188" text-anchor="middle">x+Δx</text>
+      <text class="sm" x="490" y="218" text-anchor="middle">나가는 열 − 들어오는 열 = 안에서 만든 열</text>
+      <text class="sm" x="490" y="238" text-anchor="middle">열의 흐름 φ = −k·dT/dx (푸리에 법칙)</text>
+    </svg>
+    <figcaption>그림 3. 3절에서 푸는 상황. 왼쪽: 양 끝을 얼음물에 담가 0 °C로 붙잡은 막대에 전류를 흘리면 막대 전체가 고르게 데워집니다(빨간 물결 — 막대 어디서나 똑같이 생기는 열). 열은 양 끝으로만 빠져나갈 수 있어서 가운데가 가장 뜨겁고 양 끝이 0 °C인 곡선이 됩니다. 오른쪽: 막대에서 떼어 낸 얇은 토막(왼쪽의 노란 띠). 가운데보다 오른쪽에 있으니 열은 오른쪽으로 흐르고, 토막 안에서 열이 더해지므로 오른쪽 면으로 나가는 열(굵은 화살표)이 왼쪽 면으로 들어오는 열보다 그만큼 큽니다.</figcaption>
+  </figure>
+  <p>이 식이 어디서 나오는지 먼저 짚고 가겠습니다. 열은 뜨거운 곳에서 찬 곳으로 흐르고 흐르는 양은 온도가 얼마나 가파르게 변하느냐, 곧 온도의 기울기 dT/dx에 비례합니다. 비례 상수가 열전도율 k입니다. 열은 기울기를 거슬러 내려가므로 부호는 마이너스입니다(푸리에의 열전도 법칙).</p>
+  <div class="wr-math"><math display="block"><mtext>오른쪽으로 흐르는 열</mtext><mo>=</mo><mo>−</mo><mi>k</mi><mfrac><mrow><mi>d</mi><mi>T</mi></mrow><mrow><mi>d</mi><mi>x</mi></mrow></mfrac></math></div>
+  <p>막대에서 x부터 x+Δx까지 얇은 토막 하나를 떼어 봅니다(그림 3 오른쪽). 온도가 더 이상 변하지 않는 정상 상태라면 토막 안에서 만들어진 열 qΔx는 전부 양 끝으로 빠져나가야 합니다. 「오른쪽 끝으로 나가는 열 − 왼쪽 끝으로 들어오는 열 = 안에서 만든 열」입니다.</p>
+  <div class="wr-math"><math display="block"><mrow><mo>(</mo><mo>−</mo><mi>k</mi><msub><mrow><mfrac><mrow><mi>d</mi><mi>T</mi></mrow><mrow><mi>d</mi><mi>x</mi></mrow></mfrac><mo>|</mo></mrow><mrow><mi>x</mi><mo>+</mo><mi>Δ</mi><mi>x</mi></mrow></msub><mo>)</mo></mrow><mo>−</mo><mrow><mo>(</mo><mo>−</mo><mi>k</mi><msub><mrow><mfrac><mrow><mi>d</mi><mi>T</mi></mrow><mrow><mi>d</mi><mi>x</mi></mrow></mfrac><mo>|</mo></mrow><mi>x</mi></msub><mo>)</mo></mrow><mo>=</mo><mi>q</mi><mi>Δ</mi><mi>x</mi></math></div>
+  <p>양변을 Δx로 나누면 왼쪽은 「기울기가 Δx 사이에 얼마나 변했나 ÷ Δx」, 곧 기울기의 기울기인 2계 미분이 되어 맨 위의 식이 나옵니다. 모양으로 보면 가운데가 가장 뜨겁고 양 끝으로 갈수록 식는 위로 볼록한 곡선이라 T″가 음수입니다. 그래서 −k를 곱해야 양수인 발열 q와 맞습니다.</p>
+  <p>이 식을 격자에 올립니다. 막대를 간격 h로 6등분해 점 7개(x₀…x₆)를 찍습니다. 양 끝 두 점은 값이 0으로 정해져 있으니 모르는 것은 안쪽 다섯 점의 온도 T₁…T₅입니다. 각 안쪽 점에서 2계 미분을 2절의 1, −2, 1 식으로 바꿉니다. 점 3을 예로 들면 2절 식의 x 자리에 x₃을 넣습니다. x₃에서 한 칸 오른쪽(x₃+h)은 x₄, 한 칸 왼쪽(x₃−h)은 x₂이므로 이렇게 됩니다.</p>
+  <div class="wr-math"><math display="block"><msub><mrow><mfrac><mrow><msup><mi>d</mi><mn>2</mn></msup><mi>T</mi></mrow><mrow><mi>d</mi><msup><mi>x</mi><mn>2</mn></msup></mrow></mfrac><mo>|</mo></mrow><msub><mi>x</mi><mn>3</mn></msub></msub><mo>≈</mo><mfrac><mrow><msub><mi>T</mi><mn>4</mn></msub><mo>−</mo><mn>2</mn><msub><mi>T</mi><mn>3</mn></msub><mo>+</mo><msub><mi>T</mi><mn>2</mn></msub></mrow><msup><mi>h</mi><mn>2</mn></msup></mfrac></math></div>
+  <p>이것을 −kT″ = q의 T″ 자리에 넣고,</p>
+  <div class="wr-math"><math display="block"><mo>−</mo><mi>k</mi><mfrac><mrow><msub><mi>T</mi><mn>4</mn></msub><mo>−</mo><mn>2</mn><msub><mi>T</mi><mn>3</mn></msub><mo>+</mo><msub><mi>T</mi><mn>2</mn></msub></mrow><msup><mi>h</mi><mn>2</mn></msup></mfrac><mo>=</mo><mi>q</mi></math></div>
+  <p>양변에 −h²/k를 곱해 순서를 정리하면 점 3의 식이 됩니다.</p>
+  <div class="wr-math"><math display="block"><msub><mi>T</mi><mn>2</mn></msub><mo>−</mo><mn>2</mn><msub><mi>T</mi><mn>3</mn></msub><mo>+</mo><msub><mi>T</mi><mn>4</mn></msub><mo>=</mo><mo>−</mo><mfrac><mrow><msup><mi>h</mi><mn>2</mn></msup><mi>q</mi></mrow><mi>k</mi></mfrac></math></div>
+  <p>미분이 사라지고 T₂, T₃, T₄ 사이의 평범한 일차식이 되었습니다. 계수 1, −2, 1이 붙는 이유는 2.3절에서 본 그대로이고, 막대에서는 여기에 물리적인 뜻이 하나 더 있습니다. 푸리에 법칙대로 열은 온도 차에 비례해 흐르니 오른쪽 이웃에서 점 3으로 들어오는 열은 T₄ − T₃에, 왼쪽 이웃에서 들어오는 열은 T₂ − T₃에 비례합니다. 둘을 더한 T₂ − 2T₃ + T₄가 이웃에서 점 3으로 모여드는 열의 합입니다. 그러니 이 식은 「점 3으로 모여드는 열이 −h²q/k」, 곧 음수이고 점 3이 스스로 만든 열만큼 이웃으로 빠져나간다는 열 균형입니다. 이 규칙은 점마다 똑같습니다. 어느 점이든 자기는 −2, 양옆은 1이라는 「이웃과 열을 주고받는 규칙」 하나를 점 1부터 점 5까지 차례로 대입하면 식이 다섯 개 생깁니다. 점 1의 식에는 왼쪽 이웃 T₀이 들어가지만 T₀ = 0으로 이미 정해져 있어 빠지고 점 5 식의 T₆도 마찬가지입니다.</p>
+  <div class="wr-math"><math display="block"><mtable columnalign="right right right right right left" columnspacing="0.4em" rowspacing="0.35em"><mtr><mtd><mtext>점 1:&#x2002;</mtext></mtd><mtd><mo>−</mo><mn>2</mn><msub><mi>T</mi><mn>1</mn></msub></mtd><mtd><mo>+</mo><msub><mi>T</mi><mn>2</mn></msub></mtd><mtd></mtd><mtd></mtd><mtd></mtd><mtd><mo>=</mo><mo>−</mo><msup><mi>h</mi><mn>2</mn></msup><mi>q</mi><mo>/</mo><mi>k</mi></mtd></mtr><mtr><mtd><mtext>점 2:&#x2002;</mtext></mtd><mtd><msub><mi>T</mi><mn>1</mn></msub></mtd><mtd><mo>−</mo><mn>2</mn><msub><mi>T</mi><mn>2</mn></msub></mtd><mtd><mo>+</mo><msub><mi>T</mi><mn>3</mn></msub></mtd><mtd></mtd><mtd></mtd><mtd><mo>=</mo><mo>−</mo><msup><mi>h</mi><mn>2</mn></msup><mi>q</mi><mo>/</mo><mi>k</mi></mtd></mtr><mtr><mtd><mtext>점 3:&#x2002;</mtext></mtd><mtd></mtd><mtd><msub><mi>T</mi><mn>2</mn></msub></mtd><mtd><mo>−</mo><mn>2</mn><msub><mi>T</mi><mn>3</mn></msub></mtd><mtd><mo>+</mo><msub><mi>T</mi><mn>4</mn></msub></mtd><mtd></mtd><mtd><mo>=</mo><mo>−</mo><msup><mi>h</mi><mn>2</mn></msup><mi>q</mi><mo>/</mo><mi>k</mi></mtd></mtr><mtr><mtd><mtext>점 4:&#x2002;</mtext></mtd><mtd></mtd><mtd></mtd><mtd><msub><mi>T</mi><mn>3</mn></msub></mtd><mtd><mo>−</mo><mn>2</mn><msub><mi>T</mi><mn>4</mn></msub></mtd><mtd><mo>+</mo><msub><mi>T</mi><mn>5</mn></msub></mtd><mtd><mo>=</mo><mo>−</mo><msup><mi>h</mi><mn>2</mn></msup><mi>q</mi><mo>/</mo><mi>k</mi></mtd></mtr><mtr><mtd><mtext>점 5:&#x2002;</mtext></mtd><mtd></mtd><mtd></mtd><mtd></mtd><mtd><msub><mi>T</mi><mn>4</mn></msub></mtd><mtd><mo>−</mo><mn>2</mn><msub><mi>T</mi><mn>5</mn></msub></mtd><mtd><mo>=</mo><mo>−</mo><msup><mi>h</mi><mn>2</mn></msup><mi>q</mi><mo>/</mo><mi>k</mi></mtd></mtr></mtable></math></div>
+  <p>미지수 다섯 개에 식 다섯 개, 곧 연립 일차방정식입니다. 우변이 다섯 줄 모두 똑같이 −h²q/k인 것은 발열이 고르게 생겨서입니다. 만약 점 3 한 곳에서만 열을 넣었다면 우변은 점 3의 줄에만 있고 나머지 줄은 0이 됩니다. 같은 미지수끼리 세로로 줄을 맞춰 놓았는데 여기서 T는 지우고 앞에 붙은 숫자만 남기면 그림 4 오른쪽의 행렬이 됩니다. 행렬은 이렇게 읽습니다. <b>가로줄 하나가 식 하나</b>(위에서부터 점 1~5의 식)이고 <b>세로줄 하나가 미지수 하나</b>(왼쪽부터 T₁~T₅)입니다. 칸의 숫자는 그 식에서 그 미지수에 곱해진 계수입니다. 셋째 가로줄을 보면 T₂ 칸에 1, T₃ 칸에 −2, T₄ 칸에 1이 있고 점 3의 식에 나오지 않는 T₁과 T₅ 칸은 0입니다.</p>
+  <figure class="wr-fig">
+    <svg class="wf" viewBox="0 0 640 250" role="img" aria-label="왼쪽: 양 끝이 0도로 고정된 막대에 점 7개를 찍은 격자. 점 3 위에 계수 1, −2, 1이 양옆 점과 이어져 있다. 오른쪽: 5행 5열 행렬. 대각선에 −2, 바로 위아래 대각선에 1이 있고 나머지는 모두 0인 삼중대각 행렬이다.">
+      <text x="160" y="22" text-anchor="middle">격자 위의 막대</text>
+      <rect x="22" y="112" width="276" height="16" rx="3" class="cell"/>
+      <rect x="10" y="100" width="18" height="40" rx="2" fill="var(--probetint)" stroke="var(--probe)"/>
+      <rect x="292" y="100" width="18" height="40" rx="2" fill="var(--probetint)" stroke="var(--probe)"/>
+      <text class="sm" x="19" y="160" text-anchor="middle">0 °C</text>
+      <text class="sm" x="301" y="160" text-anchor="middle">0 °C</text>
+      <g>
+        <circle class="nd" cx="25" cy="120" r="5"/><circle class="nd" cx="70" cy="120" r="5"/><circle class="nd" cx="115" cy="120" r="5"/>
+        <circle cx="160" cy="120" r="6" fill="var(--warm)"/>
+        <circle class="nd" cx="205" cy="120" r="5"/><circle class="nd" cx="250" cy="120" r="5"/><circle class="nd" cx="295" cy="120" r="5"/>
+      </g>
+      <g class="sm">
+        <text class="sm" x="25" y="190" text-anchor="middle">x₀</text><text class="sm" x="70" y="190" text-anchor="middle">x₁</text><text class="sm" x="115" y="190" text-anchor="middle">x₂</text>
+        <text class="sm" x="160" y="190" text-anchor="middle">x₃</text><text class="sm" x="205" y="190" text-anchor="middle">x₄</text><text class="sm" x="250" y="190" text-anchor="middle">x₅</text><text class="sm" x="295" y="190" text-anchor="middle">x₆</text>
+      </g>
+      <path class="ln hl" d="M115 104 Q137 74 160 104 M205 104 Q183 74 160 104" fill="none" style="stroke-width:2"/>
+      <text class="hlt" x="115" y="70" text-anchor="middle">1</text>
+      <text class="hlt" x="160" y="62" text-anchor="middle">−2</text>
+      <text class="hlt" x="205" y="70" text-anchor="middle">1</text>
+      <line class="ln" x1="70" y1="212" x2="115" y2="212"/><line class="ln" x1="70" y1="207" x2="70" y2="217"/><line class="ln" x1="115" y1="207" x2="115" y2="217"/>
+      <text class="sm" x="92" y="232" text-anchor="middle">h</text>
+
+      <text x="490" y="22" text-anchor="middle">점마다 식 하나 → 행렬</text>
+      <g id="fd2-m"></g>
+      <text class="sm" x="490" y="236" text-anchor="middle">대각선 세 줄 말고는 전부 0</text>
+    </svg>
+    <figcaption>그림 4. 왼쪽은 막대에 찍은 점 7개이고, 점 3 위의 1, −2, 1은 점 3의 식에서 각 점 온도에 곱해지는 계수입니다. 오른쪽 행렬은 가로줄이 식(점 1~5), 세로줄이 미지수(T₁~T₅)이고, 노란 줄이 점 3의 식 T₂ − 2T₃ + T₄입니다. 각 점은 바로 옆 점하고만 엮여 있어서 행렬은 대각선 세 줄(삼중대각)만 차고 나머지는 모두 0입니다.</figcaption>
+  </figure>
+  <p>이 행렬에서 눈여겨볼 것은 대부분이 0이라는 점입니다. 각 점의 식에 자기 자신과 바로 옆 점만 들어가서 그렇습니다. 3차원으로 가도 마찬가지여서 한 변을 100칸으로 나눈 상자는 미지수가 백만 개지만 각 줄에는 자기와 위아래·앞뒤·좌우 이웃, 합쳐서 7개만 0이 아닙니다. 백만×백만 행렬을 통째로 저장하면 메모리가 버티지 못하지만 0이 아닌 칸만 저장하면 노트북으로도 풀립니다. <b>유한 차분이 단순하고 빠르다는 말은 이 「이웃끼리만 엮인다」는 구조에서 나옵니다.</b></p>
+  <p>덤으로 하나. 이 문제의 진짜 답은 포물선(2차식)입니다. 2절의 오차 항이 4계 미분에 비례했는데 2차식은 4계 미분이 0이니 오차가 아예 없습니다. 그래서 이 막대 문제는 점 7개만 써도 격자점 온도가 정확한 값과 소수점 끝까지 일치합니다.</p>
+
+  <h2 id="s4">4. 시간도 칸으로 나누면 상한이 생긴다</h2>
+  <p>막대 문제는 시간이 흐르지 않는 정상 상태였습니다. 빛처럼 움직이는 것을 계산하려면 시간도 칸으로 나눠야 합니다. 줄을 퉁겼을 때 진동이 퍼지는 1차원 파동 방정식을 봅시다.</p>
+  <div class="wr-math"><math display="block"><mfrac><mrow><msup><mo>∂</mo><mn>2</mn></msup><mi>u</mi></mrow><mrow><mo>∂</mo><msup><mi>t</mi><mn>2</mn></msup></mrow></mfrac><mo>=</mo><msup><mi>c</mi><mn>2</mn></msup><mfrac><mrow><msup><mo>∂</mo><mn>2</mn></msup><mi>u</mi></mrow><mrow><mo>∂</mo><msup><mi>x</mi><mn>2</mn></msup></mrow></mfrac></math></div>
+  <p>공간 쪽 2계 미분은 앞에서처럼 1, −2, 1로, 시간 쪽 2계 미분도 똑같이 「다음 시각 − 2×지금 + 이전 시각」으로 바꿉니다. 정리하면 다음 시각의 값을 지금과 이전 시각의 값으로 바로 계산하는 식이 나옵니다. 위 첨자 n이 시간 칸, 아래 첨자 i가 공간 칸입니다.</p>
+  <div class="wr-math"><math display="block"><msubsup><mi>u</mi><mi>i</mi><mrow><mi>n</mi><mo>+</mo><mn>1</mn></mrow></msubsup><mo>=</mo><mn>2</mn><msubsup><mi>u</mi><mi>i</mi><mi>n</mi></msubsup><mo>−</mo><msubsup><mi>u</mi><mi>i</mi><mrow><mi>n</mi><mo>−</mo><mn>1</mn></mrow></msubsup><mo>+</mo><msup><mi>S</mi><mn>2</mn></msup><mo stretchy="false">(</mo><msubsup><mi>u</mi><mrow><mi>i</mi><mo>+</mo><mn>1</mn></mrow><mi>n</mi></msubsup><mo>−</mo><mn>2</mn><msubsup><mi>u</mi><mi>i</mi><mi>n</mi></msubsup><mo>+</mo><msubsup><mi>u</mi><mrow><mi>i</mi><mo>−</mo><mn>1</mn></mrow><mi>n</mi></msubsup><mo stretchy="false">)</mo><mo>,</mo><mspace width="1em"/><mi>S</mi><mo>=</mo><mfrac><mrow><mi>c</mi><mi>Δ</mi><mi>t</mi></mrow><mrow><mi>Δ</mi><mi>x</mi></mrow></mfrac></math></div>
+  <p>이번에는 연립방정식을 풀 필요조차 없습니다. 오른쪽이 전부 이미 아는 값이니 칸마다 대입만 하면 다음 시각이 나오고 그걸 반복하면 시간이 흘러갑니다. 이런 방식을 양해법(explicit)이라고 합니다.</p>
+  <p>그런데 여기에 함정이 하나 있습니다. 식에 남은 유일한 손잡이 S가 1을 넘으면 계산이 폭발합니다. <b>S는 「빛이 한 시간 칸 동안 가는 거리(cΔt)」를 「공간 한 칸(Δx)」으로 나눈 값입니다.</b> 식을 다시 보면 칸 i의 다음 값은 i−1, i, i+1 세 칸만 보고 정해지니 계산 안에서는 정보가 한 시간 칸에 많아야 한 공간 칸밖에 못 퍼집니다. 그런데 진짜 파동은 그 시간에 cΔt만큼 갑니다. cΔt가 Δx보다 크면 진짜 답은 계산이 아직 보지도 못한 먼 칸의 영향을 받는데 계산은 그걸 알 길이 없습니다. 1928년 쿠랑·프리드리히스·레비가 밝힌 이 조건을 세 사람 이름 앞 글자를 따서 CFL 조건이라고 부릅니다.</p>
+  <p>그런데 계산이 먼 칸을 「못 본다」는 것이 왜 숫자가 불어나는 폭발로 나타날까요. 기타줄 하나로 생각해 보겠습니다.</p>
+  <p><b>먼저 컴퓨터 속 기타줄부터 그려 봅니다.</b> 진짜 기타줄은 매끈하게 이어져 있지만 컴퓨터는 줄 위 몇몇 점의 높이만 기억합니다. 줄 위에 Δx 간격으로 점을 찍어 놓고 점마다 높이를 +나 −로 적는다고 보면 됩니다(그림 5 (a)). 줄을 튕기면 줄 전체가 활 모양 하나로 크게 출렁이기도 하고(낮은 음), 마디가 생겨 물결 여러 개로 출렁이기도 합니다(높은 음). 그림 5 (b)처럼 물결이 짧을수록 음이 높고 빨리 떱니다. 점으로 나눈 줄에서 만들 수 있는 가장 짧은 물결은 점이 하나씩 번갈아 위·아래·위·아래로 놓인 지그재그입니다. 점 사이에 물결을 더 촘촘히 넣을 자리가 없으니 이것이 점으로 나눈 줄이 낼 수 있는 가장 높은 음이고 가장 빨리 떠는 모양입니다. 컴퓨터는 이 떨림을 연속으로 보지 못하고 Δt마다 한 장씩 찍은 사진으로만 봅니다(그림 5 (c)). S = cΔt/Δx는 그 사진 간격이 얼마나 띄엄띄엄한가를 나타냅니다.</p>
+  <figure class="wr-fig" id="fd6">
+    <svg class="wf" viewBox="0 0 640 410" role="img" aria-label="(a) 매끈한 진짜 기타줄과, 그 위 몇 점의 높이만 기억하는 점으로 나눈 줄. 점 간격이 Δx. (b) 점으로 나눈 줄을 튕긴 세 모양: 활 모양 하나인 낮은 음, 물결 셋인 높은 음, 점이 번갈아 위아래로 놓인 가장 짧은 물결 지그재그. (c) 컴퓨터는 지그재그의 떨림을 Δt마다 찍은 사진으로만 본다. 직전·지금·다음 사진에서 가운데 점이 아래·위·아래로 뒤집힌다.">
+      <g id="fd6-g"></g>
+    </svg>
+    <figcaption>그림 5. 컴퓨터 속의 기타줄. (a) 매끈한 줄 대신 Δx 간격의 점 높이만 기억합니다. (b) 점으로 나눈 줄을 튕긴 모양은 물결이 짧을수록 음이 높고 빨리 떱니다. 오른쪽 지그재그가 점으로 나눈 줄이 만들 수 있는 가장 짧은 물결입니다. (c) 컴퓨터는 이 떨림을 Δt마다 찍은 사진으로만 봅니다. 노란 점이 그림 6에서 따라가는 점입니다.</figcaption>
+  </figure>
+  <p>지그재그 하나만 시험해 보면 됩니다. 어떤 모양이든 여러 파장의 물결을 겹친 것이라 그중 가장 빨리 떠는 지그재그가 가장 먼저 탈이 납니다. 뒤의 그림 7에서 계산이 터질 때 화면을 채우는 빽빽한 무늬도 이 지그재그입니다.</p>
+  <p><b>식을 두 부분으로 나눠 읽습니다.</b> 앞에서 본 갱신 식을 다시 쓰고 괄호 안 순서만 오른쪽·왼쪽을 앞으로 옮기면 두 덩어리로 갈립니다.</p>
+  <div class="wr-math"><math display="block"><mstyle displaystyle="true"><msubsup><mi>u</mi><mi>i</mi><mrow><mi>n</mi><mo>+</mo><mn>1</mn></mrow></msubsup><mo>=</mo><munder><munder><mrow><mn>2</mn><msubsup><mi>u</mi><mi>i</mi><mi>n</mi></msubsup><mo>−</mo><msubsup><mi>u</mi><mi>i</mi><mrow><mi>n</mi><mo>−</mo><mn>1</mn></mrow></msubsup></mrow><mo>⏟</mo></munder><mtext>관성</mtext></munder><mo>+</mo><munder><munder><mrow><msup><mi>S</mi><mn>2</mn></msup><mo stretchy="false">(</mo><msubsup><mi>u</mi><mrow><mi>i</mi><mo>+</mo><mn>1</mn></mrow><mi>n</mi></msubsup><mo>+</mo><msubsup><mi>u</mi><mrow><mi>i</mi><mo>−</mo><mn>1</mn></mrow><mi>n</mi></msubsup><mo>−</mo><mn>2</mn><msubsup><mi>u</mi><mi>i</mi><mi>n</mi></msubsup><mo stretchy="false">)</mo></mrow><mo>⏟</mo></munder><mtext>끌림</mtext></munder></mstyle></math></div>
+  <p>위 첨자 n은 사진 번호, 아래 첨자 i는 점 번호입니다. 말로 풀면 이렇습니다. 점 하나의 다음 높이는 「관성」과 「끌림」의 합입니다.</p>
+  <div class="wr-math"><math display="block"><mtext>다음</mtext><mo>=</mo><munder><munder><mrow><mn>2</mn><mo>×</mo><mtext>지금</mtext><mo>−</mo><mtext>직전</mtext></mrow><mo>⏟</mo></munder><mtext>관성</mtext></munder><mo>+</mo><munder><munder><mrow><msup><mi>S</mi><mn>2</mn></msup><mo>×</mo><mo stretchy="false">(</mo><mtext>오른쪽</mtext><mo>+</mo><mtext>왼쪽</mtext><mo>−</mo><mn>2</mn><mo>×</mo><mtext>지금</mtext><mo stretchy="false">)</mo></mrow><mo>⏟</mo></munder><mtext>끌림</mtext></munder></math></div>
+  <ul>
+    <li><b>관성</b> 2×지금 − 직전: 직전 사진에서 지금 사진까지 움직인 만큼 한 장 더 가면 있을 자리입니다. 두 점을 이은 직선을 한 칸 늘린 것과 같습니다.</li>
+    <li><b>끌림</b> S² × (왼쪽 + 오른쪽 − 2×지금): 이웃 쪽으로 당겨지는 만큼입니다. 이웃보다 높으면 아래로, 낮으면 위로 당겨집니다. 사진 간격이 길수록 한 장 사이에 당겨지는 시간도 길어서 S²배가 됩니다.</li>
+  </ul>
+  <p>식은 지금과 직전 두 장이 있어야 다음 장을 계산하므로 처음 두 장은 정해 주고 출발해야 합니다. 여기서는 가운데 점이 직전에 −1, 지금 +1에 있고 양옆 점은 늘 그 반대인, 사진마다 위아래가 뒤집히는 지그재그로 출발합니다. 그 뒤는 전부 식이 계산합니다.</p>
+  <figure class="wr-fig" id="fd5">
+    <svg class="wf" viewBox="0 138 640 290" role="img" aria-label="가운데 점의 높이를 사진(단계)마다 찍은 세 칸. 직전 −1과 지금 +1을 이은 직선을 한 칸 늘린 +3이 관성이고, 거기서 끌림만큼 내려온 곳이 다음 높이다. S = 1은 끌림 −4로 정확히 −1에 내려앉아 ±1을 반복하고, S = 0.9는 끌림 −3.24로 −0.24에서 멈춰 1 안팎을 천천히 오가며, S = 1.05는 끌림 −4.41로 −1.41까지 넘어가 뒤집힐 때마다 커진다.">
+      <g id="fd5-g"></g>
+    </svg>
+    <figcaption>그림 6. 지그재그 점 하나를 사진마다 따라가 본 것. 세 칸은 그림 5 (c)의 노란 점 높이를 단계마다 찍은 것으로, 회색 점선이 관성(직전과 지금을 이은 직선을 한 칸 늘린 +3), 세로 화살표가 끌림입니다. 관성은 세 칸 모두 같고, 끌림이 −4보다 약한가 센가만 다릅니다.</figcaption>
+  </figure>
+  <p><b>기본 상태, S = 1.</b> 관성은 2×(+1) − (−1) = +3이고 양옆이 모두 −1이니 끌림은 1 × (−1 − 1 − 2) = −4입니다. 다음 높이는 3 − 4 = −1입니다. 끌림이 관성을 딱 반대편 같은 높이로 돌려놓아서 +1, −1, +1, −1이 끝없이 반복되고 크기도 1에서 변하지 않습니다.</p>
+  <p><b>S가 1보다 작으면, 예컨대 S = 0.9.</b> 관성은 그대로 +3인데 끌림이 −4 × 0.81 = −3.24로 약해져서 다음 높이는 −0.24입니다. 덜 당겨져 반대편까지 가지 못합니다. 이어서 계산하면 −0.70, +1.11, −0.68, −0.27, +1.01로, 한 장마다 뒤집히던 것이 몇 장에 걸쳐 천천히 오가는 것으로 바뀔 뿐 크기는 1 안팎에 머뭅니다. 덜 갔으니 다음 장의 기세도 그만큼 작아서 모자란 것이 쌓이지 않고 그때그때 되돌아오기 때문입니다. 계산은 안전하고, 틀리는 것은 빨리 떨어야 할 짧은 물결이 느리게 떤다는 점입니다. 그림 7에서 S를 0.5로 두면 펄스 뒤에 잔물결이 끌리는 것도 이 때문입니다.</p>
+  <p><b>S가 1보다 크면, 예컨대 S = 1.05.</b> 관성은 또 +3인데 끌림이 −4 × 1.1025 = −4.41로 세져서 다음 높이는 −1.41입니다. 반대편 −1에서 멈추지 못하고 넘어갑니다. 넘친 만큼 내려가는 기세가 커졌고 양옆 점도 반대편으로 더 멀어져 끌림도 커졌습니다. 그러니 다음 장에서 또 넘칩니다. +2.40, −4.37, +8.13으로 뒤집힐 때마다 넘친 것이 다음 넘침의 밑천이 되어 불어납니다.</p>
+  <p><b>세 경우 모두 관성은 +3으로 같고, 끌림이 −4보다 약한가 센가만 다릅니다.</b> 출발 모양을 바꿔도, 예컨대 지그재그를 손으로 잡고 있다가 가만히 놓아도(직전 = 지금 = +1) 숫자만 달라질 뿐 S &lt; 1은 일정한 크기 안에 머물고 S &gt; 1은 불어난다는 결론은 같습니다. 그리고 지그재그는 양옆 점이 늘 반대편에 있어서 끌림이 모든 모양 중 가장 세게 걸립니다. 그래서 S가 1을 넘으면 이 모양이 가장 먼저 넘칩니다.</p>
+  <p>이제 실제 계산에서 확인해 봅니다. 그림 7은 가운데에 펄스 하나를 놓고 4절의 갱신 식을 그대로 반복한 것입니다. 펄스에는 지그재그가 처음에 아주 조금밖에 섞여 있지 않습니다. 그래서 S를 1보다 살짝 크게 두면 한동안 멀쩡해 보이다가 어느 순간 지그재그가 펄스보다 커지며 화면을 뚫습니다.</p>
+  <figure class="wr-fig" id="fd3">
+    <svg class="wf" viewBox="0 0 640 260" role="img" aria-label="1차원 격자 위에서 펄스 하나가 좌우로 갈라져 퍼지는 계산. 쿠랑 수 S가 1이면 펄스가 모양 그대로 이동하고, 1보다 작으면 뒤에 잔물결이 끌리고, 1보다 조금만 커도 격자 크기의 지그재그 무늬가 생겨 수십 단계 만에 화면 밖으로 폭발한다.">
+      <g id="fd3-g"></g>
+    </svg>
+    <div class="wr-ctl">
+      <label for="fd3-s">쿠랑 수 S = cΔt/Δx</label><input type="range" id="fd3-s" min="0.3" max="1.1" step="0.01" value="1"><output id="fd3-so"></output>
+    </div>
+    <div class="wr-ctl"><button type="button" id="fd3-run" aria-pressed="false">재생</button><button type="button" id="fd3-reset">처음으로</button><span id="fd3-read"></span></div>
+    <figcaption>그림 7. 가운데에서 펄스 하나를 놓고 4절의 갱신 식을 그대로 반복한 결과입니다. S = 1에서는 펄스가 모양을 그대로 유지한 채 두 갈래로 갈라져 퍼집니다(1차원에서만 생기는 특별한 경우로, 오차가 정확히 상쇄됩니다). S를 0.5쯤으로 낮추면 계산은 안정하지만 펄스 뒤에 잔물결이 끌립니다. 격자가 짧은 파장을 실제보다 느리게 전달하는 「수치 분산」입니다. S를 1.01로만 올려도 처음엔 멀쩡하다가 어느 순간 지그재그 무늬가 솟아 백 단계도 안 되어 화면을 뚫습니다(1.1이면 서른 단계 안쪽).</figcaption>
+  </figure>
+  <p>여기까지는 1차원입니다. 2차원·3차원에서 S의 한계가 어떻게 달라지는지, 터지지 않는 범위 안에서 S를 실제로 얼마로 두는지는 FDTD를 본 뒤 6절에서 다룹니다.</p>
+
+  <h2 id="s5">5. 반 칸씩 엇갈리면 FDTD가 된다</h2>
+  <p>이제 빛입니다. 맥스웰 방정식은 2계 미분이 아니라 1계 미분 두 개가 서로 맞물린 모양입니다. x 방향으로 가는 빛에서 전기장 E와 자기장 H만 남기면 다음 두 식이 됩니다.</p>
+  <div class="wr-math"><math display="block"><mfrac><mrow><mo>∂</mo><mi>H</mi></mrow><mrow><mo>∂</mo><mi>t</mi></mrow></mfrac><mo>=</mo><mfrac><mn>1</mn><mi>μ</mi></mfrac><mfrac><mrow><mo>∂</mo><mi>E</mi></mrow><mrow><mo>∂</mo><mi>x</mi></mrow></mfrac><mo>,</mo><mspace width="2em"/><mfrac><mrow><mo>∂</mo><mi>E</mi></mrow><mrow><mo>∂</mo><mi>t</mi></mrow></mfrac><mo>=</mo><mfrac><mn>1</mn><mi>ε</mi></mfrac><mfrac><mrow><mo>∂</mo><mi>H</mi></mrow><mrow><mo>∂</mo><mi>x</mi></mrow></mfrac></math></div>
+  <p>E의 시간 변화는 H의 공간 기울기가 정하고, H의 시간 변화는 E의 공간 기울기가 정합니다. 이 1계 미분들을 차분으로 바꿔야 하는데 2절에서 본 대로 정확도를 원하면 중앙 차분을 써야 합니다. 그런데 E와 H를 같은 점에 두면 E의 기울기를 중앙 차분으로 구할 때 2h 떨어진 양옆 점을 써야 하고 정작 가운데 점은 쓰지 않습니다. 정보 절반을 버리는 셈입니다.</p>
+  <p>1966년 Kane Yee가 낸 해법은 E와 H를 <b>공간에서도 시간에서도 반 칸씩 엇갈려 놓는 것</b>이었습니다. E는 정수 칸(i)과 정수 시각(n)에, H는 반 칸(i+½)과 반 시각(n+½)에 둡니다. 그러면 H가 필요로 하는 E의 기울기는 H 양옆에 있는 E 두 점의 차이로, 간격 h짜리 중앙 차분이 됩니다. 시간도 마찬가지로, H를 n−½에서 n+½로 넘길 때 필요한 E는 정확히 그 가운데 시각 n에 있습니다. 모든 미분이 자동으로 중앙 차분이 되는 배치입니다.</p>
+  <figure class="wr-fig">
+    <svg class="wf" viewBox="0 0 640 270" role="img" aria-label="가로가 공간, 세로가 시간인 격자. 빨간 원(E)은 정수 칸과 정수 시각에, 노란 사각형(H)은 반 칸과 반 시각에 엇갈려 놓여 있다. 화살표가 보여 주듯 E 하나를 다음 시각으로 넘길 때는 반 시각 전 양옆의 H 두 개를 쓰고, H 하나를 넘길 때는 반 시각 전 양옆의 E 두 개를 쓴다.">
+      <g id="fd4-g"></g>
+    </svg>
+    <figcaption>그림 8. Yee 격자를 1차원으로 펼친 모습(가로 = 공간, 세로 = 시간). 빨간 원이 E, 노란 사각형이 H입니다. 파란 화살표처럼 E 하나를 새로 계산할 때는 바로 아래(반 시각 전) 양옆 H 두 개의 차이만 쓰고, H도 같은 방식으로 아래 양옆 E 두 개만 씁니다. E와 H가 번갈아 반 걸음씩 앞서 나가며 시간이 흐르기 때문에 이 방식을 개구리 뜀(leapfrog)이라고 부릅니다.</figcaption>
+  </figure>
+  <p>이 두 갱신 식에서 H를 소거하면 놀랍게도 4절의 파동 식과 글자 하나 다르지 않은 식이 나옵니다. <b>그림 7에서 돌린 것이 사실 1차원 FDTD였던 셈입니다.</b> S = 1에서 펄스가 완벽하게 이동하는 것도, 1을 넘으면 폭발하는 것도 FDTD에서 그대로 일어납니다.</p>
+  <p>3차원 Yee 격자는 이 생각을 상자로 넓힌 것입니다. 정육면체 칸의 모서리 가운데에 E의 세 성분을, 면의 가운데에 H의 세 성분을 놓으면 각 E 성분 주위를 H 네 개가 감싸고 각 H 성분 주위를 E 네 개가 감쌉니다. 맥스웰 방정식의 회전(curl)이 「주위를 한 바퀴 도는 양」이라는 것을 격자 모양 자체가 담고 있습니다.</p>
+  <p>실제로 써 보면 감각이 하나 생깁니다. <b>네모 칸은 둥근 모양을 계단으로 자릅니다.</b> 링 공진기의 곡면은 격자 위에서 울퉁불퉁한 계단이 되어 공진 파장을 미세하게 틀어 놓습니다. MEEP 같은 프로그램은 그래서 경계 칸에서 재료를 평균 내는 처리를 넣습니다. 처음부터 곡면을 따라가는 요소로 쪼개는 쪽이 유한 요소입니다.</p>
+
+  <h2 id="s6">6. 적절한 S 고르기 — 안정성과 분산</h2>
+  <p>4절에서는 1차원 줄만 봤습니다. 실제 FDTD는 2차원이나 3차원입니다. 그때 S를 얼마로 둘지는 두 가지를 따로 따져야 합니다. 하나는 계산이 터지지 않는가(안정성)이고, 다른 하나는 터지지 않더라도 얼마나 정확한가(분산)입니다. 여기서 S는 모든 방향의 칸 크기가 Δx로 같을 때의 cΔt/Δx입니다.</p>
+  <h3 class="wr-sub">6.1 안정성 — 차원이 늘면 한계가 내려간다</h3>
+  <p>4절의 지그재그 논리를 그대로 넓히면 됩니다. 먼저 1차원 끌림을 문자로 묶어 둡니다. 지그재그에서 가운데 점이 +1이면 양옆은 −1이니 괄호 안이 늘 −4가 됩니다.</p>
+  <div class="wr-math"><math display="block"><mtext>끌림</mtext><mo>=</mo><msup><mi>S</mi><mn>2</mn></msup><mo>×</mo><mo stretchy="false">(</mo><mtext>왼쪽</mtext><mo>+</mo><mtext>오른쪽</mtext><mo>−</mo><mn>2</mn><mo>×</mo><mtext>지금</mtext><mo stretchy="false">)</mo><mo>=</mo><msup><mi>S</mi><mn>2</mn></msup><mo>×</mo><mo stretchy="false">(</mo><mo>−</mo><mn>1</mn><mo>−</mo><mn>1</mn><mo>−</mo><mn>2</mn><mo stretchy="false">)</mo><mo>=</mo><mo>−</mo><mn>4</mn><msup><mi>S</mi><mn>2</mn></msup></math></div>
+  <p>4절에서 계산한 −4(S = 1), −3.24(S = 0.9), −4.41(S = 1.05)는 모두 이 −4S²에 S를 넣은 값입니다.</p>
+  <p>2차원에서는 점이 좌우뿐 아니라 위아래 이웃도 봅니다. 가장 짧은 물결은 바둑판처럼 이웃 칸마다 위아래가 엇갈린 무늬라서 위아래 이웃도 −1이고 방향마다 괄호가 하나씩 더해집니다.</p>
+  <div class="wr-math"><math display="block"><mtext>끌림</mtext><mo>=</mo><msup><mi>S</mi><mn>2</mn></msup><mo>×</mo><mo>[</mo><munder><munder><mrow><mo stretchy="false">(</mo><mtext>왼쪽</mtext><mo>+</mo><mtext>오른쪽</mtext><mo>−</mo><mn>2</mn><mo>×</mo><mtext>지금</mtext><mo stretchy="false">)</mo></mrow><mo>⏟</mo></munder><mtext>−4</mtext></munder><mo>+</mo><munder><munder><mrow><mo stretchy="false">(</mo><mtext>위</mtext><mo>+</mo><mtext>아래</mtext><mo>−</mo><mn>2</mn><mo>×</mo><mtext>지금</mtext><mo stretchy="false">)</mo></mrow><mo>⏟</mo></munder><mtext>−4</mtext></munder><mo>]</mo><mo>=</mo><mo>−</mo><mn>8</mn><msup><mi>S</mi><mn>2</mn></msup></math></div>
+  <p>3차원에서는 앞뒤 괄호가 하나 더 붙어 −12S²가 됩니다. 관성은 차원과 상관없이 +3입니다. 4절에서 본 대로 끌림이 −4보다 세지면 넘치기 시작하니, −4S², −8S², −12S²가 각각 −4보다 세지지 않을 조건이 안정 조건입니다.</p>
+  <table class="wr-tbl">
+    <thead><tr><th>차원</th><th>지그재그에 걸리는 끌림</th><th>안정 조건</th></tr></thead>
+    <tbody>
+      <tr><td>1차원</td><td>−4S²</td><td>S ≤ 1</td></tr>
+      <tr><td>2차원</td><td>−8S²</td><td>S ≤ 1/√2 ≈ 0.707</td></tr>
+      <tr><td>3차원</td><td>−12S²</td><td>S ≤ 1/√3 ≈ 0.577</td></tr>
+    </tbody>
+  </table>
+  <p>이웃이 많을수록 한꺼번에 당기는 힘이 커지니 사진 간격을 더 좁혀야 합니다. 이 때문에 3차원 FDTD에서 격자를 촘촘하게 하면 계산이 생각보다 훨씬 오래 걸립니다. 공간 칸을 반으로 줄이면 점의 수가 8배가 됩니다. Δt도 반으로 줄여야 하니 단계 수가 2배, 합쳐서 16배입니다.</p>
+  <h3 class="wr-sub">6.2 분산 — 터지지 않아도 물결마다 속도가 다르다</h3>
+  <p>진공의 빛은 파장과 상관없이 모두 c로 갑니다. 그런데 격자 위에서는 짧은 물결일수록 느려집니다. 4절의 S = 0.9에서 지그재그가 제 빠르기를 내지 못한 것이 극단적인 경우입니다. 파장에 따라 속도가 달라지는 이 현상을 수치 분산이라고 부릅니다. 그 크기는 한 파장에 점이 몇 개 들어가느냐와 S로 정해집니다. 아래 표는 격자 위 물결이 실제보다 몇 % 느린지를 계산한 것입니다.</p>
+  <table class="wr-tbl">
+    <thead><tr><th>한 파장에 점</th><th>1차원 S = 0.5</th><th>1차원 S = 0.99</th><th>3차원 S = 0.5 축 방향</th><th>3차원 S = 0.5 대각선</th><th>3차원 S = 0.57 축 방향</th></tr></thead>
+    <tbody>
+      <tr><td>10개</td><td>1.24 %</td><td>0.034 %</td><td>1.24 %</td><td>0.14 %</td><td>1.12 %</td></tr>
+      <tr><td>20개</td><td>0.31 %</td><td>0.008 %</td><td>0.31 %</td><td>0.034 %</td><td>0.28 %</td></tr>
+      <tr><td>30개</td><td>0.14 %</td><td>0.004 %</td><td>0.14 %</td><td>0.015 %</td><td>0.12 %</td></tr>
+    </tbody>
+  </table>
+  <p>표에서 읽을 것이 세 가지 있습니다. <b>첫째, 점 개수가 두 배가 되면 오차는 4분의 1이 됩니다.</b> 2절에서 본 중앙 차분의 h² 오차가 그대로 드러납니다. <b>둘째, 3차원에서는 S로 오차를 지울 수 없습니다.</b> 1차원에서는 S를 1에 붙이면 오차가 거의 0이 되지만 3차원 축 방향은 한계(0.577) 바로 아래에서도 한 파장에 10점이면 1.1 %가 남습니다. 오차를 줄이는 손잡이는 결국 점 개수입니다. 거꾸로 S를 줄인다고 정확해지지도 않습니다. 3차원 축 방향에서 S를 0.5에서 0.3으로 낮추면 10점 기준 오차가 1.24 %에서 1.50 %로 오히려 커집니다. 공간 칸이 만드는 오차와 시간 칸이 만드는 오차가 서로 일부를 상쇄하는데 시간 칸만 줄이면 그 상쇄가 깨지기 때문입니다. <b>셋째, 3차원에서는 방향에 따라 속도가 다릅니다.</b> 격자 축을 따라가는 빛이 가장 느리고 대각선으로 가는 빛이 가장 빠릅니다(그림 9 오른쪽). 진짜 공간에는 없는, 네모 격자가 만든 방향성이라서 수치 이방성이라고 부릅니다.</p>
+  <p>위 표의 숫자는 격자 위의 모양을 여러 파장의 물결로 쪼갠 뒤, 물결마다 한 단계에 얼마나 커지고 얼마나 도는지를 계산해서 얻습니다. 폰 노이만 분석이라고 부릅니다. 물결로 쪼갤 때 푸리에 급수가 쓰입니다. 커지는 정도에서 6.1의 안정 조건이 나오고 도는 정도에서 이 표의 분산이 나옵니다. 차분을 만드는 데는 2절의 테일러 전개면 충분하니 푸리에는 이렇게 파장별로 정확도를 따지고 싶을 때만 필요합니다.</p>
+  <figure class="wr-fig" id="fd7">
+    <svg class="wf" viewBox="0 0 640 290" role="img" aria-label="왼쪽: 한 파장에 찍은 점 수에 따른 속도 오차를 로그 축에 그린 것. 점이 두 배가 되면 오차가 4분의 1로 줄어 모든 선이 같은 기울기로 내려간다. 1차원 S = 0.99는 거의 0에 붙고, 3차원 축 방향은 S = 0.5든 한계 근처 0.57이든 비슷하며, 대각선 방향은 그보다 한참 작다. 오른쪽: 한 파장에 10점, S = 0.5일 때 방향에 따른 격자 위 빛의 속도. 점선 원이 진짜 속도이고, 격자 위 속도는 축 방향에서 가장 많이 줄어 둥근 네모 모양이 된다.">
+      <g id="fd7-g"></g>
+    </svg>
+    <figcaption>그림 9. 수치 분산의 크기와 방향성. 왼쪽은 한 파장에 찍은 점 수에 따라 격자 위 물결이 실제보다 몇 % 느린지를 그린 것으로, 모든 선이 점 개수의 제곱에 반비례해 같은 기울기로 내려갑니다. 3차원 축 방향(S = 0.5)은 1차원 S = 0.5와 정확히 겹칩니다. 축을 따라가는 빛에게는 옆 방향 이웃이 보이지 않기 때문입니다. 오른쪽은 3차원 격자의 한 평면에서 방향에 따른 속도로, 차이를 20배 키워 그렸습니다. 점선 원이 진짜 속도 c이고, 격자 위 속도는 축 방향(가로·세로)에서 가장 많이 줄어듭니다.</figcaption>
+  </figure>
+  <p>1 %가 작아 보여도 거리가 쌓이면 커집니다. 공진기처럼 빛이 수백 파장을 돌며 위상이 쌓이는 구조에서는 공진 파장도 대략 그 비율만큼 밀립니다. 1550 nm에서 0.3 %면 4~5 nm인데 링 공진기의 공진 폭은 보통 이보다 훨씬 좁습니다.</p>
+  <h3 class="wr-sub">6.3 그래서 어떻게 고르나</h3>
+  <p><b>정확도는 칸 크기로 정하고, S는 시간을 아끼는 데 씁니다.</b> 칸은 재료 속 파장을 기준으로 한 파장에 10~20점이 기본입니다. 통신 파장 1550 nm의 빛은 실리콘(굴절률 약 3.48) 안에서 파장이 445 nm쯤으로 줄어드니 칸은 20~40 nm가 됩니다. 공진기처럼 위상이 쌓이는 문제라면 더 촘촘히 잡습니다. 그다음 칸을 한 단계 더 줄여 다시 돌려 보고 결과가 거의 변하지 않으면 그 격자로 충분하다고 판단합니다(수렴 시험). 위 표의 숫자는 어디까지나 출발점입니다. 실제로 충분한지는 이렇게 확인합니다.</p>
+  <p>S는 정확도에 거의 영향을 주지 않으니 터지지 않는 범위에서 크게 둡니다. 같은 시간을 흉내 내는 데 필요한 단계 수가 1/S에 비례하기 때문입니다. 다만 한계에 딱 붙이지는 않습니다. 분산이 있는 재료 모델이나 경계에서 빛을 흡수하는 층(PML)을 넣으면 실제 한계가 이론값보다 조금 낮아질 수 있어서 보통 한계의 90~99 %로 여유를 둡니다. MEEP의 기본값 S = 0.5는 3차원 한계 0.577의 약 87 %로, 여유를 넉넉히 둔 쪽입니다.</p>
+
+  <p class="wr-goto">다음 글 › <a href="writing-fdtd-designer.html">FDTD 설계 창 만들기</a> — 이 원리 위에서 돌아가는 MEEP에 그리면서 설계하는 창을 붙인 과정입니다.</p>
+
+  </div>
+
+  <div class="wr-src">
+    <p>출처</p>
+    <ul>
+      <li>R. Courant, K. Friedrichs, H. Lewy, “Über die partiellen Differenzengleichungen der mathematischen Physik,” <i>Mathematische Annalen</i> 100, 32–74 (1928).</li>
+      <li>K. S. Yee, “Numerical solution of initial boundary value problems involving Maxwell's equations in isotropic media,” <i>IEEE Trans. Antennas Propag.</i> 14, 302–307 (1966).</li>
+      <li>A. Taflove, S. C. Hagness, <i>Computational Electrodynamics: The Finite-Difference Time-Domain Method</i>, 3rd ed. (Artech House, 2005).</li>
+      <li>A. F. Oskooi et al., “MEEP: A flexible free-software package for electromagnetic simulations by the FDTD method,” <i>Computer Physics Communications</i> 181, 687–702 (2010).</li>
+    </ul>
+  </div>
+</article>
+</main>
+
+</div>
+<script src="js/core.js?v=90afa448"></script>
+<script src="js/writing-toc.js?v=a8d95c4d"></script>
+<script src="js/writing-finite-difference.js?v=44fb8b93"></script>
+<script data-goatcounter="https://anythinking.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+</body>
+</html>

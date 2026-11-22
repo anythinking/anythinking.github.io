@@ -36,7 +36,7 @@
 <div class="ph"><h1>글</h1><p>지도는 무엇이 어디 있는지를 보여 주지만, 왜 그렇게 생겼는지는 다 담지 못합니다. 논문을 읽다 막힌 지점을 하나씩 풀어 쓴 글을 여기 모읍니다.</p></div>
 <main class="one">
 <div class="doc">
-  <p class="meta">글 4편</p>
+  <p class="meta">글 5편</p>
   <div class="wr-tabs" role="tablist"><button type="button" role="tab" id="tab-basics" aria-controls="basics" data-tab="basics">기초<span class="n"></span></button><button type="button" role="tab" id="tab-sim" aria-controls="sim" data-tab="sim">시뮬레이션<span class="n"></span></button><button type="button" role="tab" id="tab-review" aria-controls="review" data-tab="review">논문 리뷰<span class="n"></span></button><button type="button" role="tab" id="tab-compendium" aria-controls="compendium" data-tab="compendium">단권화<span class="n"></span></button></div>
   <section class="wr-tab" id="basics" aria-labelledby="tab-basics">
   <p class="wr-cat-d">논문을 읽기 전에 알아야 하는 원리입니다. 읽는 순서대로 놓았습니다.</p>
@@ -57,6 +57,11 @@
   <section class="wr-tab" id="sim" aria-labelledby="tab-sim">
   <p class="wr-cat-d">직접 만든 계산 도구와, 그 계산을 믿을 수 있는지 확인한 기록입니다.</p>
   <ul class="wr-list">
+    <li data-page="writing-finite-difference"><a href="writing-finite-difference.html">
+      <h2>FDTD란 무엇일까?</h2>
+      <p>유한차분법의 원리. 미분의 정의에서 극한만 빼는 데서 출발해, 양옆 점을 쓰면 정확도가 한 단계 오르는 이유, 미분방정식이 연립방정식이 되는 과정, 시간 간격의 상한(CFL), Yee 격자가 반 칸씩 엇갈린 이유, 그리고 안정성과 수치 분산으로 시간 간격을 고르는 법까지.</p>
+      <p class="meta">2026-11-15 · 시뮬레이션 › 원리 ①</p>
+    </a></li>
     <li data-page="writing-fdtd-designer"><a href="writing-fdtd-designer.html">
       <h2>FDTD 설계 창 만들기</h2>
       <p>졸업 후 상용 시뮬레이터 없이, MIT의 오픈소스 FDTD(MEEP) 위에 그리면서 설계하는 창을 만든 과정. 무엇을 할 수 있는지, 그리고 정답지 없이 계산을 어떻게 믿을지.</p>
