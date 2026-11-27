@@ -192,7 +192,7 @@
         n[NB.judge] ? h('span.in-judge', n[NB.judge]) : null);
     }));
   }
-  const lastTok = n => (String(n).split('(')[0].trim().split(/\s+/).slice(-1)[0] || '').toLowerCase();
+  const lastTok = n => (String(n).split('(')[0].trim().split(/[\s-]+/).slice(-1)[0] || '').toLowerCase();   // 「Errando-Herranz」 = 「Errando Herranz」
   // 손으로 조사한 PI 와 논문으로 묶은 연구실(마지막 저자)을 한 사람 목록으로 — 이름 끝 낱말·첫 글자가 같으면 같은 사람
   function people(d) {
     const labs = ((LI[d.id] || {}).labs || []).slice(), used = new Set(), out = [];

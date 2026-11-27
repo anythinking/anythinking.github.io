@@ -53,6 +53,7 @@
         h('span.dv-n', d.n, d.term ? h('a.dv-term', { href: 'glossary.html#' + encodeURIComponent(d.term), title: A.t('용어집 정의', 'Definition in glossary'), onclick: e => e.stopPropagation() }, A.t('정의', 'def')) : null),
         h('span.dv-d', d.d),
         how.length ? h('span.dv-how', A.t('만드는 법 · ', 'How it is made · ') + how.join(' · ')) : null,
+        d.fig && d.fig.length ? h('span.dv-figs', h('span.dv-mlb', A.t('그림', 'Figures')), d.fig.map(f => h('a.dv-fig', { href: A.root + f.h, target: '_blank', rel: 'noopener', title: f.s || '', onclick: e => e.stopPropagation() }, f.n))) : null,
         makers.length ? h('span.dv-makers', h('span.dv-mlb', A.t('만드는 곳', 'Who makes it')), makers.map(([i, v]) => h('a.dv-mk', { href: 'institutions.html#' + i, onclick: e => e.stopPropagation() }, v.n))) : null,
         !u.length ? h('span.dv-zerobox', A.t(`${allc.length}개 구조 어디에도 안 들어간다 — 광학에서 중요해도 연산 회로에는 자리가 없다.`, `Used in none of the ${allc.length} structures — important in optics, no place in a computing circuit.`)) : null),
       cells, h('td.dv-cnt', u.length ? String(u.length) : '—'));

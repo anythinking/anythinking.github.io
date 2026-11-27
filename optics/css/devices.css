@@ -47,6 +47,11 @@ tr.dv-dev.open .dv-makers{display:flex}
 .dv-mlb{font-size:11px;color:var(--muted);margin-right:4px}
 .dv-mk{font-size:11.5px;padding:1px 8px;border-radius:999px;border:1px solid var(--rule);color:var(--ui);text-decoration:none;white-space:nowrap}
 .dv-mk:hover{border-color:var(--ui)}
+.dv-figs{display:none;flex-wrap:wrap;gap:4px;align-items:baseline;margin-top:6px;max-width:340px;white-space:normal}
+tr.dv-dev.open .dv-figs{display:flex}
+.dv-fig{font-size:11.5px;padding:1px 8px;border-radius:999px;border:1px solid var(--ui);color:var(--ui);text-decoration:none;white-space:nowrap}
+.dv-fig::after{content:" ↗"}
+.dv-fig:hover{background:var(--ui);color:var(--bg,#fff)}
 tr.dv-dev.open .dv-d,tr.dv-dev.open .dv-how,tr.dv-dev.open .dv-zerobox{display:block}
 tr.dv-dev.open th{padding-bottom:10px}
 .dv-mx td{text-align:center;border-top:1px solid var(--grid);cursor:pointer;height:24px}

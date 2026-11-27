@@ -1,0 +1,143 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 1000 880" width="1000" height="880" role="img" aria-label="시스템 세 구조와 광 코어 확대 그림">
+    <style>text{font-family:"Noto Sans KR","Apple SD Gothic Neo",sans-serif}.flow{stroke-dasharray:14 10}</style>
+    <rect width="1000" height="880" fill="#ffffff"/>
+    <defs>
+      <marker id="ae" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#d97706"/></marker>
+      <g id="cv"><path d="M0,-7 L7,0 L0,7 L-7,0 z" fill="#dc2626"/></g>
+    </defs>
+    <text x="230" y="18" font-size="12" fill="#5a6472">바깥 ───────────────────────────────▶ 칩 안</text>
+
+    <!-- 연결 묶음 -->
+    <rect x="8" y="30" width="984" height="296" rx="12" fill="#f7f9fe" stroke="#dfe8fd"/>
+    <text x="20" y="50" font-size="12" font-weight="700" fill="#2563eb">시스템 전체 — 빛은 어디까지 들어오나</text>
+    <!-- ① -->
+    <text x="20" y="88" font-size="14" font-weight="700" fill="#1a1f26">① 지금</text>
+    <text x="20" y="106" font-size="11" fill="#5a6472">꽂는 광모듈</text>
+    <line class="flow" x1="200" y1="96" x2="380" y2="96" stroke="#2563eb" stroke-width="5"/>
+    <use href="#cv" x="388" y="96"/>
+    <rect x="398" y="78" width="96" height="36" rx="7" fill="#dfe8fd" stroke="#2563eb"/><text x="446" y="101" font-size="12" text-anchor="middle" fill="#1a1f26">광모듈</text>
+    <line x1="494" y1="96" x2="772" y2="96" stroke="#d97706" stroke-width="3" marker-end="url(#ae)"/>
+    <text x="633" y="88" font-size="11" fill="#b45309" text-anchor="middle">구리 수십 cm</text>
+    <rect x="776" y="76" width="200" height="40" rx="7" fill="#fdeccf" stroke="#d97706"/><text x="876" y="101" font-size="12" text-anchor="middle" fill="#1a1f26">칩 · 계산 = 전자</text>
+    <!-- ② -->
+    <text x="20" y="168" font-size="14" font-weight="700" fill="#1a1f26">② CPO · 광 I/O</text>
+    <text x="20" y="186" font-size="11" fill="#5a6472">빛을 칩 옆까지</text>
+    <rect x="640" y="146" width="344" height="60" rx="9" fill="none" stroke="#7d8896" stroke-dasharray="4 4"/><text x="648" y="140" font-size="10" fill="#5a6472">한 패키지</text>
+    <line class="flow" x1="200" y1="176" x2="652" y2="176" stroke="#2563eb" stroke-width="5"/>
+    <use href="#cv" x="660" y="176"/>
+    <rect x="670" y="158" width="86" height="36" rx="7" fill="#dfe8fd" stroke="#2563eb"/><text x="713" y="181" font-size="12" text-anchor="middle" fill="#1a1f26">광 엔진</text>
+    <line x1="756" y1="176" x2="772" y2="176" stroke="#d97706" stroke-width="3" marker-end="url(#ae)"/>
+    <rect x="776" y="156" width="200" height="40" rx="7" fill="#fdeccf" stroke="#d97706"/><text x="876" y="181" font-size="12" text-anchor="middle" fill="#1a1f26">칩 · 계산 = 전자</text>
+
+    <!-- ③ EO 시스템 -->
+    <text x="20" y="262" font-size="14" font-weight="700" fill="#1a1f26">③ EO 연산</text>
+    <text x="20" y="280" font-size="11" fill="#5a6472">광 코어가 계산을 거듦</text>
+    <rect x="296" y="222" width="688" height="94" rx="9" fill="none" stroke="#7d8896" stroke-dasharray="4 4"/><text x="304" y="216" font-size="10" fill="#5a6472">한 패키지</text>
+    <line class="flow" x1="200" y1="258" x2="300" y2="258" stroke="#2563eb" stroke-width="5"/>
+    <use href="#cv" x="308" y="258"/>
+    <rect x="318" y="240" width="86" height="36" rx="7" fill="#dfe8fd" stroke="#2563eb"/><text x="361" y="263" font-size="12" text-anchor="middle" fill="#1a1f26">광 엔진</text>
+    <line x1="404" y1="258" x2="440" y2="258" stroke="#d97706" stroke-width="3" marker-end="url(#ae)"/>
+    <rect x="444" y="236" width="150" height="44" rx="7" fill="#fdeccf" stroke="#d97706"/><text x="519" y="255" font-size="12" text-anchor="middle" fill="#1a1f26">전자 칩</text><text x="519" y="271" font-size="10" text-anchor="middle" fill="#5a6472">메모리 · 비선형</text>
+    <line x1="594" y1="252" x2="636" y2="252" stroke="#d97706" stroke-width="3" marker-end="url(#ae)"/>
+    <use href="#cv" x="646" y="252"/>
+    <rect x="646" y="230" width="130" height="44" rx="9" fill="#7c3aed"/><text x="711" y="257" font-size="13" font-weight="700" text-anchor="middle" fill="#fff">광 코어 · 행렬곱</text>
+    <line class="flow" x1="776" y1="252" x2="800" y2="252" stroke="#7c3aed" stroke-width="5"/>
+    <use href="#cv" x="806" y="252"/>
+    <rect x="814" y="234" width="56" height="36" rx="7" fill="#fdeccf" stroke="#d97706"/><text x="842" y="250" font-size="11" text-anchor="middle" fill="#1a1f26">검출기</text><text x="842" y="264" font-size="9" text-anchor="middle" fill="#5a6472">빛→전기</text>
+    <path d="M842,270 L842,300 L519,300 L519,286" fill="none" stroke="#d97706" stroke-width="3" marker-end="url(#ae)"/>
+    <text x="680" y="295" font-size="10" fill="#b45309" text-anchor="middle">결과를 전기로 돌려 다음 층으로</text>
+    <rect x="436" y="224" width="444" height="84" rx="12" fill="none" stroke="#7c3aed" stroke-width="2" stroke-dasharray="6 4"/>
+    <text x="890" y="250" font-size="11" fill="#5b21b6">이 부분을</text>
+    <text x="890" y="266" font-size="11" fill="#5b21b6">아래에 확대</text>
+    <!-- 확대선 -->
+    <line x1="436" y1="308" x2="8" y2="350" stroke="#7c3aed" stroke-width="1.5" stroke-dasharray="5 5"/>
+    <line x1="880" y1="308" x2="992" y2="350" stroke="#7c3aed" stroke-width="1.5" stroke-dasharray="5 5"/>
+    <g transform="translate(0,110)">
+
+    <!-- 연산 묶음 -->
+    <rect x="8" y="240" width="984" height="512" rx="12" fill="#fbf9ff" stroke="#7c3aed" stroke-dasharray="5 5"/>
+    <text x="20" y="260" font-size="12" font-weight="700" fill="#7c3aed">③의 「전자 칩 ⇄ 광 코어」를 확대하면 — 계산하는 방식 넷 (ⓓ 회절만 예외로 카메라 앞)</text>
+
+    <!-- ③ 칩 위 광 AI 칩 -->
+    <text x="20" y="300" font-size="14" font-weight="700" fill="#1a1f26">ⓐ 칩 위 광 AI 칩</text>
+    <text x="20" y="318" font-size="11" fill="#5a6472">MZI 메시 · 마이크로링</text>
+    <text x="20" y="334" font-size="11" fill="#5a6472">Lightmatter · Taichi</text>
+    <rect x="190" y="278" width="794" height="96" rx="9" fill="none" stroke="#7d8896" stroke-dasharray="4 4"/><text x="198" y="272" font-size="10" fill="#5a6472">한 패키지 (평면 칩)</text>
+    <rect x="204" y="296" width="150" height="58" rx="7" fill="#fdeccf" stroke="#d97706"/><text x="279" y="320" font-size="12" text-anchor="middle" fill="#1a1f26">전자 칩</text><text x="279" y="338" font-size="11" text-anchor="middle" fill="#5a6472">메모리에 가중치</text>
+    <line x1="354" y1="314" x2="410" y2="314" stroke="#d97706" stroke-width="3" marker-end="url(#ae)"/>
+    <text x="382" y="306" font-size="10" fill="#b45309" text-anchor="middle">입력+가중치</text>
+    <use href="#cv" x="420" y="314"/>
+    <line class="flow" x1="430" y1="314" x2="520" y2="314" stroke="#7c3aed" stroke-width="5"/>
+    <rect x="520" y="292" width="200" height="44" rx="9" fill="#7c3aed"/><text x="620" y="319" font-size="13" font-weight="700" text-anchor="middle" fill="#fff">광 코어 · 행렬곱</text>
+    <line class="flow" x1="720" y1="314" x2="744" y2="314" stroke="#7c3aed" stroke-width="5"/>
+    <rect x="744" y="297" width="56" height="34" rx="6" fill="#fdeccf" stroke="#d97706"/><text x="772" y="312" font-size="11" text-anchor="middle" fill="#1a1f26">검출기</text><text x="772" y="325" font-size="9" text-anchor="middle" fill="#5a6472">빛→전기</text>
+    <use href="#cv" x="808" y="314"/>
+    <path d="M816,322 L816,362 L279,362 L279,356" fill="none" stroke="#d97706" stroke-width="3" marker-end="url(#ae)"/>
+    <text x="830" y="318" font-size="11" fill="#b45309">층마다 왕복</text>
+    <text x="830" y="334" font-size="11" fill="#b45309">(위상·파장으로 잡은</text>
+    <text x="830" y="350" font-size="11" fill="#b45309">가중치도 전기로 유지)</text>
+
+    <!-- ④ PCM 크로스바 -->
+    <text x="20" y="420" font-size="14" font-weight="700" fill="#1a1f26">ⓑ PCM 크로스바</text>
+    <text x="20" y="438" font-size="11" fill="#5a6472">포토닉 텐서코어</text>
+    <text x="20" y="454" font-size="11" fill="#5a6472">Pernice · Bhaskaran</text>
+    <rect x="190" y="398" width="794" height="96" rx="9" fill="none" stroke="#7d8896" stroke-dasharray="4 4"/><text x="198" y="392" font-size="10" fill="#5a6472">한 패키지 (평면 칩)</text>
+    <rect x="204" y="416" width="150" height="58" rx="7" fill="#fdeccf" stroke="#d97706"/><text x="279" y="440" font-size="12" text-anchor="middle" fill="#1a1f26">전자 칩</text><text x="279" y="458" font-size="11" text-anchor="middle" fill="#5a6472">비선형 · 제어</text>
+    <line x1="354" y1="434" x2="410" y2="434" stroke="#d97706" stroke-width="3" marker-end="url(#ae)"/>
+    <text x="382" y="426" font-size="10" fill="#b45309" text-anchor="middle">입력만</text>
+    <use href="#cv" x="420" y="434"/>
+    <line class="flow" x1="430" y1="434" x2="520" y2="434" stroke="#7c3aed" stroke-width="5"/>
+    <rect x="520" y="404" width="200" height="60" rx="9" fill="#7c3aed"/>
+    <text x="620" y="428" font-size="13" font-weight="700" text-anchor="middle" fill="#fff">크로스바 · 행렬곱</text>
+    <text x="620" y="447" font-size="11" text-anchor="middle" fill="#ede9fe">가중치 = 재료 안에 저장</text>
+    <line class="flow" x1="720" y1="434" x2="744" y2="434" stroke="#7c3aed" stroke-width="5"/>
+    <rect x="744" y="417" width="56" height="34" rx="6" fill="#fdeccf" stroke="#d97706"/><text x="772" y="432" font-size="11" text-anchor="middle" fill="#1a1f26">검출기</text><text x="772" y="445" font-size="9" text-anchor="middle" fill="#5a6472">빛→전기</text>
+    <use href="#cv" x="808" y="434"/>
+    <path d="M816,442 L816,482 L279,482 L279,476" fill="none" stroke="#d97706" stroke-width="3" marker-end="url(#ae)"/>
+    <text x="830" y="438" font-size="11" fill="#b45309">입력·출력만 바꿈</text>
+    <text x="830" y="454" font-size="11" fill="#b45309">가중치는 한 번 써 두면</text>
+    <text x="830" y="470" font-size="11" fill="#b45309">전기 없이 남음</text>
+
+    <!-- ⑤ 자유공간 -->
+    <text x="20" y="540" font-size="14" font-weight="700" fill="#1a1f26">ⓒ 자유공간</text>
+    <text x="20" y="558" font-size="11" fill="#5a6472">SLM 행렬곱 · 4f 상관기</text>
+    <text x="20" y="574" font-size="11" fill="#5a6472">렌즈가 푸리에 변환</text>
+    <rect x="204" y="528" width="120" height="50" rx="7" fill="#fdeccf" stroke="#d97706"/><text x="264" y="557" font-size="12" text-anchor="middle" fill="#1a1f26">서버 (전자)</text>
+    <line x1="324" y1="553" x2="370" y2="553" stroke="#d97706" stroke-width="3" marker-end="url(#ae)"/>
+    <rect x="378" y="512" width="470" height="84" rx="9" fill="none" stroke="#7d8896" stroke-dasharray="4 4"/><text x="386" y="506" font-size="10" fill="#5a6472">칩 밖 별도 광학 박스 (렌즈·SLM·카메라)</text>
+    <use href="#cv" x="392" y="553"/>
+    <rect x="404" y="534" width="60" height="38" rx="6" fill="#ece4fd" stroke="#7c3aed"/><text x="434" y="557" font-size="11" text-anchor="middle" fill="#1a1f26">SLM</text>
+    <line class="flow" x1="464" y1="553" x2="500" y2="553" stroke="#7c3aed" stroke-width="5"/>
+    <ellipse cx="514" cy="553" rx="8" ry="26" fill="#ece4fd" stroke="#7c3aed"/><text x="514" y="594" font-size="10" text-anchor="middle" fill="#5a6472">렌즈</text>
+    <line class="flow" x1="522" y1="553" x2="580" y2="553" stroke="#7c3aed" stroke-width="5"/>
+    <rect x="580" y="534" width="70" height="38" rx="6" fill="#ece4fd" stroke="#7c3aed"/><text x="615" y="557" font-size="11" text-anchor="middle" fill="#1a1f26">필터·가중치</text>
+    <line class="flow" x1="650" y1="553" x2="690" y2="553" stroke="#7c3aed" stroke-width="5"/>
+    <ellipse cx="704" cy="553" rx="8" ry="26" fill="#ece4fd" stroke="#7c3aed"/>
+    <line class="flow" x1="712" y1="553" x2="760" y2="553" stroke="#7c3aed" stroke-width="5"/>
+    <rect x="760" y="534" width="64" height="38" rx="6" fill="#fdeccf" stroke="#d97706"/><text x="792" y="557" font-size="11" text-anchor="middle" fill="#1a1f26">카메라</text>
+    <use href="#cv" x="836" y="553"/>
+    <line x1="846" y1="553" x2="872" y2="553" stroke="#d97706" stroke-width="3" marker-end="url(#ae)"/>
+    <text x="880" y="546" font-size="11" fill="#b45309">들어갈 때 1번</text>
+    <text x="880" y="562" font-size="11" fill="#b45309">나올 때 1번</text>
+    <text x="880" y="578" font-size="11" fill="#5b21b6">행렬이 아주 큼</text>
+
+    <!-- ⑥ 회절 -->
+    <text x="20" y="660" font-size="14" font-weight="700" fill="#1a1f26">ⓓ 회절 신경망</text>
+    <text x="20" y="678" font-size="11" fill="#5a6472">D²NN (Ozcan) · ACCEL</text>
+    <text x="20" y="694" font-size="11" fill="#5a6472">카메라 앞에 놓임</text>
+    <text x="204" y="650" font-size="12" fill="#2563eb">바깥 장면의 빛</text>
+    <line class="flow" x1="204" y1="672" x2="420" y2="672" stroke="#7c3aed" stroke-width="5"/>
+    <text x="312" y="696" font-size="11" fill="#5b21b6" text-anchor="middle">처음부터 빛 → 변환 없음</text>
+    <rect x="430" y="640" width="14" height="64" fill="#ece4fd" stroke="#7c3aed"/>
+    <rect x="474" y="640" width="14" height="64" fill="#ece4fd" stroke="#7c3aed"/>
+    <rect x="518" y="640" width="14" height="64" fill="#ece4fd" stroke="#7c3aed"/>
+    <line class="flow" x1="444" y1="672" x2="474" y2="672" stroke="#7c3aed" stroke-width="5"/>
+    <line class="flow" x1="488" y1="672" x2="518" y2="672" stroke="#7c3aed" stroke-width="5"/>
+    <text x="481" y="722" font-size="11" text-anchor="middle" fill="#5a6472">찍어 만든 마스크 = 가중치 (고정)</text>
+    <line class="flow" x1="532" y1="672" x2="610" y2="672" stroke="#7c3aed" stroke-width="5"/>
+    <rect x="610" y="654" width="70" height="36" rx="6" fill="#fdeccf" stroke="#d97706"/><text x="645" y="676" font-size="11" text-anchor="middle" fill="#1a1f26">검출기</text>
+    <use href="#cv" x="692" y="672"/>
+    <line x1="702" y1="672" x2="772" y2="672" stroke="#d97706" stroke-width="3" marker-end="url(#ae)"/>
+    <rect x="776" y="652" width="200" height="40" rx="7" fill="#fdeccf" stroke="#d97706"/><text x="876" y="677" font-size="12" text-anchor="middle" fill="#1a1f26">전자 · 결과만 받음</text>
+    </g>
+  </svg>

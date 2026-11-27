@@ -1,0 +1,179 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1500 1216" width="1500" height="1216" font-family="-apple-system, 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif">
+<rect width="1500" height="1216" fill="#ffffff"/>
+<text x="40" y="44" font-size="24" font-weight="700" fill="#111">광학과 컴퓨터 산업 — 어느 층에 언제 들어갔나</text>
+<line x1="1150.9" y1="915" x2="1418.3" y2="293" stroke="#94a3b8" stroke-width="1.2" stroke-dasharray="3 3"/>
+<line x1="861.8" y1="915" x2="1102.7" y2="597" stroke="#94a3b8" stroke-width="1.2" stroke-dasharray="3 3"/>
+<line x1="861.8" y1="915" x2="861.8" y2="765" stroke="#94a3b8" stroke-width="1.2" stroke-dasharray="3 3"/>
+<line x1="958.2" y1="941" x2="1356.6" y2="865" stroke="#94a3b8" stroke-width="1.2" stroke-dasharray="3 3"/>
+<line x1="958.2" y1="941" x2="1356.6" y2="845" stroke="#94a3b8" stroke-width="1.2" stroke-dasharray="3 3"/>
+<line x1="958.2" y1="941" x2="958.2" y2="785" stroke="#94a3b8" stroke-width="1.2" stroke-dasharray="3 3"/>
+<text x="40" y="70" font-size="13" fill="#555">가로 = 연도(2005 이전은 압축) · 세로 = 컴퓨터 스택 층 · 점 옆 기호 = 근거 항목 ID(A·R·C = 「연표와 정량 잣대」, G·X = 「추천 5그룹」). 출하·발표·논문만, 예측치 없음.</text>
+<circle cx="46" cy="106" r="6" fill="#2563eb"/>
+<text x="58" y="111" font-size="13" fill="#333">광으로 연결(interconnect)</text>
+<circle cx="326" cy="106" r="6" fill="#ea580c"/>
+<text x="338" y="111" font-size="13" fill="#333">광으로 연산(compute)</text>
+<circle cx="546" cy="106" r="6" fill="#7c3aed"/>
+<text x="558" y="111" font-size="13" fill="#333">광양자</text>
+<rect x="616" y="100" width="11" height="11" fill="#fff" stroke="#6b7280" stroke-width="2"/>
+<text x="634" y="111" font-size="13" fill="#333">전기 유지·광 후퇴(반증)</text>
+<line x1="178.8" y1="150" x2="178.8" y2="1007" stroke="#e5e7eb" stroke-width="1"/>
+<text x="178.8" y="144" font-size="12" fill="#888" text-anchor="middle">1970</text>
+<line x1="236.2" y1="150" x2="236.2" y2="1007" stroke="#e5e7eb" stroke-width="1"/>
+<text x="236.2" y="144" font-size="12" fill="#888" text-anchor="middle">1980</text>
+<line x1="293.8" y1="150" x2="293.8" y2="1007" stroke="#e5e7eb" stroke-width="1"/>
+<text x="293.8" y="144" font-size="12" fill="#888" text-anchor="middle">1990</text>
+<line x1="380.0" y1="150" x2="380.0" y2="1007" stroke="#e5e7eb" stroke-width="1"/>
+<text x="380.0" y="144" font-size="12" fill="#888" text-anchor="middle">2005</text>
+<line x1="620.9" y1="150" x2="620.9" y2="1007" stroke="#e5e7eb" stroke-width="1"/>
+<text x="620.9" y="144" font-size="12" fill="#888" text-anchor="middle">2010</text>
+<line x1="861.8" y1="150" x2="861.8" y2="1007" stroke="#e5e7eb" stroke-width="1"/>
+<text x="861.8" y="144" font-size="12" fill="#888" text-anchor="middle">2015</text>
+<line x1="1102.7" y1="150" x2="1102.7" y2="1007" stroke="#e5e7eb" stroke-width="1"/>
+<text x="1102.7" y="144" font-size="12" fill="#888" text-anchor="middle">2020</text>
+<line x1="1343.6" y1="150" x2="1343.6" y2="1007" stroke="#e5e7eb" stroke-width="1"/>
+<text x="1343.6" y="144" font-size="12" fill="#888" text-anchor="middle">2025</text>
+<text x="265" y="126" font-size="11" fill="#aaa" text-anchor="middle">← 압축 구간 →</text>
+<rect x="140" y="160" width="1310" height="102" fill="#f8fafc" rx="4"/>
+<text x="132" y="216.0" font-size="15" font-weight="600" fill="#334155" text-anchor="end">장거리</text>
+<rect x="140" y="268" width="1310" height="102" fill="#f1f5f9" rx="4"/>
+<text x="132" y="324.0" font-size="15" font-weight="600" fill="#334155" text-anchor="end">데이터센터</text>
+<rect x="140" y="376" width="1310" height="102" fill="#f8fafc" rx="4"/>
+<text x="132" y="432.0" font-size="15" font-weight="600" fill="#334155" text-anchor="end">랙</text>
+<rect x="140" y="484" width="1310" height="62" fill="#f1f5f9" rx="4"/>
+<text x="132" y="520.0" font-size="15" font-weight="600" fill="#334155" text-anchor="end">보드</text>
+<rect x="140" y="552" width="1310" height="182" fill="#f8fafc" rx="4"/>
+<text x="132" y="648.0" font-size="15" font-weight="600" fill="#334155" text-anchor="end">패키지</text>
+<rect x="140" y="740" width="1310" height="142" fill="#f1f5f9" rx="4"/>
+<text x="132" y="816.0" font-size="15" font-weight="600" fill="#334155" text-anchor="end">칩 안</text>
+<rect x="1040" y="550" width="388" height="186" fill="none" stroke="#2563eb" stroke-width="1.5" stroke-dasharray="5 4" rx="6"/>
+<circle cx="155.8" cy="179" r="5.5" fill="#2563eb"/>
+<text x="164.8" y="183" font-size="12" fill="#1f2937"><tspan font-weight="700" fill="#2563eb">A1</tspan> Kao 섬유 전송</text>
+<circle cx="178.8" cy="199" r="5.5" fill="#2563eb"/>
+<text x="187.8" y="203" font-size="12" fill="#1f2937"><tspan font-weight="700" fill="#2563eb">A2</tspan> 손실 20dB/km</text>
+<circle cx="273.6" cy="219" r="5.5" fill="#2563eb"/>
+<text x="282.6" y="223" font-size="12" fill="#1f2937"><tspan font-weight="700" fill="#2563eb">A3</tspan> EDFA</text>
+<circle cx="282.2" cy="239" r="5.5" fill="#2563eb"/>
+<text x="291.2" y="243" font-size="12" fill="#1f2937"><tspan font-weight="700" fill="#2563eb">A4</tspan> TAT-8</text>
+<rect x="352.0" y="174" width="10" height="10" fill="#fff" stroke="#6b7280" stroke-width="2"/>
+<text x="366.0" y="183" font-size="12" fill="#1f2937"><tspan font-weight="700" fill="#6b7280">A6</tspan> 통신 붕괴</text>
+<circle cx="357.0" cy="287" r="5.5" fill="#2563eb"/>
+<text x="366.0" y="291" font-size="12" fill="#1f2937"><tspan font-weight="700" fill="#2563eb">A5</tspan> SFP 플러거블</text>
+<circle cx="362.8" cy="307" r="5.5" fill="#2563eb"/>
+<text x="371.8" y="311" font-size="12" fill="#1f2937"><tspan font-weight="700" fill="#2563eb">A7</tspan> 10GbE 광</text>
+<circle cx="910.0" cy="287" r="5.5" fill="#2563eb"/>
+<text x="919.0" y="291" font-size="12" fill="#1f2937"><tspan font-weight="700" fill="#2563eb">A12</tspan> QSFP-DD 400G</text>
+<circle cx="1054.5" cy="307" r="5.5" fill="#2563eb"/>
+<text x="1063.5" y="311" font-size="12" fill="#1f2937"><tspan font-weight="700" fill="#2563eb">A16</tspan> Cisco←Luxtera</text>
+<circle cx="1199.1" cy="287" r="5.5" fill="#2563eb"/>
+<text x="1190.1" y="291" font-size="12" fill="#1f2937" text-anchor="end">구글 OCS <tspan font-weight="700" fill="#2563eb">A20</tspan></text>
+<circle cx="1247.3" cy="327" r="5.5" fill="#2563eb"/>
+<text x="1238.3" y="331" font-size="12" fill="#1f2937" text-anchor="end">TPU v4 OCS <tspan font-weight="700" fill="#2563eb">A22</tspan></text>
+<rect x="1242.3" y="342" width="10" height="10" fill="#fff" stroke="#6b7280" stroke-width="2"/>
+<text x="1238.3" y="351" font-size="12" fill="#1f2937" text-anchor="end">Intel 플러거블 매각 <tspan font-weight="700" fill="#6b7280">A24</tspan></text>
+<circle cx="1418.3" cy="287" r="5.5" fill="#2563eb"/>
+<text x="1409.3" y="291" font-size="12" fill="#1f2937" text-anchor="end">Salience 광 스위치 <tspan font-weight="700" fill="#2563eb">A39</tspan></text>
+<circle cx="476.4" cy="395" r="5.5" fill="#2563eb"/>
+<text x="485.4" y="399" font-size="12" fill="#1f2937"><tspan font-weight="700" fill="#2563eb">A8</tspan> Luxtera 광케이블</text>
+<rect x="1242.3" y="390" width="10" height="10" fill="#fff" stroke="#6b7280" stroke-width="2"/>
+<text x="1238.3" y="399" font-size="12" fill="#1f2937" text-anchor="end">224G 구리 <tspan font-weight="700" fill="#6b7280">A23</tspan></text>
+<rect x="1290.5" y="410" width="10" height="10" fill="#fff" stroke="#6b7280" stroke-width="2"/>
+<text x="1286.5" y="419" font-size="12" fill="#1f2937" text-anchor="end">NVL72 구리 <tspan font-weight="700" fill="#6b7280">A25</tspan></text>
+<circle cx="1346.0" cy="435" r="5.5" fill="#7c3aed"/>
+<text x="1337.0" y="439" font-size="12" fill="#1f2937" text-anchor="end">Xanadu Aurora <tspan font-weight="700" fill="#7c3aed">A29</tspan></text>
+<circle cx="1388.0" cy="455" r="5.5" fill="#2563eb"/>
+<text x="1379.0" y="459" font-size="12" fill="#1f2937" text-anchor="end">Marvell←Celestial <tspan font-weight="700" fill="#2563eb">A35</tspan></text>
+<circle cx="572.7" cy="503" r="5.5" fill="#2563eb"/>
+<text x="581.7" y="507" font-size="12" fill="#1f2937"><tspan font-weight="700" fill="#2563eb">A9</tspan> Light Peak(광)</text>
+<rect x="664.1" y="518" width="10" height="10" fill="#fff" stroke="#6b7280" stroke-width="2"/>
+<text x="678.1" y="527" font-size="12" fill="#1f2937"><tspan font-weight="700" fill="#6b7280">A10</tspan> Thunderbolt 구리로</text>
+<circle cx="1006.4" cy="503" r="5.5" fill="#2563eb"/>
+<text x="1015.4" y="507" font-size="12" fill="#1f2937"><tspan font-weight="700" fill="#2563eb">A14</tspan> COBO 온보드</text>
+<circle cx="1054.5" cy="571" r="5.5" fill="#2563eb"/>
+<text x="1063.5" y="575" font-size="12" fill="#1f2937"><tspan font-weight="700" fill="#2563eb">A15</tspan> CPO 협의체</text>
+<circle cx="1102.7" cy="591" r="5.5" fill="#2563eb"/>
+<text x="1111.7" y="595" font-size="12" fill="#1f2937"><tspan font-weight="700" fill="#2563eb">A17</tspan> PIPES 광 칩렛</text>
+<circle cx="1247.3" cy="611" r="5.5" fill="#2563eb"/>
+<text x="1238.3" y="615" font-size="12" fill="#1f2937" text-anchor="end">외장 레이저 표준 <tspan font-weight="700" fill="#2563eb">A21</tspan></text>
+<circle cx="1295.5" cy="631" r="5.5" fill="#2563eb"/>
+<text x="1286.5" y="635" font-size="12" fill="#1f2937" text-anchor="end">Intel 광 I/O <tspan font-weight="700" fill="#2563eb">A26</tspan></text>
+<circle cx="1353.3" cy="651" r="5.5" fill="#2563eb"/>
+<text x="1344.3" y="655" font-size="12" fill="#1f2937" text-anchor="end">NVIDIA CPO 발표 <tspan font-weight="700" fill="#2563eb">A30</tspan></text>
+<circle cx="1363.9" cy="571" r="5.5" fill="#2563eb"/>
+<text x="1354.9" y="575" font-size="12" fill="#1f2937" text-anchor="end">Tomahawk6 CPO <tspan font-weight="700" fill="#2563eb">A33</tspan></text>
+<circle cx="1372.5" cy="671" r="5.5" fill="#2563eb"/>
+<text x="1363.5" y="675" font-size="12" fill="#1f2937" text-anchor="end">Passage M1000 <tspan font-weight="700" fill="#2563eb">A34</tspan></text>
+<circle cx="1403.9" cy="691" r="5.5" fill="#2563eb"/>
+<text x="1394.9" y="695" font-size="12" fill="#1f2937" text-anchor="end">TSMC COUPE 양산 <tspan font-weight="700" fill="#2563eb">A37</tspan></text>
+<circle cx="1405.8" cy="711" r="5.5" fill="#2563eb"/>
+<text x="1396.8" y="715" font-size="12" fill="#1f2937" text-anchor="end">Molex←Teramount <tspan font-weight="700" fill="#2563eb">A38</tspan></text>
+<circle cx="861.8" cy="759" r="5.5" fill="#2563eb"/>
+<text x="870.8" y="763" font-size="12" fill="#1f2937"><tspan font-weight="700" fill="#2563eb">A11</tspan> CPU 광 I/O</text>
+<circle cx="958.2" cy="779" r="5.5" fill="#ea580c"/>
+<text x="967.2" y="783" font-size="12" fill="#1f2937"><tspan font-weight="700" fill="#ea580c">A13</tspan> MZI 광 신경망</text>
+<circle cx="1150.9" cy="759" r="5.5" fill="#ea580c"/>
+<text x="1159.9" y="763" font-size="12" fill="#1f2937"><tspan font-weight="700" fill="#ea580c">A18</tspan> PACE</text>
+<circle cx="1199.1" cy="799" r="5.5" fill="#2563eb"/>
+<text x="1190.1" y="803" font-size="12" fill="#1f2937" text-anchor="end">GF Fotonix <tspan font-weight="700" fill="#2563eb">A19</tspan></text>
+<circle cx="1295.5" cy="779" r="5.5" fill="#7c3aed"/>
+<text x="1286.5" y="783" font-size="12" fill="#1f2937" text-anchor="end">광양자 모듈 <tspan font-weight="700" fill="#7c3aed">A27</tspan></text>
+<circle cx="1338.8" cy="819" r="5.5" fill="#ea580c"/>
+<text x="1329.8" y="823" font-size="12" fill="#1f2937" text-anchor="end">Q.ANT 광 NPU <tspan font-weight="700" fill="#ea580c">A28</tspan></text>
+<circle cx="1356.6" cy="839" r="5.5" fill="#ea580c"/>
+<text x="1347.6" y="843" font-size="12" fill="#1f2937" text-anchor="end">Lightmatter 연산 <tspan font-weight="700" fill="#ea580c">A31</tspan></text>
+<circle cx="1356.6" cy="859" r="5.5" fill="#ea580c"/>
+<text x="1347.6" y="863" font-size="12" fill="#1f2937" text-anchor="end">Lightelligence 16k <tspan font-weight="700" fill="#ea580c">A32</tspan></text>
+<circle cx="1396.6" cy="799" r="5.5" fill="#ea580c"/>
+<text x="1387.6" y="803" font-size="12" fill="#1f2937" text-anchor="end">Optalysys 투자 <tspan font-weight="700" fill="#ea580c">A36</tspan></text>
+<line x1="140" y1="898" x2="1450" y2="898" stroke="#94a3b8" stroke-width="1"/>
+<text x="132" y="942" font-size="15" font-weight="600" fill="#334155" text-anchor="end">학계 그룹</text>
+<text x="132" y="960" font-size="11" fill="#64748b" text-anchor="end">(대표 논문 연도)</text>
+<polygon points="428.2,915 435.2,922 428.2,929 421.2,922" fill="#6b7280"/>
+<text x="439.2" y="926" font-size="12" fill="#1f2937"><tspan font-weight="700" fill="#6b7280">X4</tspan> Bowers(광원) <tspan fill="#6b7280" font-weight="600">[소자]</tspan></text>
+<polygon points="861.8,915 868.8,922 861.8,929 854.8,922" fill="#2563eb"/>
+<text x="872.8" y="926" font-size="12" fill="#1f2937"><tspan font-weight="700" fill="#2563eb">X2</tspan> Stojanović(광 I/O) <tspan fill="#2563eb" font-weight="600">[연결]</tspan></text>
+<polygon points="958.2,941 965.2,948 958.2,955 951.2,948" fill="#059669"/>
+<text x="969.2" y="952" font-size="12" fill="#1f2937"><tspan font-weight="700" fill="#059669">G1</tspan> Englund·Soljačić <tspan fill="#059669" font-weight="600">[EO]</tspan></text>
+<polygon points="1006.4,967 1013.4,974 1006.4,981 999.4,974" fill="#dc2626"/>
+<text x="1017.4" y="978" font-size="12" fill="#1f2937"><tspan font-weight="700" fill="#dc2626">G3</tspan> Ozcan(센서 앞단) <tspan fill="#dc2626" font-weight="600">[전광]</tspan></text>
+<polygon points="1006.4,993 1013.4,1000 1006.4,1007 999.4,1000" fill="#2563eb"/>
+<text x="1017.4" y="1004" font-size="12" fill="#1f2937"><tspan font-weight="700" fill="#2563eb">X1</tspan> Bergman(연결) <tspan fill="#2563eb" font-weight="600">[연결]</tspan></text>
+<polygon points="1150.9,915 1157.9,922 1150.9,929 1143.9,922" fill="#059669"/>
+<text x="1161.9" y="926" font-size="12" fill="#1f2937"><tspan font-weight="700" fill="#059669">G5</tspan> Pernice·Bhaskaran <tspan fill="#059669" font-weight="600">[EO]</tspan></text>
+<polygon points="1199.1,941 1206.1,948 1199.1,955 1192.1,948" fill="#059669"/>
+<text x="1210.1" y="952" font-size="12" fill="#1f2937"><tspan font-weight="700" fill="#059669">G2</tspan> McMahon(물리 조건) <tspan fill="#059669" font-weight="600">[EO]</tspan></text>
+<polygon points="1295.5,967 1302.5,974 1295.5,981 1288.5,974" fill="#059669"/>
+<text x="1306.5" y="978" font-size="12" fill="#1f2937"><tspan font-weight="700" fill="#059669">G4</tspan> Fang·Dai(칭화) <tspan fill="#059669" font-weight="600">[EO]</tspan></text>
+<polygon points="1343.6,993 1350.6,1000 1343.6,1007 1336.6,1000" fill="#6b7280"/>
+<text x="1354.6" y="1004" font-size="12" fill="#1f2937"><tspan font-weight="700" fill="#6b7280">X3</tspan> Lau(Si 광원) <tspan fill="#6b7280" font-weight="600">[소자]</tspan></text>
+<polygon points="150,1018 156,1024 150,1030 144,1024" fill="#059669"/>
+<text x="162" y="1028" font-size="12" fill="#333">EO = 광 연산 + 전자 (9/28 축)</text>
+<polygon points="420,1018 426,1024 420,1030 414,1024" fill="#dc2626"/>
+<text x="432" y="1028" font-size="12" fill="#333">전광 (연산 본체가 광에서 끝남)</text>
+<polygon points="640,1018 646,1024 640,1030 634,1024" fill="#2563eb"/>
+<text x="652" y="1028" font-size="12" fill="#333">연결 담당 — 연산 판정 대상 아님</text>
+<polygon points="870,1018 876,1024 870,1030 864,1024" fill="#6b7280"/>
+<text x="882" y="1028" font-size="12" fill="#333">광원 소자</text>
+<text x="970" y="1028" font-size="12" fill="#64748b">점선 = 연구실 → 회사 (B 노트 「산업 연결」)</text>
+<rect x="150" y="1050" width="423" height="128" fill="#fffbeb" stroke="#f59e0b" stroke-width="1" rx="6"/>
+<text x="162" y="1072" font-size="14" font-weight="700" fill="#92400e">① CPO는 왜 지금 오나</text>
+<text x="162" y="1094" font-size="12" fill="#374151">파란 점선 상자(패키지 층 2019~2026):</text>
+<text x="162" y="1111" font-size="12" fill="#374151">표준 먼저(A15 협의체·A21 외장 레이저) →</text>
+<text x="162" y="1128" font-size="12" fill="#374151">병목 부품이 양산·인수 대상(A37·A38) →</text>
+<text x="162" y="1145" font-size="12" fill="#374151">스위치 제품(A30·A33). 단 A37은 제한</text>
+<text x="162" y="1162" font-size="12" fill="#374151">시험 생산 단계(R8), A30은 일정 발표(C5).</text>
+<rect x="583" y="1050" width="423" height="128" fill="#fffbeb" stroke="#f59e0b" stroke-width="1" rx="6"/>
+<text x="595" y="1072" font-size="14" font-weight="700" fill="#92400e">② Lightmatter는 왜 연결 쪽인가</text>
+<text x="595" y="1094" font-size="12" fill="#374151">뿌리는 연산(A13, G1 연구실) → 2025 연산</text>
+<text x="595" y="1111" font-size="12" fill="#374151">칩 실증(A31)과 같은 해 연결 제품(A34).</text>
+<text x="595" y="1128" font-size="12" fill="#374151">제품 페이지 전면은 연결(C1). 같은 방향:</text>
+<text x="595" y="1145" font-size="12" fill="#374151">Lightelligence·Salience(A39, R6). 단 「전략</text>
+<text x="595" y="1162" font-size="12" fill="#374151">이동」 자체는 미확인, 표본 세 곳.</text>
+<rect x="1017" y="1050" width="423" height="128" fill="#fffbeb" stroke="#f59e0b" stroke-width="1" rx="6"/>
+<text x="1029" y="1072" font-size="14" font-weight="700" fill="#92400e">③ 5그룹 중 EO 축은 어디</text>
+<text x="1029" y="1094" font-size="12" fill="#374151">초록 마름모 = EO: G1·G2·G4·G5.</text>
+<text x="1029" y="1111" font-size="12" fill="#374151">G5는 본문 4편으로 재판정(2021~ 텐서 코어</text>
+<text x="1029" y="1128" font-size="12" fill="#374151">계열 EO, 가중치는 주로 PCM). 빨강 = 전광:</text>
+<text x="1029" y="1145" font-size="12" fill="#374151">G3(센서 앞단, 스택 밖). 파랑·회색 X1~X4는</text>
+<text x="1029" y="1162" font-size="12" fill="#374151">연산이 아닌 연결·광원 축.</text>
+<text x="40" y="1202" font-size="11" fill="#888">가설(결론 아님): 「연결은 광이 이기고 연산은 아직」. 회색 네모(A6·A10·A23·A24·A25)가 그 가설의 「연결」 쪽도 층마다 다르다는 반증이다 — 랙 안은 2024년에도 구리(A25·R1). 2026-11-25 생성 · 11-26 G5 재판정·인용 보강.</text>
+</svg>

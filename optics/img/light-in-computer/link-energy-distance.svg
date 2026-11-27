@@ -1,0 +1,91 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 640" width="900" height="640" font-family="-apple-system, 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif">
+  <title>광학과 컴퓨터 스택 — 링크 에너지 대 거리</title>
+  <rect width="900" height="640" fill="#ffffff"/>
+  <text x="450" y="28" text-anchor="middle" font-size="17" font-weight="700" fill="#1a1a1a">비트당 에너지 대 거리 — 조건이 다른 숫자는 선으로 잇지 않고 기호로만 구분</text>
+  <text x="450" y="48" text-anchor="middle" font-size="12" fill="#555">출처: Miller 2017(arXiv 1609.05510), Sun 2015(Berkeley 보도자료), DARPA PIPES 2020. 각 점의 조건은 아래 범례</text>
+  <!-- plot frame -->
+  <g stroke="#d9d9d9" stroke-width="1">
+    <line x1="80" y1="80" x2="80" y2="440"/>
+    <line x1="80" y1="170" x2="860" y2="170"/>
+    <line x1="80" y1="260" x2="860" y2="260"/>
+    <line x1="80" y1="350" x2="860" y2="350"/>
+    <line x1="80" y1="440" x2="860" y2="440"/>
+    <line x1="80" y1="80" x2="860" y2="80"/>
+    <line x1="192" y1="80" x2="192" y2="440" stroke-dasharray="3 4"/>
+    <line x1="304" y1="80" x2="304" y2="440" stroke-dasharray="3 4"/>
+    <line x1="416" y1="80" x2="416" y2="440" stroke-dasharray="3 4"/>
+    <line x1="528" y1="80" x2="528" y2="440" stroke-dasharray="3 4"/>
+    <line x1="640" y1="80" x2="640" y2="440" stroke-dasharray="3 4"/>
+  </g>
+  <rect x="690" y="80" width="170" height="360" fill="#f4f4f4"/>
+  <line x1="690" y1="80" x2="690" y2="440" stroke="#999" stroke-width="1.5"/>
+  <text x="775" y="72" text-anchor="middle" font-size="12" fill="#444" font-weight="600">거리 미명시 / 링크 일부</text>
+  <!-- 링크 범위 구역: D·E=패키지/I-O 전체, F=전기 읽기 전체, G·H=수신 회로만 -->
+  <rect x="700" y="80" width="60" height="360" fill="#e6f0fa"/>
+  <rect x="760" y="80" width="30" height="360" fill="#fbeee6"/>
+  <rect x="790" y="80" width="70" height="360" fill="#e9f5ec"/>
+  <g font-size="10" fill="#444" text-anchor="middle">
+    <text x="730" y="436">I/O 인터페이스</text>
+    <text x="775" y="436">읽기 전체</text>
+    <text x="825" y="436">수신 회로만</text>
+  </g>
+  <text x="360" y="436" font-size="11" fill="#555" text-anchor="middle">A는 배선 충전만 · B·C는 링크 전체(송신·수신·타이밍)</text>
+  <!-- y axis labels -->
+  <g font-size="12" fill="#333" text-anchor="end">
+    <text x="72" y="84">10</text><text x="72" y="174">1</text><text x="72" y="264">0.1</text><text x="72" y="354">0.01</text><text x="72" y="444">0.001</text>
+  </g>
+  <text x="26" y="260" font-size="13" fill="#222" text-anchor="middle" transform="rotate(-90 26 260)">에너지 [pJ/bit] (로그)</text>
+  <!-- x axis labels -->
+  <g font-size="12" fill="#333" text-anchor="middle">
+    <text x="80" y="458">1 mm</text><text x="192" y="458">1 cm</text><text x="304" y="458">10 cm</text><text x="416" y="458">1 m</text><text x="528" y="458">10 m</text><text x="640" y="458">100 m</text>
+  </g>
+  <text x="360" y="480" font-size="13" fill="#222" text-anchor="middle">링크 거리 (로그)</text>
+  <!-- stack hint -->
+  <g font-size="11" fill="#777" text-anchor="middle">
+    <text x="136" y="496">칩 안</text><text x="248" y="496">패키지·보드</text><text x="416" y="496">랙</text><text x="528" y="496">랙 사이</text><text x="640" y="496">데이터센터</text>
+  </g>
+  <!-- B: 1cm-10m target 0.01 pJ (hollow) -->
+  <line x1="192" y1="350" x2="528" y2="350" stroke="#1b6fb5" stroke-width="3"/>
+  <circle cx="192" cy="350" r="7" fill="#fff" stroke="#1b6fb5" stroke-width="2.5"/>
+  <circle cx="528" cy="350" r="7" fill="#fff" stroke="#1b6fb5" stroke-width="2.5"/>
+  <text x="360" y="340" font-size="13" fill="#1b6fb5" text-anchor="middle" font-weight="700">B</text>
+  <!-- C: 1cm-10m currently >= 1 pJ (estimate, triangle) -->
+  <line x1="192" y1="170" x2="528" y2="170" stroke="#c4561a" stroke-width="3"/>
+  <polygon points="192,163 199,177 185,177" fill="#c4561a"/>
+  <polygon points="528,163 535,177 521,177" fill="#c4561a"/>
+  <line x1="360" y1="170" x2="360" y2="120" stroke="#c4561a" stroke-width="2"/><polygon points="360,112 354,124 366,124" fill="#c4561a"/>
+  <text x="360" y="104" font-size="13" fill="#c4561a" text-anchor="middle" font-weight="700">C (이상)</text>
+  <!-- A: electrical on-chip wire 1 cm 0.6 pJ -->
+  <polygon points="192,176 200,192 184,192" fill="#c4561a"/>
+  <text x="212" y="196" font-size="13" fill="#c4561a" font-weight="700">A</text>
+  <!-- lane points -->
+  <!-- D DARPA target <1 pJ (hollow, down arrow) x=715 -->
+  <circle cx="715" cy="170" r="7" fill="#fff" stroke="#1b6fb5" stroke-width="2.5"/>
+  <line x1="715" y1="177" x2="715" y2="215" stroke="#1b6fb5" stroke-width="2"/><polygon points="715,223 709,211 721,211" fill="#1b6fb5"/>
+  <text x="715" y="160" font-size="13" fill="#1b6fb5" text-anchor="middle" font-weight="700">D</text>
+  <!-- E Sun 2015 1.3 pJ measured -->
+  <circle cx="745" cy="160" r="7" fill="#1a8a4a"/>
+  <text x="745" y="148" font-size="13" fill="#1a8a4a" text-anchor="middle" font-weight="700">E</text>
+  <!-- F DRAM off-chip read 5 pJ estimate -->
+  <polygon points="775,99 783,115 767,115" fill="#c4561a"/>
+  <text x="775" y="92" font-size="13" fill="#c4561a" text-anchor="middle" font-weight="700">F</text>
+  <!-- G receiver circuit 170 fJ measured (cited) -->
+  <circle cx="805" cy="239" r="7" fill="#1a8a4a"/>
+  <text x="805" y="228" font-size="13" fill="#1a8a4a" text-anchor="middle" font-weight="700">G</text>
+  <!-- H near-receiverless 1 fJ prediction -->
+  <circle cx="835" cy="438" r="7" fill="#fff" stroke="#1b6fb5" stroke-width="2.5"/>
+  <text x="835" y="424" font-size="13" fill="#1b6fb5" text-anchor="middle" font-weight="700">H</text>
+  <!-- legend -->
+  <g font-size="12" fill="#222">
+    <circle cx="90" cy="530" r="6" fill="#1a8a4a"/><text x="104" y="534">측정(칩·회로 실측 또는 인용 실측)</text>
+    <circle cx="330" cy="530" r="6" fill="#fff" stroke="#1b6fb5" stroke-width="2.5"/><text x="344" y="534">목표·예측(아직 달성 아님)</text>
+    <polygon points="560,524 567,537 553,537" fill="#c4561a"/><text x="574" y="534">문헌 서술·추정(해당 논문이 인용한 값)</text>
+  </g>
+  <g font-size="11.5" fill="#222">
+    <text x="30" y="560"><tspan font-weight="700">A</tspan> 칩 위 전기 배선 ~1 cm, ~0.6 pJ/bit — 선로 충전 에너지, 추정 (Miller 2017 Table I)</text>
+    <text x="30" y="576"><tspan font-weight="700">B</tspan> 광 링크 1 cm~10 m, ~0.01 pJ/bit(10 fJ) — 송수신·타이밍 포함 링크 전체, 목표 (Miller 2017)</text>
+    <text x="30" y="592"><tspan font-weight="700">C</tspan> 같은 거리의 현재 링크: pJ/bit 이상 — 링크 전체, 서술 (Miller 2017). 정확한 값 아님, 하한 쪽 화살표</text>
+    <text x="30" y="608"><tspan font-weight="700">D</tspan> 패키지당 100 Tbps 이상을 1 pJ/bit 미만으로 — 프로그램 목표 (DARPA PIPES 2020)   <tspan font-weight="700">E</tspan> 1.3 pJ/bit 광 I/O 실측 (Sun 2015, 거리·레이저 포함 여부 미확인)</text>
+    <text x="30" y="624"><tspan font-weight="700">F</tspan> 오프칩 DRAM 읽기 ~5 pJ (전기, 거리 미명시)   <tspan font-weight="700">G</tspan> 수신 회로만 170 fJ/bit @25 Gb/s   <tspan font-weight="700">H</tspan> 광검출기 직결 수신 시 ~1 fJ/bit 총합 (예측)</text>
+  </g>
+</svg>
