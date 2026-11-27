@@ -27,6 +27,13 @@
   const SS = OV ? OV.S.filter(s => HASH.test(s.id)) : [];
   const SROW = Object.fromEntries(((OV && OV.S) || []).map(s => [s.id, s]));
   const DEV = id => (D.DEV && D.DEV[id]) || { n: id, d: '' };
+  // 이 구조가 쓰는 소자 중 그림(해부도)이 있는 것 — 소자 카드와 같은 그림으로 간다
+  const figRow = sid => {
+    const figs = BOM(sid).flatMap(it => (DEV(it.id).fig || []).map(f => [it.id, f]));
+    if (!figs.length) return null;
+    return h('div.cmp-figtop', h('b', A.t('해부도 — 실제 장치로 보기', 'Anatomy — see the real device')),
+      h('span.cmp-figs', figs.map(([, f]) => h('a.cmp-fig', { href: A.root + f.h, target: '_blank', rel: 'noopener', title: f.s || '' }, f.n))));
+  };
   const PRIV = A.hasPrivate('compute');
 
   const st = { grp: 'o', sel: {}, vals: {}, pane: {}, marks: true, dev: null, devNum: 0, info: false };
@@ -246,6 +253,47 @@
   const instsOf = id => { const a = ((SROW[id] || {}).inst || []).slice(); Object.entries(IR).forEach(([i, v]) => { if (v.w.some(w => w.struct === id) && !a.includes(i)) a.push(i); }); return a; };
   const code = s => `${s.group.toUpperCase()}-${s.id.slice(1).padStart(2, '0')}`;
   const pict = s => h('span.cmp-pic', { html: PIC[s.id] ? `<svg viewBox="0 0 80 50" aria-hidden="true">${PIC[s.id]}</svg>` : '' });
+  // ── 목차 기본 = 원리 × 차원 격자. 가로 = 빛의 물리가 직접 하는 수학, 세로 = 빛이 퍼지는 차원 ──
+  const PRL = (OV && OV.PRL) || {}, DIML = (OV && OV.DIML) || {}, EXI = (OV && OV.EX) || [];
+  const PRL_EN = { LIN: 'Linear transform', DYN: 'Temporal dynamics', OPT: 'Optimization', LOG: 'Logic', MOV: 'Moving data', QNT: 'Quantum' };
+  const DIML_EN = { '2D': ['In-plane — 2D', 'flows inside on-chip waveguides'], '3D': ['Surface-normal — 3D', 'passes through plates into free space'], '1T': ['One line + time', 'fibre and delay loops; parallelism from time'], MX: ['Mixed by segment', '2D on chip, fibre or free space between'] };
+  // 차원 머리 그림: 빛이 칩·판에 대해 퍼지는 모양 (빨강 = 빛)
+  const DPIC = {
+    '2D': '<path class="pl" d="M6 22 L20 10 L60 10 L46 22 Z"/><path class="lt" d="M14 18 L52 14"/><path class="lt" d="M48 12 l4 2 -4 3"/>',
+    '3D': '<rect class="pl" x="11" y="5" width="6" height="20" rx="1"/><rect class="pl" x="27" y="5" width="6" height="20" rx="1"/><rect class="pl" x="43" y="5" width="6" height="20" rx="1"/><path class="lt" d="M2 15 H60"/><path class="lt" d="M56 12 l4 3 -4 3"/>',
+    '1T': '<ellipse cx="32" cy="15" rx="22" ry="10"/><circle class="dot" cx="12" cy="12" r="2.2"/><circle class="dot" cx="24" cy="5.6" r="2.2"/><circle class="dot" cx="40" cy="5.6" r="2.2"/><circle class="dot" cx="52" cy="12" r="2.2"/><circle class="dot" cx="44" cy="23.5" r="2.2"/>',
+    'MX': '<path class="pl" d="M2 20 L10 12 L22 12 L14 20 Z"/><path class="pl" d="M42 20 L50 12 L62 12 L54 20 Z"/><path class="lt" d="M18 16 C26 4 36 28 46 16"/>',
+  };
+  // 행 = 연산 원리, 열 = 차원. 원리마다 자기 높이를 가져서 카드가 적은 원리는 행이 얇다(선형 변환이 많다는 것이 행 두께로 보인다)
+  function gridView() {
+    const PK = Object.keys(PRL), DK = Object.keys(DIML);
+    const card = pk => s => h('button.cmp-gxit.pr-' + pk, { type: 'button', title: (s.desc || '') + (s.dimnote ? ' — ' + s.dimnote : ''), onclick: () => A.route.go('', s.id) },
+      pict(s),
+      h('span.cmp-gxbody',
+        h('span.cmp-gxname', A.tr(s.short), h('span.cmp-gxcode', code(s) + (s.pre ? ' ▲' : '') + (s.dimnote ? ' ?' : ''))),
+        h('span.cmp-ovsub', h('i', { style: { background: VC[s.vol] || 'var(--faint)' } }), `${A.tr(s.weight)} · ${A.tr(s.vol)}${s.vol === '비휘발' ? ' ◆' : ''}`)));
+    const exCard = pk => e => h('span.cmp-gxit.ex.pr-' + pk, { title: A.lang === 'en' ? e.en : e.d },
+      e.pic ? h('span.cmp-pic', { html: `<svg viewBox="0 0 80 50" aria-hidden="true">${e.pic}</svg>` }) : h('span.cmp-pic.cmp-picnone', A.t('그림 없음', 'no figure')),
+      h('span.cmp-gxbody', h('span.cmp-gxname', A.lang === 'en' ? e.en : e.n, h('span.cmp-gxcode', A.t('새', 'new')))));
+    const rows = PK.map(pk => {
+      const n = SS.filter(s => s.pr === pk).length + EXI.filter(e => e.pr === pk).length;
+      return [
+        h('div.cmp-gxrh.pr-' + pk, h('b', A.t(PRL[pk], PRL_EN[pk])), h('small', A.t(`${n}개`, `${n}`))),
+        DK.map(dk => {
+          const ss = SS.filter(s => s.pr === pk && s.dim === dk), ex = EXI.filter(e => e.pr === pk && e.dim === dk);
+          if (!ss.length && !ex.length) return h('div.cmp-gxc.empty', A.t('빈칸', 'empty'));
+          return h('div.cmp-gxc', ss.map(card(pk)), ex.map(exCard(pk)));
+        })];
+    });
+    return h('div.cmp-gxwrap', h('div.cmp-gx.cmp-gxT', h('div'),
+      DK.map(dk => h('div.cmp-gxch', DPIC[dk] ? h('span.cmp-gxpic', { html: `<svg viewBox="0 0 64 30" aria-hidden="true">${DPIC[dk]}</svg>` }) : null,
+        h('span.cmp-gxct', h('b', A.t(DIML[dk][0], DIML_EN[dk][0])), h('small', A.t(DIML[dk][1], DIML_EN[dk][1]))))), rows));
+  }
+  const gridRead = () => h('div.cmp-read',
+    h('p', h('b', A.t('센서 앞 계산(▲)은 거의 3D 줄에 있다.', 'Computing before detection (▲) sits almost entirely in the 3D row.')), A.t(' 카메라 입력은 처음부터 면에 수직으로 오는 2D 영상이라서다. 입력이 처음부터 빛인 응용을 노리라는 McMahon의 전략이 곧 이 줄이다.', ' Camera input already arrives as a 2D image normal to the surface. McMahon’s advice to target applications whose input is already light is exactly this row.')),
+    h('p', h('b', A.t('시간 동역학·최적화는 「한 줄 + 시간」에 몰린다.', 'Dynamics and optimization cluster in “one line + time”.')), A.t(' 되먹임에는 지연이 필요하고, 광섬유 루프가 지연을 가장 싸게 준다.', ' Feedback needs delay, and fibre loops give delay most cheaply.')),
+    h('p', h('b', A.t('2D 줄은 선형과 데이터 이동이 대부분이다.', 'The 2D row is mostly linear transforms and data movement.')), A.t(' 같은 실리콘 포토닉스 공장에서 계산 칩과 인터커넥트 칩이 함께 나온다.', ' The same silicon-photonics foundries make both compute chips and interconnect chips.')),
+    h('p', h('b', A.t('같은 원리가 줄을 바꿔 다시 나온다.', 'The same principle reappears in another row.')), A.t(' 회절판(3D)은 칩 위 슬롯 줄(2D)로, S-SEED(3D)와 회절판은 기하학적 쌍둥이다. 줄 사이 이동이 따로 자란 분야를 잇는 자리다. 빈칸은 「없다」가 아니라 「아직 확인하지 않았다」이다.', ' Diffractive plates (3D) become slot rows on chip (2D); S-SEED (3D) and diffractive plates are geometric twins. Moving between rows is where separately grown fields connect. Empty cells mean “not yet checked”, not “nothing there”.')));
   function renderOverview() {
     if (!OV) { mount(stage, h('p.empty.cmp-pad', A.t('데이터 로드 실패 — 목차 데이터를 읽지 못했다.', 'Failed to load — could not read the overview data.'))); mount(side); return; }
     const para = (CP && CP.PARA) || [];
@@ -284,7 +332,21 @@
         h('a', { href: 'about.html' }, A.t('만든 사람', 'About the author')),
         h('a', { href: '#a5' }, A.t('먼저 볼 구조 — PCM 크로스바', 'Start here — PCM crossbar')),
         h('a', { href: 'writing-matrix-crossbar.html' }, A.t('먼저 읽을 글 — 신경망이 어떻게 크로스바로 표현될까?', 'Read first — How can a neural network be expressed as a crossbar?'))));
-    mount(stage, h('div.cmp-ov', who, rows, read));
+    // 갈래의 역사 — 시간 × 무엇을 계산하나 (그림은 scripts/branches_svg.py 가 만든다)
+    const hist = h('figure.cmp-hist',
+      h('a', { href: A.root + 'img/compute/' + (A.lang === 'en' ? 'branches-en.svg' : 'branches.svg'), target: '_blank', rel: 'noopener', title: A.t('크게 보기', 'Open full size') },
+        h('img', { src: A.root + 'img/compute/' + (A.lang === 'en' ? 'branches-en.svg' : 'branches.svg'), loading: 'lazy',
+          alt: A.t('광 연산의 갈래를 1960년부터 2026년까지 시간축에 그린 그림. 위 두 줄(디지털 논리, 데이터 이동)은 Miller 2010이 다룬 범위이고, 아래 네 줄(행렬곱, 시간 동역학, 최적화, 검출 전 계산)은 그 잣대 밖의 아날로그 연산이다.',
+            'Branches of optical computing on a timeline from 1960 to 2026. The top two rows (digital logic, moving data) are what Miller 2010 covered; the four rows below (matrix multiply, temporal dynamics, optimization, computing before detection) are analog computing outside that yardstick.') })),
+      h('figcaption', A.t('갈래는 언제 갈라졌나. Miller 2010의 잣대는 논리 소자의 기준이라 위 두 줄만 잰다 — 아래 네 줄은 그 기준을 비켜 가서 2010년 이후 갈라져 나왔다. ', 'When did the branches split? Miller 2010\'s yardstick is a test for logic devices, so it measures only the top two rows — the four below sidestep it and branched out after 2010. '),
+        h('a', { href: A.root + 'writing-review-miller-2010.html' }, A.t('Miller 2010 글 읽기', 'Read the Miller 2010 piece (Korean)'))));
+    const kindMode = !!st.ovk;
+    const sw = h('div.cmp-ovsw',
+      opt(A.t('원리 × 차원', 'Principle × dimension'), !kindMode, () => A.route.set({ ov: null })),
+      opt(A.t('산업 지형 (기존 갈래)', 'Industry map (branches)'), kindMode, () => A.route.set({ ov: 'kind' })),
+      h('span.cmp-glegend', kindMode ? A.t('갈래 = 시장·커뮤니티 기준. 기관 지도와 이어진다.', 'Branches follow markets and communities; linked to the institutions map.')
+        : A.t('카드를 누르면 그 구조로 · 붉은 자리 = 가중치가 사는 곳 · ▲ 센서·변환 앞 · ◆ 비휘발 · 새 = 아직 구조 페이지 없음 · ? 차원 확인 필요', 'Click a card to open it · red = where the weights live · ▲ before detection · ◆ non-volatile · new = no structure page yet · ? dimension to check')));
+    mount(stage, h('div.cmp-ov', who, sw, kindMode ? [rows, read] : [gridView(), gridRead()], hist));
   }
   // ── 그림 크기: 남은 높이에 맞춘 폭 (넓은 화면). 좁은 화면은 칸 폭 그대로 ──
   function fitW(fw, fh) {
@@ -557,7 +619,7 @@
       h('div.cmp-note'));
     const deep = LAB[E.id] ? h('button.cmp-deep', { type: 'button', onclick: () => A.route.set({ deep: '1' }) },
       h('b', A.t('깊게 보기', 'Deep view')), h('span', A.t('논문 프리셋으로 재료·광원·검출기를 바꿔 돌려 본다 · 3D', 'Swap materials, sources and detectors with paper presets and run it · 3D'))) : null;
-    mount(side, h('div.cmp-main-side', head, deep, toPapers, panes, intro, ctl, stats, read, h('div#cmp-dev')), foot);
+    mount(side, h('div.cmp-main-side', head, deep, figRow(E.id), toPapers, panes, intro, ctl, stats, read, h('div#cmp-dev')), foot);
     stats.hidden = true;
 
     if (legacy) {
@@ -585,8 +647,7 @@
       it ? h('p.cmp-devr', it.r) : null,
       h('div.cmp-devd', d.d || ''),
       how.length ? h('p.cmp-devh', A.t('만드는 법 · ', 'How it is made · ') + how.join(' · ')) : null,
-      it && it.w ? h('p.cmp-devw', '↳ ' + it.w) : null,
-      h('a.cmp-devgo', { href: 'devices.html#' + st.dev }, A.t('소자 페이지에서 어디에 쓰이나', 'Where it is used — devices page'))));
+      it && it.w ? h('p.cmp-devw', '↳ ' + it.w) : null));
   }
 
   // ── 부품 선반: 그림 아래, 부품을 「빛에 무엇을 하나」 순으로. 누르면 그림의 자리와 설명이 열린다 ──
@@ -675,7 +736,7 @@
     lastR = r;
     // #kind/<갈래> — 목차의 그 갈래 행으로(기관 페이지의 종류 칩이 온다)
     if (r.key === 'kind') {
-      st.grp = 'o'; st.dev = null; st.deep = false; render();
+      st.grp = 'o'; st.ovk = true; st.dev = null; st.deep = false; render();
       const el = document.getElementById('kind-' + r.arg);
       if (el) { el.classList.add('cmp-ovhl'); el.scrollIntoView({ block: 'start' }); }
       return;
@@ -686,6 +747,7 @@
     if (LABKEYS.some(k => r.params[k] != null) && !(st.deep && m && LAB[m[1] + m[2]])) { A.route.set(Object.fromEntries(LABKEYS.map(k => [k, null])), { replace: true }); return; }
     if (lab && st.deep && m && labFor === m[1] + m[2]) { lab.update(r); return; }
     if (m) { st.grp = m[1]; st.sel[m[1]] = m[1] + m[2]; } else st.grp = 'o';
+    st.ovk = A.route.param(r, 'ov', '') === 'kind';
     st.dev = null;
     render();
     if (A.narrow()) window.scrollTo(0, 0);

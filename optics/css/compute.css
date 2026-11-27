@@ -226,3 +226,53 @@ aside.cmp-side{padding:22px 28px 28px;gap:20px}
 .cmp-lab{padding:4px 0 20px}
 .cmp-topapers{align-self:flex-start;font:inherit;font-size:12px;padding:4px 10px;border:1px solid var(--rule);border-radius:999px;background:transparent;color:var(--probe);cursor:pointer}
 .cmp-topapers:hover{border-color:var(--probe)}
+/* 목차 위 갈래 그림 — 시간 × 무엇을 계산하나. 그림이 자기 바탕색을 갖고 있어 다크 모드에서도 밝은 판 그대로 둔다 */
+.cmp-hist{margin:4px 0 26px}
+.cmp-hist img{display:block;width:100%;height:auto;border:1px solid var(--rule);border-radius:8px;background:#fbfaf7}
+.cmp-hist figcaption{margin-top:8px;font-size:13px;line-height:1.7;color:var(--muted)}
+
+/* 목차 기본 — 원리 × 차원 격자 */
+.cmp-ovsw{display:flex;flex-wrap:wrap;align-items:center;gap:6px 8px;padding:16px 0 4px}
+.cmp-glegend{font-size:12px;color:var(--muted);margin-left:6px}
+.cmp-gxwrap{overflow-x:auto;padding:8px 0 4px}
+.cmp-gx{display:grid;grid-template-columns:132px repeat(6,minmax(190px,1fr));gap:6px;min-width:1290px}
+.cmp-gxh{font-size:12.5px;font-weight:700;text-align:center;padding:7px 4px;border-radius:7px;color:#fff;background:var(--pc)}
+.cmp-gxr{display:flex;flex-direction:column;gap:2px;padding:8px 10px;border-radius:7px;border:1px solid var(--rule);background:var(--bg);font-size:12.5px}
+.cmp-gxr small{font-size:11px;line-height:1.45;color:var(--muted)}
+.cmp-gxc{display:flex;flex-direction:column;gap:5px;padding:6px;border-radius:7px;border:1px solid var(--rule);background:var(--bg);min-width:0}
+.cmp-gxc.empty{border-style:dashed;align-items:center;justify-content:center;color:var(--faint);font-size:11.5px;min-height:46px;background:transparent}
+.cmp-gxit{font:inherit;font-size:12.5px;line-height:1.35;text-align:left;display:flex;flex-direction:row;align-items:center;gap:8px;padding:6px 8px;border-radius:6px;border:1px solid var(--rule);border-left:4px solid var(--pc);background:var(--panel);color:var(--ink);cursor:pointer;min-width:0}
+.cmp-gxit .cmp-pic{width:62px;height:39px}
+.cmp-gxbody{display:flex;flex-direction:column;gap:2px;min-width:0;flex:1}
+.cmp-gxname{display:flex;justify-content:space-between;gap:6px;align-items:baseline;font-weight:500}
+.cmp-picnone{display:flex;align-items:center;justify-content:center;border:1px dashed var(--rule);border-radius:5px;font-size:10.5px;color:var(--faint)}
+.cmp-gxit:hover{border-color:var(--pc)}
+.cmp-gxit.ex{cursor:default;border-style:dashed;border-left-style:solid;color:var(--muted)}
+.cmp-gxcode{font-family:var(--mono);font-size:10px;color:var(--muted);white-space:nowrap}
+.pr-LIN{--pc:#3a7bbf}.pr-DYN{--pc:#7a4f8f}.pr-OPT{--pc:#c0392b}.pr-LOG{--pc:#b07d22}.pr-MOV{--pc:#2f6b3e}.pr-QNT{--pc:#5a5a5a}
+.cmp-gxit .cmp-ovsub{font-size:10px}
+.cmp-gxname .cmp-gxcode{margin-left:4px}
+
+.cmp-figtop{display:flex;flex-direction:column;gap:6px;margin:10px 0 12px;padding:10px 12px;border:1px solid var(--ui);border-radius:8px}
+.cmp-figtop b{font-size:13px;color:var(--ui)}
+.cmp-figs{display:inline-flex;flex-wrap:wrap;gap:6px}
+.cmp-fig{font-size:12.5px;padding:3px 10px;border-radius:999px;border:1px solid var(--ui);color:var(--ui);text-decoration:none;white-space:nowrap}
+.cmp-fig::after{content:" ↗"}
+.cmp-fig:hover{background:var(--ui);color:var(--bg,#fff)}
+
+/* 원리 × 차원 — 행 = 원리, 열 = 차원 */
+.cmp-gx.cmp-gxT{grid-template-columns:112px repeat(4,minmax(220px,1fr));min-width:1000px}
+.cmp-gxch{display:flex;gap:10px;align-items:center;padding:4px 4px 8px;border-bottom:2px solid var(--ink);color:var(--ink);font-size:13px}
+.cmp-gxct{display:flex;flex-direction:column;gap:1px;min-width:0}
+.cmp-gxch small{font-size:11px;line-height:1.35;color:var(--muted)}
+.cmp-gxpic{flex:none;width:64px;height:30px}
+.cmp-gxpic svg{width:100%;height:100%}
+.cmp-gxpic *{fill:none;stroke:var(--ink);stroke-width:1.4;stroke-linecap:round;stroke-linejoin:round}
+.cmp-gxpic .lt{stroke:var(--beam);stroke-width:1.8}
+.cmp-gxpic .pl{fill:var(--grid)}
+.cmp-gxpic .dot{fill:var(--beam);stroke:none}
+.cmp-gxrh{display:flex;flex-direction:column;gap:2px;justify-content:center;align-items:center;text-align:center;padding:8px 10px;border-radius:7px;color:#fff;background:var(--pc);font-size:13px}
+.cmp-gxrh small{font-size:11px;opacity:.85}
+.cmp-gxT .cmp-gxc{flex-direction:row;flex-wrap:wrap;align-content:flex-start}
+.cmp-gxT .cmp-gxit{flex:1 1 210px}
+.cmp-gxT .cmp-gxc.empty{min-height:0}
