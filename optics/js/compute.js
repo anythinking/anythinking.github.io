@@ -290,10 +290,10 @@
         h('span.cmp-gxct', h('b', A.t(DIML[dk][0], DIML_EN[dk][0])), h('small', A.t(DIML[dk][1], DIML_EN[dk][1]))))), rows));
   }
   const gridRead = () => h('div.cmp-read',
-    h('p', h('b', A.t('센서 앞 계산(▲)은 거의 3D 줄에 있다.', 'Computing before detection (▲) sits almost entirely in the 3D row.')), A.t(' 카메라 입력은 처음부터 면에 수직으로 오는 2D 영상이라서다. 입력이 처음부터 빛인 응용을 노리라는 McMahon의 전략이 곧 이 줄이다.', ' Camera input already arrives as a 2D image normal to the surface. McMahon’s advice to target applications whose input is already light is exactly this row.')),
-    h('p', h('b', A.t('시간 동역학·최적화는 「한 줄 + 시간」에 몰린다.', 'Dynamics and optimization cluster in “one line + time”.')), A.t(' 되먹임에는 지연이 필요하고, 광섬유 루프가 지연을 가장 싸게 준다.', ' Feedback needs delay, and fibre loops give delay most cheaply.')),
-    h('p', h('b', A.t('2D 줄은 선형과 데이터 이동이 대부분이다.', 'The 2D row is mostly linear transforms and data movement.')), A.t(' 같은 실리콘 포토닉스 공장에서 계산 칩과 인터커넥트 칩이 함께 나온다.', ' The same silicon-photonics foundries make both compute chips and interconnect chips.')),
-    h('p', h('b', A.t('같은 원리가 줄을 바꿔 다시 나온다.', 'The same principle reappears in another row.')), A.t(' 회절판(3D)은 칩 위 슬롯 줄(2D)로, S-SEED(3D)와 회절판은 기하학적 쌍둥이다. 줄 사이 이동이 따로 자란 분야를 잇는 자리다. 빈칸은 「없다」가 아니라 「아직 확인하지 않았다」이다.', ' Diffractive plates (3D) become slot rows on chip (2D); S-SEED (3D) and diffractive plates are geometric twins. Moving between rows is where separately grown fields connect. Empty cells mean “not yet checked”, not “nothing there”.')));
+    h('p', h('b', A.t('센서 안·ADC 앞 계산(▲)은 4개 중 3개가 3D 열에 있다.', 'Three of the four in-sensor or pre-ADC designs (▲) sit in the 3D column.')), A.t(' 카메라 입력은 처음부터 면에 수직으로 오는 영상이라서다. 입력이 처음부터 빛인 응용을 노리라는 McMahon의 제안과 겹치지만, 그 제안이 3D 구조에만 해당하는 건 아니다.', ' Camera input already arrives as an image normal to the surface. This overlaps with McMahon’s advice to target applications whose input is already light, though that advice is not limited to 3D designs.')),
+    h('p', h('b', A.t('되먹임 구조는 「한 줄 + 시간」을 자주 쓴다.', 'Feedback designs often use “one line + time”.')), A.t(' 지연 루프 리저버와 코히런트 이징 머신이 그렇다 — 광섬유 고리가 긴 지연을 싸게 주기 때문이다. 다만 시간 동역학·최적화 전체는 네 열에 고루 퍼져 있다.', ' The delay-loop reservoir and the coherent Ising machine do — a fibre loop gives a long delay cheaply. Temporal dynamics and optimization as a whole, though, spread across all four columns.')),
+    h('p', h('b', A.t('2D 열은 선형 변환과 데이터 이동이 대부분이다(16개 중 10개).', 'The 2D column is mostly linear transforms and data movement (10 of 16).')), A.t(' 실리콘 포토닉스 공정이 계산용과 연결용 소자 블록을 함께 제공하는 경우가 많다.', ' Silicon-photonics processes often offer device blocks for both computing and interconnects.')),
+    h('p', h('b', A.t('같은 원리가 열을 바꿔 다시 나온다.', 'The same principle reappears in another column.')), A.t(' 회절판(3D)은 칩 위 슬롯 줄(2D)로 옮겨 갔다. S-SEED(3D)와 회절판은 자유공간에서 층을 건너가는 배치가 닮았지만, 소자 원리와 비선형은 전혀 다르다. 열 사이 이동이 따로 자란 분야를 잇는 자리다. 빈칸은 「없다」가 아니라 「아직 확인하지 않았다」이다.', ' Diffractive plates (3D) moved on chip as slot rows (2D). S-SEED (3D) and diffractive plates share a free-space layer-to-layer layout, but their device physics and nonlinearity are entirely different. Moving between columns is where separately grown fields connect. Empty cells mean “not yet checked”, not “nothing there”.')));
   function renderOverview() {
     if (!OV) { mount(stage, h('p.empty.cmp-pad', A.t('데이터 로드 실패 — 목차 데이터를 읽지 못했다.', 'Failed to load — could not read the overview data.'))); mount(side); return; }
     const para = (CP && CP.PARA) || [];
@@ -336,16 +336,16 @@
     const hist = h('figure.cmp-hist',
       h('a', { href: A.root + 'img/compute/' + (A.lang === 'en' ? 'branches-en.svg' : 'branches.svg'), target: '_blank', rel: 'noopener', title: A.t('크게 보기', 'Open full size') },
         h('img', { src: A.root + 'img/compute/' + (A.lang === 'en' ? 'branches-en.svg' : 'branches.svg'), loading: 'lazy',
-          alt: A.t('광 연산의 갈래를 1960년부터 2026년까지 시간축에 그린 그림. 위 두 줄(디지털 논리, 데이터 이동)은 Miller 2010이 다룬 범위이고, 아래 네 줄(행렬곱, 시간 동역학, 최적화, 검출 전 계산)은 그 잣대 밖의 아날로그 연산이다.',
-            'Branches of optical computing on a timeline from 1960 to 2026. The top two rows (digital logic, moving data) are what Miller 2010 covered; the four rows below (matrix multiply, temporal dynamics, optimization, computing before detection) are analog computing outside that yardstick.') })),
-      h('figcaption', A.t('갈래는 언제 갈라졌나. Miller 2010의 잣대는 논리 소자의 기준이라 위 두 줄만 잰다 — 아래 네 줄은 그 기준을 비켜 가서 2010년 이후 갈라져 나왔다. ', 'When did the branches split? Miller 2010\'s yardstick is a test for logic devices, so it measures only the top two rows — the four below sidestep it and branched out after 2010. '),
+          alt: A.t('광 연산의 갈래를 1960년부터 2026년까지 시간축에 그린 그림. 위 두 줄(디지털 논리, 데이터 이동)은 Miller 2010이 다룬 범위이고, 아래 네 줄(행렬곱, 시간 동역학, 최적화, 센서·ADC 앞 계산)은 그 잣대를 그대로 대기 어려운 아날로그 연산이다.',
+            'Branches of optical computing on a timeline from 1960 to 2026. The top two rows (digital logic, moving data) are what Miller 2010 covered; the four rows below (matrix multiply, temporal dynamics, optimization, in-sensor or pre-ADC computing) are analog computing to which that yardstick does not directly apply.') })),
+      h('figcaption', A.t('갈래는 언제 갈라졌나. Miller 2010의 잣대는 논리 소자의 기준이라 위 두 줄에 맞춰져 있다 — 아래 네 줄(아날로그 연산)은 1960년대부터 있었지만 2010년 이후 크게 늘었다. ', 'When did the branches split? Miller 2010\'s yardstick is a test for logic devices, so it fits the top two rows — the four below (analog computing) date back to the 1960s but grew sharply after 2010. '),
         h('a', { href: A.root + 'writing-review-miller-2010.html' }, A.t('Miller 2010 글 읽기', 'Read the Miller 2010 piece (Korean)'))));
     const kindMode = !!st.ovk;
     const sw = h('div.cmp-ovsw',
       opt(A.t('원리 × 차원', 'Principle × dimension'), !kindMode, () => A.route.set({ ov: null })),
       opt(A.t('산업 지형 (기존 갈래)', 'Industry map (branches)'), kindMode, () => A.route.set({ ov: 'kind' })),
       h('span.cmp-glegend', kindMode ? A.t('갈래 = 시장·커뮤니티 기준. 기관 지도와 이어진다.', 'Branches follow markets and communities; linked to the institutions map.')
-        : A.t('카드를 누르면 그 구조로 · 붉은 자리 = 가중치가 사는 곳 · ▲ 센서·변환 앞 · ◆ 비휘발 · 새 = 아직 구조 페이지 없음 · ? 차원 확인 필요', 'Click a card to open it · red = where the weights live · ▲ before detection · ◆ non-volatile · new = no structure page yet · ? dimension to check')));
+        : A.t('카드를 누르면 그 구조로 · 붉은 자리 = 가중치가 사는 곳 · ▲ 센서 안·ADC 앞 · ◆ 비휘발 · 새 = 아직 구조 페이지 없음 · ? 차원 확인 필요', 'Click a card to open it · red = where the weights live · ▲ in-sensor or pre-ADC · ◆ non-volatile · new = no structure page yet · ? dimension to check')));
     mount(stage, h('div.cmp-ov', who, sw, kindMode ? [rows, read] : [gridView(), gridRead()], hist));
   }
   // ── 그림 크기: 남은 높이에 맞춘 폭 (넓은 화면). 좁은 화면은 칸 폭 그대로 ──

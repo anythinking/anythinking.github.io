@@ -30,7 +30,7 @@
 <rect x="20" y="130" width="6" height="256" fill="#8c3527"/>
 <text x="34" y="148" font-size="14" font-weight="700" fill="#8c3527">What Miller 2010 covered — digital logic, and its lesson (light wins at connecting)</text>
 <rect x="20" y="406" width="6" height="494" fill="#3a7bbf"/>
-<text x="34" y="424" font-size="14" font-weight="700" fill="#1e4a72">Outside Miller's yardstick — analog computing. No level restoration or cascading needed, so it sidesteps those criteria</text>
+<text x="34" y="424" font-size="14" font-weight="700" fill="#1e4a72">Analog computing — Miller's logic-device yardstick does not apply directly (precision and noise matter instead of level restoration)</text>
 <rect x="20" y="164" width="1480" height="110" rx="8" fill="#fff" stroke="#e6e1d8" fill-opacity="0.85"/>
 <rect x="20" y="282" width="1480" height="110" rx="8" fill="#f6f3ee" stroke="#e6e1d8" fill-opacity="0.85"/>
 <rect x="20" y="440" width="1480" height="110" rx="8" fill="#fff" stroke="#e6e1d8" fill-opacity="0.85"/>
@@ -39,10 +39,10 @@
 <rect x="20" y="794" width="1480" height="110" rx="8" fill="#f6f3ee" stroke="#e6e1d8" fill-opacity="0.85"/>
 <line x1="760" y1="164" x2="760" y2="392" stroke="#8c3527" stroke-width="2.2" stroke-dasharray="6 4"/>
 <text x="34" y="215.0" font-size="17" font-weight="700" fill="#1e1e1e">Digital logic</text><text x="34" y="235.0" font-size="12.5" fill="#6b6560">The general-purpose optical computer</text>
-<line x1="505" y1="219.0" x2="1480" y2="219.0" stroke="#c9c2b8" stroke-width="2"/>
-<circle cx="505.0" cy="219.0" r="7" fill="#c08a2e" stroke="#fff" stroke-width="1.5"/>
-<text x="505" y="189.0" font-size="12.5" font-weight="700" fill="#3a3530" text-anchor="middle" stroke="#fbfaf7" stroke-width="4" stroke-linejoin="round" paint-order="stroke">Optical bistability</text>
-<text x="505" y="204.0" font-size="11" fill="#8a837c" text-anchor="middle" stroke="#fbfaf7" stroke-width="4" stroke-linejoin="round" paint-order="stroke">1985 · Gibbs · fails most criteria</text>
+<line x1="413" y1="219.0" x2="1480" y2="219.0" stroke="#c9c2b8" stroke-width="2"/>
+<circle cx="413.2" cy="219.0" r="7" fill="#c08a2e" stroke="#fff" stroke-width="1.5"/>
+<text x="413" y="189.0" font-size="12.5" font-weight="700" fill="#3a3530" text-anchor="middle" stroke="#fbfaf7" stroke-width="4" stroke-linejoin="round" paint-order="stroke">Optical bistability</text>
+<text x="413" y="204.0" font-size="11" fill="#8a837c" text-anchor="middle" stroke="#fbfaf7" stroke-width="4" stroke-linejoin="round" paint-order="stroke">1976 · Gibbs et al. first demo (1985 book) — fails most criteria</text>
 <circle cx="545.8" cy="219.0" r="7" fill="#c08a2e" stroke="#fff" stroke-width="1.5"/>
 <text x="546" y="241.0" font-size="12.5" font-weight="700" fill="#3a3530" text-anchor="middle" stroke="#fbfaf7" stroke-width="4" stroke-linejoin="round" paint-order="stroke">S-SEED · the only one to pass</text>
 <text x="546" y="256.0" font-size="11" fill="#8a837c" text-anchor="middle" stroke="#fbfaf7" stroke-width="4" stroke-linejoin="round" paint-order="stroke">1989 · 1984 SEED (Miller) → 1993 system demo · Bell Labs</text>
@@ -50,8 +50,8 @@
 <text x="729" y="189.0" font-size="12.5" font-weight="700" fill="#3a3530" text-anchor="middle" stroke="#fbfaf7" stroke-width="4" stroke-linejoin="round" paint-order="stroke">Gain · quantum dots · molecules</text>
 <text x="729" y="204.0" font-size="11" fill="#8a837c" text-anchor="middle" stroke="#fbfaf7" stroke-width="4" stroke-linejoin="round" paint-order="stroke">2007 · 2006–09 nano/quantum attempts</text>
 <circle cx="773.5" cy="219.0" r="7" fill="#3a7bbf" stroke="#fff" stroke-width="1.5"/>
-<text x="773" y="241.0" font-size="12.5" font-weight="700" fill="#3a3530" text-anchor="middle" stroke="#fbfaf7" stroke-width="4" stroke-linejoin="round" paint-order="stroke">PhC nanocavity 0.42 fJ</text>
-<text x="773" y="256.0" font-size="11" fill="#8a837c" text-anchor="middle" stroke="#fbfaf7" stroke-width="4" stroke-linejoin="round" paint-order="stroke">2010 · Notomi · NTT</text>
+<text x="773" y="241.0" font-size="12.5" font-weight="700" fill="#3a3530" text-anchor="middle" stroke="#fbfaf7" stroke-width="4" stroke-linejoin="round" paint-order="stroke">PhC nanocavity 0.42 fJ (3 dB)</text>
+<text x="773" y="256.0" font-size="11" fill="#8a837c" text-anchor="middle" stroke="#fbfaf7" stroke-width="4" stroke-linejoin="round" paint-order="stroke">2010 · Nozaki et al. · NTT</text>
 <circle cx="1165.0" cy="219.0" r="7" fill="#3a7bbf" stroke="#fff" stroke-width="1.5"/>
 <text x="1165" y="189.0" font-size="12.5" font-weight="700" fill="#3a3530" text-anchor="middle" stroke="#fbfaf7" stroke-width="4" stroke-linejoin="round" paint-order="stroke">Femtofarad O-E-O · hybrid</text>
 <text x="1165" y="204.0" font-size="11" fill="#8a837c" text-anchor="middle" stroke="#fbfaf7" stroke-width="4" stroke-linejoin="round" paint-order="stroke">2019 · NTT · Nat Photon</text>
@@ -65,7 +65,7 @@
 <text x="495" y="322.0" font-size="11" fill="#8a837c" text-anchor="middle" stroke="#fbfaf7" stroke-width="4" stroke-linejoin="round" paint-order="stroke">1984 · Goodman · Proc IEEE</text>
 <circle cx="525.4" cy="337.0" r="7" fill="#2f6b3e" stroke="#fff" stroke-width="1.5"/>
 <text x="525" y="359.0" font-size="12.5" font-weight="700" fill="#3a3530" text-anchor="middle" stroke="#fbfaf7" stroke-width="4" stroke-linejoin="round" paint-order="stroke">EDFA · long-haul links</text>
-<text x="525" y="374.0" font-size="11" fill="#8a837c" text-anchor="middle" stroke="#fbfaf7" stroke-width="4" stroke-linejoin="round" paint-order="stroke">1987 · Payne · the capacity of the internet</text>
+<text x="525" y="374.0" font-size="11" fill="#8a837c" text-anchor="middle" stroke="#fbfaf7" stroke-width="4" stroke-linejoin="round" paint-order="stroke">1987 · Mears · Payne et al. · Southampton</text>
 <circle cx="658.0" cy="337.0" r="7" fill="#2f6b3e" stroke="#fff" stroke-width="1.5"/>
 <text x="658" y="307.0" font-size="12.5" font-weight="700" fill="#3a3530" text-anchor="middle" stroke="#fbfaf7" stroke-width="4" stroke-linejoin="round" paint-order="stroke">Case for optical links</text>
 <text x="658" y="322.0" font-size="11" fill="#8a837c" text-anchor="middle" stroke="#fbfaf7" stroke-width="4" stroke-linejoin="round" paint-order="stroke">2000 · Miller · Proc IEEE</text>
@@ -75,20 +75,20 @@
 <circle cx="985.0" cy="337.0" r="7" fill="#3a7bbf" stroke="#fff" stroke-width="1.5"/>
 <text x="985" y="307.0" font-size="12.5" font-weight="700" fill="#3a3530" text-anchor="middle" stroke="#fbfaf7" stroke-width="4" stroke-linejoin="round" paint-order="stroke">Microprocessor with optical I/O</text>
 <text x="985" y="322.0" font-size="11" fill="#8a837c" text-anchor="middle" stroke="#fbfaf7" stroke-width="4" stroke-linejoin="round" paint-order="stroke">2015 · Sun·Stojanović·Popović · Nature</text>
-<circle cx="1300.0" cy="337.0" r="7" fill="#2f6b3e" stroke="#fff" stroke-width="1.5"/>
-<text x="1300" y="359.0" font-size="12.5" font-weight="700" fill="#3a3530" text-anchor="middle" stroke="#fbfaf7" stroke-width="4" stroke-linejoin="round" paint-order="stroke">TPU v4 optical circuit switch</text>
-<text x="1300" y="374.0" font-size="11" fill="#8a837c" text-anchor="middle" stroke="#fbfaf7" stroke-width="4" stroke-linejoin="round" paint-order="stroke">2022 · Google · ISCA 2023</text>
+<circle cx="1210.0" cy="337.0" r="7" fill="#2f6b3e" stroke="#fff" stroke-width="1.5"/>
+<text x="1210" y="359.0" font-size="12.5" font-weight="700" fill="#3a3530" text-anchor="middle" stroke="#fbfaf7" stroke-width="4" stroke-linejoin="round" paint-order="stroke">TPU v4 optical circuit switch</text>
+<text x="1210" y="374.0" font-size="11" fill="#8a837c" text-anchor="middle" stroke="#fbfaf7" stroke-width="4" stroke-linejoin="round" paint-order="stroke">2020 · Google · deployed 2020 · ISCA 2023</text>
 <circle cx="1453.0" cy="337.0" r="7" fill="#3a7bbf" stroke="#fff" stroke-width="1.5"/>
-<text x="1453" y="307.0" font-size="12.5" font-weight="700" fill="#3a3530" text-anchor="end" stroke="#fbfaf7" stroke-width="4" stroke-linejoin="round" paint-order="stroke">CPO in volume</text>
-<text x="1453" y="322.0" font-size="11" fill="#8a837c" text-anchor="end" stroke="#fbfaf7" stroke-width="4" stroke-linejoin="round" paint-order="stroke">2025 · NVIDIA·Broadcom</text>
+<text x="1453" y="307.0" font-size="12.5" font-weight="700" fill="#3a3530" text-anchor="end" stroke="#fbfaf7" stroke-width="4" stroke-linejoin="round" paint-order="stroke">CPO switches arrive</text>
+<text x="1453" y="322.0" font-size="11" fill="#8a837c" text-anchor="end" stroke="#fbfaf7" stroke-width="4" stroke-linejoin="round" paint-order="stroke">2025 · Broadcom · NVIDIA · shipping 2024–26</text>
 <text x="34" y="491.0" font-size="17" font-weight="700" fill="#1e1e1e">Matrix multiply · linear</text><text x="34" y="511.0" font-size="12.5" fill="#6b6560">The bulk of NN inference</text>
 <line x1="250" y1="495.0" x2="1435" y2="495.0" stroke="#c9c2b8" stroke-width="2"/>
 <circle cx="250.0" cy="495.0" r="7" fill="#c08a2e" stroke="#fff" stroke-width="1.5"/>
 <text x="250" y="465.0" font-size="12.5" font-weight="700" fill="#3a3530" text-anchor="start" stroke="#fbfaf7" stroke-width="4" stroke-linejoin="round" paint-order="stroke">4f Fourier correlator</text>
-<text x="250" y="480.0" font-size="11" fill="#8a837c" text-anchor="start" stroke="#fbfaf7" stroke-width="4" stroke-linejoin="round" paint-order="stroke">1960 · Radar image processing · Cutrona</text>
+<text x="250" y="480.0" font-size="11" fill="#8a837c" text-anchor="start" stroke="#fbfaf7" stroke-width="4" stroke-linejoin="round" paint-order="stroke">1960 · Cutrona et al. · radar imaging (matched filter Vander Lugt 1964)</text>
 <circle cx="535.6" cy="495.0" r="7" fill="#c08a2e" stroke="#fff" stroke-width="1.5"/>
 <text x="536" y="517.0" font-size="12.5" font-weight="700" fill="#3a3530" text-anchor="middle" stroke="#fbfaf7" stroke-width="4" stroke-linejoin="round" paint-order="stroke">Holographic optical NN</text>
-<text x="536" y="532.0" font-size="11" fill="#8a837c" text-anchor="middle" stroke="#fbfaf7" stroke-width="4" stroke-linejoin="round" paint-order="stroke">1988 · Psaltis</text>
+<text x="536" y="532.0" font-size="11" fill="#8a837c" text-anchor="middle" stroke="#fbfaf7" stroke-width="4" stroke-linejoin="round" paint-order="stroke">1988 · Psaltis · Brady · Wagner · Appl Opt</text>
 <circle cx="1075.0" cy="495.0" r="7" fill="#3a7bbf" stroke="#fff" stroke-width="1.5"/>
 <text x="1075" y="465.0" font-size="12.5" font-weight="700" fill="#3a3530" text-anchor="middle" stroke="#fbfaf7" stroke-width="4" stroke-linejoin="round" paint-order="stroke">MZI-mesh optical NN</text>
 <text x="1075" y="480.0" font-size="11" fill="#8a837c" text-anchor="middle" stroke="#fbfaf7" stroke-width="4" stroke-linejoin="round" paint-order="stroke">2017 · Shen·Soljačić · Nat Photon</text>
@@ -99,16 +99,16 @@
 <text x="1255" y="465.0" font-size="12.5" font-weight="700" fill="#3a3530" text-anchor="middle" stroke="#fbfaf7" stroke-width="4" stroke-linejoin="round" paint-order="stroke">PCM tensor core</text>
 <text x="1255" y="480.0" font-size="11" fill="#8a837c" text-anchor="middle" stroke="#fbfaf7" stroke-width="4" stroke-linejoin="round" paint-order="stroke">2021 · Feldmann·Pernice · Nature</text>
 <circle cx="1390.0" cy="495.0" r="7" fill="#3a7bbf" stroke="#fff" stroke-width="1.5"/>
-<text x="1390" y="517.0" font-size="12.5" font-weight="700" fill="#3a3530" text-anchor="middle" stroke="#fbfaf7" stroke-width="4" stroke-linejoin="round" paint-order="stroke">Taichi chiplet · training on light</text>
+<text x="1390" y="517.0" font-size="12.5" font-weight="700" fill="#3a3530" text-anchor="middle" stroke="#fbfaf7" stroke-width="4" stroke-linejoin="round" paint-order="stroke">Taichi · FFM training</text>
 <text x="1390" y="532.0" font-size="11" fill="#8a837c" text-anchor="middle" stroke="#fbfaf7" stroke-width="4" stroke-linejoin="round" paint-order="stroke">2024 · Tsinghua · Science·Nature</text>
 <circle cx="1435.0" cy="495.0" r="7" fill="#3a7bbf" stroke="#fff" stroke-width="1.5"/>
 <text x="1435" y="465.0" font-size="12.5" font-weight="700" fill="#3a3530" text-anchor="end" stroke="#fbfaf7" stroke-width="4" stroke-linejoin="round" paint-order="stroke">Lightmatter</text>
 <text x="1435" y="480.0" font-size="11" fill="#8a837c" text-anchor="end" stroke="#fbfaf7" stroke-width="4" stroke-linejoin="round" paint-order="stroke">2025 · Nature</text>
 <text x="34" y="609.0" font-size="17" font-weight="700" fill="#1e1e1e">Temporal dynamics</text><text x="34" y="629.0" font-size="12.5" fill="#6b6560">Reservoir · spiking</text>
-<line x1="805" y1="613.0" x2="1435" y2="613.0" stroke="#c9c2b8" stroke-width="2"/>
-<circle cx="805.0" cy="613.0" r="7" fill="#2f6b3e" stroke="#fff" stroke-width="1.5"/>
-<text x="805" y="583.0" font-size="12.5" font-weight="700" fill="#3a3530" text-anchor="middle" stroke="#fbfaf7" stroke-width="4" stroke-linejoin="round" paint-order="stroke">Delay-loop reservoir</text>
-<text x="805" y="598.0" font-size="11" fill="#8a837c" text-anchor="middle" stroke="#fbfaf7" stroke-width="4" stroke-linejoin="round" paint-order="stroke">2011 · Appeltant · Nat Commun</text>
+<line x1="850" y1="613.0" x2="1435" y2="613.0" stroke="#c9c2b8" stroke-width="2"/>
+<circle cx="850.0" cy="613.0" r="7" fill="#2f6b3e" stroke="#fff" stroke-width="1.5"/>
+<text x="850" y="583.0" font-size="12.5" font-weight="700" fill="#3a3530" text-anchor="middle" stroke="#fbfaf7" stroke-width="4" stroke-linejoin="round" paint-order="stroke">Delay-loop reservoir</text>
+<text x="850" y="598.0" font-size="11" fill="#8a837c" text-anchor="middle" stroke="#fbfaf7" stroke-width="4" stroke-linejoin="round" paint-order="stroke">2012 · Larger · Paquot photonic (concept Appeltant 2011)</text>
 <circle cx="940.0" cy="613.0" r="7" fill="#3a7bbf" stroke="#fff" stroke-width="1.5"/>
 <text x="940" y="635.0" font-size="12.5" font-weight="700" fill="#3a3530" text-anchor="middle" stroke="#fbfaf7" stroke-width="4" stroke-linejoin="round" paint-order="stroke">On-chip reservoir</text>
 <text x="940" y="650.0" font-size="11" fill="#8a837c" text-anchor="middle" stroke="#fbfaf7" stroke-width="4" stroke-linejoin="round" paint-order="stroke">2014 · Vandoorne·Bienstman</text>
@@ -129,19 +129,19 @@
 <circle cx="1435.0" cy="731.0" r="7" fill="#c08a2e" stroke="#fff" stroke-width="1.5"/>
 <text x="1435" y="701.0" font-size="12.5" font-weight="700" fill="#3a3530" text-anchor="end" stroke="#fbfaf7" stroke-width="4" stroke-linejoin="round" paint-order="stroke">Microsoft AOC</text>
 <text x="1435" y="716.0" font-size="11" fill="#8a837c" text-anchor="end" stroke="#fbfaf7" stroke-width="4" stroke-linejoin="round" paint-order="stroke">2025 · Nature — inference + optimization</text>
-<text x="34" y="845.0" font-size="17" font-weight="700" fill="#1e1e1e">Before detection</text><text x="34" y="865.0" font-size="12.5" fill="#6b6560">The sensor front end</text>
-<line x1="1120" y1="849.0" x2="1412" y2="849.0" stroke="#c9c2b8" stroke-width="2"/>
+<text x="34" y="845.0" font-size="17" font-weight="700" fill="#1e1e1e">In-sensor · pre-ADC</text><text x="34" y="865.0" font-size="12.5" fill="#6b6560">The sensor front end</text>
+<line x1="940" y1="849.0" x2="1345" y2="849.0" stroke="#c9c2b8" stroke-width="2"/>
 <circle cx="1120.0" cy="849.0" r="7" fill="#c08a2e" stroke="#fff" stroke-width="1.5"/>
-<text x="1120" y="819.0" font-size="12.5" font-weight="700" fill="#3a3530" text-anchor="middle" stroke="#fbfaf7" stroke-width="4" stroke-linejoin="round" paint-order="stroke">Diffractive encoder</text>
-<text x="1120" y="834.0" font-size="11" fill="#8a837c" text-anchor="middle" stroke="#fbfaf7" stroke-width="4" stroke-linejoin="round" paint-order="stroke">2018 · D²NN family</text>
+<text x="1120" y="819.0" font-size="12.5" font-weight="700" fill="#3a3530" text-anchor="middle" stroke="#fbfaf7" stroke-width="4" stroke-linejoin="round" paint-order="stroke">Optical convolution front end</text>
+<text x="1120" y="834.0" font-size="11" fill="#8a837c" text-anchor="middle" stroke="#fbfaf7" stroke-width="4" stroke-linejoin="round" paint-order="stroke">2018 · Chang · Wetzstein · Sci Rep</text>
 <circle cx="1345.0" cy="849.0" r="7" fill="#c08a2e" stroke="#fff" stroke-width="1.5"/>
 <text x="1345" y="871.0" font-size="12.5" font-weight="700" fill="#3a3530" text-anchor="middle" stroke="#fbfaf7" stroke-width="4" stroke-linejoin="round" paint-order="stroke">ACCEL all-analog chip</text>
 <text x="1345" y="886.0" font-size="11" fill="#8a837c" text-anchor="middle" stroke="#fbfaf7" stroke-width="4" stroke-linejoin="round" paint-order="stroke">2023 · Tsinghua Dai · Nature</text>
-<circle cx="1412.5" cy="849.0" r="7" fill="#c08a2e" stroke="#fff" stroke-width="1.5"/>
-<text x="1412" y="819.0" font-size="12.5" font-weight="700" fill="#3a3530" text-anchor="middle" stroke="#fbfaf7" stroke-width="4" stroke-linejoin="round" paint-order="stroke">Metasurface computing</text>
-<text x="1412" y="834.0" font-size="11" fill="#8a837c" text-anchor="middle" stroke="#fbfaf7" stroke-width="4" stroke-linejoin="round" paint-order="stroke">2024</text>
+<circle cx="940.0" cy="849.0" r="7" fill="#c08a2e" stroke="#fff" stroke-width="1.5"/>
+<text x="940" y="871.0" font-size="12.5" font-weight="700" fill="#3a3530" text-anchor="middle" stroke="#fbfaf7" stroke-width="4" stroke-linejoin="round" paint-order="stroke">Metamaterial computing</text>
+<text x="940" y="886.0" font-size="11" fill="#8a837c" text-anchor="middle" stroke="#fbfaf7" stroke-width="4" stroke-linejoin="round" paint-order="stroke">2014 · Silva · Engheta · Science</text>
 <rect x="680" y="267" width="160" height="22" rx="4" fill="#fff" stroke="#8c3527" stroke-width="1.4"/>
 <text x="760" y="282" font-size="12" font-weight="700" fill="#8c3527" text-anchor="middle">Miller 2010 · 7 criteria</text>
-<text x="30" y="958" font-size="13.5" fill="#4a4540">How to read — Miller 2010 asks what it takes to be a logic device, so it measures only the top two rows. The four rows below run without the gain, cascading and level restoration it demands, which is why they branched out after 2010.</text>
+<text x="30" y="958" font-size="13.5" fill="#4a4540">How to read — Miller 2010 asks what it takes to be a logic device, so it fits the top two rows. The four rows below (analog computing) date back to the 1960s but grew sharply after 2010 with integrated photonics and AI demand.</text>
 <text x="30" y="980" font-size="13.5" fill="#4a4540">A third axis (where light meets electronics — all-optical / O-E-O / electronic compute + optical I/O) is mixed point by point, so it is left out. Results that bridge rows, like reservoir equalization (2025), are where new work appears.</text>
 </svg>
