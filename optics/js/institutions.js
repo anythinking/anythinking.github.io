@@ -1,4 +1,5 @@
-/* 기관 지도: Leaflet 지도 · 지역 탭 · 축 필터 · 기관 목록/상세. 고른 기관은 #<기관 id> 로 남는다 */
+/* 기관 지도: Leaflet 지도 · 지역 탭 · 축 필터 · 기관 목록/상세. 고른 기관은 #<기관 id> 로 남는다
+   보기는 지도 | 트리(지역 → 기관 → 그룹장) 둘. 필터 상태 st 를 둘이 같이 읽고, 보기는 ?view=tree 와 localStorage 로 기억한다 */
 (function () {
   'use strict';
   const I = A.data('inst'), OV = A.data('overview');
@@ -49,7 +50,7 @@
     (MADE[d.id] || []).forEach(s => { if (s.para) set.add(s.para); });
     return KINDS.filter(k => set.has(k));
   };
-  const st = { cur: 'all', flt: 'all', sel: null, q: '', rec: false, auto: false };
+  const st = { view: 'map', cur: 'all', flt: 'all', sel: null, person: null, q: '', rec: false, auto: false };
   const store = (k, v) => { try { if (v === undefined) return JSON.parse(localStorage.getItem(k) || 'null'); localStorage.setItem(k, JSON.stringify(v)); } catch (e) { return null; } };
   st.auto = !!store('in-autoln');
   let cart = PRIV ? (store('in-cart') || []) : [];
@@ -206,10 +207,11 @@
   }
   const recentOf = d => { const x = LI[d.id] || {}; return Math.max(0, ...(x.labs || []).map(L => (L.r || {}).y || 0), ...(x.aff ? (x.p || []).map(p => p.y) : [])); };
   const paper = (tag, p, old) => h('span.pa', h('span.tg' + (old ? '.old' : ''), tag), p.doi ? h('a', { href: 'https://doi.org/' + p.doi, target: '_blank', rel: 'noopener' }, p.t) : h('span', p.t));
-  function person(d, { nm, t, L }) {
-    const ss = nm ? piStat(d, nm) : [], f = nm && FIELD[nm];
-    const top = L && L.p && L.p[0];
-    return h('div.in-pp',
+  const pkey = p => p.nm ? 'h:' + p.nm : 'l:' + p.L.id;
+  function person(d, p) {
+    const { nm, t, L } = p, ss = nm ? piStat(d, nm) : [], f = nm && FIELD[nm];
+    const top = L && L.p && L.p[0], key = pkey(p);
+    return h('div.in-pp' + (st.person === key ? '.on' : ''), { dataset: { pk: key } },
       h('span.nm', h('b', nm || L.pi), f ? h('span.in-field', { title: String(FIELDS[f] || '').replace(/<[^>]+>/g, '') }, f) : null,
         nm ? h('span.in-badge.hd', A.t('손 조사', 'curated')) : null, L ? h('span.in-badge.au', A.t('논문으로 묶음', 'from papers')) : null,
         ss.map(q => [q.status && q.status !== '현직' ? h('span.in-badge.s-' + (SBAD[q.status] || 'uk'), { title: q.detail || '' }, (ss.length > 1 ? q.name.split(' ').slice(-1)[0] + ' ' : '') + q.status) : null,
@@ -404,6 +406,169 @@
     (n.kids || []).forEach(walk);
   })(NT.NOTES || { kids: [] });
 
+  /* 트리 — 지역 → 기관 → 그룹장. 필터(st)는 지도와 같이 읽는다. 기관은 접힌 채로 시작하고, 누르면 그룹장이 펼쳐지며 오른쪽에 railDetail */
+  const PPL = {}; D.forEach(d => { PPL[d.id] = people(d); });
+  const pname = p => p.nm || p.L.pi;
+  const isHead = p => p.nm || (p.L && p.L.n >= 2);
+  const NAMEQ = {}; D.forEach(d => { NAMEQ[d.id] = fold1([d.n, d.w, d.city].join(' ')); });
+  const personHit = p => !!st.q && (fold1(pname(p)).includes(fold1(st.q)) || !!(p.nm && p.L && fold1(p.L.pi).includes(fold1(st.q))));
+  const instHit = d => !!st.q && NAMEQ[d.id].includes(fold1(st.q));
+  const visible = () => D.filter(d => inRegion(d) && match(d)).sort((a, b) => stars(b) - stars(a) || a.n.localeCompare(b.n, 'ko'));
+  // 펼침: 손으로 펼치거나 접은 것이 우선, 아니면 검색어가 그 기관 사람 이름에 걸릴 때만 저절로
+  const tvOpen = new Set(), tvShut = new Set(), tvMore = new Set(), regFold = {};
+  const expd = id => tvOpen.has(id) ? true : tvShut.has(id) ? false : (!!st.q && PPL[id].some(personHit));
+  const setExp = (id, v) => { if (v) { tvOpen.add(id); tvShut.delete(id); } else { tvOpen.delete(id); tvShut.add(id); } };
+  // 칸 위치·폭·줄 높이. 넓은 화면은 왼→오른 세 칸, 폰은 들여쓰기 목록
+  const WIDE = { col: [0, 168, 462], w: [136, 260, 290], row: { reg: 34, inst: 30, pi: 26, more: 26 }, bh: { reg: 28, inst: 24, pi: 21, more: 21 }, gap: 20, after: 10 };
+  const NAR = W => ({ col: [0, 14, 30], w: [W, W - 14, W - 30], row: { reg: 44, inst: 42, pi: 36, more: 36 }, bh: { reg: 36, inst: 36, pi: 31, more: 31 }, gap: 6, after: 6 });
+  const stageEl = $('.in-stage'), tvCanvas = $('#in-tvcanvas');
+  function shown(d) {
+    const ppl = PPL[d.id], head = ppl.filter(isHead), rest = ppl.filter(p => !isHead(p));
+    const list = tvMore.has(d.id) ? head.concat(rest) : head.concat(rest.filter(personHit));
+    return { list, rest: rest.length, hidden: tvMore.has(d.id) ? 0 : rest.length - rest.filter(personHit).length };
+  }
+  function layout() {
+    const nar = A.narrow(), P = nar ? NAR(Math.max(260, tvCanvas.clientWidth)) : WIDE;
+    const vis = visible(), N = [], B = [];
+    let y = 0;
+    C.slice(1).filter(c => st.cur === 'all' || c[0] === st.cur).forEach(([rid, rnm]) => {
+      const items = vis.filter(d => d.p === rid);
+      if (!items.length) return;
+      // 넓은 화면은 지역을 다 펼쳐 둔다. 폰은 결과가 60곳 넘으면 지역만 보이게 시작한다
+      const ro = regFold[rid] != null ? !regFold[rid] : (!nar || vis.length <= 60);
+      const rn = { t: 'reg', id: rid, nm: rnm, n: items.length, all: D.filter(d => d.p === rid).length, d: 0, y, open: ro };
+      N.push(rn);
+      if (nar || !ro) y += P.row.reg;
+      if (ro) items.forEach(d => {
+        const ex = expd(d.id) && PPL[d.id].length > 0;
+        const iN = { t: 'inst', id: d.id, dd: d, d: 1, y, open: ex, par: rn };
+        N.push(iN);
+        if (nar || !ex) y += P.row.inst;
+        if (ex) {
+          const s = shown(d), y0 = y;
+          s.list.forEach(p => { N.push({ t: 'pi', id: d.id, p, key: pkey(p), d: 2, y, par: iN }); y += P.row.pi; });
+          if (s.rest) { N.push({ t: 'more', id: d.id, n: s.hidden, d: 2, y, par: iN, open: tvMore.has(d.id) }); y += P.row.more; }
+          if (!nar) B.push({ cls: 'pi', x: P.col[2] - 7, y: y0 - 2, w: P.w[2] + 14, h: y - y0 + 2 });
+          y += P.after;
+        }
+      });
+      if (ro && !nar) B.push({ cls: '', x: P.col[1] - 8, y: rn.y - 3, w: P.w[1] + 16, h: y - rn.y + 3 });
+      y += P.gap;
+    });
+    return { N, B, H: Math.max(y, 40), P, nar, vis };
+  }
+  const cy = (n, T) => T.nar ? n.y + T.P.row[n.t] / 2 : n.y + 14;
+  const esc = A.esc;
+  function nodeHTML(n, T) {
+    const P = T.P, bh = P.bh[n.t], box = `left:${P.col[n.d]}px;top:${cy(n, T) - bh / 2}px;width:${P.w[n.d]}px;height:${bh}px`;
+    if (n.t === 'reg') return `<button type="button" class="tn tn-reg${n.open ? ' open' : ''}" style="${box}" data-a="reg" data-id="${n.id}" aria-expanded="${n.open}" role="treeitem">`
+      + `<span class="car">${n.open ? '▾' : '▸'}</span><span class="nm">${esc(n.nm)}</span><span class="n">${n.n === n.all ? A.t(n.n + '곳', String(n.n)) : n.n + ' / ' + n.all}</span></button>`;
+    if (n.t === 'inst') {
+      const d = n.dd, cnt = PPL[d.id].length, ls = layersOf(d), ks = ls.length ? [] : [d.k].concat((d.t || []).filter(t => t !== d.k));
+      const dots = ls.map(l => `<i class="in-dot l-${l}"></i>`).join('') + ks.slice(0, 3).map(k => `<i class="in-dot ${kc(k)}"></i>`).join('');
+      const cls = `tn tn-inst${n.open ? ' open' : ''}${st.sel === d.id ? ' sel' : ''}${cnt ? '' : ' zero'}${instHit(d) ? ' hit' : ''}`;
+      const inner = `<span class="car">${cnt ? (n.open ? '▾' : '▸') : ''}</span><span class="nm">${esc(d.n)}</span>${PRIV && d.fit ? `<span class="in-fit">${esc(d.fit)}</span>` : ''}<span class="dots">${dots}</span><span class="n">${cnt || '—'}</span>`;
+      const tip = esc(d.n + ' · ' + (d.city || '') + A.t(` · 그룹장 ${cnt}명`, ` · ${cnt} group leaders`));
+      if (T.nar) return `<div class="tn-row" style="${box}"><button type="button" class="${cls}" data-a="inst" data-id="${d.id}" aria-expanded="${n.open}" role="treeitem" title="${tip}">${inner}</button>`
+        + `<button type="button" class="tn-go" data-a="go" data-id="${d.id}">${A.t('상세 ›', 'Details ›')}</button></div>`;
+      return `<button type="button" class="${cls}" style="${box}" data-a="inst" data-id="${d.id}" aria-expanded="${n.open}" role="treeitem" title="${tip}">${inner}</button>`;
+    }
+    if (n.t === 'pi') {
+      const p = n.p, f = p.nm && FIELD[p.nm];
+      const cls = `tn tn-pi ${p.nm ? 'hand' : 'oa'}${st.sel === n.id && st.person === n.key ? ' sel' : ''}${personHit(p) ? ' hit' : ''}`;
+      const tip = esc(pname(p) + (f ? ' · ' + f : '') + (p.L ? A.t(` · 분야 논문 ${p.L.n}편`, ` · ${p.L.n} papers`) : A.t(' · 논문으로는 못 묶음', ' · not matched in papers')));
+      return `<button type="button" class="${cls}" style="${box}" data-a="pi" data-id="${n.id}" data-pk="${esc(n.key)}" role="treeitem" title="${tip}">`
+        + `<span class="nm">${esc(pname(p))}</span>${f && !T.nar ? `<span class="f">${esc(f)}</span>` : ''}<span class="sp"></span><span class="n">${p.L ? A.t(p.L.n + '편', String(p.L.n)) : ''}</span></button>`;
+    }
+    return `<button type="button" class="tn tn-more" style="${box}" data-a="more" data-id="${n.id}">${n.open ? A.t('− 논문 1편짜리 그룹 접기', '− Hide one-paper groups') : A.t(`＋ 논문 1편짜리 그룹 ${n.n}곳`, `+ ${n.n} one-paper groups`)}</button>`;
+  }
+  function linkPath(a, b, T) {
+    const P = T.P;
+    if (T.nar) return `M ${P.col[a.d] + 9} ${cy(a, T) + P.bh[a.t] / 2} V ${cy(b, T)} H ${P.col[b.d]}`;
+    const x1 = P.col[a.d] + P.w[a.d], x2 = P.col[b.d], y1 = cy(a, T), y2 = cy(b, T), mx = (x1 + x2) / 2;
+    return `M ${x1} ${y1} C ${mx} ${y1}, ${mx} ${y2}, ${x2} ${y2}`;
+  }
+  let LAY = null;
+  function drawTree() {
+    const T = LAY = layout(), svg = $('#in-tvsvg');
+    const W = T.nar ? tvCanvas.clientWidth : T.P.col[2] + T.P.w[2] + 4;
+    tvCanvas.style.height = T.H + 'px'; tvCanvas.style.width = T.nar ? '' : W + 'px';
+    svg.setAttribute('width', W); svg.setAttribute('height', T.H); svg.setAttribute('viewBox', `0 0 ${W} ${T.H}`);
+    svg.innerHTML = T.B.map(b => `<rect class="tv-band ${b.cls}" x="${b.x}" y="${b.y}" width="${b.w}" height="${b.h}" rx="8"/>`).join('')
+      + T.N.filter(n => n.par).map(n => `<path class="tv-ln${st.sel && n.par.id === st.sel && n.t !== 'inst' ? ' on' : ''}" d="${linkPath(n.par, n, T)}"/>`).join('');
+    $('#in-tvnodes').innerHTML = T.N.length ? T.N.map(n => nodeHTML(n, T)).join('') : `<p class="tv-empty">${A.t('이 필터에 맞는 기관이 없다.', 'No institution matches these filters.')}</p>`;
+    drawHead();
+  }
+  function drawHead() {
+    const T = LAY, reg = curRegion();
+    mount('#in-tvhead',
+      T.nar ? null : h('div.tv-cols', { style: { width: (T.P.col[2] - 14) + 'px' } },
+        h('span', { style: { left: T.P.col[0] + 'px' } }, reg ? [A.t('지역 · ', 'Region · '), h('b', reg)] : A.t('지역', 'Region')),
+        h('span', { style: { left: T.P.col[1] + 'px' } }, A.t('기관 · 그룹장 수', 'Institution · group leaders'))),
+      T.nar ? null : h('span.tv-c3', A.t('그룹장 · 분야 논문 수', 'Group leader · papers')),
+      h('span.tv-key', h('i.hand'), A.t('손으로 조사한 PI', 'Curated PI')), h('span.tv-key', h('i.oa'), A.t('논문으로 묶은 연구실', 'Lab from papers')),
+      h('div.tv-tools',
+        T.vis.length <= 40 && T.vis.some(d => PPL[d.id].length && !expd(d.id)) ? h('button', { type: 'button', onclick: () => { T.vis.forEach(d => setExp(d.id, true)); drawTree(); } }, A.t(`${T.vis.length}곳 모두 펼치기`, `Expand all ${T.vis.length}`)) : null,
+        T.vis.some(d => expd(d.id) && PPL[d.id].length) ? h('button', { type: 'button', onclick: () => { tvOpen.clear(); T.vis.forEach(d => tvShut.add(d.id)); drawTree(); } }, A.t('기관 모두 접기', 'Collapse all')) : null));
+  }
+  // 긴 지역(아시아 100곳 남짓)을 내려가도 지금 어느 지역인지 머리줄에 남긴다
+  function curRegion() {
+    if (!LAY || LAY.nar) return null;
+    const top = stageEl.getBoundingClientRect().top - tvCanvas.getBoundingClientRect().top + 40;
+    const regs = LAY.N.filter(n => n.t === 'reg' && n.open && n.y < top);
+    return regs.length ? regs[regs.length - 1].nm : null;
+  }
+  let lastReg = null;
+  stageEl.addEventListener('scroll', () => { if (st.view !== 'tree' || !LAY || LAY.nar) return; const r = curRegion(); if (r !== lastReg) { lastReg = r; drawHead(); } }, { passive: true });
+  function scrollToSel() {
+    if (!LAY || !st.sel) return;
+    const n = LAY.N.find(x => x.t === 'inst' && x.id === st.sel); if (!n) return;
+    const off = tvCanvas.getBoundingClientRect().top + n.y;
+    if (LAY.nar) scrollTo({ top: scrollY + off - 120 });
+    else stageEl.scrollTop += off - stageEl.getBoundingClientRect().top - 90;
+  }
+  function focusPerson() {
+    requestAnimationFrame(() => {
+      const el = st.person && A.$$('#in-rail [data-pk]').find(x => x.dataset.pk === st.person);
+      if (!el) return;
+      const det = el.closest('details'); if (det) det.open = true;
+      el.scrollIntoView({ block: 'center' });
+    });
+  }
+  let pendPerson = null, tvFromTree = false;
+  $('#in-tvnodes').addEventListener('click', e => {
+    const b = e.target.closest('[data-a]'); if (!b) return;
+    const a = b.dataset.a, id = b.dataset.id;
+    if (a === 'reg') { regFold[id] = LAY.N.find(x => x.t === 'reg' && x.id === id).open; drawTree(); return; }
+    if (a === 'more') { tvMore.has(id) ? tvMore.delete(id) : tvMore.add(id); drawTree(); return; }
+    // 넓은 화면: 처음 누르면 고르고 펼침, 고른 기관을 다시 누르면 접기·펼치기. 폰: 줄은 접기·펼치기만, 「상세 ›」가 고르기
+    if (a === 'inst') { if (A.narrow() || st.sel === id) { setExp(id, !expd(id)); drawTree(); } else { setExp(id, true); tvFromTree = true; pick(id); } return; }
+    if (a === 'go') { if (st.sel !== id) { tvFromTree = true; pick(id); } return; }
+    if (a === 'pi') {
+      if (st.sel === id) { st.person = b.dataset.pk; render(); focusPerson(); return; }
+      pendPerson = { id, pk: b.dataset.pk }; tvFromTree = true; pick(id);
+    }
+  });
+  // 공저 쌍 수 — 「다 이으면 실뭉치」의 근거
+  const PAIRS = (() => { const s = new Set(); Object.entries(LI).forEach(([a, x]) => (x.links || []).forEach(l => s.add([a, l.to].sort().join('|')))); return s.size; })();
+  function railIntro() {
+    const vis = visible(), regs = new Set(vis.map(d => d.p)).size;
+    const hand = vis.reduce((s, d) => s + (d.pi || []).length, 0), labs = vis.reduce((s, d) => s + ((LI[d.id] || {}).labs || []).length, 0);
+    return h('div.tv-intro',
+      h('span.lb', A.t('트리 보기', 'Tree view')),
+      h('h2', A.t('지역 → 기관 → 그룹장', 'Region → institution → group leader')),
+      h('p.sub', A.t('지도와 ', 'The '), h('b', A.t('같은 필터', 'same filters')), A.t('가 걸린다. 기관은 접힌 채로 시작하고, 누르면 그 아래 그룹장이 펼쳐지며 이 칸에 지도에서 누를 때와 같은 상세가 뜬다.',
+        ' as the map apply. Institutions start folded; click one to unfold its group leaders and open the same detail as on the map.')),
+      h('div.tv-cnt', h('div', h('b', String(regs)), A.t('지역', 'Regions')), h('div', h('b', String(vis.length)), A.t('기관', 'Institutions')),
+        h('div', h('b', hand.toLocaleString()), A.t('손 조사 PI', 'Curated PIs')), h('div', h('b', labs.toLocaleString()), A.t('논문 연구실', 'Paper labs'))),
+      h('ul.tv-how',
+        h('li', h('b', A.t('좁혀서 본다.', 'Narrow it down.')), A.t(' 위 띠의 지역·축·층·검색어가 트리를 그대로 거른다.', ' Region, axis, layer and search in the bar above filter the tree.')),
+        h('li', h('b', A.t('그룹장 이름으로 찾는다.', 'Search by group leader.')), A.t(' 검색어가 사람 이름에 걸리면 그 기관이 저절로 펼쳐지고 그 사람이 노랗게 표시된다.', ' When the search matches a person, their institution unfolds and they are highlighted.')),
+        h('li', h('b', A.t('선은 위계만 긋는다.', 'Lines show hierarchy only.')),
+          A.t(` 공저 ${PAIRS.toLocaleString()}쌍·컨소시엄 명단 ${Object.keys(GI).length}곳까지 선으로 이으면 실뭉치가 된다. 그 연결은 기관을 고르면 이 칸에 목록으로 뜬다.`,
+            ` Drawing all ${PAIRS.toLocaleString()} co-author pairs and ${Object.keys(GI).length} consortium rosters would make a tangle; those links are listed here once you pick an institution.`))));
+  }
+
   const rail = $('#in-rail');
   function result() {
     const any = st.cur !== 'all' || st.flt !== 'all' || st.ax !== 'all' || st.kind !== 'all' || st.q || st.rec;
@@ -411,19 +576,32 @@
     const n = D.filter(d => inRegion(d) && match(d)).length;
     const tags = [st.cur !== 'all' && (C.find(c => c[0] === st.cur) || [])[1], st.ax !== 'all' && LBL[st.ax], st.flt !== 'all' && st.flt + ' ' + (LN[st.flt] || ''),
       st.kind !== 'all' && PSH[st.kind], st.rec && A.t('모집 확인', 'recruiting'), st.q && `“${st.q}”`].filter(Boolean);
+    const pn = st.view === 'tree' ? D.filter(d => inRegion(d) && match(d)).reduce((s, d) => s + PPL[d.id].length, 0) : 0;
     mount('#in-result', h('b', A.t(`${n}곳`, `${n}`)), h('span', tags.join(' · ')),
-      PRIV ? null : h('span', A.t('해당 없는 곳은 지도에서 흐리게', 'others are dimmed')),
+      st.view === 'tree' ? h('span', A.t(`그룹장 ${pn.toLocaleString()}명 · 지도로 바꿔도 같은 필터`, `${pn.toLocaleString()} group leaders · same filters on the map`))
+        : PRIV ? null : h('span', A.t('해당 없는 곳은 지도에서 흐리게', 'others are dimmed')),
       h('button', { type: 'button', onclick: () => { st.q = ''; st.rec = false; $('#in-q').value = ''; $('#in-rec').checked = false; A.route.go('', st.sel || '', { params: { cur: null, flt: null, ax: null, kind: null } }); } }, A.t('필터 모두 해제', 'Clear filters')));
   }
   function render() {
-    drawTabs(); restyle(); lanes(); result(); tray();
+    const tree = st.view === 'tree', nar = A.narrow();
+    document.body.classList.toggle('in-tv', tree);
+    $('#in-tree').hidden = !tree;
+    $('#in-vmap').setAttribute('aria-pressed', String(!tree)); $('#in-vtree').setAttribute('aria-pressed', String(tree));
+    drawTabs(); restyle(); if (tree) drawTree(); else lanes(); result(); tray();
     const d = st.sel && D.find(x => x.id === st.sel);
-    rail.hidden = !d;   // 오른쪽 칸은 기관을 골랐을 때만
-    mount(rail, d ? railDetail(d) : []);
+    // 오른쪽 칸은 기관을 골랐을 때만. 넓은 화면 트리는 늘 두고(고르기 전엔 안내), 폰 트리는 아래에서 올라오는 판
+    rail.hidden = tree && !nar ? false : !d;
+    $('#in-tvback').hidden = !(tree && nar && d);
+    mount(rail, d ? railDetail(d) : (tree && !nar ? railIntro() : []));
+  }
+  // 검색·모집 필터 — 주소는 그대로 두고 다시 그린다. 새 검색어엔 손으로 접은 것을 풀어 이름이 걸린 기관이 펼쳐지게
+  function refilter() {
+    tvShut.clear(); restyle(); if (st.view === 'tree') drawTree(); else lanes(); result();
+    if (st.view === 'tree' && !A.narrow() && !st.sel) mount(rail, railIntro());
   }
   function pick(id) { A.route.go('', id); }
-  $('#in-q').addEventListener('input', e => { st.q = e.target.value.trim(); restyle(); lanes(); result(); });
-  if (PS) { $('#in-reclab').hidden = false; $('#in-rec').addEventListener('change', e => { st.rec = e.target.checked; restyle(); lanes(); result(); }); }
+  $('#in-q').addEventListener('input', e => { st.q = e.target.value.trim(); refilter(); });
+  if (PS) { $('#in-reclab').hidden = false; $('#in-rec').addEventListener('change', e => { st.rec = e.target.checked; refilter(); }); }
   $('#in-more').addEventListener('click', e => { const adv = $('#in-adv'); adv.hidden = !adv.hidden; e.currentTarget.setAttribute('aria-expanded', String(!adv.hidden)); });
   const autoEl = $('#in-autoln'); autoEl.checked = st.auto;
   L.DomEvent.disableClickPropagation($('#in-legend'));
@@ -435,13 +613,27 @@
     $('#in-cmp').addEventListener('click', e => { if (e.target.id === 'in-cmp') e.target.hidden = true; });
   }
   function clear() { A.route.go('', ''); }
+  const setView = v => { store('in-view', v); A.route.set({ view: v === 'tree' ? 'tree' : null }); };
+  $('#in-vmap').addEventListener('click', () => setView('map'));
+  $('#in-vtree').addEventListener('click', () => setView('tree'));
+  $('#in-tvback').addEventListener('click', clear);
+  let wasNar = A.narrow();
+  addEventListener('resize', () => { const n = A.narrow(); if (n !== wasNar) { wasNar = n; render(); } else if (n && st.view === 'tree') drawTree(); });
   document.addEventListener('keydown', e => { if (e.key === 'Escape') { if (!$('#in-cmp').hidden) { $('#in-cmp').hidden = true; return; } if (st.sel) clear(); } });
 
   let first = true;
   A.route.on(r => {
+    // 주소에 보기가 없으면 이 브라우저에서 마지막으로 고른 보기로 연다(처음 한 번만)
+    if (first && r.params.view == null && store('in-view') === 'tree') { A.route.set({ view: 'tree' }, { replace: true }); if (st.view === 'tree') return; }
     const d = D.find(x => x.id === r.raw) || null;
-    const was = st.sel, wasCur = st.cur;
+    const was = st.sel, wasCur = st.cur, wasView = st.view;
     st.sel = d ? d.id : null;
+    st.view = A.route.param(r, 'view', 'map') === 'tree' ? 'tree' : 'map';
+    if (!d || d.id !== was) st.person = d && pendPerson && pendPerson.id === d.id ? pendPerson.pk : null;
+    pendPerson = null;
+    // 트리에서 기관이 골라지면(지도·상세의 연결·주소로 와도) 그 기관을 펼치고 지역도 연다
+    if (st.view === 'tree' && d && (d.id !== was || wasView !== 'tree')) { setExp(d.id, true); regFold[d.p] = false; }
+    if (st.view !== wasView && !first) stageEl.scrollTop = 0;
     st.cur = A.route.param(r, 'cur', 'all');
     st.flt = A.route.param(r, 'flt', 'all');
     st.kind = A.route.param(r, 'kind', 'all');
@@ -452,7 +644,17 @@
     document.title = (d ? d.n + ' · ' : '') + A.t('기관', 'Institutions') + ' — ' + A.site;
     drawLinks(d);
     render();
-    if (d && d.id !== was) {
+    const tree = st.view === 'tree';
+    if (tree) {
+      if (d && !tvFromTree && (d.id !== was || wasView !== 'tree')) requestAnimationFrame(scrollToSel);
+      if (d && st.person) focusPerson();
+      tvFromTree = false;
+      if (d && d.id !== was) rail.scrollTop = 0;
+    } else if (wasView === 'tree' && !first) {
+      // 트리에서 지도로 — 보이게 된 지도 크기를 다시 재고 고른 기관(없으면 지역)으로
+      setTimeout(() => { map.invalidateSize(); if (d) map.panTo([d.lat, d.lon]); else map.fitBounds(C.find(c => c[0] === st.cur)[2], { padding: [20, 20] }); }, 30);
+    }
+    if (d && d.id !== was && !tree) {
       // 고른 기관으로 이동만 한다 — 줌아웃하지 않는다
       const go = () => { map.invalidateSize(); map.panTo([d.lat, d.lon]); };
       if (first) setTimeout(go, 200); else go();
